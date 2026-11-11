@@ -669,6 +669,33 @@ html.phone .tp-name{font-size:13.5px}html.phone .tp-sub{font-size:11px}
 html.phone .side{width:150px!important}
 html.phone .pl{padding:4px 8px!important;gap:2px 6px}html.phone .pl .nm{font-size:12.5px}
 html.phone .tray{padding-right:250px!important}
+/* v27 */
+.panel,.dicebox,.turnplaque,#stage .camreset,#tip,#pop{background:linear-gradient(180deg,rgba(44,44,46,.8),rgba(32,32,34,.8))!important;border-color:rgba(255,255,255,.12)!important}
+header.top .tools .btn,header.top select.btn{background-color:rgba(44,44,46,.85)!important}
+@media (min-width:1101px) and (min-height:640px){
+  #leftcol{width:190px}
+  #leftcol>.coach,#leftcol>.toast{background:none!important;border:0!important;box-shadow:none!important;padding:0 2px!important;text-shadow:0 1px 2px rgba(0,0,0,.95),0 0 10px rgba(0,0,0,.7)}
+  #leftcol>.coach{font-size:15px}#leftcol>.toast{font-size:13px}#leftcol>.toast .ex{display:none}
+}
+html.phone #leftcol{width:170px}html.phone #leftcol>.coach{font-size:14px}
+/* v28: text toolbar */
+header.top::before{content:"";position:fixed;left:0;right:0;top:0;height:78px;background:linear-gradient(180deg,rgba(12,12,14,.72),rgba(12,12,14,.35) 55%,rgba(12,12,14,0));pointer-events:none;z-index:-1}
+header.top .tools{gap:0!important;align-items:center}
+html body header.top .tools>.btn,html body header.top .tools>.speedlbl{background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;padding:4px 14px!important;font-size:13px!important;color:#d9d3c8!important;font-weight:500;letter-spacing:.01em;text-shadow:0 1px 2px rgba(0,0,0,.8)}
+html body header.top .tools>.btn.btn+.btn.btn,html body header.top .tools>.btn.btn+.speedlbl{border-left:1px solid rgba(255,255,255,.2)!important}
+header.top .tools>.speedlbl{padding-right:4px!important;color:#a39c90!important}
+html body header.top .tools>.speedlbl+select.btn{border-left:0!important;padding-left:0!important;padding-right:26px!important;background-position:right 10px center!important}
+html body header.top .tools>.btn:hover:not(:disabled){color:#f3d08a!important}
+html body header.top .tools>.btn.btn.active{color:#e9c47a!important;background:none!important;border-top:0!important;border-right:0!important;border-bottom:0!important}
+html body header.top .tools>#gfxBtn:not(.active),html body header.top .tools>#tipBtn:not(.active),html body header.top .tools>#hintBtn:not(.active){color:#8f897f!important}
+header.top select.btn option{color:#111}
+.roundline{display:none}
+html.phone .turnplaque{display:none!important}
+html.phone .side{top:50px!important}
+html.phone .roundline{display:block;margin-top:6px;padding-top:7px;border-top:1px solid rgba(255,255,255,.14);font-size:12px;color:#b8b1a6;text-align:center}
+html.phone .side .panel{padding:8px 10px!important}
+html.phone html body header.top .tools>.btn,html body header.top .tools>.speedlbl{padding:4px 10px!important;font-size:13px!important}
+
 </style>
 
 </head>
@@ -683,16 +710,17 @@ html.phone .tray{padding-right:250px!important}
     <button id="gfxBtn" class="btn">그래픽 높음</button>
     <button id="tipBtn" class="btn">툴팁 켜짐</button>
     <button id="hintBtn" class="btn">힌트 켜짐</button>
+    <button id="camReset" class="btn" title="보드를 처음 시점으로 되돌려요">시점 초기화</button>
     <button id="rulesBtn" class="btn">게임 방법</button>
     <button id="newBtn" class="btn">새 게임</button>
-    <button id="fsBtn" class="btn" hidden>전체화면</button>
+    <button id="fsBtn" class="btn" hidden>전체화면 켜기</button>
   </div>
 </header>
 
 <main class="game">
   <section class="board-wrap">
     <div id="coach" class="coach"></div>
-    <div id="stage"><div id="maplbls"></div><div id="toast" class="toast" hidden></div><div class="dicebox" id="dicebox"></div><div class="turnplaque" id="turnbar"></div><button class="btn camreset" id="camReset" title="드래그: 360도 돌리기와 기울이기 · 휠/두 손가락: 확대·축소">시점 초기화</button><div class="stagebtns" id="stagebtns"></div></div>
+    <div id="stage"><div id="maplbls"></div><div id="toast" class="toast" hidden></div><div class="dicebox" id="dicebox"></div><div class="turnplaque" id="turnbar"></div><div class="stagebtns" id="stagebtns"></div></div>
     <div class="tray" id="tray">
       <div class="tray-hand"><div class="tray-h">내 손패 <span id="handCount"></span></div><div id="hand"></div></div>
       <div class="tray-dev"><div class="tray-h">발전 카드 <button class="linkish" data-pop="all">종류 보기</button></div><div id="devs"></div></div>
@@ -709,7 +737,7 @@ html.phone .tray{padding-right:250px!important}
   </section>
 
   <aside class="side">
-    <div class="panel"><h2>플레이어</h2><div class="gameinfo" id="gameinfo"></div><div id="players" class="players"></div></div>
+    <div class="panel"><h2>플레이어</h2><div class="gameinfo" id="gameinfo"></div><div id="players" class="players"></div><div class="roundline" id="roundline"></div></div>
     <div class="panel">
       <details class="ref" id="refBox"><summary>건설 비용과 은행 잔고</summary><div id="ref"></div></details>
     </div>
@@ -1748,7 +1776,7 @@ function renderDiceBox(){const el=$('#dicebox');if(!el||!S)return;const rolling=
   el.classList.toggle('rolling',!!rolling);
   el.innerHTML=S.dice&&!rolling?`<div class="sum" aria-label="주사위 합">${S.dice[0]+S.dice[1]}</div><div class="dice" data-tip="마지막으로 굴린 주사위예요. 두 눈의 합과 같은 숫자가 적힌 땅이 자원을 만들어요. 7이면 도적이 움직여요.">${dieHTML(S.dice[0])+dieHTML(S.dice[1])}</div>`
     :S.dice?`<div class="dice">${dieHTML(1+Math.floor(Math.random()*6))+dieHTML(1+Math.floor(Math.random()*6))}</div><div class="who">굴리는 중…</div>`
-    :`<div class="dice">${dieHTML(0,'blank')+dieHTML(0,'blank')}</div><div class="who">아직 주사위를 굴리지 않았어요</div>`;}
+    :`<div class="dice">${dieHTML(0,'blank')+dieHTML(0,'blank')}</div><div class="who">굴리기 전</div>`;}
 function row(items,cw,maxW,extra,flags){const n=items.length;if(!n)return '';const step=n>1?Math.max(12,Math.min(cw*.72,(maxW-cw)/(n-1))):0;
   return `<div class="crow ${extra||''}" style="--cw:${cw}px">${items.map((it,i)=>`<div class="cw${flags&&flags[i]?' new':''}" style="margin-left:${i?(step-cw).toFixed(1):0}px;z-index:${i};animation-delay:${flags&&flags[i]?(flags[i]-1)*70:0}ms">${it}</div>`).join('')}</div>`;}
 function fan(items,cw,maxW,extra){const n=items.length;if(!n)return '';const ch=cw*1.4;const usable=maxW*.86-cw*1.15;const step=Math.max(12,Math.min(cw*.62,usable/Math.max(1,n-1)));const spread=Math.min(5,34/n);
@@ -1790,6 +1818,7 @@ function render(){
   const rolledNow=S.rollId!==ui.shownRoll;ui.shownRoll=S.rollId;
   $('#turnbar').innerHTML=`<span class="tp-pip" style="background:${cp.color}"></span><span class="tp-txt"><span class="tp-name">${S.phase==='over'?'게임 종료':S.cur===0?'나 (내 차례)':cp.name+'의 차례'}</span><span class="tp-sub">${S.phase==='setup'?`초기 배치 ${S.si+1}/${2*S.n}`:`${S.turn}번째 바퀴`}</span></span>`;
   if(ui.lastCur!==S.cur+':'+S.phase){ui.lastCur=S.cur+':'+S.phase;const tb=$('#turnbar');tb.classList.remove('swap');void tb.offsetWidth;tb.classList.add('swap');}
+  {const rl=$('#roundline');if(rl)rl.textContent=S.phase==='setup'?`초기 배치 ${S.si+1}/${2*S.n}`:S.phase==='over'?'게임 종료':`${S.turn}번째 바퀴`;}
   $('#gameinfo').textContent=`${S.n}인 게임, 난이도 ${({easy:'쉬움',normal:'보통',hard:'어려움'})[S.diff||'normal']}`;
   if(rolledNow&&S.dice){ui.diceRevealAt=performance.now()+1350;if(typeof throwDice==='function')throwDice(S.dice);clearTimeout(ui.diceT);ui.diceT=setTimeout(renderDiceBox,1400);}
   renderDiceBox();
@@ -2153,7 +2182,7 @@ function evalMQ(txt,w,h){if(/prefers|hover|pointer|orientation/.test(txt))return
 function applyPhone(){const coarse=matchMedia('(pointer:coarse)').matches;const small=Math.min(innerWidth,innerHeight)<700;const land=innerWidth>innerHeight;
   const portraitBlock=coarse&&small&&!land;document.documentElement.classList.toggle('portrait-block',portraitBlock);$('#rotate').hidden=!portraitBlock;
   const on=coarse&&small&&land;const VH=440;const k=on?innerHeight/VH:1;const vw=Math.round(innerWidth/k);
-  if(on===PH.on&&(!on||Math.abs(k-PH.k)<.001))return;PH.on=on;PH.k=k;PH.vw=vw;PH.vh=VH;
+  if(on===PH.on&&(!on||(Math.abs(k-PH.k)<.001&&vw===PH.vw)))return;PH.on=on;PH.k=k;PH.vw=vw;PH.vh=VH;
   const root=document.documentElement;root.classList.toggle('phone',on);root.style.setProperty('--k',k);root.style.setProperty('--vw',vw+'px');root.style.setProperty('--vh',VH+'px');
   for(const sh of document.styleSheets){let rules;try{rules=sh.cssRules;}catch(e){continue;}for(const r of rules){if(!r.media||r.type!==4)continue;
     if(!PH.orig.has(r))PH.orig.set(r,r.media.mediaText);const o=PH.orig.get(r);if(!on){r.media.mediaText=o;continue;}const v=evalMQ(o,Math.max(vw,1280),720);if(v===null)continue;r.media.mediaText=v?'all':'not all';}}
@@ -2172,7 +2201,7 @@ function fitChrome(){const h=document.querySelector('header.top');if(h)document.
 fitChrome();window.addEventListener('resize',fitChrome);try{document.fonts.ready.then(fitChrome);}catch(e){}
 {const fb=$('#fsBtn');const el=document.documentElement;const can=document.fullscreenEnabled||document.webkitFullscreenEnabled;fb.hidden=!can;
   fb.onclick=async()=>{try{if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}else{await (el.requestFullscreen||el.webkitRequestFullscreen).call(el);try{await screen.orientation.lock('landscape');}catch(e){}}}catch(e){openModal('confirm',`<h3>전체화면을 쓸 수 없어요</h3><p>${window.top!==window?'이 게임은 다른 페이지 안에 들어 있어서, 브라우저가 게임 쪽의 전체화면 요청을 막고 있어요.':'이 브라우저는 웹페이지의 전체화면을 지원하지 않아요(아이폰 사파리 등).'}</p><p><b>대신 이렇게 해 보세요</b></p><ul class="steps"><li><b>홈 화면에 추가</b>해서 열면 주소창 없는 전체화면으로 실행돼요(사파리: 공유 → 홈 화면에 추가, 크롬·삼성: 메뉴 → 홈 화면에 추가)</li><li>삼성 인터넷: 설정 → 레이아웃 및 메뉴 → <b>상태 표시줄 숨기기</b>, 주소창은 화면을 위로 살짝 밀면 숨겨져요</li><li>사파리: 주소창의 <b>가가(aA) → 도구 막대 가리기</b></li></ul><div class="row"><button class="btn primary" id="fsOk">확인</button></div>`);$('#fsOk').onclick=()=>{closeModal();update();};}};
-  document.addEventListener('fullscreenchange',()=>{fb.textContent=document.fullscreenElement?'전체화면 끄기':'전체화면';setTimeout(()=>{applyPhone();fitChrome();},120);});}
+  document.addEventListener('fullscreenchange',()=>{fb.textContent=document.fullscreenElement?'전체화면 끄기':'전체화면 켜기';setTimeout(()=>{applyPhone();fitChrome();},120);});}
 // ---------- boot ----------
 (function(){const blank='data:image/gif;base64,R0lGODlhAQABAAAAACw=';RES.forEach(r=>CARDIMG[r]=CARDIMG[r]||blank);Object.keys(DEVN).forEach(t=>CARDIMG[t]=paintCard(t,DEVN[t],true));})();woodBg();leatherBg();
 function boot(data){
