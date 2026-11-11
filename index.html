@@ -253,7 +253,10 @@ header.top{max-width:none;margin:0 0 10px}
 .dicebox{position:absolute;left:12px;top:12px;z-index:2;display:flex;align-items:center;gap:10px;background:rgba(8,18,26,.72);border:1px solid rgba(227,185,92,.35);border-radius:12px;padding:8px 12px;min-height:56px}
 .dicebox .sum{font-size:32px;min-width:0}
 .dicebox .who{font-size:12px;color:var(--muted);line-height:1.3;max-width:120px}
-.dicebox.rolling .die{animation:shake .5s infinite}
+.dicebox.rolling .die{animation:none}
+.dicebox .dice{overflow:hidden}
+.die.slot{animation:slotIn .085s linear}
+@keyframes slotIn{from{transform:translateY(-55%);opacity:.35}to{transform:none;opacity:1}}
 .toast{left:auto;right:12px;transform:none;width:min(460px,calc(100% - 260px))}
 @media (max-width:640px){.toast{width:calc(100% - 24px);top:84px}
   #stage .camreset{left:auto;right:10px;top:10px;bottom:auto;padding:5px 9px;font-size:12px}
@@ -634,7 +637,7 @@ header.top h1.logo{font-size:26px}
 /* phone: bigger essentials, fewer extras */
 html.phone header.top{top:8px!important;left:14px!important;right:14px!important}
 html.phone header.top h1.logo{font-size:20px}
-html.phone .speedlbl,html.phone #speed,html.phone #gfxBtn,html.phone #tipBtn,html.phone #hintBtn{display:none!important}
+html.phone .speedlbl,html.phone #speed,html.phone #gfxBtn,html.phone #hintBtn{display:none!important}
 html.phone header.top .tools .btn{font-size:13px!important;padding:7px 12px!important}
 html.phone #leftcol{left:14px;top:50px;width:270px;gap:8px}
 html.phone .dicebox{padding:6px 10px!important;min-height:0}html.phone .dicebox .who{display:none}
@@ -737,6 +740,22 @@ html.phone .dicebox .sum{font-size:34px!important}
 .htab.on{color:#f3e7cf;border-bottom-color:#d9a441}
 html.phone .pl .nm{white-space:nowrap;overflow:hidden;text-overflow:clip}
 html.phone .side{width:170px!important}
+#tip.bubble{max-width:340px;word-break:keep-all}
+#tip.bubble::after{content:"";position:absolute;left:var(--ax,50%);bottom:-7px;width:12px;height:12px;margin-left:-6px;background:inherit;border-right:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12);transform:rotate(45deg)}
+html.phone .step{grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:4px 0 10px}
+html.phone .step .cell{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:8px 10px;text-align:left}
+html.phone .step .cell>div:first-child{font-size:15px;font-weight:700}
+html.phone .step .cell .v{font-size:20px;margin-left:auto}
+html.phone .step .cell .b{gap:4px}
+html.phone .step .cell button{width:32px;height:32px;font-size:16px}
+html.phone .resp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:6px}
+html.phone .resp .r{padding:8px 10px;flex-wrap:wrap;gap:4px 8px}
+html.phone .resp .r span{flex:1 1 100%;font-size:14px}
+html.phone .resp .r .btn{padding:6px 12px;font-size:14px}
+html.phone .sheet.sheet-trade{padding:16px 24px!important}
+html.phone .sheet-trade h3{font-size:22px;margin-bottom:6px}
+html.phone .sheet-trade .tabs{margin-bottom:6px}
+html.phone .sheet-trade .row{margin-top:6px}
 </style>
 
 </head>
@@ -1816,6 +1835,9 @@ const DEVL={knight:'도적을 원하는 땅으로 옮기고, 그 땅에 건물�
  monopoly:'자원 하나를 고르면 <b>모든 상대가 가진 그 자원을 전부</b> 가져와요. 상대들이 많이 모았을 것 같은 자원을 노리세요.',
  vp:'갖고만 있어도 <b>1점</b>이에요. 쓸 필요가 없고 상대에게는 보이지 않아서, 마지막에 깜짝 승리를 만들어 줘요.'};
 const DEVCNT={knight:14,vp:5,roads:2,plenty:2,monopoly:2};
+function slotSpin(){clearTimeout(ui.slotT);const t0=performance.now();const tick=()=>{const el=$('#dicebox');if(!el)return;const el2=el.querySelectorAll('.dice .die');const now=performance.now();if(now>=(ui.diceRevealAt||0)-60){renderDiceBox();return;}
+  el2.forEach(d=>{const n=1+Math.floor(Math.random()*6);const on={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]}[n];d.querySelectorAll('i').forEach((x,i)=>x.classList.toggle('on',on.includes(i)));d.classList.remove('slot','blank');void d.offsetWidth;d.classList.add('slot');});
+  const p=(now-t0)/1300;ui.slotT=setTimeout(tick,70+p*p*160);};setTimeout(tick,20);}
 function renderDiceBox(){const el=$('#dicebox');if(!el||!S)return;const rolling=S.dice&&performance.now()<(ui.diceRevealAt||0);
   el.classList.toggle('rolling',!!rolling);
   el.innerHTML=S.dice&&!rolling?`<div class="dice" data-tip="마지막으로 굴린 주사위예요. 두 눈의 합과 같은 숫자가 적힌 땅이 자원을 만들어요. 7이면 도적이 움직여요.">${dieHTML(S.dice[0])+dieHTML(S.dice[1])}</div><div class="sum" aria-label="주사위 합">${S.dice[0]+S.dice[1]}</div>`
@@ -1866,7 +1888,7 @@ function render(){
   if(ui.lastCur!==S.cur+':'+S.phase){ui.lastCur=S.cur+':'+S.phase;const tb=$('#turnbar');tb.classList.remove('swap');void tb.offsetWidth;tb.classList.add('swap');}
   {const rl=$('#roundline');if(rl)rl.textContent=S.phase==='setup'?`초기 배치 ${S.si+1}/${2*S.n}`:S.phase==='over'?'게임 종료':`${S.turn}번째 바퀴`;}
   $('#gameinfo').textContent=`${S.n}인 게임, 난이도 ${({easy:'쉬움',normal:'보통',hard:'어려움'})[S.diff||'normal']}`;
-  if(rolledNow&&S.dice){ui.diceRevealAt=performance.now()+1350;if(typeof throwDice==='function')throwDice(S.dice);clearTimeout(ui.diceT);ui.diceT=setTimeout(renderDiceBox,1400);}
+  if(rolledNow&&S.dice){ui.diceRevealAt=performance.now()+1350;slotSpin();if(typeof throwDice==='function')throwDice(S.dice);clearTimeout(ui.diceT);ui.diceT=setTimeout(renderDiceBox,1400);}
   renderDiceBox();
   const myS=S.phase==='main'&&S.cur===0&&!S.pend;
   $('#stagebtns').innerHTML=`<button class="tbtn primary" data-act="roll" data-tip="${BTIP.roll}" ${myS&&!S.rolled?'':'disabled'}>주사위 굴리기</button><button class="tbtn" data-act="trade" data-tip="${BTIP.trade}" ${myS&&S.rolled?'':'disabled'}>교환</button><button class="tbtn" data-act="end" data-tip="${BTIP.end}" ${myS&&S.rolled?'':'disabled'}>턴 종료</button>`;
@@ -1906,7 +1928,9 @@ function hideTip(){tipEl.hidden=true;}
 document.addEventListener('pointermove',e=>{if(!ui.tips||e.pointerType!=='mouse')return;const t=e.target.closest&&e.target.closest('[data-tip]');
   if(t)showTipAt(t.dataset.tip,e.clientX,e.clientY);else if(!(e.target.closest&&e.target.closest('#stage')))hideTip();});
 document.addEventListener('pointerdown',e=>{if(!ui.tips||e.pointerType==='mouse')return;const t=e.target.closest&&e.target.closest('[data-tip]');
-  if(t){showTipAt(t.dataset.tip,e.clientX,e.clientY);clearTimeout(tipTimer);tipTimer=setTimeout(hideTip,2800);}});
+  if(t){const sb=t.closest('#stagebtns');if(sb){tipEl.innerHTML=t.dataset.tip;tipEl.classList.add('bubble');tipEl.hidden=false;const r=sb.getBoundingClientRect();const k=PH.on?PH.k:1;const w=tipEl.offsetWidth,h=tipEl.offsetHeight;
+      const vw=PH.on?PH.vw:innerWidth;let l=(r.left+r.width/2)/k-w/2;l=Math.max(8,Math.min(vw-w-8,l));tipEl.style.left=l+'px';tipEl.style.top=(r.top/k-h-12)+'px';{const br=t.getBoundingClientRect();tipEl.style.setProperty('--ax',((br.left+br.width/2)/k-l)+'px');}}
+    else{tipEl.classList.remove('bubble');showTipAt(t.dataset.tip,e.clientX,e.clientY);}clearTimeout(tipTimer);tipTimer=setTimeout(()=>{hideTip();tipEl.classList.remove('bubble');},2800);}});
 document.addEventListener('click',e=>{const b=e.target.closest('[data-pop]');
   if(b){e.stopPropagation();hideTip();popEl.innerHTML=devPop(b.dataset.pop);const r=b.getBoundingClientRect();placeFloat(popEl,r.left,r.bottom-8);return;}
   if(!popEl.hidden&&!e.target.closest('#pop'))popEl.hidden=true;},true);
