@@ -701,6 +701,13 @@ html.phone .sheet-start .cnt small{font-size:14px}
 html.phone .sheet-start .st-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
 html.phone .sheet-start .st-btns .btn{font-size:17px;padding:14px 10px}
 html.phone .sheet-start .st-btns #sTut{grid-column:1/-1}
+.sheet p,.sheet h3{word-break:keep-all}
+html.phone .sheet-newgame .st-l h3{font-size:40px;line-height:1.2;margin-bottom:12px}
+html.phone .sheet-newgame .st-btns #cYes{order:2}
+/* fullscreen button stands out */
+html body header.top .tools>#fsBtn.btn.btn{color:#f3d08a!important;font-weight:700;border:1px solid rgba(243,208,138,.7)!important;background:rgba(217,164,65,.14)!important;margin-left:10px;padding:4px 14px!important;border-radius:2px!important}
+html body header.top .tools>#fsBtn.btn.btn:hover{background:rgba(217,164,65,.28)!important}
+html body header.top .tools>#fsBtn.btn.btn:focus:not(:focus-visible){color:#f3d08a!important;background:rgba(217,164,65,.14)!important}
 </style>
 
 
@@ -1869,7 +1876,7 @@ const tipLabel=()=>{$('#tipBtn').textContent=ui.tips?'툴팁 켜짐':'툴팁 꺼
 $('#tipBtn').onclick=()=>{ui.tips=!ui.tips;saveUi();tipLabel();hideTip();if(!ui.tips)$('#toast').hidden=true;};tipLabel();
 $('#hintBtn').onclick=()=>{ui.hints=!ui.hints;saveUi();hintLabel();render();};hintLabel();
 $('#rulesBtn').onclick=()=>{clearTimeout(aiTimer);showRules(0);};
-$('#newBtn').onclick=()=>{clearTimeout(aiTimer);openModal('confirm',`<h3>새 게임을 시작할까요?</h3><p>지금 진행 중인 게임은 사라지고 새 섬이 만들어져요.</p>${countPick()}<div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn primary" id="cYes">새 게임 시작</button></div>`);
+$('#newBtn').onclick=()=>{clearTimeout(aiTimer);openModal('confirm',`<div class="st-l"><h3>새 게임을 시작할까요?</h3><p>지금 진행 중인 게임은 사라지고 새 섬이 만들어져요.</p></div><div class="st-r">${countPick()}<div class="row st-btns"><button class="btn" id="cNo">계속하기</button><button class="btn primary" id="cYes">새 게임 시작</button></div></div>`);$('#sheet').classList.add('sheet-start','sheet-newgame');
   bindCount();$('#cNo').onclick=()=>{closeModal();update();};$('#cYes').onclick=()=>{closeModal();startNew();};};
 
 // ---------- painted cards (canvas) ----------
