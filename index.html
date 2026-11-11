@@ -1252,7 +1252,7 @@ vec3 rockC(vec2 p,float h,float slope){vec3 b=tx(tRock,p*.95);b=sat(b,.35)*.78;
   float sn=smoothstep(.33,.42,h+(fbm(p*6.)-.5)*.12)*(1.-smoothstep(.55,.85,slope));return mix(b,tx(tSnow,p*1.6)*1.05,sn);}
 vec3 sandC(vec2 p){return sat(tx(tDesert,p*1.1),1.6)*vec3(1.22,1.02,.74)*1.12;}
 vec3 terrainColor(vec3 wp,vec3 wn){
-  vec2 p=wp.xz;vec2 w=p+(vec2(fbm(p*1.6),fbm(p*1.6+5.2))-.5)*.3;
+  vec2 p=wp.xz;vec2 w=p+(vec2(fbm3(p*1.6),fbm3(p*1.6+5.2))-.5)*.3;
   float ty,hd,va;hexAt(w,ty,hd,va);float slope=1.-clamp(wn.y,0.,1.);float h=wp.y;
   vec3 c=grassC(p)*1.03;
   gPert=vec3(0.);
@@ -1301,9 +1301,9 @@ function waterMaterial(){const m=new THREE.MeshStandardMaterial({color:0xffffff,
         vec3 wc=dep<.22?mix(shallow,mid,smoothstep(0.,.22,dep)):mix(mid,deep,smoothstep(.22,.95,dep));
         wc*=.9+.18*fbm3(p*1.3+uTime*.01);
         float cau=pow(abs(sin(fbm3(p*5.+uTime*.15)*12.)),8.)*(1.-smoothstep(.0,.25,dep))*smoothstep(.01,.05,dep);wc+=vec3(.25,.35,.3)*cau*.5;
-        float wcap=smoothstep(.78,.92,fbm(p*3.+vec2(uTime*.06,uTime*.03)))*smoothstep(.4,.9,dep)*.35;
-        float fo=(1.-smoothstep(.0,.06,dep))*smoothstep(.42,.7,fbm(p*10.+vec2(uTime*.12,-uTime*.08)));
-        fo+=(1.-smoothstep(.02,.13,dep))*smoothstep(.82,.98,sin(dep*48.-uTime*1.1)*.5+.5)*smoothstep(.35,.6,fbm3(p*7.+uTime*.05))*.7;
+        float wcap=dep<.4?0.:smoothstep(.78,.92,fbm(p*3.+vec2(uTime*.06,uTime*.03)))*smoothstep(.4,.9,dep)*.35;
+        float fo=dep<.06?(1.-smoothstep(.0,.06,dep))*smoothstep(.42,.7,fbm(p*10.+vec2(uTime*.12,-uTime*.08))):0.;
+        if(dep<.13)fo+=(1.-smoothstep(.02,.13,dep))*smoothstep(.82,.98,sin(dep*48.-uTime*1.1)*.5+.5)*smoothstep(.35,.6,fbm3(p*7.+uTime*.05))*.7;
         fo=clamp(fo,0.,1.);
         diffuseColor.rgb=mix(wc,vec3(.94,.97,.98),max(fo*.9,wcap));
         diffuseColor.a=max(mix(.36,1.,smoothstep(0.,.42,dep)),fo*.95);`)
@@ -1320,7 +1320,7 @@ function makeEnv(){if(W.envDone)return;W.envDone=1;try{const pm=new THREE.PMREMG
 function treeGeos(){if(W.treeGeo)return W.treeGeo;const U=THREE.BufferGeometryUtils;const nz=makeNoise(7);const rr=seeded(91);
   const colorize=(g,fn)=>{const p=g.attributes.position,c=[];for(let i=0;i<p.count;i++){const col=fn(p.getX(i),p.getY(i),p.getZ(i));c.push(col[0],col[1],col[2]);}g.setAttribute('color',new THREE.Float32BufferAttribute(c,3));return g;};
   const strip=g=>{g=g.index?g.toNonIndexed():g;g.deleteAttribute('uv');g.deleteAttribute('normal');return g;};
-  const blob=(cx,cy,cz,r,seed)=>{let b=U.mergeVertices(new THREE.IcosahedronGeometry(1,2).deleteAttribute('uv').deleteAttribute('normal'));const pa=b.attributes.position;
+  const blob=(cx,cy,cz,r,seed)=>{let b=U.mergeVertices(new THREE.IcosahedronGeometry(1,1).deleteAttribute('uv').deleteAttribute('normal'));const pa=b.attributes.position;
     for(let i=0;i<pa.count;i++){const x=pa.getX(i),y=pa.getY(i),z=pa.getZ(i);const k=.78+fbm(nz,x*2.2+seed,z*2.2+y*1.7+seed*3,3)*.5;pa.setXYZ(i,cx+x*r*k,cy+(y<-.3?y*.5:y)*r*k*.9,cz+z*r*k);}
     return b.toNonIndexed();};
   const decVar=n=>{const parts=[];const base=.13;for(let k=0;k<n;k++){const a=rr()*6.28,d=k?.03+rr()*.035:0;parts.push(blob(Math.cos(a)*d,base+(k?rr()*.05-.01:.02),Math.sin(a)*d,k?.04+rr()*.02:.06,k*7+rr()*9));}
@@ -1382,7 +1382,7 @@ function buildStatic(){
   const key=JSON.stringify(S.board.hexes)+JSON.stringify(S.board.ports);if(key===W.boardKey)return;W.boardKey=key;W.prev=null;W.robberFrom=null;if(W.pieces){W.pieces.clear();}W.dynG.clear();W.anim.clear();W.robber=null;W.tkey=null;
   W.staticG.clear();W.mills=[];W.tokens=[];W.infoG.clear();makeEnv();if(W.labels){W.labels=W.labels.filter(L=>{if(L.keep)return true;L.el.remove();return false;});}
   const g=W.staticG;const rng=seeded(key.length+S.board.robber*13);
-  const tg=new THREE.PlaneGeometry(15,15,280,280);tg.rotateX(-Math.PI/2);const tp=tg.attributes.position;
+  const tg=new THREE.PlaneGeometry(15,15,220,220);tg.rotateX(-Math.PI/2);const tp=tg.attributes.position;
   for(let i=0;i<tp.count;i++)tp.setY(i,heightAt(tp.getX(i),tp.getZ(i)));tg.computeVertexNormals();
   const terr=new THREE.Mesh(tg,terrainMaterial());terr.receiveShadow=true;terr.castShadow=false;terr.userData.keep=1;g.add(terr);
   W.waterTime=W.waterTime||{value:0};
@@ -1535,12 +1535,13 @@ function stepDice(now){DICE.list=DICE.list.filter(d=>{const p=Math.min(1,Math.ma
   d.m.position.lerpVectors(d.start,d.end,e);d.m.position.y=d.end.y+2.6*Math.pow(1-p,2.2)*Math.abs(Math.cos(p*Math.PI*2.6));
   const res=new THREE.Quaternion().setFromAxisAngle(d.axis,d.spin*Math.pow(1-p,2));d.m.quaternion.copy(d.qt).premultiply(res);
   const after=now-(d.t0+d.dur);if(after>2600){const k=Math.max(0,1-(after-2600)/400);d.m.scale.setScalar(k);if(k<=0){W.scene.remove(d.m);return false;}}return true;});}
-const PERF={born:performance.now(),dpr:Math.min(window.devicePixelRatio||1,2),max:Math.min(window.devicePixelRatio||1,2),last:0,ambient:0,samples:[],dirty:true,shadow:true,lastLow:0};
-function invalidate(shadow){PERF.dirty=true;if(shadow)PERF.shadow=true;}
+const PERF={born:performance.now(),dpr:Math.min(window.devicePixelRatio||1,2),max:Math.min(window.devicePixelRatio||1,2),last:0,ambient:0,samples:[],dirty:true,shadow:true,lastLow:0,act:performance.now()};
+['pointerdown','pointermove','wheel','keydown','touchstart'].forEach(e=>addEventListener(e,()=>{PERF.act=performance.now();},{passive:true,capture:true}));
+function invalidate(shadow){PERF.dirty=true;PERF.act=performance.now();if(shadow)PERF.shadow=true;}
 function setDPR(v){PERF.dpr=v;W.r.setPixelRatio(v);if(W.comp)W.comp.setPixelRatio(v);fitCam(false);PERF.shadow=true;PERF.dirty=true;}
 function loop(t){requestAnimationFrame(loop);if(!W.ok||document.hidden)return;const s=t/1000;const moved=W.ctl.update();
   const now0=performance.now();const robP=W.robber&&W.robber.userData.robPulse;const anim=moved||W.camAnim||DICE.list.length||W.tgtG.children.length||W.anim.size||robP;
-  const ambientDue=now0-PERF.ambient>(PERF.dpr<PERF.max?140:80);
+  const ambientDue=now0-PERF.ambient>(now0-PERF.act>45000?600:PERF.dpr<PERF.max?140:80);
   if(!anim&&!PERF.dirty&&!ambientDue)return;
   if(!anim&&!PERF.dirty)PERF.ambient=now0;
   const movingObj=DICE.list.length||W.anim.size;if(movingObj)PERF.shadow=true;
