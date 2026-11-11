@@ -611,6 +611,56 @@ html.phone .panel h2{margin-bottom:6px;padding-bottom:5px}
 .logo small{font-size:.38em;letter-spacing:.32em;font-weight:500;color:#b9a684;opacity:.9}
 header.top h1.logo{font-size:26px}
 .hero-title.logo{font-size:46px;margin:6px 0 14px}
+/* v25 layout */
+.sheet{position:relative}
+.mclose{position:absolute;top:12px;right:12px;width:36px;height:36px;display:grid;place-items:center;font-size:24px;line-height:1;background:transparent;border:1px solid var(--hud-line2);color:var(--ink);cursor:pointer;z-index:2}
+.mclose:hover{border-color:#e3c27a;color:#f3d08a}
+#leftcol{display:none}
+@media (min-width:1101px) and (min-height:640px){
+  #leftcol{display:flex;flex-direction:column;align-items:flex-start;gap:12px;position:fixed;left:24px;top:84px;width:340px;z-index:5;pointer-events:none}
+  #leftcol>*{pointer-events:auto;position:static!important;transform:none!important;left:auto!important;top:auto!important;right:auto!important;margin:0}
+  #leftcol>.coach{width:100%}
+  #leftcol>.toast{width:100%!important;box-sizing:border-box}
+  #leftcol>.toast.show{animation:plaqueIn3 .35s ease-out}
+  .stagebtns{display:grid!important;grid-template-columns:1fr 1fr;gap:10px!important;width:284px;right:24px!important;bottom:24px!important}
+  .stagebtns .tbtn{min-width:0!important;padding:13px 10px!important}
+  .stagebtns .tbtn.primary{grid-column:1/-1;min-width:0!important;padding:16px 10px!important;font-size:16px!important}
+  .tray{padding-right:340px!important}
+  .side{max-height:calc(100dvh - 160px - var(--sbH,120px) - 44px);overflow:hidden}
+  .side .logpanel{flex:0 1 auto!important;min-height:0;display:flex;flex-direction:column}
+  .side .log{flex:1 1 auto!important;min-height:0;max-height:180px!important;overflow:auto!important}
+}
+@media (min-width:1101px) and (min-height:640px) and (max-height:900px){#leftcol{top:76px}.side{max-height:calc(100dvh - 148px - var(--sbH,120px) - 40px)}}
+/* phone: bigger essentials, fewer extras */
+html.phone header.top{top:8px!important;left:14px!important;right:14px!important}
+html.phone header.top h1.logo{font-size:20px}
+html.phone .speedlbl,html.phone #speed,html.phone #gfxBtn,html.phone #tipBtn,html.phone #hintBtn{display:none!important}
+html.phone header.top .tools .btn{font-size:13px!important;padding:7px 12px!important}
+html.phone #leftcol{left:14px;top:50px;width:270px;gap:8px}
+html.phone .dicebox{padding:6px 10px!important;min-height:0}html.phone .dicebox .who{display:none}
+html.phone .coach{font-size:13px;line-height:1.45;padding:9px 12px!important}
+html.phone #leftcol>.toast .ex{display:none}html.phone #leftcol>.toast{font-size:12.5px;padding:8px 12px}
+html.phone .turnplaque{top:50px!important;right:14px!important;width:220px!important;padding:8px 12px!important}
+html.phone .tp-name{font-size:15px}
+html.phone .side{top:112px!important;right:14px!important;width:220px!important}
+html.phone .side .logpanel,html.phone .side>.panel:has(details.ref),html.phone .gameinfo{display:none!important}
+html.phone .side .panel h2{display:none}
+html.phone .pl .nm{font-size:13.5px}html.phone .pl .vp{font-size:17px}
+html.phone #stage .camreset{left:14px!important;bottom:calc(var(--trayH) + 8px)!important;padding:6px 10px!important;font-size:12px}
+html.phone .tray{padding:22px 260px 10px 14px!important}
+html.phone .tray-dev{display:none}
+html.phone .tally{display:none}
+html.phone .tray-h{font-size:13px}
+html.phone .builds{grid-template-columns:repeat(4,72px)!important}html.phone .bld .meta2{display:none}html.phone .bld b{font-size:12.5px}
+html.phone .stagebtns{width:230px!important;right:14px!important;bottom:12px!important;gap:8px!important}
+html.phone .stagebtns .tbtn{font-size:15px!important;padding:12px 8px!important}html.phone .stagebtns .tbtn.primary{font-size:17px!important;padding:14px 8px!important}
+html.phone .side{max-height:calc(var(--vh) - 112px - var(--sbH,110px) - 24px)}
+html.phone .overlay{padding:0!important}
+html.phone .sheet,html.phone .sheet.sheet-rules{width:100%!important;max-width:none!important;height:100%!important;max-height:100%!important;border-radius:0!important;padding:22px 28px!important;font-size:16px;box-sizing:border-box;overflow:auto}
+html.phone .sheet h3{font-size:26px}html.phone .sheet p,html.phone .sheet li{font-size:16px}
+html.phone .sheet .btn{font-size:16px;padding:12px 18px}html.phone .cnt .btn{font-size:15px}html.phone .cnt small{font-size:13px}
+html.phone .hero-title.logo{font-size:44px}
+html.phone .mclose{width:44px;height:44px;font-size:28px}
 </style>
 
 </head>
@@ -660,6 +710,7 @@ header.top h1.logo{font-size:26px}
 </main>
 
 <div id="tip" hidden></div><div id="pop" hidden></div>
+<div id="leftcol"></div>
 <div id="rotate" hidden><div class="rot-ic"></div><b>가로로 돌려 주세요</b><span>HexIsle은 휴대폰에서 가로 화면으로 플레이해요.</span></div>
 <div id="modal" class="overlay" hidden><div class="sheet" id="sheet"></div></div>
 
@@ -906,12 +957,13 @@ function aiStep(p){
 function aiAccepts(q,give,get){
   const r=S.players[q].res;
   if(!sumRes(give)&&!sumRes(get))return{ok:false,why:'빈 제안이에요'};
-  if(RES.some(k=>(get[k]||0)>r[k]))return{ok:false,why:'그 카드가 없어요'};
-  const d=DF();if(sumRes(get)&&d!=='easy'&&vp(0)>=(d==='hard'?7:8))return{ok:false,why:'선두와는 거래 안 해요'};
+  const d=DF();const lack=RES.filter(k=>(get[k]||0)>r[k]);
+  if(lack.length){if(d==='easy')return{ok:false,why:'그 카드가 없어요'};if(d==='normal'&&RES.filter(k=>get[k]).length===1&&Math.random()<.5)return{ok:false,why:'그건 좀 부족해요'};return{ok:false,why:d==='hard'?'거절할게요':'저한테 손해예요'};}
+if(sumRes(get)&&d!=='easy'&&vp(0)>=(d==='hard'?7:8))return{ok:false,why:d==='hard'?'거절할게요':'선두와는 거래 안 해요'};
   const g=aiGoal(q)||'dev';const c=COST[g];let gain=0,loss=0;
   RES.forEach(k=>{gain+=(give[k]||0)*(1+((c[k]||0)>r[k]?1.2:0));const n=get[k]||0;if(n){const after=r[k]-n;loss+=n*(1+(after<(c[k]||0)?1.5:0));}});
   const ok=(d==='easy'?gain>=loss-1.2:d==='hard'?gain>loss:gain>=loss)&&sumRes(give)>0||!sumRes(get);
-  return{ok,why:ok?'좋아요, 거래해요':'저한테 손해예요'};
+  return{ok,why:ok?'좋아요, 거래해요':(d==='hard'?'거절할게요':'저한테 손해예요')};
 }
 </script>
 
@@ -1150,11 +1202,13 @@ function init3D(){
   requestAnimationFrame(loop);
   return true;
 }
-function hudBox(w,h){if(!(typeof HUDQ!=='undefined'&&HUDQ.matches))return{dx:0,dy:0,vw:w,vh:h};const tr=$('#tray');const th=tr?tr.offsetHeight*.72:200;const right=330,top=70;
-  const vw=w-right,vh=h-th-top;return{dx:right/2,dy:(th-top)/2,vw,vh};}
-function fitCam(reset){const el=$('#stage');const w=el.clientWidth||600,h=el.clientHeight||500;W.r.setSize(w,h);try{PERF.dirty=true;PERF.shadow=true;}catch(e){}W.cam.aspect=w/h;
+function hudBox(w,h){if(!(typeof HUDQ!=='undefined'&&HUDQ.matches))return{dx:0,dy:0,vw:w,vh:h};const tr=$('#tray');const th=tr?tr.offsetHeight*.72:200;
+  const lc=$('#leftcol'),sd=document.querySelector('.side');const L=(lc&&lc.offsetWidth?lc.offsetWidth+24:300),Rr=(sd&&sd.offsetWidth?sd.offsetWidth+24:300);const top=PH.on?44:64;
+  const vw=w-(L+Rr)*.7,vh=h-th-top;return{dx:(Rr-L)/2,dy:(th-top)/2,vw,vh};}
+function fitCam(reset){const el=$('#stage');const w=el.clientWidth||600,h=el.clientHeight||500;const sz=W.r.getSize(new THREE.Vector2());const changed=sz.x!==w||sz.y!==h||W.r.getPixelRatio()!==W.lastPR;W.lastPR=W.r.getPixelRatio();if(changed)W.r.setSize(w,h);W.cam.aspect=w/h;
   const hb=hudBox(w,h);if(hb.dx||hb.dy)W.cam.setViewOffset(w,h,hb.dx,hb.dy,w,h);else W.cam.clearViewOffset();W.cam.updateProjectionMatrix();
-  if(W.comp)resizeFX(w,h);
+  if(W.comp&&changed)resizeFX(w,h);
+  if(changed||!reset){try{PERF.dirty=true;PERF.shadow=true;W.r.shadowMap.needsUpdate=true;}catch(e){}if(W.started){if(W.comp&&ui.gfx!=='low')W.comp.render();else W.r.render(W.scene,W.cam);}}
   if(reset){const a=hb.vw/hb.vh;const d=13.6*Math.pow(Math.max(1,1.32/a),1.05)*Math.max(1,h/Math.max(300,hb.vh))**.9;const ph=.66;
     const tp=new THREE.Vector3(0,0,.35),cp=new THREE.Vector3(0,d*Math.cos(ph),.35+d*Math.sin(ph));
     if(reset==='now'||!W.started){W.ctl.target.copy(tp);W.cam.position.copy(cp);W.ctl.update();W.camAnim=null;}
@@ -1629,7 +1683,7 @@ function loop(t){requestAnimationFrame(loop);if(!W.ok||document.hidden)return;co
   const f0=performance.now();if(W.comp&&ui.gfx!=='low')W.comp.render();else W.r.render(W.scene,W.cam);placeLabels();$('#maplbls').style.opacity=DICE.list.length?'.25':'';
   if(anim){const dt=now0-(PERF.last||now0);PERF.last=now0;if(dt>0&&dt<500){PERF.samples.push(dt);if(PERF.samples.length>40){const avg=PERF.samples.reduce((a,b)=>a+b,0)/PERF.samples.length;PERF.samples=[];
       const floor=Math.min(PERF.max,1);if(now0-PERF.born<6000){}else if(avg>34&&PERF.dpr>floor){setDPR(Math.max(floor,+(PERF.dpr-.25).toFixed(2)));PERF.lastLow=now0;}
-      else if(avg<22&&PERF.dpr<PERF.max&&now0-PERF.lastLow>4000)setDPR(Math.min(PERF.max,+(PERF.dpr+.25).toFixed(2)));}}}else PERF.last=0;}
+      else if(!PERF.lastLow&&avg<22&&PERF.dpr<PERF.max)setDPR(Math.min(PERF.max,+(PERF.dpr+.25).toFixed(2)));}}}else PERF.last=0;}
 // ---- post-processing: ambient occlusion, bloom, tilt-shift depth of field, filmic grade ----
 const GradeShaderX=0;
 const GradeShader={uniforms:{tDiffuse:{value:null},exposure:{value:1.0},sat:{value:1.0},vign:{value:.7}},
@@ -1898,12 +1952,12 @@ const PAGES=[
 ];
 
 function showRules(i,after){i=i||0;
-  openModal('rules',`<div class="label">게임 방법 ${i+1} / ${PAGES.length}</div><h3>${PAGES[i][0]}</h3><div class="tut-body">${PAGES[i][1]}</div>
+  openModal('rules',`<button class="mclose" id="rx" aria-label="닫기" title="닫기">×</button><div class="label">게임 방법 ${i+1} / ${PAGES.length}</div><h3>${PAGES[i][0]}</h3><div class="tut-body">${PAGES[i][1]}</div>
   <div class="row"><div class="tut-dots">${PAGES.map((_,j)=>`<i class="${j===i?'on':''}"></i>`).join('')}</div>
   ${i>0?'<button class="btn" id="rp">이전</button>':'<button class="btn" id="rs">건너뛰기</button>'}
   ${i<PAGES.length-1?'<button class="btn primary" id="rn">다음</button>':'<button class="btn primary" id="rd">게임으로</button>'}</div>`);
   const done=()=>{closeModal();if(after)after();else update();};
-  if($('#rp'))$('#rp').onclick=()=>showRules(i-1,after);if($('#rs'))$('#rs').onclick=done;
+  $('#rx').onclick=done;if($('#rp'))$('#rp').onclick=()=>showRules(i-1,after);if($('#rs'))$('#rs').onclick=done;
   if($('#rn'))$('#rn').onclick=()=>showRules(i+1,after);if($('#rd'))$('#rd').onclick=done;}
 
 const DIFF=[['easy','쉬움','AI가 실수도 하고 거래에 너그러워요'],['normal','보통','기본 전략으로 플레이해요'],['hard','어려움','선두를 견제하고 은행 교환이 3:1이에요']];
@@ -2097,18 +2151,20 @@ const HUDQ={get matches(){return PH.on||matchMedia('(min-width:1101px) and (min-
 function evalMQ(txt,w,h){if(/prefers|hover|pointer|orientation/.test(txt))return null;return txt.split(',').some(part=>{let ok=true;part.replace(/\((min|max)-(width|height)\s*:\s*(\d+)px\)/g,(m,mm,d,v)=>{const x=d==='width'?w:h;v=+v;if(mm==='min'?x<v:x>v)ok=false;});return ok;});}
 function applyPhone(){const coarse=matchMedia('(pointer:coarse)').matches;const small=Math.min(innerWidth,innerHeight)<700;const land=innerWidth>innerHeight;
   const portraitBlock=coarse&&small&&!land;document.documentElement.classList.toggle('portrait-block',portraitBlock);$('#rotate').hidden=!portraitBlock;
-  const on=coarse&&small&&land;const VH=600;const k=on?innerHeight/VH:1;const vw=Math.round(innerWidth/k);
+  const on=coarse&&small&&land;const VH=440;const k=on?innerHeight/VH:1;const vw=Math.round(innerWidth/k);
   if(on===PH.on&&(!on||Math.abs(k-PH.k)<.001))return;PH.on=on;PH.k=k;PH.vw=vw;PH.vh=VH;
   const root=document.documentElement;root.classList.toggle('phone',on);root.style.setProperty('--k',k);root.style.setProperty('--vw',vw+'px');root.style.setProperty('--vh',VH+'px');
   for(const sh of document.styleSheets){let rules;try{rules=sh.cssRules;}catch(e){continue;}for(const r of rules){if(!r.media||r.type!==4)continue;
-    if(!PH.orig.has(r))PH.orig.set(r,r.media.mediaText);const o=PH.orig.get(r);if(!on){r.media.mediaText=o;continue;}const v=evalMQ(o,vw,640);if(v===null)continue;r.media.mediaText=v?'all':'not all';}}
+    if(!PH.orig.has(r))PH.orig.set(r,r.media.mediaText);const o=PH.orig.get(r);if(!on){r.media.mediaText=o;continue;}const v=evalMQ(o,Math.max(vw,1280),720);if(v===null)continue;r.media.mediaText=v?'all':'not all';}}
   phoneDPR();}
 function phoneDPR(){if(typeof W==='undefined'||!W.ok)return;const v=Math.min(window.devicePixelRatio||1,2)*(PH.on?Math.max(PH.k,.7):1);try{PERF.max=v;PERF.samples=[];setDPR(v);}catch(e){W.r.setPixelRatio(v);}}
 addEventListener('resize',()=>{applyPhone();setTimeout(()=>{fitChrome();if(S)render();},60);});applyPhone();
 function fitChrome(){const h=document.querySelector('header.top');if(h)document.documentElement.style.setProperty('--chrome',(h.offsetHeight+16+40)+'px');
   {const tb=$('#turnbar'),sd=document.querySelector('.side'),st0=$('#stage');if(tb&&sd&&st0){if(HUDQ.matches){if(tb.parentNode!==st0)st0.appendChild(tb);}else if(tb.parentNode!==sd)sd.insertBefore(tb,sd.firstChild);}}
   const sb=$('#stagebtns'),tr=$('#tray'),st=$('#stage');if(sb&&tr&&st){if(HUDQ.matches){if(sb.parentNode!==tr)tr.appendChild(sb);}else if(sb.parentNode!==st)st.appendChild(sb);}
+  {const lc=$('#leftcol');for(const id of ['dicebox','coach','toast']){const e=$('#'+id);if(!e)continue;if(!e._home)e._home={p:e.parentNode,n:e.nextSibling};if(HUDQ.matches){if(e.parentNode!==lc)lc.appendChild(e);}else if(e.parentNode!==e._home.p)e._home.p.insertBefore(e,e._home.n);}}
   if(tr)document.documentElement.style.setProperty('--trayH',(HUDQ.matches?tr.offsetHeight:0)+'px');
+  if(sb)document.documentElement.style.setProperty('--sbH',(HUDQ.matches?sb.offsetHeight:0)+'px');
   if(W.ok)fitCam(false);}
 fitChrome();window.addEventListener('resize',fitChrome);try{document.fonts.ready.then(fitChrome);}catch(e){}
 {const fb=$('#fsBtn');const el=document.documentElement;const can=document.fullscreenEnabled||document.webkitFullscreenEnabled;fb.hidden=!can;
