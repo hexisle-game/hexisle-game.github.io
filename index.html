@@ -661,6 +661,14 @@ html.phone .sheet h3{font-size:26px}html.phone .sheet p,html.phone .sheet li{fon
 html.phone .sheet .btn{font-size:16px;padding:12px 18px}html.phone .cnt .btn{font-size:15px}html.phone .cnt small{font-size:13px}
 html.phone .hero-title.logo{font-size:44px}
 html.phone .mclose{width:44px;height:44px;font-size:28px}
+/* v26 */
+.panel,.coach,.sheet,.dicebox,#tip,#pop,.toast,.turnplaque,#stage .camreset,.bld{box-shadow:none!important}
+.panel,.coach,.dicebox,.toast,.turnplaque,#stage .camreset{background:linear-gradient(180deg,rgba(18,17,16,.8),rgba(6,6,7,.8))!important}
+html.phone .turnplaque{width:150px!important;padding:7px 10px!important}
+html.phone .tp-name{font-size:13.5px}html.phone .tp-sub{font-size:11px}
+html.phone .side{width:150px!important}
+html.phone .pl{padding:4px 8px!important;gap:2px 6px}html.phone .pl .nm{font-size:12.5px}
+html.phone .tray{padding-right:250px!important}
 </style>
 
 </head>
@@ -1202,14 +1210,14 @@ function init3D(){
   requestAnimationFrame(loop);
   return true;
 }
-function hudBox(w,h){if(!(typeof HUDQ!=='undefined'&&HUDQ.matches))return{dx:0,dy:0,vw:w,vh:h};const tr=$('#tray');const th=tr?tr.offsetHeight*.72:200;
+function hudBox(w,h){if(!(typeof HUDQ!=='undefined'&&HUDQ.matches))return{dx:0,dy:0,vw:w,vh:h};const tr=$('#tray');const th=tr?tr.offsetHeight*(PH.on?1.15:.95):200;
   const lc=$('#leftcol'),sd=document.querySelector('.side');const L=(lc&&lc.offsetWidth?lc.offsetWidth+24:300),Rr=(sd&&sd.offsetWidth?sd.offsetWidth+24:300);const top=PH.on?44:64;
   const vw=w-(L+Rr)*.7,vh=h-th-top;return{dx:(Rr-L)/2,dy:(th-top)/2,vw,vh};}
 function fitCam(reset){const el=$('#stage');const w=el.clientWidth||600,h=el.clientHeight||500;const sz=W.r.getSize(new THREE.Vector2());const changed=sz.x!==w||sz.y!==h||W.r.getPixelRatio()!==W.lastPR;W.lastPR=W.r.getPixelRatio();if(changed)W.r.setSize(w,h);W.cam.aspect=w/h;
   const hb=hudBox(w,h);if(hb.dx||hb.dy)W.cam.setViewOffset(w,h,hb.dx,hb.dy,w,h);else W.cam.clearViewOffset();W.cam.updateProjectionMatrix();
   if(W.comp&&changed)resizeFX(w,h);
   if(changed||!reset){try{PERF.dirty=true;PERF.shadow=true;W.r.shadowMap.needsUpdate=true;}catch(e){}if(W.started){if(W.comp&&ui.gfx!=='low')W.comp.render();else W.r.render(W.scene,W.cam);}}
-  if(reset){const a=hb.vw/hb.vh;const d=13.6*Math.pow(Math.max(1,1.32/a),1.05)*Math.max(1,h/Math.max(300,hb.vh))**.9;const ph=.66;
+  if(reset){const a=hb.vw/hb.vh;const d=13.6*Math.pow(Math.max(1,1.32/a),1.05)*Math.max(1,h/Math.max(300,hb.vh))**.9*(PH.on?1.1:1);const ph=.66;
     const tp=new THREE.Vector3(0,0,.35),cp=new THREE.Vector3(0,d*Math.cos(ph),.35+d*Math.sin(ph));
     if(reset==='now'||!W.started){W.ctl.target.copy(tp);W.cam.position.copy(cp);W.ctl.update();W.camAnim=null;}
     else W.camAnim={t0:performance.now(),fp:W.cam.position.clone(),ft:W.ctl.target.clone(),tp,cp};}}
@@ -1624,12 +1632,12 @@ function sync3D(){
   const T=targets();
   if(ui.hints&&T.kind==='setupS'){const pr=prodOf(0);[...T.v].sort((a,b)=>spotValue(b,0,pr)-spotValue(a,0,pr)).slice(0,3).forEach(v=>{const V=vc(v);const d=decal('ring',0xffc94a,1,.62,.62,heightAt(V.x,V.z)+.03);d.position.x=V.x;d.position.z=V.z;W.tgtG.add(d);});}
   T.e.forEach(e=>{const E=G.edges[e],A=vc(E.a),B=vc(E.b);const dx=B.x-A.x,dz=B.z-A.z,L=Math.hypot(dx,dz);const k=new THREE.Group();k.position.set((A.x+B.x)/2,0,(A.z+B.z)/2);k.rotation.y=Math.atan2(dx,dz);
-    {const d=decal('bar',0xffffff,.9,.16,L*.66,heightAt(k.position.x,k.position.z)+.04);d.rotation.y=Math.PI/2;d.scale.set(L*.66,1,.16);k.add(d);}k.add(part('box',HIT,[.26,.25,L*.7],[0,.1,0],{noShadow:true}));
+    {const d=decal('bar',0xffffff,.9,.16,L*.66,heightAt(k.position.x,k.position.z)+.04);d.rotation.y=Math.PI/2;d.scale.set(L*.7,1,PH.on?.28:.16);k.add(d);}k.add(part('box',HIT,[PH.on?.4:.26,.25,L*.7],[0,.1,0],{noShadow:true}));
     k.userData.pick={e};k.userData.pulse=1;W.tgtG.add(k);});
   T.v.forEach(v=>{const V=vc(v);const k=new THREE.Group();k.position.set(V.x,0,V.z);
     const hy=heightAt(V.x,V.z);if(T.kind==='city')k.add(decal('ring',0xffd36b,1,.9,.9,.08));
-    else k.add(decal('dot',0xffffff,.95,.36,.36,hy+.035));
-    k.add(part('sph',HIT,[.24,.24,.24],[0,.1,0],{noShadow:true}));k.userData.pick={v};k.userData.pulse=1;W.tgtG.add(k);});
+    else{const z=PH.on?.56:.36;k.add(decal('dot',0xffffff,.95,z,z,hy+.035));}
+    {const z=PH.on?.34:.24;k.add(part('sph',HIT,[z,z,z],[0,.1,0],{noShadow:true}));}k.userData.pick={v};k.userData.pulse=1;W.tgtG.add(k);});
   T.h.forEach(h=>{const {x,z}=hc(h);const k=new THREE.Group();k.position.set(x,0,z);
     k.add(part('cyl6',glow(0xffc94a,.28),[.9,.02,.9],[0,.02,0],{noShadow:true}));
     k.add(part('cyl6',HIT,[.9,.3,.9],[0,.15,0],{noShadow:true}));k.userData.pick={h};k.userData.pulse=2;W.tgtG.add(k);});
@@ -1716,23 +1724,16 @@ function dieHTML(n,cls){const on={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6
   return `<div class="die ${cls||''}">${[0,1,2,3,4,5,6,7,8].map(i=>`<i class="${on.includes(i)?'on':''}"></i>`).join('')}</div>`;}
 
 function coachText(){
-  if(S.phase==='over')return S.winner===0?'<b>승리!</b> 섬의 개척왕이 됐어요. 새 게임으로 다시 도전해 보세요.':`${pname(S.winner)}이(가) 10점을 먼저 모았어요. 새 게임으로 설욕해 보세요.`;
-  if(S.pend&&S.pend.k==='discard')return `<b>주사위 7!</b> 카드가 8장 이상이면 절반을 버려야 해요. <b>${S.pend.n}장</b>을 골라 주세요.`;
-  if(S.cur!==0){
-    if(S.phase==='setup')return `${pname(S.cur)}이(가) 초기 배치 중이에요. 순서: ${S.order.map(i=>S.players[i].name).join(' → ')}`;
-    return `${pname(S.cur)}의 차례예요. 기록 창에서 무엇을 하는지 볼 수 있어요.`;}
-  if(S.phase==='setup'){const second=S.si>=4;
-    if(S.sub==='settlement')return second?'<b>두 번째 정착지</b>를 놓으세요. 이번에는 붙어 있는 땅마다 자원을 1장씩 바로 받아요. 첫 정착지에 없는 자원을 노려 보세요.'+(ui.hints?' 금색 고리는 추천 위치예요.':'')
-      :'<b>첫 정착지</b>를 놓을 교차점을 누르세요. 빨간 6·8이 가장 자주 나오고, 5·9가 그다음이에요. 여러 종류의 자원을 고루 받는 자리가 좋아요.'+(ui.hints?' 금색 고리는 추천 위치예요.':'');
-    return '방금 놓은 정착지에서 뻗는 <b>도로</b>를 하나 놓으세요. 다음 정착지를 지을 방향으로 뻗어 두면 좋아요.';}
-  if(S.pend){if(S.pend.k==='robber')return '<b>도적을 옮길 차례예요.</b> 주황빛으로 빛나는 도적을 보낼 땅을 보드에서 누르세요. 그 땅은 생산이 멈추고, 그 땅에 건물이 있는 상대에게서 카드 1장을 빼앗아요.';
-    if(S.pend.k==='steal')return '누구에게서 카드를 빼앗을지 고르세요.';
-    if(S.pend.k==='roads')return `<b>무료 도로</b>를 놓을 곳을 누르세요. (${S.pend.left}개 남음)`;}
-  if(!S.rolled)return '<b>주사위를 굴리세요.</b>'+(canPlayDev(0,'knight')?' 도적이 거슬리면 굴리기 전에 기사 카드를 쓸 수도 있어요.':'');
-  if(ui.mode)return {road:'반짝이는 <b>변</b>을 눌러 도로를 놓으세요. 내 도로나 건물에 이어져야 해요.',settlement:'반짝이는 <b>교차점</b>을 눌러 정착지를 지으세요. 내 도로와 이어지고, 다른 건물과 한 칸 이상 떨어진 곳만 돼요.',city:'도시로 바꿀 <b>내 정착지</b>를 누르세요. 도시는 자원을 2장씩 받아요.'}[ui.mode]+' 같은 버튼을 다시 누르면 취소돼요.';
+  if(S.phase==='over')return S.winner===0?'<b>승리!</b> 새 게임으로 다시 도전해 보세요.':`${pname(S.winner)}의 승리예요.`;
+  if(S.pend&&S.pend.k==='discard')return `카드 <b>${S.pend.n}장</b>을 버리세요.`;
+  if(S.cur!==0)return `${pname(S.cur)}의 차례예요.`;
+  if(S.phase==='setup'){if(S.sub==='settlement')return S.si>=4?'<b>두 번째 정착지</b>를 놓을 교차점을 누르세요.':'<b>첫 정착지</b>를 놓을 교차점을 누르세요.';return '정착지에 붙은 <b>도로</b>를 놓으세요.';}
+  if(S.pend){if(S.pend.k==='robber')return '<b>도적</b>을 보낼 땅을 누르세요.';if(S.pend.k==='steal')return '카드를 빼앗을 상대를 고르세요.';if(S.pend.k==='roads')return `<b>무료 도로</b>를 놓으세요. (${S.pend.left}개 남음)`;}
+  if(!S.rolled)return '<b>주사위를 굴리세요.</b>';
+  if(ui.mode)return {road:'<b>도로</b>를 놓을 변을 누르세요.',settlement:'<b>정착지</b>를 지을 교차점을 누르세요.',city:'<b>도시</b>로 바꿀 정착지를 누르세요.'}[ui.mode];
   const can=['road','settlement','city','dev'].filter(w=>canBuild(0,w)).map(w=>BN[w]);
-  if(can.length)return `지금 지을 수 있어요: <b>${can.join(', ')}</b>. 다 끝났으면 <b>턴 종료</b>를 누르세요.`;
-  return '지금은 지을 수 있는 게 없어요. <b>교환</b>으로 필요한 자원을 맞추거나 <b>턴 종료</b>를 누르세요.';
+  if(can.length)return `건설 가능: <b>${can.join(', ')}</b>`;
+  return '교환하거나 <b>턴 종료</b>를 누르세요.';
 }
 
 const RUSE={wood:'도로·정착지',brick:'도로·정착지',wool:'정착지·발전 카드',grain:'정착지·도시·발전 카드',ore:'도시·발전 카드'};
@@ -1815,7 +1816,7 @@ function render(){
     <div style="margin-top:10px" class="label">은행 잔고</div><div class="cost" style="margin-top:4px" data-tip="은행에 남은 자원 수. 0이면 그 자원은 생산돼도 받을 수 없어요.">${RES.map(k=>`<span class="pip bg-${k}">${RN[k]} ${S.bank[k]}</span>`).join('')}<span class="pip" style="background:var(--line)">발전 ${S.deck.length}</span></div>
     <div style="margin-top:8px" class="label">내 교환 비율</div><div class="cost" style="margin-top:4px" data-tip="이 자원 몇 장을 원하는 자원 1장으로 바꿀 수 있는지. 항구에 건물이 있으면 비율이 좋아져요.">${(r=>RES.map(k=>`<span class="pip bg-${k}">${RN[k]} ${r[k]}:1</span>`).join(''))(ratios(0))}</div>`;
   $('#log').innerHTML=S.log.slice(PH.on?-4:0).reverse().map(e=>e.k==='turn'?`<div class="turn">${e.p>=0?pname(e.p):''}${e.p>=0&&e.t.startsWith('의')?'':' '}${e.t}</div>`:`<div class="${e.k}">${e.p>=0?pname(e.p)+' ':''}${e.t}</div>`).join('');
-  checkToast();
+  checkToast();try{alignBtns();}catch(e){}
   forcedModals();
 }
 function checkToast(){const seq=S.logSeq||0;if(ui.seenSeq===undefined||ui.seenSeq>seq){ui.seenSeq=seq;return;}
@@ -2159,11 +2160,13 @@ function applyPhone(){const coarse=matchMedia('(pointer:coarse)').matches;const 
   phoneDPR();}
 function phoneDPR(){if(typeof W==='undefined'||!W.ok)return;const v=Math.min(window.devicePixelRatio||1,2)*(PH.on?Math.max(PH.k,.7):1);try{PERF.max=v;PERF.samples=[];setDPR(v);}catch(e){W.r.setPixelRatio(v);}}
 addEventListener('resize',()=>{applyPhone();setTimeout(()=>{fitChrome();if(S)render();},60);});applyPhone();
+function alignBtns(){const sb=$('#stagebtns'),bd=document.querySelector('.builds');if(!sb||!bd)return;if(!HUDQ.matches||PH.on){sb.style.bottom='';return;}const r=bd.getBoundingClientRect();if(!r.height)return;const c=r.top+r.height/2;sb.style.setProperty('bottom',Math.max(12,innerHeight-c-sb.offsetHeight/2)+'px','important');}
 function fitChrome(){const h=document.querySelector('header.top');if(h)document.documentElement.style.setProperty('--chrome',(h.offsetHeight+16+40)+'px');
   {const tb=$('#turnbar'),sd=document.querySelector('.side'),st0=$('#stage');if(tb&&sd&&st0){if(HUDQ.matches){if(tb.parentNode!==st0)st0.appendChild(tb);}else if(tb.parentNode!==sd)sd.insertBefore(tb,sd.firstChild);}}
   const sb=$('#stagebtns'),tr=$('#tray'),st=$('#stage');if(sb&&tr&&st){if(HUDQ.matches){if(sb.parentNode!==tr)tr.appendChild(sb);}else if(sb.parentNode!==st)st.appendChild(sb);}
   {const lc=$('#leftcol');for(const id of ['dicebox','coach','toast']){const e=$('#'+id);if(!e)continue;if(!e._home)e._home={p:e.parentNode,n:e.nextSibling};if(HUDQ.matches){if(e.parentNode!==lc)lc.appendChild(e);}else if(e.parentNode!==e._home.p)e._home.p.insertBefore(e,e._home.n);}}
   if(tr)document.documentElement.style.setProperty('--trayH',(HUDQ.matches?tr.offsetHeight:0)+'px');
+  alignBtns();
   if(sb)document.documentElement.style.setProperty('--sbH',(HUDQ.matches?sb.offsetHeight:0)+'px');
   if(W.ok)fitCam(false);}
 fitChrome();window.addEventListener('resize',fitChrome);try{document.fonts.ready.then(fitChrome);}catch(e){}
