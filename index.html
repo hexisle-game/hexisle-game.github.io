@@ -97,7 +97,7 @@ select.btn{appearance:auto}
 .tbtn:hover:not(:disabled){filter:brightness(1.08)}
 .tbtn:active:not(:disabled){transform:translateY(2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 1px 0 rgba(0,0,0,.35)}
 .sum{font-weight:800;font-size:30px;color:var(--gold);min-width:36px;text-align:right;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-.sum small{display:block;font-size:10.5px;color:var(--muted);font-weight:500;letter-spacing:0}
+.sum small{display:block;font-size:10.5px;color:var(--muted);font-weight:500;letter-spacing:-.02em}
 .res{border-radius:10px;padding:6px 4px 5px;text-align:center;color:#fff;position:relative;text-shadow:0 1px 1px rgba(0,0,0,.35)}
 .res svg{width:22px;height:22px;display:block;margin:0 auto;color:rgba(255,255,255,.9)}
 .res .c{font-size:20px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
@@ -323,7 +323,7 @@ body{background:#0d0b09;font-family:var(--body);font-size:14px;letter-spacing:-.
 .coach::before{display:none}
 .panel h2{font-family:var(--body);font-weight:500;font-size:12.5px;margin-bottom:10px}
 .panel h2::after{display:none}
-.btn,.tbtn,select.btn{font-family:var(--body);font-weight:500;font-size:13px;border-radius:9px;border:1px solid var(--hud-line2);background:rgba(255,245,230,.06);box-shadow:none;text-shadow:none;color:var(--ink);letter-spacing:0;transition:background .15s,border-color .15s,transform .1s}
+.btn,.tbtn,select.btn{font-family:var(--body);font-weight:500;font-size:13px;border-radius:9px;border:1px solid var(--hud-line2);background:rgba(255,245,230,.06);box-shadow:none;text-shadow:none;color:var(--ink);letter-spacing:-.02em;transition:background .15s,border-color .15s,transform .1s}
 .btn:hover:not(:disabled),.tbtn:hover:not(:disabled){background:rgba(255,245,230,.13);border-color:rgba(255,236,205,.36);filter:none}
 .btn:active:not(:disabled),.tbtn:active:not(:disabled){transform:translateY(1px)}
 .btn.primary,.tbtn.primary{background:var(--acc);border-color:var(--acc);color:var(--acc-ink);font-weight:700;box-shadow:0 8px 22px rgba(217,164,65,.28)}
@@ -331,7 +331,7 @@ body{background:#0d0b09;font-family:var(--body);font-size:14px;letter-spacing:-.
 .btn.active{background:rgba(217,164,65,.16);border-color:rgba(217,164,65,.7);color:#f3d08a}
 .btn:disabled,.tbtn:disabled{opacity:.38;filter:none}
 select.btn{padding-right:8px}
-header.top h1{font-family:var(--display);font-weight:900;font-size:22px;color:#ecd3a0;text-shadow:none;letter-spacing:0}
+header.top h1{font-family:var(--display);font-weight:900;font-size:22px;color:#ecd3a0;text-shadow:none;letter-spacing:-.02em}
 header.top .sub{color:var(--muted);font-size:12px}
 .coach{font-size:13.5px;line-height:1.6;color:#e3dacb;padding:12px 16px!important}
 .coach b{color:#f0c977;font-weight:700}
@@ -355,14 +355,14 @@ details.ref summary{color:var(--muted)}
 .reftable td{border-bottom:1px solid var(--hud-line)}
 .sheet{border-radius:16px!important;padding:26px 28px!important}
 .sheet h3{font-family:var(--display);font-weight:700;color:#f0d49c;text-align:left}
-.label{color:var(--muted);letter-spacing:0;font-weight:500}
+.label{color:var(--muted);letter-spacing:-.02em;font-weight:500}
 .overlay{background:rgba(8,6,4,.62);border:1px solid var(--hud-line2);border-radius:8px}
 .hero-title{font-family:var(--display);color:#ecd3a0;text-shadow:none;text-align:left}
 .pick button,.step .cell{border-radius:9px}
 .resp .r{background:rgba(255,245,230,.05);border:1px solid var(--hud-line);border-radius:9px}
 .tray{background:linear-gradient(180deg,rgba(13,11,9,0),rgba(13,11,9,.72) 34%,rgba(13,11,9,.9))!important;border:0!important;border-radius:0;box-shadow:none!important}
 .tray>div+div{border-image:linear-gradient(180deg,transparent,rgba(255,236,205,.16),transparent) 1}
-.tray-h{font-family:var(--body);font-weight:500;font-size:13px;color:#e8dfd0;letter-spacing:0;text-shadow:none}
+.tray-h{font-family:var(--body);font-weight:500;font-size:13px;color:#e8dfd0;letter-spacing:-.02em;text-shadow:none}
 .tray-h span{color:var(--muted)}
 .tally span{background:rgba(255,245,230,.06);border:1px solid var(--hud-line);border-radius:6px;color:#e8dfd0;font-weight:500}
 .bld{border-radius:10px;box-shadow:none;transition:background .15s,border-color .15s,transform .15s}
@@ -781,7 +781,7 @@ html.phone body .mclose{top:0!important;right:0!important}
 html body .sheet .row .btn{min-width:130px}
 html.phone body .sheet .row .btn{min-width:110px}
 html.phone body .sheet-start .st-btns .btn{height:40px!important}
-.logoimg{display:block!important;line-height:0!important;letter-spacing:0!important;margin:0}
+.logoimg{display:block!important;line-height:0!important;letter-spacing:-.02em!important;margin:0}
 .logoimg img{display:block;height:auto;width:100%;filter:drop-shadow(0 3px 6px rgba(0,0,0,.6))}
 html body header.top h1.logoimg{width:250px!important;font-size:0!important}
 html body .sheet-start .hero-title.logoimg{width:min(440px,100%)!important;font-size:0!important;margin:6px 0 20px!important}
@@ -974,7 +974,17 @@ html.phone body .sheet-start .st-r .label:first-child{margin-top:0!important}
 html.phone body .sheet-start .cnt .btn{padding:7px 11px!important;font-size:16px!important}
 html.phone body .sheet-start .cnt small{font-size:12.5px!important}
 html.phone body .sheet-start .st-btns{margin-top:10px!important;gap:6px!important}
-html.phone body .sheet-start .st-btns .btn{height:44px;font-size:15px!important}</style>
+html.phone body .sheet-start .st-btns .btn{height:44px;font-size:15px!important}
+html body{letter-spacing:-.02em}
+html body .bld.active{border:0!important;box-shadow:none!important;outline:0!important;background:none!important}
+html body .bld{position:relative;isolation:isolate}
+html body .bld::before{content:"";position:absolute;left:-14%;right:-14%;top:-6%;bottom:18%;z-index:-1;background:radial-gradient(ellipse 50% 50% at 50% 55%,rgba(255,200,100,.55),rgba(243,170,70,.22) 45%,transparent 72%);opacity:0;transition:opacity .15s;pointer-events:none}
+html body .bld.active::before{opacity:1}
+html body .bld b{position:relative}
+html body .bld.active b::after{content:"";position:absolute;left:-30%;right:-30%;bottom:-3px;height:2px;background:linear-gradient(90deg,transparent,#f3d08a 30%,#fff0c0 50%,#f3d08a 70%,transparent)}
+html.phone body .step .cell button{padding:0 0 3px!important;line-height:1!important;display:grid!important;place-items:center}
+html.phone body .sheet .btn,html.phone body .stagebtns .tbtn{padding-bottom:3px!important}
+@media (min-width:1101px) and (min-height:640px){html body .tray{background:linear-gradient(180deg,rgba(13,11,9,0) 0%,rgba(13,11,9,.1) 14%,rgba(13,11,9,.26) 30%,rgba(13,11,9,.42) 50%,rgba(13,11,9,.56) 72%,rgba(13,11,9,.66) 100%)!important}}</style>
 
 
 
