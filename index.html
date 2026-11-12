@@ -970,6 +970,31 @@ html:not(.phone) body .sheet.sheet-trade{width:min(960px,calc(100vw - 48px))!imp
 html body .step .cell>div:first-child{white-space:nowrap}
 html:not(.phone) body .sheet.sheet-start{padding-top:22px!important}
 html:not(.phone) body .sheet-trade h3,html:not(.phone) body .sheet-over h3,html:not(.phone) body .sheet-confirm h3{margin-top:14px}
+
+/* ===== glow-line tabs (no boxes) ===== */
+html body .sheet .tabs,html body #handHead,html body .setmenu .seg,html body .cnt{position:relative;display:flex;gap:0!important;border:0!important;background:none!important;box-shadow:none!important}
+html body .sheet .tabs::after,html body #handHead::after,html body .setmenu .seg::after,html body .cnt::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(214,176,104,.55) 12%,rgba(214,176,104,.55) 88%,transparent);pointer-events:none}
+html body .sheet .tabs .btn,html body .htab,html body .setmenu .seg button,html body .cnt .btn{position:relative;background:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;filter:none!important;color:#9d958a!important;font-weight:600!important;padding:8px 16px 10px!important;margin:0!important;min-width:0!important;text-shadow:0 1px 2px rgba(0,0,0,.8)!important;transition:color .15s;cursor:pointer;flex:0 0 auto}
+html body .sheet .tabs .btn::after,html body .htab::after,html body .setmenu .seg button::after,html body .cnt .btn::after{content:"";position:absolute;left:12%;right:12%;bottom:0;height:2px;background:linear-gradient(90deg,transparent,#f3d08a 25%,#fff0c0 50%,#f3d08a 75%,transparent);opacity:0;transition:opacity .15s;z-index:1}
+html body .sheet .tabs .btn::before,html body .htab::before,html body .setmenu .seg button::before,html body .cnt .btn::before{content:"";position:absolute;left:-10%;right:-10%;bottom:0;height:70%;background:radial-gradient(ellipse 50% 100% at 50% 100%,rgba(243,190,90,.38),rgba(243,190,90,.12) 45%,transparent 75%);opacity:0;transition:opacity .15s;pointer-events:none;display:block!important}
+html body .sheet .tabs .btn.active,html body .htab.on,html body .setmenu .seg button.on,html body .cnt .btn.active{color:#ffe6a8!important;text-shadow:0 0 10px rgba(243,190,90,.55),0 1px 2px rgba(0,0,0,.8)!important}
+html body .sheet .tabs .btn.active::after,html body .htab.on::after,html body .setmenu .seg button.on::after,html body .cnt .btn.active::after,html body .sheet .tabs .btn.active::before,html body .htab.on::before,html body .setmenu .seg button.on::before,html body .cnt .btn.active::before{opacity:1}
+html body .sheet .tabs .btn:not(.active):hover,html body .htab:not(.on):hover,html body .cnt .btn:not(.active):hover{color:#e6dccb!important}
+html body .sheet .tabs .btn{font-size:16px!important}
+html body .cnt{justify-content:flex-start;flex-wrap:nowrap}
+html body .cnt .btn{flex:1 1 0!important;display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;font-size:18px!important;gap:3px!important}
+html body .cnt .btn small{color:inherit!important;opacity:.75;font-size:12.5px!important}
+html.phone body .cnt .btn{font-size:15px!important;padding:5px 8px 8px!important}
+html.phone body .cnt .btn small{font-size:11px!important}
+html body .setmenu .seg button{padding:6px 12px 8px!important;font-size:15px!important}
+html body .htab{padding:4px 12px 8px!important;font-size:14px!important;margin:0!important}
+html body #handHead{display:flex;align-items:flex-end}
+/* fewer boxes */
+html body .resp .r{border:0!important;background:linear-gradient(90deg,rgba(0,0,0,.28),rgba(0,0,0,.08))!important}
+html body .side .pl.cur{border:0!important;background:linear-gradient(90deg,rgba(243,190,90,.18),rgba(243,190,90,0) 85%)!important;box-shadow:inset 2px 0 0 #e9b95c!important}
+html.phone body .tray-act{display:flex!important;flex-direction:column!important;justify-content:flex-end!important;align-self:stretch!important}
+html.phone body .tray-act>.tray-h{margin-bottom:6px!important}
+html.phone body .tray-act #actions{padding-bottom:4px}
 /* stepper */
 .step .cell{position:relative;isolation:isolate;background:none!important}
 .step .cell::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.7;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
@@ -1073,7 +1098,7 @@ const COST={road:{wood:1,brick:1},settlement:{wood:1,brick:1,wool:1,grain:1},cit
 const BN={road:'도로',settlement:'정착지',city:'도시',dev:'발전 카드'};
 const DEVN={knight:'기사',roads:'도로 건설',plenty:'풍년',monopoly:'독점',vp:'승점'};
 const DEVD={knight:'도적을 옮기고 상대 카드 1장을 빼앗아요.',roads:'도로 2개를 무료로 놓아요.',plenty:'은행에서 원하는 자원 2장을 받아요.',monopoly:'자원 1종을 골라 상대들이 가진 것을 전부 가져와요.',vp:'갖고만 있어도 1점. 상대에게는 보이지 않아요.'};
-const PCOL=['#f03a2e','#3a8cff','#e046e0','#f5c400'];
+const PCOL=['#ff2a1a','#3a8cff','#e046e0','#f5c400'];
 const rnd=n=>Math.floor(Math.random()*n);
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
 const emptyRes=()=>({wood:0,brick:0,wool:0,grain:0,ore:0});
@@ -1559,7 +1584,7 @@ vec3 terrainColor(vec3 wp,vec3 wn){
   c=mix(c,vec3(.56,.49,.36),smoothstep(-.105,-.14,h));
   c=mix(c,vec3(.42,.42,.34),smoothstep(-.18,-.35,h));c=mix(c,vec3(.03,.12,.22),smoothstep(-.35,-.6,h));
   float ty2,hd2,va2;hexAt(p,ty2,hd2,va2);
-  if(va2>.5&&distance(gCell,uRob)<.5){float pu=.5+.5*sin(uTimeT*3.);c=c*vec3(.34,.24,.22)*(.9+.15*pu);c=mix(c,vec3(1.,.16,.07)*1.1,smoothstep(.915,.94,hd2)*(1.-smoothstep(.985,1.,hd2)));}
+  if(va2>.5&&distance(gCell,uRob)<.5){float pu=.5+.5*sin(uTimeT*3.);c=c*vec3(.34,.24,.22)*(.9+.15*pu);c=mix(c,vec3(.42,.04,.03),smoothstep(.915,.94,hd2)*(1.-smoothstep(.985,1.,hd2)));}
   if(va2>.5)c=mix(c,c*1.28+.05,smoothstep(.955,.988,hd2)*.6);
   return c;}
 `;
@@ -1737,7 +1762,7 @@ const BUILDIMG={"dev": "assets/build/dev.webp", "road": "assets/build/road.webp"
 const CARDFRAME="assets/cards/frame.webp";
 const SCANART={"wood": "assets/cards/wood.webp", "wool": "assets/cards/wool.webp", "brick": "assets/cards/brick.webp", "ore": "assets/cards/ore.webp", "grain": "assets/cards/grain.webp", "knight": "assets/cards/knight.webp", "roads": "assets/cards/roads.webp", "plenty": "assets/cards/plenty.webp", "monopoly": "assets/cards/monopoly.webp", "vp": "assets/cards/vp.webp"};
 let FRAMEIMG=null;{let left=Object.keys(SCANART).length+1;const done=()=>{if(--left===0)setTimeout(()=>{try{buildCards();if(S)render();}catch(e){}},0);};{const im=new Image();im.onload=()=>{FRAMEIMG=im;done();};im.src=CARDFRAME;}for(const k in SCANART){const im=new Image();im.onload=()=>{ARTIMG[k]=im;done();};im.src=SCANART[k];}}
-function basePlate(k,o,r){k.add(part('cyl16',PM(o),[r+.025,.018,r+.025],[0,.009,0],{noShadow:true}));k.add(part('cyl16',tmat('slate',0x9a9488,1.5,.2),[r,.034,r],[0,.017,0]));}
+function basePlate(k,o,r){k.add(part('cyl16',o===0?M(0xff2a1a,{emissive:0xff3020,emissiveIntensity:.75,roughness:.5,toneMapped:false}):PM(o),[r+.03,.02,r+.03],[0,.01,0],{noShadow:true}));k.add(part('cyl16',tmat('slate',0x9a9488,1.5,.2),[r,.034,r],[0,.017,0]));}
 function settlementMesh(o,ry){const k=new THREE.Group();basePlate(k,o,.17);const h=new THREE.Group();h.rotation.y=ry;h.position.y=.03;k.add(h);
   rhouse(h,-.02,-.01,.13,.1,.15,o,0);rhouse(h,.1,.06,.075,.065,.095,o,Math.PI/2);
   h.add(part('box',tmat('slate',0xbfb8ac,.3,.6),[.024,.07,.024],[.03,.21,-.03]));
@@ -1781,7 +1806,7 @@ function sync3D(){
   S.eo.forEach((o,e)=>{if(o>=0)want.set('e'+e+':'+o,()=>{const E=G.edges[e],A=vc(E.a),B=vc(E.b);const dx=B.x-A.x,dz=B.z-A.z,L=Math.hypot(dx,dz);
     const k=roadPiece(o,L*.72);mergeStatic(k,true);k.position.set((A.x+B.x)/2,0,(A.z+B.z)/2);k.rotation.y=Math.atan2(dx,dz);k.userData.info={t:'road',e};return k;});});
   S.vb.forEach((b,v)=>{if(b)want.set('v'+v+':'+b.o+':'+(b.c?1:0),()=>{const V=vc(v);const ry=Math.atan2(V.x,V.z)+Math.PI;
-    const inner=b.c?cityMesh(b.o,ry):settlementMesh(b.o,ry);inner.scale.setScalar(b.c?1.45:1.6);const k=new THREE.Group();k.add(inner);mergeStatic(k,true);k.position.set(V.x,0,V.z);k.userData.info={t:'bld',v};return k;});});
+    const inner=b.c?cityMesh(b.o,ry):settlementMesh(b.o,ry);inner.scale.setScalar(b.c?1.9:2.08);const k=new THREE.Group();k.add(inner);mergeStatic(k,true);k.position.set(V.x,0,V.z);k.userData.info={t:'bld',v};return k;});});
   for(const [key,obj] of W.pieces){if(!want.has(key)){W.dynG.remove(obj);W.pieces.delete(key);W.anim.delete(obj);}}
   for(const [key,mk] of want){if(W.pieces.has(key))continue;const k=mk();if(!first){k.userData.born=now;W.anim.add(k);}W.pieces.set(key,k);W.dynG.add(k);}
   W.prev=true;
@@ -1932,12 +1957,12 @@ function renderHand(me,groups){const box=$('#hand');const W0=Math.max(220,box.cl
   const prev=ui.prevRes||me.res;let nn=0;const flags=list.map((r,i)=>{const idx=i-list.indexOf(r);return idx>=(prev[r]||0)&&ui.prevRes?++nn:0;});ui.prevRes={...me.res};
   const hh=$('#handHead');if(PH.on){if(!ui.handTab)ui.handTab='res';hh.innerHTML=`<button class="htab${ui.handTab==='res'?' on':''}" data-htab="res">내 자원카드 · ${list.length}장</button><button class="htab${ui.handTab==='dev'?' on':''}" data-htab="dev">내 발전카드 · ${me.dev.length}장</button>`;}
   else hh.innerHTML=`내 자원카드 <span id="handCount">· ${list.length}장${list.length>7?' (8장 이상: 7이 나오면 절반을 버려요)':''}</span>`;
-  if(PH.on&&ui.handTab==='dev'){box.innerHTML=me.dev.length?row(me.dev.map(d=>`<div style="position:relative"><img class="card" src="${CARDIMG[d.t]}" alt="${DEVN[d.t]}" data-pop="${d.t}">${d.fresh&&d.t!=='vp'?'<span class="newtag">다음 차례</span>':''}</div>`),cw,W0,'devrow2'):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">발전 카드가 없어요.<br>양모·곡물·광석으로 살 수 있어요.</div>`;return;}
-  let h=list.length?row(list.map(r=>`<img class="card" src="${CARDIMG[r]}" alt="${RN[r]}" data-tip="${RN[r]}: ${TN[r]}에서 나와요. ${RUSE[r]}에 써요.">`),cw,W0,'',flags):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">아직 자원 카드가 없어요.<br>주사위 숫자에 맞는 땅에서 카드가 들어와요.</div>`;
+  if(PH.on&&ui.handTab==='dev'){box.innerHTML=me.dev.length?row(me.dev.map(d=>`<div style="position:relative"><img class="card" src="${CARDIMG[d.t]}" alt="${DEVN[d.t]}" data-pop="${d.t}">${d.fresh&&d.t!=='vp'?'<span class="newtag">다음 차례</span>':''}</div>`),cw,W0,'devrow2'):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">발전 카드가 없어요.</div>`;return;}
+  let h=list.length?row(list.map(r=>`<img class="card" src="${CARDIMG[r]}" alt="${RN[r]}" data-tip="${RN[r]}: ${TN[r]}에서 나와요. ${RUSE[r]}에 써요.">`),cw,W0,'',flags):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">자원 카드가 없어요.</div>`;
   h+=`<div class="tally">${RES.map(r=>`<span class="${me.res[r]?'':'z'}">${RN[r]} ${me.res[r]}</span>`).join('')}</div>`;
   box.innerHTML=h;
   const db=$('#devs');const dw=Math.max(150,Math.min(300,db.clientWidth||220));
-  db.innerHTML=me.dev.length?row(me.dev.map(d=>`<div style="position:relative"><img class="card" src="${CARDIMG[d.t]}" alt="${DEVN[d.t]}" data-pop="${d.t}" data-tip="${DEVN[d.t]}: 눌러서 설명 보기">${d.fresh&&d.t!=='vp'?'<span class="newtag">다음 차례</span>':''}</div>`),innerHeight<900&&innerWidth>1100?50:62,dw,'devrow2'):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">없음<br>양모·곡물·광석으로 구입</div>`;}
+  db.innerHTML=me.dev.length?row(me.dev.map(d=>`<div style="position:relative"><img class="card" src="${CARDIMG[d.t]}" alt="${DEVN[d.t]}" data-pop="${d.t}" data-tip="${DEVN[d.t]}: 눌러서 설명 보기">${d.fresh&&d.t!=='vp'?'<span class="newtag">다음 차례</span>':''}</div>`),innerHeight<900&&innerWidth>1100?50:62,dw,'devrow2'):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">발전 카드가 없어요.</div>`;}
 
 function devPop(t){
   if(t==='cost')return `<h4>건설 비용</h4><table class="reftable"><tbody>${['road','settlement','city','dev'].map(w=>`<tr><td>${BN[w]}</td><td>${costPips(COST[w])}</td></tr>`).join('')}</tbody></table><p class="muted">도로는 길을 넓히고, 정착지 1점, 도시 2점이에요. 발전 카드는 무작위 특수 카드예요.</p>`;
