@@ -1052,6 +1052,7 @@ html.phone body .sheet .btn,html.phone body .stagebtns .tbtn{padding-bottom:3px!
 <script>document.getElementById('logoImg')&&(document.getElementById('logoImg').src=window.LOGO_URL);</script>
 <script id="logic">
 // ================= GAME LOGIC (no DOM) =================
+let ME=0; // seat index of the local player
 const HR=60,SQ3=Math.sqrt(3);
 const RES=['wood','brick','wool','grain','ore'];
 const RN={wood:'목재',brick:'벽돌',wool:'양모',grain:'곡물',ore:'광석',desert:'사막'};
@@ -1171,8 +1172,8 @@ function roll(p){
   log(p,`주사위 ${a} + ${b} = ${n}`,'',n===7?'7은 아무 땅도 생산하지 않아요. 카드가 8장 이상인 사람은 절반을 버리고, 굴린 사람이 도적을 옮겨요.':`숫자 ${n}이 적힌 땅에 건물이 닿아 있는 사람이 자원을 받아요.`);
   if(n===7){
     let human=false;
-    S.players.forEach((pl,i)=>{const t=sumRes(pl.res);if(t>7){if(pl.ai)aiDiscard(i,Math.floor(t/2));else human=true;}});
-    S.pend=human?{k:'discard',p:0,n:Math.floor(sumRes(S.players[0].res)/2)}:{k:'robber'};
+    const hq=[];S.players.forEach((pl,i)=>{const t=sumRes(pl.res);if(t>7){if(pl.ai)aiDiscard(i,Math.floor(t/2));else hq.push(i);}});
+    S.pend=hq.length?{k:'discard',p:hq[0],n:Math.floor(sumRes(S.players[hq[0]].res)/2),q:hq.slice(1)}:{k:'robber'};
   } else produce(n);
 }
 function produce(n){
@@ -1187,6 +1188,8 @@ function produce(n){
   if(!any)log(-1,'이번에는 아무도 자원을 받지 못했어요.','sys');
   if(DF()==='hard'){const bon=[];S.players.forEach((pl,i)=>{if(!pl.ai||sumRes(gain[i])>1)return;const g=aiGoal(i);const c=g?COST[g]:{};const k=argmax(RES.filter(r=>S.bank[r]>0),r=>((c[r]||0)-pl.res[r])+Math.random()*.1);if(!k)return;pl.res[k]++;S.bank[k]--;bon.push(pl.name);});if(bon.length)log(-1,`어려움 보너스: ${bon.join(', ')} 자원 1장씩`,'sys');}
 }
+function takeOverSeat(p){const pl=S.players[p];if(!pl||pl.ai)return;pl.ai=true;pl.left=true;log(p,'이(가) 나가서 AI가 이어서 플레이해요.','sys');}
+function nextDiscard(){const q=(S.pend&&S.pend.q)||[];if(q.length){const p=q[0];S.pend={k:'discard',p,n:Math.floor(sumRes(S.players[p].res)/2),q:q.slice(1)};}else S.pend={k:'robber'};}
 function discard(p,obj){RES.forEach(r=>{S.players[p].res[r]-=obj[r]||0;S.bank[r]+=obj[r]||0;});log(p,`카드 ${sumRes(obj)}장을 버렸어요.`);}
 function robberVictims(p,hi){return [...new Set(G.hexes[hi].v.map(v=>S.vb[v]).filter(b=>b&&b.o!==p&&sumRes(S.players[b.o].res)>0).map(b=>b.o))];}
 function moveRobber(p,hi){
@@ -1257,7 +1260,7 @@ function aiGoal(p){const k=count(p);const c=[];
   c.sort((a,b)=>(missing(p,COST[a[0]])+a[1])-(missing(p,COST[b[0]])+b[1]));return c[0][0];}
 function robberHurts(p){const hi=S.board.robber;return pips(S.board.hexes[hi].num)>=3&&G.hexes[hi].v.some(v=>S.vb[v]&&S.vb[v].o===p);}
 function aiRobberHex(p){const d=DF();return argmax(HIDX.filter(i=>i!==S.board.robber),hi=>{const t=S.board.hexes[hi];let s=t.res==='desert'?-1:0;if(d==='easy')s+=Math.random()*12;
-  for(const v of G.hexes[hi].v){const b=S.vb[v];if(!b)continue;if(b.o===p)s-=12;else s+=(b.c?2:1)*pips(t.num)*(1+vp(b.o)/(d==='hard'?4:8))*(d==='easy'&&b.o===0?.15:d==='hard'&&b.o===0&&vp(0)>=Math.max(...S.players.map((_,i)=>vp(i)))?1.6:1)+(sumRes(S.players[b.o].res)?0.5:0);}
+  for(const v of G.hexes[hi].v){const b=S.vb[v];if(!b)continue;if(b.o===p)s-=12;else s+=(b.c?2:1)*pips(t.num)*(1+vp(b.o)/(d==='hard'?4:8))*(d==='easy'&&!S.players[b.o].ai?.15:d==='hard'&&!S.players[b.o].ai&&vp(b.o)>=Math.max(...S.players.map((_,i)=>vp(i)))?1.6:1)+(sumRes(S.players[b.o].res)?0.5:0);}
   return s+Math.random()*0.2;});}
 function aiDiscard(p,k){const r=S.players[p].res;if(DF()==='easy'){const out=emptyRes();for(let i=0;i<k;i++){const pick=RES.filter(x=>r[x]-out[x]>0);out[pick[rnd(pick.length)]]++;}discard(p,out);return;}const g=aiGoal(p);const c=g?COST[g]:{};const out=emptyRes();
   for(let i=0;i<k;i++){const pick=argmax(RES.filter(x=>r[x]-out[x]>0),x=>(r[x]-out[x])-(c[x]||0)*1.5);out[pick]++;}
@@ -1268,7 +1271,7 @@ function aiStep(p){
     const nz={easy:7,normal:.6,hard:.15}[DF()];if(S.sub==='settlement')placeSettlement(p,argmax(settleSpots(p,true),v=>spotValue(v,p,pr)+Math.random()*nz));
     else placeRoad(p,argmax(roadSpots(p,true),e=>roadScore(p,e,pr)+Math.random()*0.3));
     return;}
-  if(S.pend){if(S.pend.k==='robber')moveRobber(p,aiRobberHex(p));else S.pend=null;return;}
+  if(S.pend){if(S.pend.k==='discard'&&S.pend.p===p){aiDiscard(p,S.pend.n);nextDiscard();}else if(S.pend.k==='robber')moveRobber(p,aiRobberHex(p));else S.pend=null;return;}
   if(!S.rolled){if(canPlayDev(p,'knight')&&robberHurts(p)){useKnight(p);return;}roll(p);return;}
   S.acts++;if(S.acts>40){endTurn();return;}
   const pl=S.players[p],res=pl.res;const d=DF();
@@ -1294,13 +1297,13 @@ function aiStep(p){
       if(give.length){bankTrade(p,argmax(give,k=>res[k]-(c[k]||0)-rat[k]),need[0]);return;}}}
   endTurn();
 }
-function aiAccepts(q,give,get){
+function aiAccepts(q,give,get,from){from=from===undefined?ME:from;
   const r=S.players[q].res;
   if(!sumRes(give)&&!sumRes(get))return{ok:false,why:'빈 제안이에요'};
   const d=DF();const lack=RES.filter(k=>(get[k]||0)>r[k]);
   if(lack.length){if(d==='easy')return{ok:false,why:'그 카드가 없어요'};if(d==='normal'&&RES.filter(k=>get[k]).length===1&&Math.random()<.5)return{ok:false,why:'그건 좀 부족해요'};return{ok:false,why:d==='hard'?'거절할게요':'저한테 손해예요'};}
-const lead0=S.players.every((_,i)=>i===0||vp(0)>=vp(i));
-if(sumRes(get)&&d!=='easy'&&lead0&&vp(0)>=(d==='hard'?6:8))return{ok:false,why:d==='hard'?'거절할게요':'선두와는 거래 안 해요'};
+const lead0=S.players.every((_,i)=>i===from||vp(from)>=vp(i));
+if(sumRes(get)&&d!=='easy'&&lead0&&vp(from)>=(d==='hard'?6:8))return{ok:false,why:d==='hard'?'거절할게요':'선두와는 거래 안 해요'};
   const g=aiGoal(q)||'dev';const c=COST[g];let gain=0,loss=0;
   RES.forEach(k=>{gain+=(give[k]||0)*(1+((c[k]||0)>r[k]?1.2:0));const n=get[k]||0;if(n){const after=r[k]-n;loss+=n*(1+(after<(c[k]||0)?1.5:0));}});
   const ok=(d==='easy'?gain>=loss-2.5:d==='hard'?gain>=loss+1:gain>=loss)&&sumRes(give)>0||!sumRes(get);
@@ -1344,12 +1347,12 @@ const costPips=c=>`<span class="cost">${RES.filter(k=>c[k]).map(k=>`<span class=
 const pname=p=>`<b style="color:${S.players[p].color}">${S.players[p].name}</b>`;
 
 function targets(){const t={v:[],e:[],h:[],kind:null};
-  if(!S||S.phase==='over'||S.cur!==0||ui.modal==='start')return t;
-  if(S.phase==='setup'){if(S.sub==='settlement'){t.kind='setupS';t.v=settleSpots(0,true);}else{t.kind='setupR';t.e=roadSpots(0,true);}return t;}
-  if(S.pend){if(S.pend.k==='robber'){t.kind='robber';t.h=HIDX.filter(i=>i!==S.board.robber);}else if(S.pend.k==='roads'){t.kind='freeRoad';t.e=roadSpots(0);}return t;}
-  if(ui.mode==='road'){t.kind='road';t.e=roadSpots(0);}
-  else if(ui.mode==='settlement'){t.kind='settlement';t.v=settleSpots(0);}
-  else if(ui.mode==='city'){t.kind='city';t.v=citySpots(0);}
+  if(!S||S.phase==='over'||S.cur!==ME||ui.modal==='start')return t;
+  if(S.phase==='setup'){if(S.sub==='settlement'){t.kind='setupS';t.v=settleSpots(ME,true);}else{t.kind='setupR';t.e=roadSpots(ME,true);}return t;}
+  if(S.pend){if(S.pend.k==='robber'){t.kind='robber';t.h=HIDX.filter(i=>i!==S.board.robber);}else if(S.pend.k==='roads'){t.kind='freeRoad';t.e=roadSpots(ME);}return t;}
+  if(ui.mode==='road'){t.kind='road';t.e=roadSpots(ME);}
+  else if(ui.mode==='settlement'){t.kind='settlement';t.v=settleSpots(ME);}
+  else if(ui.mode==='city'){t.kind='city';t.v=citySpots(ME);}
   return t;}
 
 const PCOL3=PCOL.map(c=>parseInt(c.slice(1),16));
@@ -1783,7 +1786,7 @@ function sync3D(){
       rb.userData.robPulse=1;}
     else if(!rmode&&rb.userData.robPulse){const fx=rb.getObjectByName('robfx');if(fx)rb.remove(fx);rb.traverse(o=>{if(o.isMesh&&o.material.emissive)o.material.emissiveIntensity=0;});delete rb.userData.robPulse;}}
   const T=targets();const tkey=[T.kind,T.v.join(','),T.e.join(','),T.h.join(','),ui.hints,PH.on].join('|');if(tkey===W.tkey)return;W.tkey=tkey;W.tgtG.clear();
-  if(ui.hints&&T.kind==='setupS'){const pr=prodOf(0);[...T.v].sort((a,b)=>spotValue(b,0,pr)-spotValue(a,0,pr)).slice(0,3).forEach(v=>{const V=vc(v);const d=decal('ring',0xffc94a,1,.62,.62,heightAt(V.x,V.z)+.03);d.position.x=V.x;d.position.z=V.z;W.tgtG.add(d);});}
+  if(ui.hints&&T.kind==='setupS'){const pr=prodOf(ME);[...T.v].sort((a,b)=>spotValue(b,ME,pr)-spotValue(a,ME,pr)).slice(0,3).forEach(v=>{const V=vc(v);const d=decal('ring',0xffc94a,1,.62,.62,heightAt(V.x,V.z)+.03);d.position.x=V.x;d.position.z=V.z;W.tgtG.add(d);});}
   T.e.forEach(e=>{const E=G.edges[e],A=vc(E.a),B=vc(E.b);const dx=B.x-A.x,dz=B.z-A.z,L=Math.hypot(dx,dz);const k=new THREE.Group();k.position.set((A.x+B.x)/2,0,(A.z+B.z)/2);k.rotation.y=Math.atan2(dx,dz);
     {const d=decal('bar',0xffffff,.9,.16,L*.66,heightAt(k.position.x,k.position.z)+.04);d.rotation.y=Math.PI/2;d.scale.set(L*.7,1,PH.on?.28:.16);k.add(d);}k.add(part('box',HIT,[PH.on?.4:.26,.25,L*.7],[0,.1,0],{noShadow:true}));
     k.userData.pick={e};k.userData.pulse=1;W.tgtG.add(k);});
@@ -1879,14 +1882,14 @@ function dieHTML(n,cls){const on={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6
   return `<div class="die ${cls||''}">${[0,1,2,3,4,5,6,7,8].map(i=>`<i class="${on.includes(i)?'on':''}"></i>`).join('')}</div>`;}
 
 function coachText(){
-  if(S.phase==='over')return S.winner===0?'<b>승리!</b> 새 게임으로 다시 도전해 보세요.':`${pname(S.winner)}의 승리예요.`;
-  if(S.pend&&S.pend.k==='discard')return `카드 <b>${S.pend.n}장</b>을 버리세요.`;
-  if(S.cur!==0)return `${pname(S.cur)}의 차례예요.`;
+  if(S.phase==='over')return S.winner===ME?'<b>승리!</b> 새 게임으로 다시 도전해 보세요.':`${pname(S.winner)}의 승리예요.`;
+  if(S.pend&&S.pend.k==='discard')return S.pend.p===ME?`카드 <b>${S.pend.n}장</b>을 버리세요.`:`${pname(S.pend.p)}이(가) 카드를 버리는 중이에요.`;
+  if(S.cur!==ME)return `${pname(S.cur)}의 차례예요.`;
   if(S.phase==='setup'){if(S.sub==='settlement')return S.si>=4?'<b>두 번째 정착지</b>를 놓을 교차점을 누르세요.':'<b>첫 정착지</b>를 놓을 교차점을 누르세요.';return '정착지에 붙은 <b>도로</b>를 놓으세요.';}
   if(S.pend){if(S.pend.k==='robber')return '<b>도적</b>을 보낼 땅을 누르세요.';if(S.pend.k==='steal')return '카드를 빼앗을 상대를 고르세요.';if(S.pend.k==='roads')return `<b>무료 도로</b>를 놓으세요. (${S.pend.left}개 남음)`;}
   if(!S.rolled)return '<b>주사위를 굴리세요.</b>';
   if(ui.mode)return {road:'<b>도로</b>를 놓을 변을 누르세요.',settlement:'<b>정착지</b>를 지을 교차점을 누르세요.',city:'<b>도시</b>로 바꿀 정착지를 누르세요.'}[ui.mode];
-  const can=['road','settlement','city','dev'].filter(w=>canBuild(0,w)).map(w=>BN[w]);
+  const can=['road','settlement','city','dev'].filter(w=>canBuild(ME,w)).map(w=>BN[w]);
   if(can.length)return `건설 가능: <b>${can.join(', ')}</b>`;
   return '교환하거나 <b>턴 종료</b>를 누르세요.';
 }
@@ -1931,36 +1934,36 @@ function renderHand(me,groups){const box=$('#hand');const W0=Math.max(220,box.cl
 function devPop(t){
   if(t==='cost')return `<h4>건설 비용</h4><table class="reftable"><tbody>${['road','settlement','city','dev'].map(w=>`<tr><td>${BN[w]}</td><td>${costPips(COST[w])}</td></tr>`).join('')}</tbody></table><p class="muted">도로는 길을 넓히고, 정착지 1점, 도시 2점이에요. 발전 카드는 무작위 특수 카드예요.</p>`;
   if(t==='all')return `<h4>발전 카드란?</h4><p>양모·곡물·광석 1장씩으로 사는 무작위 특수 카드예요. 총 25장이 있어요.</p><ul>${Object.keys(DEVCNT).map(k=>`<li><b>${DEVN[k]}</b> ${DEVCNT[k]}장: ${DEVD[k]}</li>`).join('')}</ul><p class="muted">산 차례에는 못 쓰고, 한 차례에 1장만 쓸 수 있어요. 남은 덱 ${S.deck.length}장.</p>`;
-  const own=S.players[0].dev.some(d=>d.t===t);const can=canPlayDev(0,t);
-  return `<h4>${DEVN[t]} 카드</h4><p>${DEVL[t]}</p><p class="muted">덱에 처음 ${DEVCNT[t]}장. ${t==='vp'?'자동으로 점수에 들어가요.':'산 차례에는 못 쓰고, 한 차례에 발전 카드는 1장만 쓸 수 있어요.'}</p>${own&&t!=='vp'?`<button class="btn primary" data-play="${t}" ${can?'':'disabled'} style="margin-top:4px">${can?'이 카드 사용하기':S.cur!==0||S.phase!=='main'?'내 차례에 쓸 수 있어요':S.devPlayed?'이번 차례엔 이미 사용했어요':S.pend?'지금 하던 행동을 먼저 끝내세요':'다음 차례부터 쓸 수 있어요'}</button>`:''}`;}
+  const own=S.players[ME].dev.some(d=>d.t===t);const can=canPlayDev(ME,t);
+  return `<h4>${DEVN[t]} 카드</h4><p>${DEVL[t]}</p><p class="muted">덱에 처음 ${DEVCNT[t]}장. ${t==='vp'?'자동으로 점수에 들어가요.':'산 차례에는 못 쓰고, 한 차례에 발전 카드는 1장만 쓸 수 있어요.'}</p>${own&&t!=='vp'?`<button class="btn primary" data-play="${t}" ${can?'':'disabled'} style="margin-top:4px">${can?'이 카드 사용하기':S.cur!==ME||S.phase!=='main'?'내 차례에 쓸 수 있어요':S.devPlayed?'이번 차례엔 이미 사용했어요':S.pend?'지금 하던 행동을 먼저 끝내세요':'다음 차례부터 쓸 수 있어요'}</button>`:''}`;}
 function render(){
   renderBoard();
   $('#coach').innerHTML=coachText();
   const cp=S.players[S.cur];
   const rolledNow=S.rollId!==ui.shownRoll;ui.shownRoll=S.rollId;
-  $('#turnbar').innerHTML=`<span class="tp-pip" style="background:${cp.color}"></span><span class="tp-txt"><span class="tp-name">${S.phase==='over'?'게임 종료':S.cur===0?'나 (내 차례)':cp.name+'의 차례'}</span><span class="tp-sub">${S.phase==='setup'?`초기 배치 ${S.si+1}/${2*S.n}`:`${S.turn}번째 바퀴`}</span></span>`;
+  $('#turnbar').innerHTML=`<span class="tp-pip" style="background:${cp.color}"></span><span class="tp-txt"><span class="tp-name">${S.phase==='over'?'게임 종료':S.cur===ME?'나 (내 차례)':cp.name+'의 차례'}</span><span class="tp-sub">${S.phase==='setup'?`초기 배치 ${S.si+1}/${2*S.n}`:`${S.turn}번째 바퀴`}</span></span>`;
   if(ui.lastCur!==S.cur+':'+S.phase){ui.lastCur=S.cur+':'+S.phase;const tb=$('#turnbar');tb.classList.remove('swap');void tb.offsetWidth;tb.classList.add('swap');}
   {const rl=$('#roundline');if(rl)rl.textContent=S.phase==='setup'?`초기 배치 ${S.si+1}/${2*S.n}`:S.phase==='over'?'게임 종료':`${S.turn}번째 바퀴`;}
   $('#gameinfo').textContent=`${S.n}인 게임, 난이도 ${({easy:'쉬움',normal:'보통',hard:'어려움'})[S.diff||'normal']}`;
   if(rolledNow&&S.dice){ui.diceRevealAt=performance.now()+1350;renderDiceBox();slotSpin();if(typeof throwDice==='function')throwDice(S.dice);clearTimeout(ui.diceT);ui.diceT=setTimeout(renderDiceBox,1450);}
   else if(!(S.dice&&performance.now()<(ui.diceRevealAt||0)))renderDiceBox();
-  const myS=S.phase==='main'&&S.cur===0&&!S.pend;
+  const myS=S.phase==='main'&&S.cur===ME&&!S.pend;
   $('#stagebtns').innerHTML=`<button class="tbtn primary" data-act="roll" data-tip="${BTIP.roll}" ${myS&&!S.rolled?'':'disabled'}>주사위 굴리기</button><button class="tbtn" data-act="trade" data-tip="${BTIP.trade}" ${myS&&S.rolled?'':'disabled'}>교환</button><button class="tbtn" data-act="end" data-tip="${BTIP.end}" ${myS&&S.rolled?'':'disabled'}>턴 종료</button>`;
-  const me=S.players[0];
+  const me=S.players[ME];
   const groups={};me.dev.forEach(d=>{groups[d.t]=groups[d.t]||{n:0,fresh:0};groups[d.t].n++;if(d.fresh)groups[d.t].fresh++;});
   renderHand(me,groups);
-  const my=S.phase==='main'&&S.cur===0&&!S.pend;const k0=count(0);
-  const mini=c=>{const have=S.players[0].res;const seen={};return `<span class="mini">${RES.flatMap(r=>Array(c[r]||0).fill(r)).map(r=>{seen[r]=(seen[r]||0)+1;const ok=seen[r]<=have[r];return `<img src="${CARDIMG[r]}" alt="${RN[r]}" class="${ok?'':'lack'}" title="${RN[r]} ${ok?'있음':'부족'}">`;}).join('')}</span>`;};
+  const my=S.phase==='main'&&S.cur===ME&&!S.pend;const k0=count(ME);
+  const mini=c=>{const have=S.players[ME].res;const seen={};return `<span class="mini">${RES.flatMap(r=>Array(c[r]||0).fill(r)).map(r=>{seen[r]=(seen[r]||0)+1;const ok=seen[r]<=have[r];return `<img src="${CARDIMG[r]}" alt="${RN[r]}" class="${ok?'':'lack'}" title="${RN[r]} ${ok?'있음':'부족'}">`;}).join('')}</span>`;};
   const bb=(id,label,meta,en)=>`<button class="bld${ui.mode===id?' active':''}" data-act="${id}" data-tip="${BTIP[id]}" ${en?'':'disabled'}><span class="pimg"><img src="${BUILDIMG[id]}" alt=""></span><b>${label}</b>${mini(COST[id])}<span class="meta2">${meta}</span></button>`;
   $('#actions').innerHTML=`<div class="builds">
-    ${bb('road','도로',`${15-k0.r} 남음`,my&&S.rolled&&canBuild(0,'road'))}
-    ${bb('settlement','정착지',`1점 · ${5-k0.s} 남음`,my&&S.rolled&&canBuild(0,'settlement'))}
-    ${bb('city','도시',`2점 · ${4-k0.c} 남음`,my&&S.rolled&&canBuild(0,'city'))}
-    ${bb('dev','발전 카드',`덱 ${S.deck.length}장`,my&&S.rolled&&canBuild(0,'dev'))}
+    ${bb('road','도로',`${15-k0.r} 남음`,my&&S.rolled&&canBuild(ME,'road'))}
+    ${bb('settlement','정착지',`1점 · ${5-k0.s} 남음`,my&&S.rolled&&canBuild(ME,'settlement'))}
+    ${bb('city','도시',`2점 · ${4-k0.c} 남음`,my&&S.rolled&&canBuild(ME,'city'))}
+    ${bb('dev','발전 카드',`덱 ${S.deck.length}장`,my&&S.rolled&&canBuild(ME,'dev'))}
     </div>`;
   $('#players').innerHTML=S.players.map((p,i)=>`<div class="pl${i===S.cur&&S.phase!=='over'?' cur':''}"><span class="dot" style="background:${p.color}"></span>
     <span class="nm">${p.name}${p.ai?' · AI':''} ${S.lr.o===i?'<span class="badge" data-tip="최장 교역로 +2점: 끊기지 않은 도로가 5칸 이상이면서 가장 긴 사람">최장 교역로</span>':''} ${S.la.o===i?'<span class="badge" data-tip="최강 기사단 +2점: 기사 카드를 3장 이상, 가장 많이 쓴 사람">최강 기사단</span>':''}</span>
-    <span class="vp" data-tip="${i===0?'내 점수(승점 카드 포함). 10점이 되면 승리!':'공개된 점수예요. 숨겨진 승점 카드는 빠져 있어요.'}">${vp(i,i===0)}</span>
+    <span class="vp" data-tip="${i===ME?'내 점수(승점 카드 포함). 10점이 되면 승리!':'공개된 점수예요. 숨겨진 승점 카드는 빠져 있어요.'}">${vp(i,i===ME)}</span>
     <span class="meta"><span data-tip="손에 든 자원 카드 수. 8장 이상이면 7이 나올 때 절반을 버려요.">자원 ${sumRes(p.res)}</span><span data-tip="가진 발전 카드 수. 종류는 본인만 알아요.">발전 ${p.dev.length}</span><span data-tip="지금까지 사용한 기사 카드 수. 3장 이상이며 가장 많으면 최강 기사단 2점.">기사 ${p.knights}</span><span data-tip="가장 길게 이어진 도로 길이. 5 이상이며 가장 길면 최장 교역로 2점.">도로 ${S.rl[i]||0}</span></span></div></nav>`).join('');
   $('#log').innerHTML=S.log.slice(PH.on?-4:0).reverse().map(e=>e.k==='turn'?`<div class="turn">${e.p>=0?pname(e.p):''}${e.p>=0&&e.t.startsWith('의')?'':' '}${e.t}</div>`:`<div class="${e.k}">${e.p>=0?pname(e.p)+' ':''}${e.t}</div>`).join('');
   checkToast();try{alignBtns();}catch(e){}
@@ -2003,12 +2006,12 @@ function closeModal(){ui.modal=null;$('#modal').hidden=true;$('#sheet').innerHTM
 function forcedModals(){
   if(['start','rules','confirm','closed-over','trade','plenty','mono'].includes(ui.modal))return;
   if(S.phase==='over'){if(ui.modal!=='over')showOver();return;}
-  if(S.pend&&S.pend.k==='discard'&&S.pend.p===0){if(ui.modal!=='discard')showDiscard();return;}
-  if(S.pend&&S.pend.k==='steal'&&S.cur===0){if(ui.modal!=='steal')showSteal();return;}
+  if(S.pend&&S.pend.k==='discard'&&S.pend.p===ME){if(ui.modal!=='discard')showDiscard();return;}
+  if(S.pend&&S.pend.k==='steal'&&S.cur===ME){if(ui.modal!=='steal')showSteal();return;}
   if(['discard','steal','over'].includes(ui.modal))closeModal();
 }
 function stepper(idp,vals,max){return `<div class="step" id="${idp}">${RES.map(k=>`<div class="cell bg-${k}"><div>${RN[k]}</div><div class="v">${vals[k]}</div><div class="b"><button data-k="${k}" data-d="-1" ${vals[k]<=0?'disabled':''} aria-label="${RN[k]} 빼기">−</button><button data-k="${k}" data-d="1" ${vals[k]>=max(k)?'disabled':''} aria-label="${RN[k]} 더하기">+</button></div></div>`).join('')}</div>`;}
-function showDiscard(){const n=S.pend.n;const sel=emptyRes();const me=S.players[0];
+function showDiscard(){const n=S.pend.n;const sel=emptyRes();const me=S.players[ME];
   const draw=()=>{const left=RES.flatMap(r=>Array(me.res[r]-sel[r]).fill(r)),out=RES.flatMap(r=>Array(sel[r]).fill(r));const k=out.length,full=k>=n;
     const cw=PH.on?48:84;const cd=r=>`<img class="card" src="${CARDIMG[r]}" alt="${RN[r]}" data-r="${r}">`;
     openModal('discard',`<h3>카드 ${n}장 버리기</h3><p>주사위 7이 나왔고 내 카드가 8장 이상이라 절반을 은행에 버려야 해요. 아래 카드 중 버릴 카드를 누르세요.</p>
@@ -2020,18 +2023,18 @@ function showDiscard(){const n=S.pend.n;const sel=emptyRes();const me=S.players[
     const mw=Math.max(cw*2,$('#dIn').clientWidth-4);$('#dOut').innerHTML=k?row(out.map(cd),cw,mw,'dpick'):`<div class="dempty">아래 내 자원카드에서 카드를 눌러 주세요</div>`;$('#dIn').innerHTML=row(left.map(cd),cw,mw,'dpick'+(full?' dfull':''));
     $('#dIn').onclick=e=>{const t=e.target.closest('[data-r]');if(!t||sumRes(sel)>=n)return;sel[t.dataset.r]++;draw();};
     $('#dOut').onclick=e=>{const t=e.target.closest('[data-r]');if(!t)return;sel[t.dataset.r]--;draw();};
-    $('#dOk').onclick=()=>{discard(0,sel);S.pend={k:'robber'};closeModal();update();};};
+    $('#dOk').onclick=()=>{discard(ME,sel);nextDiscard();closeModal();update();};};
   draw();}
 function showSteal(){openModal('steal',`<h3>누구에게서 빼앗을까요?</h3><p>도적이 앉은 땅에 건물이 있는 상대 중 한 명을 고르세요. 카드 1장을 무작위로 가져와요.</p>
   <div class="row" style="justify-content:flex-start">${S.pend.v.map(q=>`<button class="btn" data-q="${q}" style="border-color:${S.players[q].color}">${S.players[q].name} (카드 ${sumRes(S.players[q].res)}장)</button>`).join('')}</div>`);
-  $('#sheet').querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{steal(0,+b.dataset.q);S.pend=null;closeModal();update();});}
+  $('#sheet').querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{steal(ME,+b.dataset.q);S.pend=null;closeModal();update();});}
 function showOver(){const order=S.players.map((_,i)=>i).sort((a,b)=>vp(b,true)-vp(a,true));
-  openModal('over',`<h3>${S.winner===0?'승리했어요!':S.players[S.winner].name+'의 승리'}</h3><p>${S.turn}바퀴 만에 게임이 끝났어요.</p>
+  openModal('over',`<h3>${S.winner===ME?'승리했어요!':S.players[S.winner].name+'의 승리'}</h3><p>${S.turn}바퀴 만에 게임이 끝났어요.</p>
   <div class="scores">${order.map(i=>`<div><span class="dot" style="width:12px;height:12px;border-radius:3px;background:${S.players[i].color}"></span>${S.players[i].name}${S.players[i].dev.some(d=>d.t==='vp')?` <span class="empty">(승점 카드 ${S.players[i].dev.filter(d=>d.t==='vp').length}장 포함)</span>`:''}<b>${vp(i,true)}점</b></div>`).join('')}</div>
   <div class="row"><button class="btn" id="oClose">보드 보기</button><button class="btn primary" id="oNew">새 게임</button></div>`);
   $('#oClose').onclick=()=>{ui.modal='closed-over';$('#modal').hidden=true;};
   $('#oNew').onclick=()=>{closeModal();startNew();};}
-function showTrade(tab){tab=tab||'bank';const me=S.players[0];const rat=ratios(0);
+function showTrade(tab){tab=tab||'bank';const me=S.players[ME];const rat=ratios(ME);
   const st={give:null,get:null,pg:emptyRes(),pr:emptyRes(),resp:null};
   const draw=()=>{
     let body='';
@@ -2047,18 +2050,18 @@ function showTrade(tab){tab=tab||'bank';const me=S.players[0];const rat=ratios(0
     $('#t1').onclick=()=>{tab='bank';draw();};$('#t2').onclick=()=>{tab='player';draw();};$('#tx').onclick=()=>{closeModal();update();};
     if(tab==='bank'){$('#tg').onclick=e=>{const t=e.target.closest('button');if(!t)return;st.give=t.dataset.k;if(st.get===st.give)st.get=null;draw();};
       $('#tr').onclick=e=>{const t=e.target.closest('button');if(!t)return;st.get=t.dataset.k;draw();};
-      $('#tb').onclick=()=>{bankTrade(0,st.give,st.get);st.give=null;st.get=null;save();render();showTrade('bank');};}
+      $('#tb').onclick=()=>{bankTrade(ME,st.give,st.get);st.give=null;st.get=null;save();render();showTrade('bank');};}
     else{const h=(id,o)=>{$('#'+id).onclick=e=>{const t=e.target.closest('button');if(!t)return;o[t.dataset.k]+= +t.dataset.d;st.resp=null;draw();};};h('pg',st.pg);h('pr',st.pr);
-      $('#tp').onclick=()=>{st.resp=S.players.map((_,i)=>i).filter(q=>q>0).map(q=>({q,...aiAccepts(q,st.pg,st.pr)}));draw();};
-      $('#sheet').querySelectorAll('[data-deal]').forEach(b=>b.onclick=()=>{playerTrade(0,+b.dataset.deal,st.pg,st.pr);closeModal();update();});}
+      $('#tp').onclick=()=>{st.resp=S.players.map((_,i)=>i).filter(q=>q!==ME&&S.players[q].ai).map(q=>({q,...aiAccepts(q,st.pg,st.pr,ME)}));draw();};
+      $('#sheet').querySelectorAll('[data-deal]').forEach(b=>b.onclick=()=>{playerTrade(ME,+b.dataset.deal,st.pg,st.pr);closeModal();update();});}
   };draw();}
 function showPlenty(){const sel=emptyRes();const draw=()=>{openModal('plenty',`<h3>풍년</h3><p>은행에서 원하는 자원 2장을 고르세요. 같은 자원 2장도 돼요.</p>
   ${stepper('pl',sel,k=>Math.min(S.bank[k],sel[k]+(2-sumRes(sel))))}<div class="row"><button class="btn" id="px">취소</button><button class="btn primary" id="pk" ${sumRes(sel)===2?'':'disabled'}>받기</button></div>`);
   $('#pl').onclick=e=>{const t=e.target.closest('button');if(!t)return;sel[t.dataset.k]+= +t.dataset.d;draw();};$('#px').onclick=closeModal;
-  $('#pk').onclick=()=>{const l=[];RES.forEach(k=>{for(let i=0;i<sel[k];i++)l.push(k);});plenty(0,l[0],l[1]);closeModal();update();};};draw();}
+  $('#pk').onclick=()=>{const l=[];RES.forEach(k=>{for(let i=0;i<sel[k];i++)l.push(k);});plenty(ME,l[0],l[1]);closeModal();update();};};draw();}
 function showMonopoly(){openModal('mono',`<h3>독점</h3><p>자원 하나를 고르면 상대 3명이 가진 그 자원을 전부 가져와요. 상대 손패는 보이지 않으니 기록을 보고 추측해 보세요.</p>
   <div class="pick" id="mp">${RES.map(k=>`<button class="bg-${k}" data-k="${k}">${icon(k)}${RN[k]}</button>`).join('')}</div><div class="row"><button class="btn" id="mx">취소</button></div>`);
-  $('#mx').onclick=closeModal;$('#mp').onclick=e=>{const t=e.target.closest('button');if(!t)return;monopoly(0,t.dataset.k);closeModal();update();};}
+  $('#mx').onclick=closeModal;$('#mp').onclick=e=>{const t=e.target.closest('button');if(!t)return;monopoly(ME,t.dataset.k);closeModal();update();};}
 
 // ---------- rules / tutorial ----------
 const DG={wood:'#3a7232',brick:'#a65a36',wool:'#76a845',grain:'#c49b36',ore:'#73777f',desert:'#c8ad78'};
@@ -2144,21 +2147,21 @@ function startNew(withRules){newGame(ui.n,ui.diff);ui.prevRes=undefined;ui.mode=
 function onPick(pk){
   if(ui.modal&&ui.modal!=='closed-over')return;const T=targets();if(!T.kind)return;
   if(pk.v!==undefined){const v=pk.v;if(!T.v.includes(v))return;
-    if(T.kind==='setupS'||T.kind==='settlement')placeSettlement(0,v);else if(T.kind==='city')placeCity(0,v);ui.mode=null;}
+    if(T.kind==='setupS'||T.kind==='settlement')placeSettlement(ME,v);else if(T.kind==='city')placeCity(ME,v);ui.mode=null;}
   else if(pk.e!==undefined){const e=pk.e;if(!T.e.includes(e))return;
-    if(T.kind==='freeRoad')freeRoad(0,e);else placeRoad(0,e);ui.mode=null;}
-  else if(pk.h!==undefined){if(T.kind!=='robber'||!T.h.includes(pk.h))return;moveRobber(0,pk.h);}
+    if(T.kind==='freeRoad')freeRoad(ME,e);else placeRoad(ME,e);ui.mode=null;}
+  else if(pk.h!==undefined){if(T.kind!=='robber'||!T.h.includes(pk.h))return;moveRobber(ME,pk.h);}
   else return;
   update();}
 document.addEventListener('click',ev=>{if(!ev.target.closest('#actions,#stagebtns'))return;const b=ev.target.closest('[data-act]');if(!b||b.disabled)return;const a=b.dataset.act;
   if(a==='roll'){ui.mode=null;roll(0);}
   else if(['road','settlement','city'].includes(a))ui.mode=ui.mode===a?null:a;
-  else if(a==='dev'){buyDev(0);ui.mode=null;}
+  else if(a==='dev'){buyDev(ME);ui.mode=null;}
   else if(a==='trade'){ui.mode=null;showTrade('bank');return;}
   else if(a==='end'){ui.mode=null;endTurn();}
   update();});
 document.addEventListener('click',ev=>{const b=ev.target.closest('[data-play]');if(!b||b.disabled)return;$('#pop').hidden=true;const t=b.dataset.play;ui.mode=null;
-  if(t==='knight')useKnight(0);else if(t==='roads')useRoads(0);else if(t==='plenty')return showPlenty();else if(t==='monopoly')return showMonopoly();
+  if(t==='knight')useKnight(ME);else if(t==='roads')useRoads(ME);else if(t==='plenty')return showPlenty();else if(t==='monopoly')return showMonopoly();
   update();});
 $('#modal').addEventListener('click',ev=>{if(ev.target.id==='modal'&&['trade','plenty','mono','rules'].includes(ui.modal)){closeModal();update();}});
 document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&['trade','plenty','mono','rules','confirm'].includes(ui.modal)){closeModal();update();}});
