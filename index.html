@@ -1060,6 +1060,22 @@ html body .setpanel{overflow:visible!important}
 html body .setpanel .mi+.mi{border-top:1px solid rgba(233,196,122,.09)!important}
 .ricon{width:18px;height:18px;object-fit:contain;vertical-align:-3px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.6))}
 html body .pick button .pn .ricon{width:22px;height:22px}
+
+/* round 53: start dialog spacing/size */
+html.phone body .sheet.sheet-start #cnt.cnt{margin-bottom:26px!important}
+html.phone body .sheet.sheet-start #dif.cnt{margin-bottom:34px!important}
+html.phone body .sheet.sheet-start .st-btns.st-btns{margin-top:0!important;row-gap:12px!important}
+html:not(.phone) body .sheet.sheet-start.sheet-start{width:min(1440px,calc(100vw - 80px))!important;padding:34px 44px!important;gap:0 72px!important;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)!important}
+html:not(.phone) body .sheet-start .hero-title.logoimg{width:min(560px,100%)!important;margin:0 0 28px!important}
+html:not(.phone) body .sheet-start .st-l p{font-size:17px!important;line-height:1.8!important}
+html:not(.phone) body .sheet.sheet-start .st-r .label{font-size:17px!important;margin:0 0 12px!important}
+html:not(.phone) body .sheet.sheet-start #cnt.cnt{margin-bottom:34px!important}
+html:not(.phone) body .sheet.sheet-start #dif.cnt{margin-bottom:40px!important}
+html:not(.phone) body .sheet.sheet-start .cnt .btn{font-size:22px!important;padding:10px 12px 14px!important}
+html:not(.phone) body .sheet.sheet-start .cnt .btn small{font-size:14px!important}
+html:not(.phone) body .sheet.sheet-start .st-btns{margin-top:0!important;row-gap:16px!important;column-gap:14px!important}
+html:not(.phone) body .sheet.sheet-start .st-btns .btn{min-height:66px!important;font-size:19px!important}
+html:not(.phone) body .sheet.sheet-start .st-btns #sTut{min-height:78px!important;font-size:22px!important}
 /* stepper */
 .step .cell{position:relative;isolation:isolate;background:none!important}
 .step .cell::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.7;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
