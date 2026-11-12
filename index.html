@@ -984,7 +984,12 @@ html body .bld b{position:relative}
 html body .bld.active b::after{content:"";position:absolute;left:-30%;right:-30%;bottom:-3px;height:2px;background:linear-gradient(90deg,transparent,#f3d08a 30%,#fff0c0 50%,#f3d08a 70%,transparent)}
 html.phone body .step .cell button{padding:0 0 3px!important;line-height:1!important;display:grid!important;place-items:center}
 html.phone body .sheet .btn,html.phone body .stagebtns .tbtn{padding-bottom:3px!important}
-@media (min-width:1101px) and (min-height:640px){html body .tray{background:linear-gradient(180deg,rgba(13,11,9,0) 0%,rgba(13,11,9,.1) 14%,rgba(13,11,9,.26) 30%,rgba(13,11,9,.42) 50%,rgba(13,11,9,.56) 72%,rgba(13,11,9,.66) 100%)!important}}</style>
+@media (min-width:1101px) and (min-height:640px){html body .tray{background:linear-gradient(180deg,rgba(13,11,9,0) 0%,rgba(13,11,9,.1) 14%,rgba(13,11,9,.26) 30%,rgba(13,11,9,.42) 50%,rgba(13,11,9,.56) 72%,rgba(13,11,9,.66) 100%)!important}}
+.cdwrap{color:#e9c47a;font-weight:700;white-space:nowrap}
+.resp .wait{color:#cdbf9f}
+.sheet-offer .tinfo{margin-top:8px}
+.sheet-offer .cost .pip{display:inline-flex;align-items:center;gap:4px;font-size:14px;padding:4px 8px}
+</style>
 
 
 
@@ -1231,11 +1236,44 @@ function bankTrade(p,give,get){const r=ratios(p)[give];S.players[p].res[give]-=r
   log(p,`${RN[give]} ${r}장을 ${RN[get]} 1장으로 교환했어요. (${r===4?'은행':'항구 '+r+':1'})`);}
 function playerTrade(p,q,give,get){RES.forEach(r=>{const a=give[r]||0,b=get[r]||0;S.players[p].res[r]+=b-a;S.players[q].res[r]+=a-b;});
   log(p,`${S.players[q].name}와 거래: ${fmt(give)} 주고 ${fmt(get)} 받음`);}
-function endTurn(){const pl=S.players[S.cur];pl.dev.forEach(d=>d.fresh=false);
+function endTurn(){S.offer=null;const pl=S.players[S.cur];pl.dev.forEach(d=>d.fresh=false);
   S.cur=(S.cur+1)%S.players.length;S.rolled=false;S.devPlayed=false;S.pend=null;S.acts=0;if(S.cur===0)S.turn++;
   log(S.cur,'의 차례','turn');}
 function checkWin(){if(!S||S.phase!=='main')return;const p=S.cur;if(vp(p,true)>=10){S.phase='over';S.winner=p;S.pend=null;log(p,`${vp(p,true)}점 달성! 승리했어요.`,'turn');}}
 function actor(){if(!S||S.phase==='over')return null;if(S.pend&&S.pend.k==='discard')return S.pend.p;return S.cur;}
+
+
+// ---------- multiplayer rules: offers, deadlines ----------
+const TL={turn:90000,setup:60000,discard:60000,robber:45000,offer:30000};
+function proposeOffer(from,give,get){const to={};S.players.forEach((pl,q)=>{if(q===from)return;
+    if(pl.ai){const r=aiAccepts(q,give,get,from);to[q]={s:r.ok?'yes':'no',why:r.why};}
+    else{const lack=RES.some(k=>(get[k]||0)>pl.res[k]);to[q]={s:'wait',why:'답변을 기다리는 중'};}});
+  S.offer={id:(S.offer?S.offer.id:0)+1,from,give:{...give},get:{...get},to,t:Date.now()+TL.offer};}
+function respondOffer(q,yes){const o=S.offer;if(!o||!o.to[q]||o.to[q].s!=='wait')return;
+  const lack=RES.some(k=>(o.get[k]||0)>S.players[q].res[k]);
+  o.to[q]=yes&&!lack?{s:'yes',why:'좋아요, 거래해요'}:{s:'no',why:yes?'카드가 부족해요':'거절했어요'};}
+function acceptOffer(from,q){const o=S.offer;if(!o||o.from!==from||!o.to[q]||o.to[q].s!=='yes')return false;
+  const okA=RES.every(k=>(o.give[k]||0)<=S.players[from].res[k]),okB=RES.every(k=>(o.get[k]||0)<=S.players[q].res[k]);
+  if(!okA||!okB){o.to[q]={s:'no',why:'카드가 부족해요'};return false;}
+  playerTrade(from,q,o.give,o.get);S.offer=null;return true;}
+function cancelOffer(){S.offer=null;}
+function randomDiscard(p,n){const r=S.players[p].res,out=emptyRes();for(let i=0;i<n;i++){const pick=RES.filter(x=>r[x]-out[x]>0);if(!pick.length)break;out[pick[rnd(pick.length)]]++;}discard(p,out);}
+function dlKey(){const a=actor();if(a===null)return '';return [S.phase,S.turn,S.si,S.cur,a,S.pend?S.pend.k+':'+(S.pend.p===undefined?'':S.pend.p):''].join('|');}
+function dlLimit(){if(S.pend&&S.pend.k==='discard')return TL.discard;if(S.pend&&(S.pend.k==='robber'||S.pend.k==='steal'))return TL.robber;return S.phase==='setup'?TL.setup:TL.turn;}
+function timeoutAct(p){
+  if(S.pend&&S.pend.k==='discard'&&S.pend.p===p){log(p,'시간 초과로 카드를 무작위로 버렸어요.','sys');randomDiscard(p,S.pend.n);nextDiscard();return;}
+  log(p,'시간 초과! 자동으로 진행했어요.','sys');
+  if(S.phase==='setup'){aiStep(p);return;}
+  let g=0;while(S.phase==='main'&&S.cur===p&&g++<12){
+    if(S.pend){if(S.pend.k==='discard')return;if(S.pend.k==='steal'){steal(p,S.pend.v[rnd(S.pend.v.length)]);S.pend=null;}else if(S.pend.k==='robber')moveRobber(p,aiRobberHex(p));else S.pend=null;continue;}
+    if(!S.rolled){roll(p);continue;}
+    S.offer=null;endTurn();}}
+// host clock: returns true if state changed
+function mpTick(now){if(!S||!S.mp||S.phase==='over')return false;let ch=false;
+  if(S.offer&&now>S.offer.t){Object.keys(S.offer.to).forEach(q=>{if(S.offer.to[q].s==='wait')S.offer.to[q]={s:'no',why:'시간 초과'};});}
+  const k=dlKey();if(k!==S.dlKey){S.dlKey=k;S.deadline=now+dlLimit();ch=true;}
+  else if(S.deadline&&now>S.deadline){const a=actor();if(a!==null&&!S.players[a].ai){timeoutAct(a);S.dlKey=null;ch=true;}}
+  return ch;}
 
 // ---------- AI ----------
 const DF=()=>S.diff||'normal';
@@ -1938,7 +1976,7 @@ function devPop(t){
   return `<h4>${DEVN[t]} 카드</h4><p>${DEVL[t]}</p><p class="muted">덱에 처음 ${DEVCNT[t]}장. ${t==='vp'?'자동으로 점수에 들어가요.':'산 차례에는 못 쓰고, 한 차례에 발전 카드는 1장만 쓸 수 있어요.'}</p>${own&&t!=='vp'?`<button class="btn primary" data-play="${t}" ${can?'':'disabled'} style="margin-top:4px">${can?'이 카드 사용하기':S.cur!==ME||S.phase!=='main'?'내 차례에 쓸 수 있어요':S.devPlayed?'이번 차례엔 이미 사용했어요':S.pend?'지금 하던 행동을 먼저 끝내세요':'다음 차례부터 쓸 수 있어요'}</button>`:''}`;}
 function render(){
   renderBoard();
-  $('#coach').innerHTML=coachText();
+  $('#coach').innerHTML=coachText()+(S.mp&&S.phase!=='over'&&actor()!==null&&!S.players[actor()].ai?` <span class="cdwrap">· <i data-cd="dl"></i></span>`:'');
   const cp=S.players[S.cur];
   const rolledNow=S.rollId!==ui.shownRoll;ui.shownRoll=S.rollId;
   $('#turnbar').innerHTML=`<span class="tp-pip" style="background:${cp.color}"></span><span class="tp-txt"><span class="tp-name">${S.phase==='over'?'게임 종료':S.cur===ME?'나 (내 차례)':cp.name+'의 차례'}</span><span class="tp-sub">${S.phase==='setup'?`초기 배치 ${S.si+1}/${2*S.n}`:`${S.turn}번째 바퀴`}</span></span>`;
@@ -1967,6 +2005,7 @@ function render(){
     <span class="meta"><span data-tip="손에 든 자원 카드 수. 8장 이상이면 7이 나올 때 절반을 버려요.">자원 ${sumRes(p.res)}</span><span data-tip="가진 발전 카드 수. 종류는 본인만 알아요.">발전 ${p.dev.length}</span><span data-tip="지금까지 사용한 기사 카드 수. 3장 이상이며 가장 많으면 최강 기사단 2점.">기사 ${p.knights}</span><span data-tip="가장 길게 이어진 도로 길이. 5 이상이며 가장 길면 최장 교역로 2점.">도로 ${S.rl[i]||0}</span></span></div></nav>`).join('');
   $('#log').innerHTML=S.log.slice(PH.on?-4:0).reverse().map(e=>e.k==='turn'?`<div class="turn">${e.p>=0?pname(e.p):''}${e.p>=0&&e.t.startsWith('의')?'':' '}${e.t}</div>`:`<div class="${e.k}">${e.p>=0?pname(e.p)+' ':''}${e.t}</div>`).join('');
   checkToast();try{alignBtns();}catch(e){}
+  {const sig=myOffer()?JSON.stringify(S.offer.to):'';if(ui.modal==='trade'&&ui.tradeRedraw&&sig!==ui.offerSig){ui.offerSig=sig;try{ui.tradeRedraw();}catch(e){}}}
   forcedModals();
 }
 function checkToast(){const seq=S.logSeq||0;if(ui.seenSeq===undefined||ui.seenSeq>seq){ui.seenSeq=seq;return;}
@@ -2003,18 +2042,34 @@ function openModal(key,html){ui.modal=key;$('#sheet').className='sheet sheet-'+k
 function placeCrest(){const sh=$('#sheet'),c=$('#mcrest');if(!sh||!c||$('#modal').hidden)return;const r=sh.getBoundingClientRect(),o=$('#modal').getBoundingClientRect(),k=PH.on?PH.k:1;c.style.left=((r.left-o.left+r.width/2)/k)+'px';c.style.top=((r.top-o.top)/k)+'px';}
 addEventListener('resize',()=>setTimeout(placeCrest,80));
 function closeModal(){ui.modal=null;$('#modal').hidden=true;$('#sheet').innerHTML='';}
+
+function hasHumans(){return S.players.some((p,i)=>i!==ME&&!p.ai);}
+function myOffer(){return S.offer&&S.offer.from===ME;}
+function showOffer(){const o=S.offer;const me=S.players[ME];const lack=RES.some(k=>(o.get[k]||0)>me.res[k]);
+  const chips=c=>RES.filter(k=>c[k]).map(k=>`<span class="pip bg-${k}">${icon(k)} ${RN[k]} ${c[k]}</span>`).join('')||'<span class="muted">없음</span>';
+  openModal('offer',`<h3>교환 제안</h3><p>${pname(o.from)}이(가) 교환을 제안했어요. <span class="muted">남은 시간 <i data-cd="offer"></i></span></p>
+  <div class="tinfo"><div><div class="label">내가 받을 것</div><div class="cost">${chips(o.give)}</div></div><div><div class="label">내가 줄 것</div><div class="cost">${chips(o.get)}</div></div></div>
+  ${lack?'<p class="muted" style="margin-top:10px">줄 카드가 부족해서 수락할 수 없어요.</p>':''}
+  <div class="row"><button class="btn" id="oNo">거절</button><button class="btn sub" id="oYes" ${lack?'disabled':''}>수락</button></div>`);
+  $('#oNo').onclick=()=>{respondOffer(ME,false);closeModal();update();};$('#oYes').onclick=()=>{respondOffer(ME,true);closeModal();update();};}
+function fmtCd(ms){return Math.max(0,Math.ceil(ms/1000))+'초';}
+setInterval(()=>{if(!S)return;const now=Date.now();
+  if(S.mp&&(!window.NET||NET.isHost)){if(mpTick(now))update();}
+  document.querySelectorAll('[data-cd]').forEach(e=>{const k=e.dataset.cd;const t=k==='offer'?(S.offer&&S.offer.t):S.deadline;e.textContent=t?fmtCd(t-now):'';});
+},500);
 function forcedModals(){
   if(['start','rules','confirm','closed-over','trade','plenty','mono'].includes(ui.modal))return;
   if(S.phase==='over'){if(ui.modal!=='over')showOver();return;}
   if(S.pend&&S.pend.k==='discard'&&S.pend.p===ME){if(ui.modal!=='discard')showDiscard();return;}
   if(S.pend&&S.pend.k==='steal'&&S.cur===ME){if(ui.modal!=='steal')showSteal();return;}
-  if(['discard','steal','over'].includes(ui.modal))closeModal();
+  if(S.offer&&S.offer.to[ME]&&S.offer.to[ME].s==='wait'){if(ui.modal!=='offer')showOffer();return;}
+  if(['discard','steal','over','offer'].includes(ui.modal))closeModal();
 }
 function stepper(idp,vals,max){return `<div class="step" id="${idp}">${RES.map(k=>`<div class="cell bg-${k}"><div>${RN[k]}</div><div class="v">${vals[k]}</div><div class="b"><button data-k="${k}" data-d="-1" ${vals[k]<=0?'disabled':''} aria-label="${RN[k]} 빼기">−</button><button data-k="${k}" data-d="1" ${vals[k]>=max(k)?'disabled':''} aria-label="${RN[k]} 더하기">+</button></div></div>`).join('')}</div>`;}
 function showDiscard(){const n=S.pend.n;const sel=emptyRes();const me=S.players[ME];
   const draw=()=>{const left=RES.flatMap(r=>Array(me.res[r]-sel[r]).fill(r)),out=RES.flatMap(r=>Array(sel[r]).fill(r));const k=out.length,full=k>=n;
     const cw=PH.on?48:84;const cd=r=>`<img class="card" src="${CARDIMG[r]}" alt="${RN[r]}" data-r="${r}">`;
-    openModal('discard',`<h3>카드 ${n}장 버리기</h3><p>주사위 7이 나왔고 내 카드가 8장 이상이라 절반을 은행에 버려야 해요. 아래 카드 중 버릴 카드를 누르세요.</p>
+    openModal('discard',`<h3>카드 ${n}장 버리기</h3>${S.mp?'<p class="muted">남은 시간 <i data-cd="dl"></i> · 시간이 지나면 무작위로 버려져요</p>':''}<p>주사위 7이 나왔고 내 카드가 8장 이상이라 절반을 은행에 버려야 해요. 아래 카드 중 버릴 카드를 누르세요.</p>
     <div class="label">버릴 카드 <b class="dcnt${full?' ok':''}">${k} / ${n}</b>${k?' · 다시 누르면 내 자원카드로 돌아가요':''}</div>
     <div class="dzone" id="dOut" style="--cw:${cw}px"></div>
     <div class="label">내 자원카드 · ${left.length}장</div>
@@ -2035,7 +2090,7 @@ function showOver(){const order=S.players.map((_,i)=>i).sort((a,b)=>vp(b,true)-v
   $('#oClose').onclick=()=>{ui.modal='closed-over';$('#modal').hidden=true;};
   $('#oNew').onclick=()=>{closeModal();startNew();};}
 function showTrade(tab){tab=tab||'bank';const me=S.players[ME];const rat=ratios(ME);
-  const st={give:null,get:null,pg:emptyRes(),pr:emptyRes(),resp:null};
+  const st={give:null,get:null,pg:emptyRes(),pr:emptyRes(),resp:null};if(myOffer()){Object.assign(st.pg,S.offer.give);Object.assign(st.pr,S.offer.get);if(!tab||tab==='bank')tab=arguments[0]||'player';}
   const draw=()=>{
     let body='';
     if(tab==='bank'){body=`<div class="label">줄 자원 (내 비율)</div><div class="pick" id="tg">${RES.map(k=>`<button class="bg-${k}${st.give===k?' sel':''}" data-k="${k}" ${me.res[k]>=rat[k]?'':'disabled'}><span class="pn">${icon(k)}${RN[k]}</span><span class="pr"><i>${rat[k]}장 → 1장</i><i>보유 ${me.res[k]}</i></span></button>`).join('')}</div>
@@ -2044,16 +2099,17 @@ function showTrade(tab){tab=tab||'bank';const me=S.players[ME];const rat=ratios(
       <div class="tinfo"><div><div class="label">은행 잔고</div><div class="cost" data-tip="은행에 남은 자원 수. 0이면 그 자원은 생산돼도 받을 수 없어요.">${RES.map(k=>`<span class="pip bg-${k}">${RN[k]} ${S.bank[k]}</span>`).join('')}<span class="pip pdev">발전 ${S.deck.length}</span></div></div><div><div class="label">내 교환 비율</div><div class="cost" data-tip="이 자원 몇 장을 원하는 자원 1장으로 바꿀 수 있는지. 항구에 건물이 있으면 비율이 좋아져요.">${RES.map(k=>`<span class="pip bg-${k}">${RN[k]} ${rat[k]}:1</span>`).join('')}</div></div></div>
       <div class="row"><button class="btn primary" id="tb" ${st.give&&st.get?'':'disabled'}>교환하기</button></div>`;}
     else{body=`<div class="label">내가 줄 것</div>${stepper('pg',st.pg,k=>me.res[k])}<div class="label">내가 받을 것</div>${stepper('pr',st.pr,()=>9)}
-      <div class="row"><button class="btn primary" id="tp" ${sumRes(st.pg)||sumRes(st.pr)?'':'disabled'}>AI들에게 제안</button></div>
-      ${st.resp?`<div class="resp">${st.resp.map(r=>`<div class="r"><b style="color:${S.players[r.q].color}">${S.players[r.q].name}</b><span class="${r.ok?'ok':'no'}">${r.why}</span>${r.ok?`<button class="btn sub" data-deal="${r.q}">거래</button>`:''}</div>`).join('')}</div>`:''}`;}
-    openModal('trade',`<button class="mclose" id="tx" aria-label="닫기" title="닫기"></button><h3>교환</h3><div class="tabs"><button class="btn${tab==='bank'?' active':''}" id="t1">은행 · 항구</button><button class="btn${tab==='player'?' active':''}" id="t2">AI 플레이어</button></div>${body}`);
-    $('#t1').onclick=()=>{tab='bank';draw();};$('#t2').onclick=()=>{tab='player';draw();};$('#tx').onclick=()=>{closeModal();update();};
+      <div class="row"><button class="btn primary" id="tp" ${sumRes(st.pg)||sumRes(st.pr)?'':'disabled'}>${hasHumans()?'제안하기':'AI들에게 제안'}</button></div>
+      ${myOffer()?`<div class="resp">${Object.keys(S.offer.to).map(q=>{const r=S.offer.to[q];return `<div class="r"><b style="color:${S.players[q].color}">${S.players[q].name}</b><span class="${r.s==='yes'?'ok':r.s==='no'?'no':'wait'}">${r.s==='wait'?`답변 대기 · <i data-cd="offer"></i>`:r.why}</span>${r.s==='yes'?`<button class="btn sub" data-deal="${q}">거래</button>`:''}</div>`;}).join('')}</div>`:''}`;}
+    openModal('trade',`<button class="mclose" id="tx" aria-label="닫기" title="닫기"></button><h3>교환</h3><div class="tabs"><button class="btn${tab==='bank'?' active':''}" id="t1">은행 · 항구</button><button class="btn${tab==='player'?' active':''}" id="t2">${hasHumans()?'다른 플레이어':'AI 플레이어'}</button></div>${body}`);
+    $('#t1').onclick=()=>{tab='bank';draw();};$('#t2').onclick=()=>{tab='player';draw();};$('#tx').onclick=()=>{if(myOffer())cancelOffer();ui.tradeRedraw=null;closeModal();update();};
     if(tab==='bank'){$('#tg').onclick=e=>{const t=e.target.closest('button');if(!t)return;st.give=t.dataset.k;if(st.get===st.give)st.get=null;draw();};
       $('#tr').onclick=e=>{const t=e.target.closest('button');if(!t)return;st.get=t.dataset.k;draw();};
       $('#tb').onclick=()=>{bankTrade(ME,st.give,st.get);st.give=null;st.get=null;save();render();showTrade('bank');};}
-    else{const h=(id,o)=>{$('#'+id).onclick=e=>{const t=e.target.closest('button');if(!t)return;o[t.dataset.k]+= +t.dataset.d;st.resp=null;draw();};};h('pg',st.pg);h('pr',st.pr);
-      $('#tp').onclick=()=>{st.resp=S.players.map((_,i)=>i).filter(q=>q!==ME&&S.players[q].ai).map(q=>({q,...aiAccepts(q,st.pg,st.pr,ME)}));draw();};
-      $('#sheet').querySelectorAll('[data-deal]').forEach(b=>b.onclick=()=>{playerTrade(ME,+b.dataset.deal,st.pg,st.pr);closeModal();update();});}
+    else{const h=(id,o)=>{$('#'+id).onclick=e=>{const t=e.target.closest('button');if(!t)return;o[t.dataset.k]+= +t.dataset.d;if(myOffer())cancelOffer();draw();};};h('pg',st.pg);h('pr',st.pr);
+      $('#tp').onclick=()=>{proposeOffer(ME,st.pg,st.pr);update();draw();};
+      $('#sheet').querySelectorAll('[data-deal]').forEach(b=>b.onclick=()=>{if(acceptOffer(ME,+b.dataset.deal)){closeModal();update();}else draw();});}
+    ui.tradeRedraw=draw;
   };draw();}
 function showPlenty(){const sel=emptyRes();const draw=()=>{openModal('plenty',`<h3>풍년</h3><p>은행에서 원하는 자원 2장을 고르세요. 같은 자원 2장도 돼요.</p>
   ${stepper('pl',sel,k=>Math.min(S.bank[k],sel[k]+(2-sumRes(sel))))}<div class="row"><button class="btn" id="px">취소</button><button class="btn primary" id="pk" ${sumRes(sel)===2?'':'disabled'}>받기</button></div>`);
