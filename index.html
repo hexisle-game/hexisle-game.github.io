@@ -550,7 +550,6 @@ header.top h1.logo{font-size:26px}
 }
 html.phone header.top{top:8px!important;left:14px!important;right:14px!important}
 html.phone header.top h1.logo{font-size:20px}
-html.phone .speedlbl,html.phone #speed,html.phone #gfxBtn,html.phone #hintBtn{display:none!important}
 html.phone header.top .tools .btn{font-size:13px!important;padding:7px 12px!important}
 html.phone #leftcol{left:14px;top:50px;gap:8px}
 html.phone .dicebox{padding:6px 10px!important;min-height:0}
@@ -610,7 +609,6 @@ header.top .tools>.speedlbl{padding-right:4px!important;color:#a39c90!important}
 html body header.top .tools>.speedlbl+select.btn{border-left:0!important;padding-left:0!important;padding-right:26px!important;background-position:right 10px center!important}
 html body header.top .tools>.btn:hover:not(:disabled){color:#f3d08a!important}
 html body header.top .tools>.btn.btn.active{color:#e9c47a!important;background:none!important;border-top:0!important;border-right:0!important;border-bottom:0!important}
-html body header.top .tools>#gfxBtn:not(.active),html body header.top .tools>#tipBtn:not(.active),html body header.top .tools>#hintBtn:not(.active){color:#8f897f!important}
 header.top select.btn option{color:#111}
 .roundline{display:none}
 html.phone .turnplaque{display:none!important}
@@ -623,9 +621,6 @@ html body header.top .tools>.btn:active{color:#f3d08a!important;background:none!
 @media (hover:none){
   html body header.top .tools>.btn:hover:not(:active){color:#d9d3c8!important}
 }
-html body header.top .tools>#fsBtn{background:none!important}
-html.phone body header.top .tools>#tipBtn.btn.btn{border-left:0!important}
-html.phone body header.top .tools>#camReset.btn.btn{border-left:1px solid rgba(255,255,255,.2)!important}
 .dicebox{background:none!important;border:0!important;box-shadow:none!important;padding:0!important;min-height:0!important}
 .dicebox .sum{text-shadow:0 1px 3px rgba(0,0,0,.9)}
 .dicebox .who{text-shadow:0 1px 2px rgba(0,0,0,.9)}
@@ -705,9 +700,31 @@ html.phone .sheet-start .st-btns #sTut{grid-column:1/-1}
 html.phone .sheet-newgame .st-l h3{font-size:40px;line-height:1.2;margin-bottom:12px}
 html.phone .sheet-newgame .st-btns #cYes{order:2}
 /* fullscreen button stands out */
-html body header.top .tools>#fsBtn.btn.btn{color:#f3d08a!important;font-weight:700;border:1px solid rgba(243,208,138,.7)!important;background:rgba(217,164,65,.14)!important;margin-left:10px;padding:4px 14px!important;border-radius:2px!important}
-html body header.top .tools>#fsBtn.btn.btn:hover{background:rgba(217,164,65,.28)!important}
-html body header.top .tools>#fsBtn.btn.btn:focus:not(:focus-visible){color:#f3d08a!important;background:rgba(217,164,65,.14)!important}
+
+header.top .tools{gap:2px!important}
+header.top .tools .ib{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;padding:0;border:1px solid rgba(255,255,255,.14);border-radius:2px;background:rgba(36,36,38,.82);color:#d9d3c8;cursor:pointer;transition:color .15s,background .15s,border-color .15s}
+header.top .tools .ib:hover{color:#f3d08a;border-color:rgba(243,208,138,.5)}
+header.top .tools .ib:focus:not(:focus-visible){outline:none}
+header.top .tools .ib.active{color:#f3d08a;border-color:rgba(243,208,138,.6);background:rgba(60,48,24,.75)}
+header.top .tools .ib[hidden]{display:none}
+#fsBtn .fs-out,#fsBtn.on .fs-in{display:none}#fsBtn.on .fs-out{display:inline}
+.setwrap{position:relative}
+.setmenu{position:absolute;right:0;top:calc(100% + 6px);min-width:212px;padding:6px;background:rgba(30,30,32,.96);border:1px solid rgba(255,255,255,.14);border-radius:2px;box-shadow:0 10px 30px rgba(0,0,0,.45);z-index:40;display:flex;flex-direction:column}
+.setmenu[hidden]{display:none}
+.setmenu .mi{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;padding:10px 12px;background:none;border:0;border-radius:2px;color:#e6e0d4;font:inherit;font-size:14px;text-align:left;cursor:pointer}
+.setmenu button.mi:hover{background:rgba(255,255,255,.07);color:#f3d08a}
+.setmenu .mi.tg::after{content:"";flex:none;width:34px;height:18px;border-radius:9px;background:#55524d radial-gradient(circle at 9px 9px,#d9d3c8 6px,transparent 6.5px);transition:background .15s}
+.setmenu .mi.tg[aria-checked=true]::after{background:#b8893a radial-gradient(circle at 25px 9px,#fff6e0 6px,transparent 6.5px)}
+.setmenu .msep{height:1px;margin:5px 4px;background:rgba(255,255,255,.12)}
+.setmenu .mrow{cursor:default}
+.setmenu .seg{display:inline-flex;border:1px solid rgba(255,255,255,.18);border-radius:2px}
+.setmenu .seg button{padding:4px 9px;background:none;border:0;color:#a39c90;font:inherit;font-size:12.5px;cursor:pointer}
+.setmenu .seg button+button{border-left:1px solid rgba(255,255,255,.18)}
+.setmenu .seg button.on{background:rgba(184,137,58,.35);color:#f3d08a}
+html.phone header.top .tools .ib{width:44px;height:44px}
+html.phone .setmenu .mi{font-size:15px;padding:11px 12px}
+html body header.top.menu-open{z-index:20}
+.setmenu .mi,.setmenu .seg button{white-space:nowrap;word-break:keep-all}
 </style>
 
 
@@ -726,15 +743,20 @@ html body header.top .tools>#fsBtn.btn.btn:focus:not(:focus-visible){color:#f3d0
     <h1 class="logo">HEXISLE<small>육각섬 개척기</small></h1>
   </div>
   <div class="tools">
-    <label class="speedlbl" for="speed">AI 속도</label>
-    <select id="speed" class="btn"><option>느림</option><option selected>보통</option><option>빠름</option></select>
-    <button id="gfxBtn" class="btn">그래픽 높음</button>
-    <button id="tipBtn" class="btn">툴팁 켜짐</button>
-    <button id="hintBtn" class="btn">힌트 켜짐</button>
-    <button id="camReset" class="btn" title="보드를 처음 시점으로 되돌려요">시점 초기화</button>
-    <button id="rulesBtn" class="btn">게임 방법</button>
-    <button id="newBtn" class="btn">새 게임</button>
-    <button id="fsBtn" class="btn" hidden>전체화면 켜기</button>
+    <button id="camReset" class="ib" aria-label="시점 초기화" data-tip="시점 초기화: 보드를 처음 시점으로 되돌려요"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 2.64-6.36"/><path d="M3 4v5h5"/></svg></button>
+    <button id="fsBtn" class="ib" aria-label="전체화면 켜기" data-tip="전체화면 켜기" hidden><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="fs-in" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><path class="fs-out" d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg></button>
+    <div class="setwrap">
+      <button id="setBtn" class="ib" aria-label="설정" aria-haspopup="true" aria-expanded="false" data-tip="설정"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+      <div id="setMenu" class="setmenu" role="menu" hidden>
+        <button id="newBtn" class="mi" role="menuitem">새 게임</button>
+        <button id="rulesBtn" class="mi" role="menuitem">게임 방법</button>
+        <button id="tipBtn" class="mi tg" role="menuitemcheckbox">툴팁</button>
+        <button id="hintBtn" class="mi tg" role="menuitemcheckbox">힌트</button>
+        <div class="msep"></div>
+        <button id="gfxBtn" class="mi tg" role="menuitemcheckbox">고화질 그래픽</button>
+        <div class="mi mrow"><span>AI 속도</span><span class="seg" id="speedSeg"><button data-sp="느림">느림</button><button data-sp="보통">보통</button><button data-sp="빠름">빠름</button></span></div>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -1869,11 +1891,17 @@ document.addEventListener('click',ev=>{const b=ev.target.closest('[data-play]');
   update();});
 $('#modal').addEventListener('click',ev=>{if(ev.target.id==='modal'&&['trade','plenty','mono','rules'].includes(ui.modal)){closeModal();update();}});
 document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&['trade','plenty','mono','rules','confirm'].includes(ui.modal)){closeModal();update();}});
-$('#speed').value=ui.speed;$('#speed').onchange=e=>{ui.speed=e.target.value;saveUi();kick();};
-const hintLabel=()=>{$('#hintBtn').textContent=ui.hints?'힌트 켜짐':'힌트 꺼짐';$('#hintBtn').classList.toggle('active',ui.hints);};
-const gfxLabel=()=>{$('#gfxBtn').textContent=ui.gfx==='low'?'그래픽 낮음':'그래픽 높음';$('#gfxBtn').classList.toggle('active',ui.gfx!=='low');$('#gfxBtn').dataset.tip='높음: 그림자 깊이, 빛 번짐, 원근 흐림, 색 보정을 켜요. 화면이 버벅이면 낮음으로 바꾸세요.';};
+const spLabel=()=>document.querySelectorAll('#speedSeg [data-sp]').forEach(b=>b.classList.toggle('on',b.dataset.sp===ui.speed));spLabel();
+$('#speedSeg').onclick=e=>{const b=e.target.closest('[data-sp]');if(!b)return;ui.speed=b.dataset.sp;saveUi();spLabel();kick();};
+{const sb=$('#setBtn'),sm=$('#setMenu');const setOpen=o=>{sm.hidden=!o;document.querySelector('header.top').classList.toggle('menu-open',o);sb.classList.toggle('active',o);sb.setAttribute('aria-expanded',o);};
+ sb.onclick=e=>{e.stopPropagation();sb.blur();hideTip();setOpen(sm.hidden);};
+ document.addEventListener('pointerdown',e=>{if(!sm.hidden&&!e.target.closest('.setwrap'))setOpen(false);},true);
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!sm.hidden)setOpen(false);});
+ sm.addEventListener('click',e=>{const b=e.target.closest('#newBtn,#rulesBtn');if(b)setOpen(false);});}
+const hintLabel=()=>{$('#hintBtn').setAttribute('aria-checked',ui.hints);$('#hintBtn').classList.toggle('active',ui.hints);};
+const gfxLabel=()=>{$('#gfxBtn').setAttribute('aria-checked',ui.gfx!=='low');$('#gfxBtn').classList.toggle('active',ui.gfx!=='low');$('#gfxBtn').dataset.tip='높음: 그림자 깊이, 빛 번짐, 원근 흐림, 색 보정을 켜요. 화면이 버벅이면 낮음으로 바꾸세요.';};
 $('#gfxBtn').onclick=()=>{ui.gfx=ui.gfx==='low'?'high':'low';saveUi();gfxLabel();invalidate(true);};gfxLabel();
-const tipLabel=()=>{$('#tipBtn').textContent=ui.tips?'툴팁 켜짐':'툴팁 꺼짐';$('#tipBtn').classList.toggle('active',ui.tips);};
+const tipLabel=()=>{$('#tipBtn').setAttribute('aria-checked',ui.tips);$('#tipBtn').classList.toggle('active',ui.tips);};
 $('#tipBtn').onclick=()=>{ui.tips=!ui.tips;saveUi();tipLabel();hideTip();if(!ui.tips)$('#toast').hidden=true;};tipLabel();
 $('#hintBtn').onclick=()=>{ui.hints=!ui.hints;saveUi();hintLabel();render();};hintLabel();
 $('#rulesBtn').onclick=()=>{clearTimeout(aiTimer);showRules(0);};
@@ -1976,7 +2004,7 @@ function fitChrome(){const h=document.querySelector('header.top');if(h)document.
 fitChrome();window.addEventListener('resize',fitChrome);try{document.fonts.ready.then(fitChrome);}catch(e){}
 {const fb=$('#fsBtn');const el=document.documentElement;const can=document.fullscreenEnabled||document.webkitFullscreenEnabled;fb.hidden=!can;
   fb.onclick=async()=>{fb.blur();try{if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}else{await (el.requestFullscreen||el.webkitRequestFullscreen).call(el);try{await screen.orientation.lock('landscape');}catch(e){}}}catch(e){openModal('confirm',`<h3>전체화면을 쓸 수 없어요</h3><p>${window.top!==window?'이 게임은 다른 페이지 안에 들어 있어서, 브라우저가 게임 쪽의 전체화면 요청을 막고 있어요.':'이 브라우저는 웹페이지의 전체화면을 지원하지 않아요(아이폰 사파리 등).'}</p><p><b>대신 이렇게 해 보세요</b></p><ul class="steps"><li><b>홈 화면에 추가</b>해서 열면 주소창 없는 전체화면으로 실행돼요(사파리: 공유 → 홈 화면에 추가, 크롬·삼성: 메뉴 → 홈 화면에 추가)</li><li>삼성 인터넷: 설정 → 레이아웃 및 메뉴 → <b>상태 표시줄 숨기기</b>, 주소창은 화면을 위로 살짝 밀면 숨겨져요</li><li>사파리: 주소창의 <b>가가(aA) → 도구 막대 가리기</b></li></ul><div class="row"><button class="btn primary" id="fsOk">확인</button></div>`);$('#fsOk').onclick=()=>{closeModal();update();};}};
-  document.addEventListener('fullscreenchange',()=>{fb.textContent=document.fullscreenElement?'전체화면 끄기':'전체화면 켜기';setTimeout(()=>{applyPhone();fitChrome();},120);});}
+  document.addEventListener('fullscreenchange',()=>{{const on=!!document.fullscreenElement,l=on?'전체화면 끄기':'전체화면 켜기';fb.classList.toggle('on',on);fb.setAttribute('aria-label',l);fb.dataset.tip=l;}setTimeout(()=>{applyPhone();fitChrome();},120);});}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-htab]');if(!b)return;ui.handTab=b.dataset.htab;render();});
 // ---------- boot ----------
 (function(){const blank='data:image/gif;base64,R0lGODlhAQABAAAAACw=';RES.forEach(r=>CARDIMG[r]=CARDIMG[r]||blank);Object.keys(DEVN).forEach(t=>CARDIMG[t]=paintCard(t,DEVN[t],true));})();
