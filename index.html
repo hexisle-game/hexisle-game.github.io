@@ -838,43 +838,56 @@ html.phone .sheet-start .st-r .label:first-child{margin-top:0!important}
 /* info icon gap */
 .tray-h .qi{margin-left:-6px}
 
-/* ===== UI skin (generated art) ===== */
-html body .stagebtns .tbtn,html body .sheet .btn.primary,html body #sTut,html body #sNew,html body #cYes,html body #oNew{
- border-style:solid!important;border-width:17px 20px!important;border-color:transparent!important;border-image:url(assets/ui/c071a766.webp) 62 64 fill / 17px 20px stretch!important;
- background:none!important;box-shadow:none!important;border-radius:0!important;color:#fbe7b6!important;font-weight:800!important;letter-spacing:.04em;text-shadow:0 1px 0 #3a0802,0 2px 6px rgba(0,0,0,.7)!important;padding:2px 14px!important;min-height:0;filter:drop-shadow(0 4px 8px rgba(0,0,0,.45))}
-html body .stagebtns .tbtn::before,html body .stagebtns .tbtn::after{display:none!important}
-html body .stagebtns .tbtn{font-size:16px!important;padding:6px 16px!important}
-html body .sheet .row .btn:not(.primary),html body .sheet .btn.sub,html body #sCont,html body #oClose,html body #cNo{
- border-style:solid!important;border-width:10px 12px!important;border-color:transparent!important;border-image:url(assets/ui/0188c1d8.webp) 34 36 fill / 10px 12px stretch!important;
- background:none!important;box-shadow:none!important;border-radius:0!important;color:#fff0d2!important;font-weight:700!important;text-shadow:0 1px 0 #4a1c02,0 1px 4px rgba(0,0,0,.6)!important;padding:4px 14px!important;filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))}
-html body .stagebtns .tbtn:hover:not(:disabled),html body .sheet .btn:hover:not(:disabled),html body #sCont:hover,html body #oClose:hover,html body #cNo:hover{filter:brightness(1.12) drop-shadow(0 4px 8px rgba(0,0,0,.45))!important}
-html body .stagebtns .tbtn:active:not(:disabled),html body .sheet .btn:active:not(:disabled){transform:translateY(1px);filter:brightness(.95)!important}
-html body .stagebtns .tbtn:disabled,html body .sheet .btn:disabled{opacity:1!important;filter:grayscale(.75) brightness(.55)!important;color:#c9bfa9!important;cursor:not-allowed}
-html body .sheet{border-style:solid!important;border-width:58px!important;border-color:transparent!important;border-image:url(assets/ui/20c500da.webp) 150 fill / 58px stretch!important;background:none!important;box-shadow:0 20px 60px rgba(0,0,0,.55)!important;border-radius:0!important;padding:4px 12px!important}
+/* ===== UI skin v2 ===== */
+html body .stagebtns .tbtn[data-act="roll"],html body #sTut,html body .sheet .btn.primary:not(#cYes):not(#oNew):not(#rn):not(#rd),html body .stagebtns .tbtn[data-act="trade"],html body #sNew,html body #cYes,html body #oNew,html body #rn,html body #rd,html body .sheet .btn.sub,html body #sCont,html body #oClose,html body #cNo,html body #rp,html body #rs,html body .sheet .row .btn:not(.primary):not(.sub):not(#sNew),html body .stagebtns .tbtn[data-act="end"]{display:inline-flex!important;align-items:center!important;justify-content:center!important;line-height:1.1!important;white-space:nowrap!important;border-style:solid!important;border-color:transparent!important;background:none!important;box-shadow:none!important;border-radius:0!important;padding-top:0!important;padding-bottom:0!important;min-height:0;text-align:center}
+html body .stagebtns .tbtn[data-act="roll"]::before,html body #sTut::before,html body .sheet .btn.primary:not(#cYes):not(#oNew):not(#rn):not(#rd)::before,html body .stagebtns .tbtn[data-act="trade"]::before,html body #sNew::before,html body #cYes::before,html body #oNew::before,html body #rn::before,html body #rd::before,html body .sheet .btn.sub::before,html body #sCont::before,html body #oClose::before,html body #cNo::before,html body #rp::before,html body #rs::before,html body .sheet .row .btn:not(.primary):not(.sub):not(#sNew)::before,html body .stagebtns .tbtn[data-act="end"]::before,html body .stagebtns .tbtn[data-act="roll"]::after,html body #sTut::after,html body .sheet .btn.primary:not(#cYes):not(#oNew):not(#rn):not(#rd)::after,html body .stagebtns .tbtn[data-act="trade"]::after,html body #sNew::after,html body #cYes::after,html body #oNew::after,html body #rn::after,html body #rd::after,html body .sheet .btn.sub::after,html body #sCont::after,html body #oClose::after,html body #cNo::after,html body #rp::after,html body #rs::after,html body .sheet .row .btn:not(.primary):not(.sub):not(#sNew)::after,html body .stagebtns .tbtn[data-act="end"]::after{display:none!important}
+html body .stagebtns .tbtn[data-act="roll"],html body #sTut,html body .sheet .btn.primary:not(#cYes):not(#oNew):not(#rn):not(#rd){border-width:17px 20px!important;border-image:url(assets/ui/c071a766.webp) 62 64 fill / 17px 20px stretch!important;color:#fbe7b6!important;font-weight:800!important;letter-spacing:.04em;text-shadow:0 1px 0 #3a0802,0 2px 6px rgba(0,0,0,.7)!important;padding-left:14px!important;padding-right:14px!important;filter:drop-shadow(0 4px 8px rgba(0,0,0,.45))}
+html body .stagebtns .tbtn[data-act="trade"],html body #sNew,html body #cYes,html body #oNew,html body #rn,html body #rd,html body .sheet .btn.sub,html body #sCont,html body #oClose,html body #cNo,html body #rp,html body #rs,html body .sheet .row .btn:not(.primary):not(.sub):not(#sNew),html body .stagebtns .tbtn[data-act="end"]{border-width:10px 12px!important;padding-left:14px!important;padding-right:14px!important;font-weight:700!important;filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))}
+html body .stagebtns .tbtn[data-act="trade"],html body #sNew,html body #cYes,html body #oNew,html body #rn,html body #rd,html body .sheet .btn.sub{border-image:url(assets/ui/0188c1d8.webp) 34 36 fill / 10px 12px stretch!important;color:#fff0d2!important;text-shadow:0 1px 0 #4a1c02,0 1px 4px rgba(0,0,0,.6)!important}
+html body #sCont,html body #oClose,html body #cNo,html body #rp,html body #rs,html body .sheet .row .btn:not(.primary):not(.sub):not(#sNew){border-image:url(assets/ui/28241176.webp) 34 36 fill / 10px 12px stretch!important;color:#ece6dc!important;text-shadow:0 1px 0 #1a1714,0 1px 4px rgba(0,0,0,.6)!important}
+html body .stagebtns .tbtn[data-act="end"]{border-image:url(assets/ui/e5958254.webp) 34 36 fill / 10px 12px stretch!important;color:#f6e3c8!important;text-shadow:0 1px 0 #2a0e04,0 1px 4px rgba(0,0,0,.6)!important}
+html body .stagebtns .tbtn[data-act="roll"]:hover:not(:disabled),html body #sTut:hover:not(:disabled),html body .sheet .btn.primary:not(#cYes):not(#oNew):not(#rn):not(#rd):hover:not(:disabled),html body .stagebtns .tbtn[data-act="trade"]:hover:not(:disabled),html body #sNew:hover:not(:disabled),html body #cYes:hover:not(:disabled),html body #oNew:hover:not(:disabled),html body #rn:hover:not(:disabled),html body #rd:hover:not(:disabled),html body .sheet .btn.sub:hover:not(:disabled),html body #sCont:hover:not(:disabled),html body #oClose:hover:not(:disabled),html body #cNo:hover:not(:disabled),html body #rp:hover:not(:disabled),html body #rs:hover:not(:disabled),html body .sheet .row .btn:not(.primary):not(.sub):not(#sNew):hover:not(:disabled),html body .stagebtns .tbtn[data-act="end"]:hover:not(:disabled){filter:brightness(1.12) drop-shadow(0 4px 8px rgba(0,0,0,.45))!important}
+html body .stagebtns .tbtn[data-act="roll"]:active:not(:disabled),html body #sTut:active:not(:disabled),html body .sheet .btn.primary:not(#cYes):not(#oNew):not(#rn):not(#rd):active:not(:disabled),html body .stagebtns .tbtn[data-act="trade"]:active:not(:disabled),html body #sNew:active:not(:disabled),html body #cYes:active:not(:disabled),html body #oNew:active:not(:disabled),html body #rn:active:not(:disabled),html body #rd:active:not(:disabled),html body .sheet .btn.sub:active:not(:disabled),html body #sCont:active:not(:disabled),html body #oClose:active:not(:disabled),html body #cNo:active:not(:disabled),html body #rp:active:not(:disabled),html body #rs:active:not(:disabled),html body .sheet .row .btn:not(.primary):not(.sub):not(#sNew):active:not(:disabled),html body .stagebtns .tbtn[data-act="end"]:active:not(:disabled){transform:translateY(1px);filter:brightness(.95)!important}
+html body .stagebtns .tbtn[data-act="roll"]:disabled,html body #sTut:disabled,html body .sheet .btn.primary:not(#cYes):not(#oNew):not(#rn):not(#rd):disabled,html body .stagebtns .tbtn[data-act="trade"]:disabled,html body #sNew:disabled,html body #cYes:disabled,html body #oNew:disabled,html body #rn:disabled,html body #rd:disabled,html body .sheet .btn.sub:disabled,html body #sCont:disabled,html body #oClose:disabled,html body #cNo:disabled,html body #rp:disabled,html body #rs:disabled,html body .sheet .row .btn:not(.primary):not(.sub):not(#sNew):disabled,html body .stagebtns .tbtn[data-act="end"]:disabled{opacity:1!important;filter:grayscale(.8) brightness(.55)!important;color:#c9bfa9!important;cursor:not-allowed}
+html body .stagebtns .tbtn{height:52px!important;font-size:17px!important}
+html body .stagebtns .tbtn[data-act="roll"]{height:66px!important;font-size:19px!important}
+html.phone body .stagebtns .tbtn{height:42px!important;font-size:15px!important}
+html.phone body .stagebtns .tbtn[data-act="roll"]{height:52px!important;font-size:16px!important}
+html.phone html body .stagebtns .tbtn[data-act="roll"],html body #sTut,html body .sheet .btn.primary:not(#cYes):not(#oNew):not(#rn):not(#rd){border-width:13px 16px!important;border-image-width:13px 16px!important}
+html.phone html body .stagebtns .tbtn[data-act="trade"],html body #sNew,html body #cYes,html body #oNew,html body #rn,html body #rd,html body .sheet .btn.sub,html body #sCont,html body #oClose,html body #cNo,html body #rp,html body #rs,html body .sheet .row .btn:not(.primary):not(.sub):not(#sNew),html body .stagebtns .tbtn[data-act="end"]{border-width:8px 10px!important;border-image-width:8px 10px!important}
+html body .sheet .row .btn{min-height:46px}
+html.phone body .sheet .row .btn{min-height:40px}
+html body .sheet{border-style:solid!important;border-width:58px!important;border-color:transparent!important;border-image:url(assets/ui/20c500da.webp) 150 fill / 58px stretch!important;background:none!important;box-shadow:0 20px 60px rgba(0,0,0,.55)!important;border-radius:0!important;padding:4px 12px!important;overflow-x:hidden!important}
 html body .sheet.sheet-trade,html body .sheet.sheet-discard,html body .sheet.sheet-confirm,html body .sheet.sheet-over,html body .sheet.sheet-steal,html body .sheet.sheet-plenty,html body .sheet.sheet-mono{width:min(740px,100%)}
 html:not(.phone) body .sheet.sheet-start{padding:12px 16px!important;width:min(1080px,calc(100vw - 48px))}
 html:not(.phone) body .sheet.sheet-rules{padding:6px 20px 4px!important;width:min(1040px,calc(100vw - 48px))}
-html.phone body .sheet,html.phone body .sheet.sheet-rules,html.phone body .sheet.sheet-trade{border-width:24px 30px!important;border-image-width:30px!important;padding:0 8px!important}
-html.phone body .sheet-trade .resp{margin-top:4px}html.phone body .sheet-trade .resp .r{padding:4px 10px}html.phone body .sheet-trade .label{margin:2px 0}
-html.phone body .sheet.sheet-start{padding:0 16px!important}
-.mcrest{position:absolute;width:150px;height:79px;margin:-34px 0 0 -75px;background:url(assets/ui/ce981218.webp) center/contain no-repeat;pointer-events:none;z-index:3;filter:drop-shadow(0 3px 4px rgba(0,0,0,.5))}
-html.phone .mcrest{width:104px;height:55px;margin:-22px 0 0 -52px}
+.sheet-rules .tut-body{overflow-x:hidden!important}
+.mcrest{position:absolute;width:160px;height:88px;margin:-40px 0 0 -80px;background:url(assets/ui/cf92cd23.webp) center/contain no-repeat;pointer-events:none;z-index:3;filter:drop-shadow(0 3px 4px rgba(0,0,0,.5))}
+html.phone .mcrest{width:110px;height:61px;margin:-26px 0 0 -55px}
 #modal[hidden] .mcrest{display:none}
-html body .mclose{position:absolute!important;top:-6px!important;right:-6px!important;width:64px!important;height:64px!important;border:0!important;border-radius:50%!important;background:url(assets/ui/00f64396.webp) center/contain no-repeat!important;font-size:0!important;color:transparent!important;filter:drop-shadow(0 3px 6px rgba(0,0,0,.55));cursor:pointer;z-index:5;transition:transform .12s,filter .12s}
+html body .mclose{position:absolute!important;top:2px!important;right:2px!important;width:64px!important;height:64px!important;border:0!important;border-radius:50%!important;background:url(assets/ui/00f64396.webp) center/contain no-repeat!important;font-size:0!important;color:transparent!important;filter:drop-shadow(0 3px 6px rgba(0,0,0,.55));cursor:pointer;z-index:5;transition:transform .12s,filter .12s}
 html body .mclose:hover{transform:scale(1.06);filter:brightness(1.12) drop-shadow(0 3px 6px rgba(0,0,0,.55))}
-html.phone body .mclose{width:52px!important;height:52px!important;top:-4px!important;right:-4px!important}
-.sheet-trade h3,.sheet-rules>.label{padding-right:56px}
+html.phone body .mclose{width:50px!important;height:50px!important;top:0!important;right:0!important}
+.sheet-trade h3,.sheet-rules>.label{padding-right:70px}
+html body .sheet .row .btn{min-width:130px;font-size:15px!important}
+html.phone body .sheet .row .btn{min-width:110px}
+html.phone body .sheet-start .st-btns .btn{height:40px!important;min-height:0!important}
+html.phone body .sheet-start .st-btns{margin-top:8px!important}
+/* stepper */
+.step .cell{position:relative;isolation:isolate;background:none!important}
+.step .cell::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.7;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.step .cell.bg-wood::before{background:var(--t-wood)}.step .cell.bg-brick::before{background:var(--t-brick)}.step .cell.bg-wool::before{background:#6e9d3a}.step .cell.bg-grain::before{background:#b88a17}.step .cell.bg-ore::before{background:#5f6a7b}
+html body .step .cell button{background:linear-gradient(180deg,#5a4529,#2e2214)!important;border:1px solid #b08a48!important;border-radius:3px!important;color:#f6dc9c!important;box-shadow:inset 0 1px 0 rgba(255,230,170,.35),inset 0 -2px 0 rgba(0,0,0,.35),0 1px 2px rgba(0,0,0,.5)!important;text-shadow:0 1px 1px #000;font-weight:800;cursor:pointer}
+html body .step .cell button:hover:not(:disabled){background:linear-gradient(180deg,#76592f,#3a2a17)!important;color:#fff0c4!important}
+html body .step .cell button:active:not(:disabled){transform:translateY(1px);box-shadow:inset 0 1px 3px rgba(0,0,0,.6)!important}
+html body .step .cell button:disabled{opacity:.35;cursor:not-allowed}
+/* gold scrollbars everywhere */
+*{scrollbar-width:thin;scrollbar-color:#b8893a transparent}
+::-webkit-scrollbar{width:7px;height:7px;background:transparent}
+::-webkit-scrollbar-track,::-webkit-scrollbar-corner{background:transparent}
+::-webkit-scrollbar-thumb{background:#b8893a;border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:#d9a94f}
 /* log scrollbar: transparent track, thumb only */
-.log{scrollbar-width:thin;scrollbar-color:rgba(236,208,143,.45) transparent}
-.log::-webkit-scrollbar{width:6px;background:transparent}
-.log::-webkit-scrollbar-track{background:transparent}
-.log::-webkit-scrollbar-thumb{background:rgba(236,208,143,.45);border-radius:3px}
-.log::-webkit-scrollbar-thumb:hover{background:rgba(236,208,143,.7)}
-html body .stagebtns .tbtn{white-space:nowrap!important;height:58px!important;line-height:1!important;padding:0 10px!important;display:flex!important;align-items:center;justify-content:center;font-size:17px!important}
-html body .stagebtns .tbtn.primary{height:66px!important;font-size:19px!important}
-html.phone body .stagebtns .tbtn{height:46px!important;font-size:15px!important}
-html.phone body .stagebtns .tbtn.primary{height:52px!important;font-size:16px!important}
-html body .sheet .row .btn{white-space:nowrap}
 html.phone body .sheet-trade h3{display:inline-block;margin:0 14px 6px 0!important;vertical-align:middle}
 html.phone body .sheet-trade .tabs{display:inline-flex;vertical-align:middle;margin:0 0 6px!important}
 html.phone body .sheet-trade .resp .r{display:flex;align-items:center;gap:8px;min-height:0}
