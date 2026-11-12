@@ -1040,6 +1040,26 @@ html.phone body .sheet-start #cnt{margin-bottom:16px!important}
 html.phone body .sheet-start #dif{margin-bottom:16px!important}
 /* phone tray heads lower */
 
+
+/* round 52 */
+html body .dicebox{width:max-content!important;max-width:none!important;flex-wrap:nowrap!important}
+html body .dicebox .dice{flex:none!important;display:flex;gap:inherit}
+html body .dicebox .die,html body .dicebox .reelwin{flex:none!important}
+html body .dicebox .sum{flex:none!important}
+.dicebox .sum.sumimg img{height:59px!important}
+html.phone .dicebox .sum.sumimg img{height:38px!important}
+html body .dicebox .die:not(.blank){background:url(assets/ui/04666063.webp) center/100% 100% no-repeat!important;box-shadow:0 3px 6px rgba(0,0,0,.45)!important;border-radius:14px!important;padding:14px!important}
+html.phone body .dicebox .die:not(.blank){border-radius:10px!important;padding:9px!important}
+html body .dicebox .die i{background:radial-gradient(circle at 50% 38%,#1c0f06 0,#3a2412 55%,#5a3a1c 72%,rgba(120,80,40,0) 78%)!important;box-shadow:inset 0 2px 2px rgba(0,0,0,.6),0 1px 0 rgba(255,240,210,.45)!important}
+html body .dicebox .die.blank{border-radius:14px!important}
+html:not(.phone) body .setpanel{width:min(420px,30%)!important;min-width:360px!important}
+html body .setpanel::before{width:8px!important;background:linear-gradient(90deg,#3a2510,#b8873f 30%,#f6dc9a 50%,#b8873f 70%,#2a1808)!important}
+html body .setpanel::after{left:-36px!important;width:80px!important;height:44px!important;margin-top:-22px!important;transform:rotate(-90deg)!important;background:url(assets/ui/cf92cd23.webp) center/contain no-repeat!important;border:0!important;box-shadow:none!important;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))}
+html.phone body .setpanel::after{left:-30px!important;width:66px!important;height:36px!important;margin-top:-18px!important}
+html body .setpanel{overflow:visible!important}
+html body .setpanel .mi+.mi{border-top:1px solid rgba(233,196,122,.09)!important}
+.ricon{width:18px;height:18px;object-fit:contain;vertical-align:-3px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.6))}
+html body .pick button .pn .ricon{width:22px;height:22px}
 /* stepper */
 .step .cell{position:relative;isolation:isolate;background:none!important}
 .step .cell::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.7;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
@@ -1422,7 +1442,7 @@ function update(){checkWin();save();render();kick();}
 function kick(){clearTimeout(aiTimer);const a=actor();if(a===null||!S.players[a].ai||ui.modal==='start')return;
   aiTimer=setTimeout(()=>{if(actor()===a){try{aiStep(a);}catch(err){console.error(err);if(S.phase==='main'&&S.cur===a&&S.rolled&&!S.pend)endTurn();}update();}},DELAY[ui.speed]);}
 
-const icon=(k,cls)=>`<svg class="${cls||''}" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-${k}"/></svg>`;
+const icon=(k,cls)=>(typeof RESICON!=='undefined'&&RESICON[k])?`<img class="ricon ${cls||''}" src="${RESICON[k]}" alt="">`:`<svg class="${cls||''}" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-${k}"/></svg>`;
 const costPips=c=>`<span class="cost">${RES.filter(k=>c[k]).map(k=>`<span class="pip bg-${k}" title="${RN[k]}">${RN[k][0]}${c[k]>1?'×'+c[k]:''}</span>`).join('')}</span>`;
 const pname=p=>`<b style="color:${S.players[p].color}">${S.players[p].name}</b>`;
 
@@ -1805,6 +1825,7 @@ const ARTIMG={};
 // Card art: pre-rendered. Wood & ore use Poly Haven CC0 scans (dead_tree_trunk, boulder_01); others use Poly Haven CC0 textures.
 const BUILDIMG={"dev": "assets/build/dev.webp", "road": "assets/build/road.webp", "settlement": "assets/build/settlement.webp", "city": "assets/build/city.webp"};
 const SUMIMG={"2": "assets/sum/2.webp", "3": "assets/sum/3.webp", "4": "assets/sum/4.webp", "5": "assets/sum/5.webp", "6": "assets/sum/6.webp", "7": "assets/sum/7.webp", "8": "assets/sum/8.webp", "9": "assets/sum/9.webp", "10": "assets/sum/10.webp", "11": "assets/sum/11.webp", "12": "assets/sum/12.webp"};
+const RESICON={"wood": "assets/icons/wood.webp", "brick": "assets/icons/brick.webp", "wool": "assets/icons/wool.webp", "grain": "assets/icons/grain.webp", "ore": "assets/icons/ore.webp"};
 const CARDFRAME="assets/cards/frame.webp";
 const SCANART={"wood": "assets/cards/wood.webp", "wool": "assets/cards/wool.webp", "brick": "assets/cards/brick.webp", "ore": "assets/cards/ore.webp", "grain": "assets/cards/grain.webp", "knight": "assets/cards/knight.webp", "roads": "assets/cards/roads.webp", "plenty": "assets/cards/plenty.webp", "monopoly": "assets/cards/monopoly.webp", "vp": "assets/cards/vp.webp"};
 let FRAMEIMG=null;{let left=Object.keys(SCANART).length+1;const done=()=>{if(--left===0)setTimeout(()=>{try{buildCards();if(S)render();}catch(e){}},0);};{const im=new Image();im.onload=()=>{FRAMEIMG=im;done();};im.src=CARDFRAME;}for(const k in SCANART){const im=new Image();im.onload=()=>{ARTIMG[k]=im;done();};im.src=SCANART[k];}}
