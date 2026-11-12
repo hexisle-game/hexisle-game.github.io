@@ -925,6 +925,51 @@ html.phone body .bld .pimg img{max-height:50px!important}
 html.phone body .bld b{margin-top:4px;font-size:12.5px!important}
 html.phone body .bld .meta2{display:none!important}
 html.phone body .bld .mini,html.phone body .bld .cost{margin-top:3px}
+
+/* round 47 */
+html body .mclose{top:0!important;right:0!important;width:56px!important;height:56px!important}
+html.phone body .mclose{width:46px!important;height:46px!important}
+
+html body .emptyhand{border:0!important}
+html body .sheet-start .st-l p{font-size:15px!important;line-height:1.7!important;color:var(--muted)!important}
+html body .sheet{border-width:32px!important;border-image-width:50px!important;padding:2px 6px!important}
+html:not(.phone) body .sheet.sheet-start,html:not(.phone) body .sheet.sheet-rules{padding:2px 8px!important}
+html.phone body .sheet,html.phone body .sheet.sheet-rules,html.phone body .sheet.sheet-trade,html.phone body .sheet.sheet-start{border-width:20px!important;border-image-width:32px!important;padding:0 4px!important}
+html body .sheet h3{margin-top:2px}
+html body .sheet{overflow-y:auto!important;overflow-x:hidden!important}
+/* stepper row layout everywhere */
+html body .step .cell{display:flex!important;align-items:center;justify-content:space-between;gap:6px;padding:8px 10px!important;text-align:left}
+html body .step .cell>div:first-child{font-size:15px;font-weight:700}
+html body .step .cell .v{font-size:20px;margin-left:auto}
+html body .step .cell .b{gap:4px}
+html body .step .cell button{width:30px;height:30px;font-size:16px}
+/* bank pick like stepper */
+html body .pick button{position:relative;isolation:isolate;background:none!important;display:flex!important;align-items:center;justify-content:space-between;gap:6px;padding:8px 10px!important;text-align:left;border:2px solid transparent!important;min-height:52px}
+html body .pick button::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.7;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+html body .pick button.bg-wood::before{background:var(--t-wood)}html body .pick button.bg-brick::before{background:var(--t-brick)}html body .pick button.bg-wool::before{background:#6e9d3a}html body .pick button.bg-grain::before{background:#b88a17}html body .pick button.bg-ore::before{background:#5f6a7b}
+html body .pick button .pn{display:flex;align-items:center;gap:5px;font-size:15px;font-weight:700;white-space:nowrap}
+html body .pick button .pn svg,html body .pick button .pn .ic{width:16px;height:16px;flex:none}
+html body .pick button .pr{display:flex;flex-direction:column;align-items:flex-end;gap:2px;font-size:11.5px;line-height:1.2;white-space:nowrap;opacity:.95}
+html body .pick button .pr i{font-style:normal}
+html body .pick button.sel{border-color:#f3d08a!important;box-shadow:0 0 0 1px #f3d08a,0 0 12px rgba(243,208,138,.45)!important}
+html body .pick button:disabled{opacity:.42}
+html.phone body .pick button .pn{font-size:13.5px}
+html.phone body .pick button .pr{font-size:10.5px}
+html.phone body .pick button{padding:6px 8px!important;min-height:44px}
+/* side & left positions, names */
+html:not(.phone) body #leftcol{top:128px!important}
+html.phone body #leftcol{top:68px!important}
+@media (min-height:1000px){html:not(.phone) body .side{top:100px!important}}
+@media (max-height:999px){html:not(.phone) body .side{top:92px!important}}
+html.phone body .side{top:66px!important}
+html body .pl .nm{font-size:13px!important}
+html.phone body .pl .nm{font-size:11.5px!important}
+html body .roundline{font-size:14.5px!important;color:#f2ece2!important}
+html.phone body .roundline{font-size:12.5px!important}
+html:not(.phone) body .sheet.sheet-trade{width:min(960px,calc(100vw - 48px))!important}
+html body .step .cell>div:first-child{white-space:nowrap}
+html:not(.phone) body .sheet.sheet-start{padding-top:22px!important}
+html:not(.phone) body .sheet-trade h3,html:not(.phone) body .sheet-over h3,html:not(.phone) body .sheet-confirm h3{margin-top:14px}
 /* stepper */
 .step .cell{position:relative;isolation:isolate;background:none!important}
 .step .cell::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.7;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
@@ -2002,8 +2047,8 @@ function showTrade(tab){tab=tab||'bank';const me=S.players[0];const rat=ratios(0
   const st={give:null,get:null,pg:emptyRes(),pr:emptyRes(),resp:null};
   const draw=()=>{
     let body='';
-    if(tab==='bank'){body=`<div class="label">줄 자원 (내 비율)</div><div class="pick" id="tg">${RES.map(k=>`<button class="bg-${k}${st.give===k?' sel':''}" data-k="${k}" ${me.res[k]>=rat[k]?'':'disabled'}>${icon(k)}${RN[k]}<small>${rat[k]}장 → 1장 · 보유 ${me.res[k]}</small></button>`).join('')}</div>
-      <div class="label">받을 자원</div><div class="pick" id="tr">${RES.map(k=>`<button class="bg-${k}${st.get===k?' sel':''}" data-k="${k}" ${S.bank[k]>0&&k!==st.give?'':'disabled'}>${icon(k)}${RN[k]}<small>은행 ${S.bank[k]}</small></button>`).join('')}</div>
+    if(tab==='bank'){body=`<div class="label">줄 자원 (내 비율)</div><div class="pick" id="tg">${RES.map(k=>`<button class="bg-${k}${st.give===k?' sel':''}" data-k="${k}" ${me.res[k]>=rat[k]?'':'disabled'}><span class="pn">${icon(k)}${RN[k]}</span><span class="pr"><i>${rat[k]}장 → 1장</i><i>보유 ${me.res[k]}</i></span></button>`).join('')}</div>
+      <div class="label">받을 자원</div><div class="pick" id="tr">${RES.map(k=>`<button class="bg-${k}${st.get===k?' sel':''}" data-k="${k}" ${S.bank[k]>0&&k!==st.give?'':'disabled'}><span class="pn">${icon(k)}${RN[k]}</span><span class="pr"><i>은행 ${S.bank[k]}</i></span></button>`).join('')}</div>
       <p class="empty">기본은 4:1이에요. 항구에 정착지나 도시가 있으면 3:1, 또는 특정 자원 2:1로 바꿀 수 있어요.</p>
       <div class="tinfo"><div><div class="label">은행 잔고</div><div class="cost" data-tip="은행에 남은 자원 수. 0이면 그 자원은 생산돼도 받을 수 없어요.">${RES.map(k=>`<span class="pip bg-${k}">${RN[k]} ${S.bank[k]}</span>`).join('')}<span class="pip pdev">발전 ${S.deck.length}</span></div></div><div><div class="label">내 교환 비율</div><div class="cost" data-tip="이 자원 몇 장을 원하는 자원 1장으로 바꿀 수 있는지. 항구에 건물이 있으면 비율이 좋아져요.">${RES.map(k=>`<span class="pip bg-${k}">${RN[k]} ${rat[k]}:1</span>`).join('')}</div></div></div>
       <div class="row"><button class="btn primary" id="tb" ${st.give&&st.get?'':'disabled'}>교환하기</button></div>`;}
@@ -2094,7 +2139,7 @@ function bindCount(){$('#cnt').onclick=e=>{const b=e.target.closest('[data-n]');
   $('#dif').onclick=e=>{const b=e.target.closest('[data-d]');if(!b)return;ui.diff=b.dataset.d;saveUi();$('#dif').querySelectorAll('[data-d]').forEach(x=>x.classList.toggle('active',x.dataset.d===ui.diff));};}
 function migrate(){if(!S.n){S.n=S.players.length;S.order=[...Array(S.n).keys(),...[...Array(S.n).keys()].reverse()];}if(S.logSeq===undefined)S.logSeq=0;if(!S.diff)S.diff='normal';}
 function showStart(){const saved=loadSave();
-  openModal('start',`<div class="st-l"><div class="label">2~4인 자원 교역 · 섬 개척 게임</div><div class="hero-title logo logoimg"><img src="${window.LOGO_URL}" alt="HEXISLE 육각섬 개척기"></div>
+  openModal('start',`<div class="st-l"><div class="hero-title logo logoimg"><img src="${window.LOGO_URL}" alt="HEXISLE 육각섬 개척기"></div>
   <p>육각형 땅에서 자원을 모으고, 교환하고, 마을을 넓혀 10점을 먼저 모으세요. 빈자리는 AI가 채워요.</p></div><div class="st-r">${countPick()}
   <div class="row st-btns" style="justify-content:flex-start">
    <button class="btn primary" id="sTut">처음이에요: 게임 방법 보고 시작</button>
