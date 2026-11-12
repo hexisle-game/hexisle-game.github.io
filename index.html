@@ -5,8 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0d0b09">
 <meta name="description" content="육각형 섬에서 자원을 모으고 교환하며 10점을 먼저 모으는 2~4인 개척 게임. AI와 함께 플레이해요.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="HexIsle">
+<meta property="og:title" content="HexIsle 육각섬 개척기">
+<meta property="og:description" content="육각형 섬에서 자원을 모으고 교환하며 10점을 먼저 모으는 2~4인 개척 게임. AI와 함께 플레이해요.">
+<meta property="og:url" content="https://hexisle-game.github.io/">
+<meta property="og:image" content="https://hexisle-game.github.io/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="629">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://hexisle-game.github.io/og.jpg">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/favicon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -15,6 +26,7 @@
 <style>:root{color-scheme:dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-family:system-ui,sans-serif;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
 <meta charset="utf-8">
 <title>HexIsle</title>
+<script>window.LOGO_URL="assets/ui/logo.webp";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@300..900&display=swap">
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -857,7 +869,7 @@ html.phone html body .stagebtns .tbtn[data-act="roll"],html body #sTut,html body
 html.phone html body .stagebtns .tbtn[data-act="trade"],html body #sNew,html body #cYes,html body #oNew,html body #rn,html body #rd,html body .sheet .btn.sub,html body #sCont,html body #oClose,html body #cNo,html body #rp,html body #rs,html body .sheet .row .btn:not(.primary):not(.sub):not(#sNew),html body .stagebtns .tbtn[data-act="end"]{border-width:8px 10px!important;border-image-width:8px 10px!important}
 html body .sheet .row .btn{min-height:46px}
 html.phone body .sheet .row .btn{min-height:40px}
-html body .sheet{border-style:solid!important;border-width:58px!important;border-color:transparent!important;border-image:url(assets/ui/20c500da.webp) 150 fill / 58px stretch!important;background:none!important;box-shadow:0 20px 60px rgba(0,0,0,.55)!important;border-radius:0!important;padding:4px 12px!important;overflow-x:hidden!important}
+html body .sheet{border-style:solid!important;border-width:50px!important;border-color:transparent!important;border-image:url(assets/ui/518989b1.webp) 150 / 50px stretch!important;background:url(assets/ui/4bfed2ad.webp) 0 0/360px 360px repeat!important;background-clip:border-box!important;box-shadow:0 20px 60px rgba(0,0,0,.55)!important;border-radius:0!important;padding:4px 12px!important;overflow-x:hidden!important}
 html body .sheet.sheet-trade,html body .sheet.sheet-discard,html body .sheet.sheet-confirm,html body .sheet.sheet-over,html body .sheet.sheet-steal,html body .sheet.sheet-plenty,html body .sheet.sheet-mono{width:min(740px,100%)}
 html:not(.phone) body .sheet.sheet-start{padding:12px 16px!important;width:min(1080px,calc(100vw - 48px))}
 html:not(.phone) body .sheet.sheet-rules{padding:6px 20px 4px!important;width:min(1040px,calc(100vw - 48px))}
@@ -873,6 +885,25 @@ html body .sheet .row .btn{min-width:130px;font-size:15px!important}
 html.phone body .sheet .row .btn{min-width:110px}
 html.phone body .sheet-start .st-btns .btn{height:40px!important;min-height:0!important}
 html.phone body .sheet-start .st-btns{margin-top:8px!important}
+
+/* logo image */
+.logoimg{display:block!important;line-height:0!important;letter-spacing:0!important;margin:0}
+.logoimg img{display:block;height:auto;width:100%;filter:drop-shadow(0 3px 6px rgba(0,0,0,.6))}
+html body header.top h1.logoimg{width:250px!important;font-size:0!important}
+html.phone body header.top h1.logoimg{width:150px!important}
+html body .sheet-start .hero-title.logoimg{width:min(440px,100%)!important;font-size:0!important;margin:6px 0 20px!important}
+html.phone body .sheet-start .hero-title.logoimg{width:min(330px,100%)!important;margin:2px 0 10px!important}
+/* popup paddings smaller, buttons taller */
+html body .sheet .row .btn{min-height:56px!important;font-size:16px!important}
+html.phone body .sheet .row .btn{min-height:46px!important}
+html:not(.phone) body .sheet-start .st-btns .btn{min-height:58px!important;font-size:17px!important}
+html:not(.phone) body .sheet-start .st-btns #sTut{min-height:68px!important;font-size:19px!important}
+html.phone body .sheet-start .st-btns .btn{height:auto!important;min-height:44px!important}
+html.phone body .sheet-start .st-btns #sTut{min-height:50px!important}
+html.phone body .sheet-start .cnt .btn{padding:9px 11px!important}
+html:not(.phone) body #leftcol{top:112px!important}
+html.phone body header.top h1.logoimg{width:128px!important}
+html.phone body #leftcol{top:52px!important}
 /* stepper */
 .step .cell{position:relative;isolation:isolate;background:none!important}
 .step .cell::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.7;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
@@ -915,7 +946,7 @@ html.phone body .sheet-start .st-btns .btn{height:44px;font-size:15px!important}
 <body>
 <header class="top">
   <div>
-    <h1 class="logo">HEXISLE<small>육각섬 개척기</small></h1>
+    <h1 class="logo logoimg"><img id="logoImg" alt="HEXISLE 육각섬 개척기"></h1>
   </div>
   <div class="tools">
     <button id="camReset" class="ib" data-tip="보드를 처음 시점으로 되돌려요"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 2.64-6.36"/><path d="M3 4v5h5"/></svg><span class="lb">시점 초기화</span></button>
@@ -965,6 +996,7 @@ html.phone body .sheet-start .st-btns .btn{height:44px;font-size:15px!important}
 <div id="rotate" hidden><div class="rot-ic"></div><b>가로로 돌려 주세요</b><span>HexIsle은 휴대폰에서 가로 화면으로 플레이해요.</span></div>
 <div id="modal" class="overlay" hidden><div class="sheet" id="sheet"></div><i class="mcrest" id="mcrest" aria-hidden="true"></i></div>
 
+<script>document.getElementById('logoImg')&&(document.getElementById('logoImg').src=window.LOGO_URL);</script>
 <script id="logic">
 // ================= GAME LOGIC (no DOM) =================
 const HR=60,SQ3=Math.sqrt(3);
@@ -2035,12 +2067,12 @@ function showRules(i,after){i=i||0;
 
 const DIFF=[['easy','쉬움','AI가 자주 쉬고 거래에 너그러워요'],['normal','보통','기본 전략으로 플레이해요'],['hard','어려움','선두를 견제하고 자원 보너스를 받아요']];
 function countPick(){return `<div class="label" style="margin-top:8px">인원 (최소 2 · 최대 4)</div><div class="cnt" id="cnt">${[2,3,4].map(n=>`<button class="btn${ui.n===n?' active':''}" data-n="${n}">${n}인<small>나 + AI ${n-1}명</small></button>`).join('')}</div>
-  <div class="label" style="margin-top:8px">난이도</div><div class="cnt" id="dif">${DIFF.map(([k,l,d])=>`<button class="btn${ui.diff===k?' active':''}" data-d="${k}">${l}<small>${d}</small></button>`).join('')}</div>`;}
+  <div class="label" style="margin-top:8px">난이도</div><div class="cnt" id="dif">${DIFF.map(([k,l,d])=>`<button class="btn${ui.diff===k?' active':''}" data-d="${k}">${l}</button>`).join('')}</div>`;}
 function bindCount(){$('#cnt').onclick=e=>{const b=e.target.closest('[data-n]');if(!b)return;ui.n=+b.dataset.n;saveUi();$('#cnt').querySelectorAll('[data-n]').forEach(x=>x.classList.toggle('active',+x.dataset.n===ui.n));};
   $('#dif').onclick=e=>{const b=e.target.closest('[data-d]');if(!b)return;ui.diff=b.dataset.d;saveUi();$('#dif').querySelectorAll('[data-d]').forEach(x=>x.classList.toggle('active',x.dataset.d===ui.diff));};}
 function migrate(){if(!S.n){S.n=S.players.length;S.order=[...Array(S.n).keys(),...[...Array(S.n).keys()].reverse()];}if(S.logSeq===undefined)S.logSeq=0;if(!S.diff)S.diff='normal';}
 function showStart(){const saved=loadSave();
-  openModal('start',`<div class="st-l"><div class="label">2~4인 자원 교역 · 섬 개척 게임</div><div class="hero-title logo">HEXISLE<small>육각섬 개척기</small></div>
+  openModal('start',`<div class="st-l"><div class="label">2~4인 자원 교역 · 섬 개척 게임</div><div class="hero-title logo logoimg"><img src="${window.LOGO_URL}" alt="HEXISLE 육각섬 개척기"></div>
   <p>육각형 땅에서 자원을 모으고, 교환하고, 마을을 넓혀 10점을 먼저 모으세요. 빈자리는 AI가 채워요.</p></div><div class="st-r">${countPick()}
   <div class="row st-btns" style="justify-content:flex-start">
    <button class="btn primary" id="sTut">처음이에요: 게임 방법 보고 시작</button>
@@ -2151,6 +2183,8 @@ function buildCards(resOnly){RES.forEach(r=>CARDIMG[r]=paintCard(r,RN[r]));if(!r
 const PH={on:false,k:1,vw:0,vh:0,orig:new Map()};
 const HUDQ={get matches(){return PH.on||matchMedia('(min-width:1101px) and (min-height:640px)').matches;}};
 function evalMQ(txt,w,h){if(/prefers|hover|pointer|orientation/.test(txt))return null;return txt.split(',').some(part=>{let ok=true;part.replace(/\((min|max)-(width|height)\s*:\s*(\d+)px\)/g,(m,mm,d,v)=>{const x=d==='width'?w:h;v=+v;if(mm==='min'?x<v:x>v)ok=false;});return ok;});}
+
+(function(){if(!matchMedia('(hover:none)').matches)return;const strip=rules=>{for(let i=rules.length-1;i>=0;i--){const r=rules[i];if(r.cssRules&&!r.selectorText){strip(r.cssRules);continue;}if(!r.selectorText||r.selectorText.indexOf(':hover')<0)continue;const keep=r.selectorText.split(',').filter(x=>x.indexOf(':hover')<0);if(keep.length)r.selectorText=keep.join(',');else r.parentStyleSheet&&r.parentRule?r.parentRule.deleteRule(i):r.parentStyleSheet.deleteRule(i);}};for(const sh of document.styleSheets){try{strip(sh.cssRules);}catch(e){}}})();
 function applyPhone(){const coarse=matchMedia('(pointer:coarse)').matches;const small=Math.min(innerWidth,innerHeight)<700;const land=innerWidth>innerHeight;
   const portraitBlock=coarse&&small&&!land;document.documentElement.classList.toggle('portrait-block',portraitBlock);$('#rotate').hidden=!portraitBlock;
   const on=coarse&&small&&land;const VH=440;const k=on?innerHeight/VH:1;const vw=Math.round(innerWidth/k);
