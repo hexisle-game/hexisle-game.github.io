@@ -1933,7 +1933,7 @@ function dieFaceTex(n){const S0=256,c=document.createElement('canvas');c.width=c
     x.strokeStyle='rgba(255,240,210,.45)';x.lineWidth=1.5*k;x.beginPath();x.arc(a,b+.6*k,r,.15*Math.PI,.85*Math.PI);x.stroke();});
   const t=new THREE.CanvasTexture(c);t.anisotropy=8;return t;}
 function throwDice(vals){if(!W.ok)return;
-  if(!DICE.mats){DICE.mats=DFACE.map(n=>new THREE.MeshStandardMaterial({map:dieFaceTex(n),roughness:.7,metalness:.05}));DICE.geo=THREE.RoundedBoxGeometry?new THREE.RoundedBoxGeometry(.92,.92,.92,5,.13):new THREE.BoxGeometry(.92,.92,.92);}
+  if(!DICE.mats){DICE.mats=DFACE.map(n=>new THREE.MeshStandardMaterial({map:dieFaceTex(n),color:0xd9b77a,roughness:.75,metalness:.05}));DICE.geo=THREE.RoundedBoxGeometry?new THREE.RoundedBoxGeometry(.92,.92,.92,5,.13):new THREE.BoxGeometry(.92,.92,.92);}
   DICE.list.forEach(d=>W.scene.remove(d.m));DICE.list=[];
   const now=performance.now();const camDir=W.cam.position.clone().setY(0);if(camDir.lengthSq()<.01)camDir.set(0,0,1);camDir.normalize();
   const right=new THREE.Vector3(camDir.z,0,-camDir.x);
