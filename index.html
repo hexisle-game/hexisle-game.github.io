@@ -995,6 +995,25 @@ html body .side .pl.cur{border:0!important;background:linear-gradient(90deg,rgba
 html.phone body .tray-act{display:flex!important;flex-direction:column!important;justify-content:flex-end!important;align-self:stretch!important}
 html.phone body .tray-act>.tray-h{margin-bottom:6px!important}
 html.phone body .tray-act #actions{padding-bottom:4px}
+
+/* round 50 */
+.dicebox .sum.sumimg{line-height:0!important;font-size:0!important;text-shadow:none!important;display:flex;align-items:center}
+.dicebox .sum.sumimg img{height:84px;width:auto;filter:drop-shadow(0 3px 5px rgba(0,0,0,.7))}
+html.phone .dicebox .sum.sumimg img{height:54px}
+html body #handHead::after{display:none!important}
+html body .htab::before{left:0!important;right:0!important}
+html.phone body #handHead{margin:0!important;padding:0!important;min-height:0!important}
+html.phone body .htab{padding:2px 10px 6px!important;font-size:13.5px!important;line-height:1.2}
+html body .pick button .pn{font-size:15px!important}
+html.phone body .pick button .pn{font-size:15px!important}
+html.phone body .step .cell>div:first-child{font-size:15px!important}
+html:not(.phone) body .sheet-start #dif{margin-bottom:20px!important}
+html.phone body .sheet-start #dif{margin-bottom:14px!important}
+html body .sheet-start .st-btns{row-gap:14px!important}
+html.phone body .sheet-start .st-btns{row-gap:10px!important}
+html.phone body .tray-hand{display:flex!important;flex-direction:column!important;justify-content:flex-end!important;align-self:stretch!important}
+html.phone body .tray-hand #hand .crow{padding-top:6px!important}
+html.phone body #handHead{margin-bottom:2px!important}
 /* stepper */
 .step .cell{position:relative;isolation:isolate;background:none!important}
 .step .cell::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.7;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
@@ -1759,6 +1778,7 @@ const SHOT={};for(const k in SHOT0)SHOT[k]=toBlobURL(SHOT0[k]);
 const ARTIMG={};
 // Card art: pre-rendered. Wood & ore use Poly Haven CC0 scans (dead_tree_trunk, boulder_01); others use Poly Haven CC0 textures.
 const BUILDIMG={"dev": "assets/build/dev.webp", "road": "assets/build/road.webp", "settlement": "assets/build/settlement.webp", "city": "assets/build/city.webp"};
+const SUMIMG={"2": "assets/sum/2.webp", "3": "assets/sum/3.webp", "4": "assets/sum/4.webp", "5": "assets/sum/5.webp", "6": "assets/sum/6.webp", "7": "assets/sum/7.webp", "8": "assets/sum/8.webp", "9": "assets/sum/9.webp", "10": "assets/sum/10.webp", "11": "assets/sum/11.webp", "12": "assets/sum/12.webp"};
 const CARDFRAME="assets/cards/frame.webp";
 const SCANART={"wood": "assets/cards/wood.webp", "wool": "assets/cards/wool.webp", "brick": "assets/cards/brick.webp", "ore": "assets/cards/ore.webp", "grain": "assets/cards/grain.webp", "knight": "assets/cards/knight.webp", "roads": "assets/cards/roads.webp", "plenty": "assets/cards/plenty.webp", "monopoly": "assets/cards/monopoly.webp", "vp": "assets/cards/vp.webp"};
 let FRAMEIMG=null;{let left=Object.keys(SCANART).length+1;const done=()=>{if(--left===0)setTimeout(()=>{try{buildCards();if(S)render();}catch(e){}},0);};{const im=new Image();im.onload=()=>{FRAMEIMG=im;done();};im.src=CARDFRAME;}for(const k in SCANART){const im=new Image();im.onload=()=>{ARTIMG[k]=im;done();};im.src=SCANART[k];}}
@@ -1939,11 +1959,11 @@ function slotSpin(){const el=$('#dicebox');if(!el||!S.dice)return;const vals=S.d
   const probe=el.querySelector('.die');const ds=probe?probe.getBoundingClientRect().height/(PH.on?PH.k:1):57;
   const strip=(v,i)=>{const n=10+i*3;let faces=[];let last=0;for(let k=0;k<n-1;k++){let f;do{f=1+Math.floor(Math.random()*6);}while(f===last);faces.push(f);last=f;}faces.push(v);
     return `<div class="reelwin" style="--ds:${ds}px"><div class="reel" data-n="${n}">${faces.map(f=>dieHTML(f)).join('')}</div></div>`;};
-  el.classList.add('rolling');el.innerHTML=`<div class="dice">${vals.map(strip).join('')}</div><div class="sum" style="opacity:.25">?</div>`;
+  el.classList.add('rolling');el.innerHTML=`<div class="dice">${vals.map(strip).join('')}</div>`;
   el.querySelectorAll('.reel').forEach((r,i)=>{const n=+r.dataset.n;r.style.transform='translateY(0)';void r.offsetWidth;r.style.transition=`transform ${1.05+i*.22}s cubic-bezier(.12,.62,.2,1)`;r.style.transform=`translateY(${-(n-1)*ds}px)`;});}
 function renderDiceBox(){const el=$('#dicebox');if(!el||!S)return;const rolling=S.dice&&performance.now()<(ui.diceRevealAt||0);
   el.classList.toggle('rolling',!!rolling);
-  el.innerHTML=S.dice&&!rolling?`<div class="dice" data-tip="마지막으로 굴린 주사위예요. 두 눈의 합과 같은 숫자가 적힌 땅이 자원을 만들어요. 7이면 도적이 움직여요.">${dieHTML(S.dice[0])+dieHTML(S.dice[1])}</div><div class="sum" aria-label="주사위 합">${S.dice[0]+S.dice[1]}</div>`
+  el.innerHTML=S.dice&&!rolling?`<div class="dice" data-tip="마지막으로 굴린 주사위예요. 두 눈의 합과 같은 숫자가 적힌 땅이 자원을 만들어요. 7이면 도적이 움직여요.">${dieHTML(S.dice[0])+dieHTML(S.dice[1])}</div><div class="sum sumimg" aria-label="주사위 합 ${S.dice[0]+S.dice[1]}"><img src="${SUMIMG[S.dice[0]+S.dice[1]]}" alt="${S.dice[0]+S.dice[1]}"></div>`
     :S.dice?`<div class="dice">${dieHTML(1+Math.floor(Math.random()*6))+dieHTML(1+Math.floor(Math.random()*6))}</div><div class="who">굴리는 중…</div>`
     :`<div class="dice">${dieHTML(0,'blank')+dieHTML(0,'blank')}</div><div class="who">굴리기 전</div>`;}
 function row(items,cw,maxW,extra,flags){const n=items.length;if(!n)return '';const step=n>1?Math.max(12,Math.min(cw*.72,(maxW-cw)/(n-1))):0;
@@ -1952,7 +1972,7 @@ function fan(items,cw,maxW,extra){const n=items.length;if(!n)return '';const ch=
   const mm=(n-1)/2,maxY=mm*mm*.7*spread/3;
   return `<div class="fan ${extra||''}" style="--cw:${cw}px;--fh:${ch+30+maxY}px">${items.map((it,i)=>{const m=i-(n-1)/2;const a=m*spread,y=m*m*.7*spread/3;
     return `<div class="cw" style="transform:translateX(calc(-50% + ${m*step}px)) translateY(${y}px) rotate(${a}deg);z-index:${i}">${it}</div>`;}).join('')}</div>`;}
-function renderHand(me,groups){const box=$('#hand');const W0=Math.max(220,box.clientWidth||520);const cw=Math.round((W0<360?66:innerHeight<900&&innerWidth>1100?66:86)*(PH.on?.92:1));
+function renderHand(me,groups){const box=$('#hand');const W0=Math.max(220,box.clientWidth||520);const cw=Math.round((W0<360?66:innerHeight<900&&innerWidth>1100?66:86)*(PH.on?.76:1));
   const list=RES.flatMap(r=>Array(me.res[r]).fill(r));
   const prev=ui.prevRes||me.res;let nn=0;const flags=list.map((r,i)=>{const idx=i-list.indexOf(r);return idx>=(prev[r]||0)&&ui.prevRes?++nn:0;});ui.prevRes={...me.res};
   const hh=$('#handHead');if(PH.on){if(!ui.handTab)ui.handTab='res';hh.innerHTML=`<button class="htab${ui.handTab==='res'?' on':''}" data-htab="res">내 자원카드 · ${list.length}장</button><button class="htab${ui.handTab==='dev'?' on':''}" data-htab="dev">내 발전카드 · ${me.dev.length}장</button>`;}
@@ -2287,7 +2307,8 @@ function applyPhone(){const coarse=matchMedia('(pointer:coarse)').matches;const 
   phoneDPR();}
 function phoneDPR(){if(typeof W==='undefined'||!W.ok)return;const v=Math.min(window.devicePixelRatio||1,2)*(PH.on?Math.max(PH.k,.7):1);try{PERF.max=v;PERF.samples=[];setDPR(v);}catch(e){W.r.setPixelRatio(v);}}
 addEventListener('resize',()=>{applyPhone();setTimeout(()=>{fitChrome();if(S)render();},60);});applyPhone();
-function alignBtns(){const sb=$('#stagebtns'),bd=document.querySelector('.builds');if(!sb||!bd)return;if(!HUDQ.matches||PH.on){sb.style.bottom='';return;}const r=bd.getBoundingClientRect();if(!r.height)return;const c=r.top+r.height/2;sb.style.setProperty('bottom',Math.max(12,innerHeight-c-sb.offsetHeight/2)+'px','important');}
+function alignHeads(){const hh=$('#handHead'),ah=document.querySelector('.tray-act>.tray-h');if(!hh||!ah)return;ah.style.marginBottom='';if(!PH.on)return;const k=PH.k||1;const d=(ah.getBoundingClientRect().top-hh.getBoundingClientRect().top)/k;if(d>0)ah.style.setProperty('margin-bottom',(6+d)+'px','important');}
+function alignBtns(){try{alignHeads();}catch(e){}const sb=$('#stagebtns'),bd=document.querySelector('.builds');if(!sb||!bd)return;if(!HUDQ.matches||PH.on){sb.style.bottom='';return;}const r=bd.getBoundingClientRect();if(!r.height)return;const c=r.top+r.height/2;sb.style.setProperty('bottom',Math.max(12,innerHeight-c-sb.offsetHeight/2)+'px','important');}
 function fitChrome(){const h=document.querySelector('header.top');if(h)document.documentElement.style.setProperty('--chrome',(h.offsetHeight+16+40)+'px');
   {const tb=$('#turnbar'),sd=document.querySelector('.side'),st0=$('#stage');if(tb&&sd&&st0){if(HUDQ.matches){if(tb.parentNode!==st0)st0.appendChild(tb);}else if(tb.parentNode!==sd)sd.insertBefore(tb,sd.firstChild);}}
   const sb=$('#stagebtns'),tr=$('#tray'),st=$('#stage');if(sb&&tr&&st){if(HUDQ.matches){if(sb.parentNode!==tr)tr.appendChild(sb);}else if(sb.parentNode!==st)st.appendChild(sb);}
