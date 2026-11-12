@@ -810,6 +810,31 @@ html:not(.phone) body #leftcol{top:100px}
 html.phone .sheet-trade p.empty{display:none}
 html.phone .sheet-trade .tinfo{margin-top:8px;padding-top:8px}
 .sheet-start .st-btns #sNew:last-child{grid-column:1/-1}
+
+/* discard v3 */
+.dzone{min-height:calc(var(--cw)*1.4 + 20px);display:flex;align-items:flex-end;margin:4px 0 12px}
+.dzone .crow{padding-top:16px;min-height:0}
+.crow.dpick .card{cursor:pointer}
+.crow.dfull .card{cursor:not-allowed;filter:brightness(.7)}
+.crow.dfull .cw:hover{transform:none}
+.dempty{width:100%;min-height:calc(var(--cw)*1.4);display:grid;place-items:center;border:1px dashed rgba(255,255,255,.2);color:#8f897f;font-size:14px}
+.dcnt{margin-left:4px;color:#e9c47a}
+.dcnt.ok{color:#9fd68a}
+/* settings align */
+.setpanel .msep{display:none}
+.setpanel .mi{box-sizing:border-box;height:68px;padding:0 36px!important;margin:0}
+.setpanel .seg button{padding:7px 14px;line-height:1.2}
+html.phone .setpanel .mi{height:52px;padding:0 26px!important}
+html.phone .setpanel .seg button{padding:5px 11px;font-size:14px}
+/* start modal spacing */
+html:not(.phone) .sheet-start .cnt .btn{gap:6px}
+html:not(.phone) .sheet-start .st-r .label{margin-top:26px!important;margin-bottom:14px}
+html:not(.phone) .sheet-start .st-r .label:first-child{margin-top:0!important}
+html.phone .sheet-start .cnt .btn{gap:4px}
+html.phone .sheet-start .st-r .label{margin-top:18px!important;margin-bottom:8px}
+html.phone .sheet-start .st-r .label:first-child{margin-top:0!important}
+/* info icon gap */
+.tray-h .qi{margin-left:-6px}
 </style>
 
 
@@ -1010,6 +1035,7 @@ function produce(n){
   let any=false;
   gain.forEach((g,i)=>{if(!sumRes(g))return;any=true;RES.forEach(r=>{S.players[i].res[r]+=g[r];S.bank[r]-=g[r];});log(i,`${fmt(g)} 획득`);});
   if(!any)log(-1,'이번에는 아무도 자원을 받지 못했어요.','sys');
+  if(DF()==='hard'){const bon=[];S.players.forEach((pl,i)=>{if(!pl.ai||sumRes(gain[i])>1)return;const g=aiGoal(i);const c=g?COST[g]:{};const k=argmax(RES.filter(r=>S.bank[r]>0),r=>((c[r]||0)-pl.res[r])+Math.random()*.1);if(!k)return;pl.res[k]++;S.bank[k]--;bon.push(pl.name);});if(bon.length)log(-1,`어려움 보너스: ${bon.join(', ')} 자원 1장씩`,'sys');}
 }
 function discard(p,obj){RES.forEach(r=>{S.players[p].res[r]-=obj[r]||0;S.bank[r]+=obj[r]||0;});log(p,`카드 ${sumRes(obj)}장을 버렸어요.`);}
 function robberVictims(p,hi){return [...new Set(G.hexes[hi].v.map(v=>S.vb[v]).filter(b=>b&&b.o!==p&&sumRes(S.players[b.o].res)>0).map(b=>b.o))];}
@@ -1081,9 +1107,9 @@ function aiGoal(p){const k=count(p);const c=[];
   c.sort((a,b)=>(missing(p,COST[a[0]])+a[1])-(missing(p,COST[b[0]])+b[1]));return c[0][0];}
 function robberHurts(p){const hi=S.board.robber;return pips(S.board.hexes[hi].num)>=3&&G.hexes[hi].v.some(v=>S.vb[v]&&S.vb[v].o===p);}
 function aiRobberHex(p){const d=DF();return argmax(HIDX.filter(i=>i!==S.board.robber),hi=>{const t=S.board.hexes[hi];let s=t.res==='desert'?-1:0;if(d==='easy')s+=Math.random()*12;
-  for(const v of G.hexes[hi].v){const b=S.vb[v];if(!b)continue;if(b.o===p)s-=12;else s+=(b.c?2:1)*pips(t.num)*(1+vp(b.o)/(d==='hard'?4:8))*(d==='easy'&&b.o===0?.4:1)+(sumRes(S.players[b.o].res)?0.5:0);}
+  for(const v of G.hexes[hi].v){const b=S.vb[v];if(!b)continue;if(b.o===p)s-=12;else s+=(b.c?2:1)*pips(t.num)*(1+vp(b.o)/(d==='hard'?4:8))*(d==='easy'&&b.o===0?.15:d==='hard'&&b.o===0&&vp(0)>=Math.max(...S.players.map((_,i)=>vp(i)))?1.6:1)+(sumRes(S.players[b.o].res)?0.5:0);}
   return s+Math.random()*0.2;});}
-function aiDiscard(p,k){const r=S.players[p].res;const g=aiGoal(p);const c=g?COST[g]:{};const out=emptyRes();
+function aiDiscard(p,k){const r=S.players[p].res;if(DF()==='easy'){const out=emptyRes();for(let i=0;i<k;i++){const pick=RES.filter(x=>r[x]-out[x]>0);out[pick[rnd(pick.length)]]++;}discard(p,out);return;}const g=aiGoal(p);const c=g?COST[g]:{};const out=emptyRes();
   for(let i=0;i<k;i++){const pick=argmax(RES.filter(x=>r[x]-out[x]>0),x=>(r[x]-out[x])-(c[x]||0)*1.5);out[pick]++;}
   discard(p,out);}
 function aiStep(p){
@@ -1096,6 +1122,8 @@ function aiStep(p){
   if(!S.rolled){if(canPlayDev(p,'knight')&&robberHurts(p)){useKnight(p);return;}roll(p);return;}
   S.acts++;if(S.acts>40){endTurn();return;}
   const pl=S.players[p],res=pl.res;const d=DF();
+  if(d==='easy'&&S.acts===1&&Math.random()<.35){endTurn();return;}
+  if(d==='hard'&&!S.devPlayed&&canPlayDev(p,'knight')&&S.board.robber!==undefined){const lead=argmax(S.players.map((_,i)=>i).filter(i=>i!==p),i=>vp(i));if(vp(lead)>=5&&vp(lead)>=vp(p)&&!G.hexes[S.board.robber].v.some(v=>S.vb[v]&&S.vb[v].o===lead)){useKnight(p);return;}}
   if(!S.devPlayed&&(d!=='easy'||Math.random()<.4)){
     if(canPlayDev(p,'knight')&&(robberHurts(p)||(pl.knights+1>=3&&S.la.o!==p&&pl.knights+1>(S.la.o===-1?0:S.la.n)))){useKnight(p);return;}
     if(canPlayDev(p,'roads')&&count(p).r<15&&roadSpots(p).length){useRoads(p);const pr=prodOf(p);
@@ -1105,10 +1133,10 @@ function aiStep(p){
       while(need.length<2)need.push(argmax(RES,k=>-res[k]));plenty(p,need[0],need[1]);return;}
     if(canPlayDev(p,'monopoly')){const others=r=>S.players.reduce((s,x,i)=>s+(i===p?0:x.res[r]),0);const r=argmax(RES,others);if(others(r)>=4){monopoly(p,r);return;}}
   }
-  if(canBuild(p,'city')){placeCity(p,argmax(citySpots(p),v=>G.verts[v].h.reduce((s,hi)=>s+pips(S.board.hexes[hi].num),0)));return;}
+  if(canBuild(p,'city')){placeCity(p,argmax(citySpots(p),v=>G.verts[v].h.reduce((s,hi)=>s+pips(S.board.hexes[hi].num),0)+(d==='easy'?Math.random()*20:0)));return;}
   if(canBuild(p,'settlement')){const pr=prodOf(p);placeSettlement(p,argmax(settleSpots(p),v=>spotValue(v,p,pr)+(d==='easy'?Math.random()*8:0)));return;}
   const goal=aiGoal(p);
-  if(canBuild(p,'road')){const pr=prodOf(p);const rs=roadSpots(p);const be=argmax(rs,e=>roadScore(p,e,pr));
+  if(canBuild(p,'road')){const pr=prodOf(p);const rs=roadSpots(p);const be=argmax(rs,e=>roadScore(p,e,pr)+(d==='easy'?Math.random()*6:0));
     if((goal==='road'&&roadScore(p,be,pr)>0)||sumRes(res)>7){placeRoad(p,be);return;}}
   if(canBuild(p,'dev')&&(goal==='dev'||sumRes(res)>7)&&(d!=='easy'||Math.random()<.5)){buyDev(p);return;}
   if(goal&&S.acts<25&&(d!=='easy'||Math.random()<.3)){const c=COST[goal],rat=ratios(p);const need=RES.filter(k=>(c[k]||0)>res[k]&&S.bank[k]>0);
@@ -1121,10 +1149,11 @@ function aiAccepts(q,give,get){
   if(!sumRes(give)&&!sumRes(get))return{ok:false,why:'빈 제안이에요'};
   const d=DF();const lack=RES.filter(k=>(get[k]||0)>r[k]);
   if(lack.length){if(d==='easy')return{ok:false,why:'그 카드가 없어요'};if(d==='normal'&&RES.filter(k=>get[k]).length===1&&Math.random()<.5)return{ok:false,why:'그건 좀 부족해요'};return{ok:false,why:d==='hard'?'거절할게요':'저한테 손해예요'};}
-if(sumRes(get)&&d!=='easy'&&vp(0)>=(d==='hard'?7:8))return{ok:false,why:d==='hard'?'거절할게요':'선두와는 거래 안 해요'};
+const lead0=S.players.every((_,i)=>i===0||vp(0)>=vp(i));
+if(sumRes(get)&&d!=='easy'&&lead0&&vp(0)>=(d==='hard'?6:8))return{ok:false,why:d==='hard'?'거절할게요':'선두와는 거래 안 해요'};
   const g=aiGoal(q)||'dev';const c=COST[g];let gain=0,loss=0;
   RES.forEach(k=>{gain+=(give[k]||0)*(1+((c[k]||0)>r[k]?1.2:0));const n=get[k]||0;if(n){const after=r[k]-n;loss+=n*(1+(after<(c[k]||0)?1.5:0));}});
-  const ok=(d==='easy'?gain>=loss-1.2:d==='hard'?gain>loss:gain>=loss)&&sumRes(give)>0||!sumRes(get);
+  const ok=(d==='easy'?gain>=loss-2.5:d==='hard'?gain>=loss+1:gain>=loss)&&sumRes(give)>0||!sumRes(get);
   return{ok,why:ok?'좋아요, 거래해요':(d==='hard'?'거절할게요':'저한테 손해예요')};
 }
 </script>
@@ -1824,12 +1853,18 @@ function forcedModals(){
   if(['discard','steal','over'].includes(ui.modal))closeModal();
 }
 function stepper(idp,vals,max){return `<div class="step" id="${idp}">${RES.map(k=>`<div class="cell bg-${k}"><div>${RN[k]}</div><div class="v">${vals[k]}</div><div class="b"><button data-k="${k}" data-d="-1" ${vals[k]<=0?'disabled':''} aria-label="${RN[k]} 빼기">−</button><button data-k="${k}" data-d="1" ${vals[k]>=max(k)?'disabled':''} aria-label="${RN[k]} 더하기">+</button></div></div>`).join('')}</div>`;}
-function showDiscard(){const n=S.pend.n;const sel=emptyRes();
-  const draw=()=>{openModal('discard',`<h3>카드 ${n}장 버리기</h3><p>주사위 7이 나왔고 내 카드가 8장 이상이라 절반을 은행에 버려야 해요.</p>
-    <div class="label">버릴 카드 (${sumRes(sel)} / ${n})</div>${stepper('dsc',sel,k=>Math.min(S.players[0].res[k],sel[k]+(n-sumRes(sel))))}
-    <div class="label">내 자원 카드 (버린 뒤 남는 장수)</div><div class="dhand">${RES.filter(k=>S.players[0].res[k]).map(k=>{const left=S.players[0].res[k]-sel[k];return `<div class="dh${left?'':' gone'}"><img src="${CARDIMG[k]}" alt="${RN[k]}"><b>${left}</b><small>/ ${S.players[0].res[k]}</small></div>`;}).join('')}</div>
-    <div class="row"><button class="btn primary" id="dOk" ${sumRes(sel)===n?'':'disabled'}>버리기</button></div>`);
-    $('#dsc').onclick=e=>{const t=e.target.closest('button');if(!t)return;sel[t.dataset.k]+= +t.dataset.d;draw();};
+function showDiscard(){const n=S.pend.n;const sel=emptyRes();const me=S.players[0];
+  const draw=()=>{const left=RES.flatMap(r=>Array(me.res[r]-sel[r]).fill(r)),out=RES.flatMap(r=>Array(sel[r]).fill(r));const k=out.length,full=k>=n;
+    const cw=PH.on?58:84;const cd=r=>`<img class="card" src="${CARDIMG[r]}" alt="${RN[r]}" data-r="${r}">`;
+    openModal('discard',`<h3>카드 ${n}장 버리기</h3><p>주사위 7이 나왔고 내 카드가 8장 이상이라 절반을 은행에 버려야 해요. 손패에서 버릴 카드를 누르세요.</p>
+    <div class="label">버릴 카드 <b class="dcnt${full?' ok':''}">${k} / ${n}</b>${k?' · 다시 누르면 손패로 돌아가요':''}</div>
+    <div class="dzone" id="dOut" style="--cw:${cw}px"></div>
+    <div class="label">내 손패 · ${left.length}장</div>
+    <div class="dzone" id="dIn" style="--cw:${cw}px"></div>
+    <div class="row"><button class="btn primary" id="dOk" ${full?'':'disabled'}>버리기</button></div>`);
+    const mw=Math.max(cw*2,$('#dIn').clientWidth-4);$('#dOut').innerHTML=k?row(out.map(cd),cw,mw,'dpick'):`<div class="dempty">아래 손패에서 카드를 눌러 주세요</div>`;$('#dIn').innerHTML=row(left.map(cd),cw,mw,'dpick'+(full?' dfull':''));
+    $('#dIn').onclick=e=>{const t=e.target.closest('[data-r]');if(!t||sumRes(sel)>=n)return;sel[t.dataset.r]++;draw();};
+    $('#dOut').onclick=e=>{const t=e.target.closest('[data-r]');if(!t)return;sel[t.dataset.r]--;draw();};
     $('#dOk').onclick=()=>{discard(0,sel);S.pend={k:'robber'};closeModal();update();};};
   draw();}
 function showSteal(){openModal('steal',`<h3>누구에게서 빼앗을까요?</h3><p>도적이 앉은 땅에 건물이 있는 상대 중 한 명을 고르세요. 카드 1장을 무작위로 가져와요.</p>
@@ -1930,7 +1965,7 @@ function showRules(i,after){i=i||0;
   $('#rx').onclick=done;if($('#rp'))$('#rp').onclick=()=>showRules(i-1,after);if($('#rs'))$('#rs').onclick=done;
   if($('#rn'))$('#rn').onclick=()=>showRules(i+1,after);if($('#rd'))$('#rd').onclick=done;}
 
-const DIFF=[['easy','쉬움','AI가 실수도 하고 거래에 너그러워요'],['normal','보통','기본 전략으로 플레이해요'],['hard','어려움','선두를 견제하고 은행 교환이 3:1이에요']];
+const DIFF=[['easy','쉬움','AI가 자주 쉬고 거래에 너그러워요'],['normal','보통','기본 전략으로 플레이해요'],['hard','어려움','선두를 견제하고 자원 보너스를 받아요']];
 function countPick(){return `<div class="label" style="margin-top:8px">인원 (최소 2 · 최대 4)</div><div class="cnt" id="cnt">${[2,3,4].map(n=>`<button class="btn${ui.n===n?' active':''}" data-n="${n}">${n}인<small>나 + AI ${n-1}명</small></button>`).join('')}</div>
   <div class="label" style="margin-top:8px">난이도</div><div class="cnt" id="dif">${DIFF.map(([k,l,d])=>`<button class="btn${ui.diff===k?' active':''}" data-d="${k}">${l}<small>${d}</small></button>`).join('')}</div>`;}
 function bindCount(){$('#cnt').onclick=e=>{const b=e.target.closest('[data-n]');if(!b)return;ui.n=+b.dataset.n;saveUi();$('#cnt').querySelectorAll('[data-n]').forEach(x=>x.classList.toggle('active',+x.dataset.n===ui.n));};
