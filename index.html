@@ -14,9 +14,10 @@
 <meta name="apple-mobile-web-app-title" content="HexIsle">
 <style>:root{color-scheme:dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-family:system-ui,sans-serif;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>HexIsle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@300..900&display=swap">
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
-:root{--sea:#0b1620;--sea-2:#122230;--surface:#162736;--surface-2:#1f3547;--line:#33506a;--trim:#8a6d3b;--ink:#ecf0ec;--muted:#9fb3c0;--gold:#e3b95c;--gold-ink:#2a1e06;--danger:#ff8a7a;--ok:#7fd6a1;--t-wood:#2f6f3e;--t-brick:#b65a35;--t-wool:#94c45c;--t-grain:#e3b63f;--t-ore:#7d8899;--t-desert:#d6c290;--token:#f5ead0;--token-ink:#26221a;--hot:#cf3a2f;--shore:#c9b98a;--display:"LevelUp",system-ui,sans-serif;--body:"LevelUp",system-ui,sans-serif;color-scheme:dark}
+:root{--sea:#0b1620;--sea-2:#122230;--surface:#162736;--surface-2:#1f3547;--line:#33506a;--trim:#8a6d3b;--ink:#ecf0ec;--muted:#9fb3c0;--gold:#e3b95c;--gold-ink:#2a1e06;--danger:#ff8a7a;--ok:#7fd6a1;--t-wood:#2f6f3e;--t-brick:#b65a35;--t-wool:#94c45c;--t-grain:#e3b63f;--t-ore:#7d8899;--t-desert:#d6c290;--token:#f5ead0;--token-ink:#26221a;--hot:#cf3a2f;--shore:#c9b98a;--display:"Hahmlet",system-ui,sans-serif;--body:"Hahmlet",system-ui,sans-serif;color-scheme:dark}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{font-family:var(--body);font-size:14px}
@@ -210,7 +211,7 @@ header.top{max-width:none}
   .stagebtns .tbtn{flex:1;min-width:0}
 }
 @keyframes toastIn{from{opacity:0;transform:translateY(-6px)}}
-.crow{display:flex;align-items:flex-end;min-height:calc(var(--cw)*1.4 + 14px)}
+.crow{display:flex;align-items:flex-end;min-height:calc(var(--cw)*1.525 + 14px)}
 .crow .cw{position:relative;transition:transform .15s;flex:none}
 .crow .cw:hover{transform:translateY(-14px);z-index:99!important}
 .crow .card{display:block;width:var(--cw);height:auto;border-radius:calc(var(--cw)*.075);user-select:none;-webkit-user-drag:none}
@@ -331,7 +332,7 @@ details.ref summary{padding:2px 0}
 .sheet.sheet-rules .row{margin-top:auto;padding-top:14px;border-top:1px solid rgba(156,122,68,.35)}
 .sheet.sheet-rules h3{text-align:left;margin-bottom:14px}
 .sheet p{line-height:1.75}
-:root{--hud-bg:rgba(17,14,11,.68);--hud-bg2:rgba(17,14,11,.84);--hud-line:rgba(255,236,205,.11);--hud-line2:rgba(255,236,205,.2);--acc:#d9a441;--acc-ink:#1c1306;--ink:#f2ece2;--muted:#a69b8b;--r:12px;--trayh:210px;--display:"LevelUp",system-ui,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"LevelUp",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+:root{--hud-bg:rgba(17,14,11,.68);--hud-bg2:rgba(17,14,11,.84);--hud-line:rgba(255,236,205,.11);--hud-line2:rgba(255,236,205,.2);--acc:#d9a441;--acc-ink:#1c1306;--ink:#f2ece2;--muted:#a69b8b;--r:12px;--trayh:210px;--display:"Hahmlet",system-ui,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Hahmlet",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
 html,body{background:#0d0b09;color:var(--ink)}
 body{background:#0d0b09;font-family:var(--body);font-size:14px;letter-spacing:-.005em}
 .panel,.coach,.sheet,.dicebox,.toast,#tip,#pop,.turnplaque{background:var(--hud-bg)!important;border:1px solid var(--hud-line);border-radius:var(--r);box-shadow:0 12px 32px rgba(0,0,0,.32)}
@@ -812,12 +813,12 @@ html.phone .sheet-trade .tinfo{margin-top:8px;padding-top:8px}
 .sheet-start .st-btns #sNew:last-child{grid-column:1/-1}
 
 /* discard v3 */
-.dzone{min-height:calc(var(--cw)*1.4 + 20px);display:flex;align-items:flex-end;margin:4px 0 12px}
+.dzone{min-height:calc(var(--cw)*1.525 + 20px);display:flex;align-items:flex-end;margin:4px 0 12px}
 .dzone .crow{padding-top:16px;min-height:0}
 .crow.dpick .card{cursor:pointer}
 .crow.dfull .card{cursor:not-allowed;filter:brightness(.7)}
 .crow.dfull .cw:hover{transform:none}
-.dempty{width:100%;min-height:calc(var(--cw)*1.4);display:grid;place-items:center;border:1px dashed rgba(255,255,255,.2);color:#8f897f;font-size:14px}
+.dempty{width:100%;min-height:calc(var(--cw)*1.525);display:grid;place-items:center;border:1px dashed rgba(255,255,255,.2);color:#8f897f;font-size:14px}
 .dcnt{margin-left:4px;color:#e9c47a}
 .dcnt.ok{color:#9fd68a}
 /* settings align */
@@ -1243,7 +1244,7 @@ function house(g,x,z,w,d,h,roofCol,ry,wall){const k=new THREE.Group();k.position
 function tokenTex(n,hit){const k=n+':'+hit;if(TEX[k])return TEX[k];const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');x.scale(2,2);
   if(hit){x.beginPath();x.arc(64,64,62,0,7);x.fillStyle='rgba(255,214,102,.95)';x.fill();}
   x.beginPath();x.arc(64,64,hit?52:62,0,7);x.fillStyle='#e2cfa4';x.fill();x.lineWidth=hit?6:3;x.strokeStyle='#6b4f2a';x.stroke();
-  const hot=n===6||n===8;x.fillStyle=hot?'#a8180f':'#120c06';x.font=`900 ${hot?76:70}px "LevelUp",sans-serif`;x.textAlign='center';x.textBaseline='middle';x.fillText(String(n),64,60);{const p=pips(n);for(let i=0;i<p;i++){x.beginPath();x.arc(64+(i-(p-1)/2)*7,96,2.4,0,7);x.fill();}}
+  const hot=n===6||n===8;x.fillStyle=hot?'#a8180f':'#120c06';x.font=`900 ${hot?76:70}px "Hahmlet",serif`;x.textAlign='center';x.textBaseline='middle';x.fillText(String(n),64,60);{const p=pips(n);for(let i=0;i<p;i++){x.beginPath();x.arc(64+(i-(p-1)/2)*7,96,2.4,0,7);x.fill();}}
   const t=new THREE.CanvasTexture(c);t.anisotropy=16;return TEX[k]=t;}
 const TCOL={wood:0x3a7232,brick:0xa65a36,wool:0x76a845,grain:0xc49b36,ore:0x73777f,desert:0xc8ad78};
 const LBG={wood:'#2f6f3e',brick:'#b65a35',wool:'#6e9d3a',grain:'#b88a17',ore:'#5f6a7b',any:'#7a5a32'};
@@ -1570,8 +1571,9 @@ const SHOT0={"road": "assets/pieces/road.webp", "settlement": "assets/pieces/set
 const SHOT={};for(const k in SHOT0)SHOT[k]=toBlobURL(SHOT0[k]);
 const ARTIMG={};
 // Card art: pre-rendered. Wood & ore use Poly Haven CC0 scans (dead_tree_trunk, boulder_01); others use Poly Haven CC0 textures.
-const SCANART={"wood": "assets/cards/wood.webp", "brick": "assets/cards/brick.webp", "wool": "assets/cards/wool.webp", "grain": "assets/cards/grain.webp", "ore": "assets/cards/ore.webp"};
-{let left=Object.keys(SCANART).length;for(const k in SCANART){const im=new Image();im.onload=()=>{ARTIMG[k]=im;if(--left===0)setTimeout(()=>{try{buildCards(true);if(S)render();}catch(e){}},0);};im.src=SCANART[k];}}
+const CARDFRAME="assets/cards/frame.webp";
+const SCANART={"wood": "assets/cards/wood.webp", "wool": "assets/cards/wool.webp", "brick": "assets/cards/brick.webp", "ore": "assets/cards/ore.webp", "grain": "assets/cards/grain.webp", "knight": "assets/cards/knight.webp", "roads": "assets/cards/roads.webp", "plenty": "assets/cards/plenty.webp", "monopoly": "assets/cards/monopoly.webp", "vp": "assets/cards/vp.webp"};
+let FRAMEIMG=null;{let left=Object.keys(SCANART).length+1;const done=()=>{if(--left===0)setTimeout(()=>{try{buildCards();if(S)render();}catch(e){}},0);};{const im=new Image();im.onload=()=>{FRAMEIMG=im;done();};im.src=CARDFRAME;}for(const k in SCANART){const im=new Image();im.onload=()=>{ARTIMG[k]=im;done();};im.src=SCANART[k];}}
 function basePlate(k,o,r){k.add(part('cyl16',PM(o),[r+.025,.018,r+.025],[0,.009,0],{noShadow:true}));k.add(part('cyl16',tmat('slate',0x9a9488,1.5,.2),[r,.034,r],[0,.017,0]));}
 function settlementMesh(o,ry){const k=new THREE.Group();basePlate(k,o,.17);const h=new THREE.Group();h.rotation.y=ry;h.position.y=.03;k.add(h);
   rhouse(h,-.02,-.01,.13,.1,.15,o,0);rhouse(h,.1,.06,.075,.065,.095,o,Math.PI/2);
@@ -1758,21 +1760,21 @@ function renderDiceBox(){const el=$('#dicebox');if(!el||!S)return;const rolling=
     :`<div class="dice">${dieHTML(0,'blank')+dieHTML(0,'blank')}</div><div class="who">굴리기 전</div>`;}
 function row(items,cw,maxW,extra,flags){const n=items.length;if(!n)return '';const step=n>1?Math.max(12,Math.min(cw*.72,(maxW-cw)/(n-1))):0;
   return `<div class="crow ${extra||''}" style="--cw:${cw}px">${items.map((it,i)=>`<div class="cw${flags&&flags[i]?' new':''}" style="margin-left:${i?(step-cw).toFixed(1):0}px;z-index:${i};animation-delay:${flags&&flags[i]?(flags[i]-1)*70:0}ms">${it}</div>`).join('')}</div>`;}
-function fan(items,cw,maxW,extra){const n=items.length;if(!n)return '';const ch=cw*1.4;const usable=maxW*.86-cw*1.15;const step=Math.max(12,Math.min(cw*.62,usable/Math.max(1,n-1)));const spread=Math.min(5,34/n);
+function fan(items,cw,maxW,extra){const n=items.length;if(!n)return '';const ch=cw*1.525;const usable=maxW*.86-cw*1.15;const step=Math.max(12,Math.min(cw*.62,usable/Math.max(1,n-1)));const spread=Math.min(5,34/n);
   const mm=(n-1)/2,maxY=mm*mm*.7*spread/3;
   return `<div class="fan ${extra||''}" style="--cw:${cw}px;--fh:${ch+30+maxY}px">${items.map((it,i)=>{const m=i-(n-1)/2;const a=m*spread,y=m*m*.7*spread/3;
     return `<div class="cw" style="transform:translateX(calc(-50% + ${m*step}px)) translateY(${y}px) rotate(${a}deg);z-index:${i}">${it}</div>`;}).join('')}</div>`;}
-function renderHand(me,groups){const box=$('#hand');const W0=Math.max(220,box.clientWidth||520);const cw=W0<360?66:innerHeight<900&&innerWidth>1100?66:86;
+function renderHand(me,groups){const box=$('#hand');const W0=Math.max(220,box.clientWidth||520);const cw=Math.round((W0<360?66:innerHeight<900&&innerWidth>1100?66:86)*(PH.on?.92:1));
   const list=RES.flatMap(r=>Array(me.res[r]).fill(r));
   const prev=ui.prevRes||me.res;let nn=0;const flags=list.map((r,i)=>{const idx=i-list.indexOf(r);return idx>=(prev[r]||0)&&ui.prevRes?++nn:0;});ui.prevRes={...me.res};
   const hh=$('#handHead');if(PH.on){if(!ui.handTab)ui.handTab='res';hh.innerHTML=`<button class="htab${ui.handTab==='res'?' on':''}" data-htab="res">내 자원카드 · ${list.length}장</button><button class="htab${ui.handTab==='dev'?' on':''}" data-htab="dev">내 발전카드 · ${me.dev.length}장</button>`;}
   else hh.innerHTML=`내 자원카드 <span id="handCount">· ${list.length}장${list.length>7?' (8장 이상: 7이 나오면 절반을 버려요)':''}</span>`;
-  if(PH.on&&ui.handTab==='dev'){box.innerHTML=me.dev.length?row(me.dev.map(d=>`<div style="position:relative"><img class="card" src="${CARDIMG[d.t]}" alt="${DEVN[d.t]}" data-pop="${d.t}">${d.fresh&&d.t!=='vp'?'<span class="newtag">다음 차례</span>':''}</div>`),cw,W0,'devrow2'):`<div class="emptyhand" style="min-height:${cw*1.4+14}px">발전 카드가 없어요.<br>양모·곡물·광석으로 살 수 있어요.</div>`;return;}
-  let h=list.length?row(list.map(r=>`<img class="card" src="${CARDIMG[r]}" alt="${RN[r]}" data-tip="${RN[r]}: ${TN[r]}에서 나와요. ${RUSE[r]}에 써요.">`),cw,W0,'',flags):`<div class="emptyhand" style="min-height:${cw*1.4+14}px">아직 자원 카드가 없어요.<br>주사위 숫자에 맞는 땅에서 카드가 들어와요.</div>`;
+  if(PH.on&&ui.handTab==='dev'){box.innerHTML=me.dev.length?row(me.dev.map(d=>`<div style="position:relative"><img class="card" src="${CARDIMG[d.t]}" alt="${DEVN[d.t]}" data-pop="${d.t}">${d.fresh&&d.t!=='vp'?'<span class="newtag">다음 차례</span>':''}</div>`),cw,W0,'devrow2'):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">발전 카드가 없어요.<br>양모·곡물·광석으로 살 수 있어요.</div>`;return;}
+  let h=list.length?row(list.map(r=>`<img class="card" src="${CARDIMG[r]}" alt="${RN[r]}" data-tip="${RN[r]}: ${TN[r]}에서 나와요. ${RUSE[r]}에 써요.">`),cw,W0,'',flags):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">아직 자원 카드가 없어요.<br>주사위 숫자에 맞는 땅에서 카드가 들어와요.</div>`;
   h+=`<div class="tally">${RES.map(r=>`<span class="${me.res[r]?'':'z'}">${RN[r]} ${me.res[r]}</span>`).join('')}</div>`;
   box.innerHTML=h;
   const db=$('#devs');const dw=Math.max(150,Math.min(300,db.clientWidth||220));
-  db.innerHTML=me.dev.length?row(me.dev.map(d=>`<div style="position:relative"><img class="card" src="${CARDIMG[d.t]}" alt="${DEVN[d.t]}" data-pop="${d.t}" data-tip="${DEVN[d.t]}: 눌러서 설명 보기">${d.fresh&&d.t!=='vp'?'<span class="newtag">다음 차례</span>':''}</div>`),innerHeight<900&&innerWidth>1100?50:62,dw,'devrow2'):`<div class="emptyhand" style="min-height:${cw*1.4+14}px">없음<br>양모·곡물·광석으로 구입</div>`;}
+  db.innerHTML=me.dev.length?row(me.dev.map(d=>`<div style="position:relative"><img class="card" src="${CARDIMG[d.t]}" alt="${DEVN[d.t]}" data-pop="${d.t}" data-tip="${DEVN[d.t]}: 눌러서 설명 보기">${d.fresh&&d.t!=='vp'?'<span class="newtag">다음 차례</span>':''}</div>`),innerHeight<900&&innerWidth>1100?50:62,dw,'devrow2'):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">없음<br>양모·곡물·광석으로 구입</div>`;}
 
 function devPop(t){
   if(t==='cost')return `<h4>건설 비용</h4><table class="reftable"><tbody>${['road','settlement','city','dev'].map(w=>`<tr><td>${BN[w]}</td><td>${costPips(COST[w])}</td></tr>`).join('')}</tbody></table><p class="muted">도로는 길을 넓히고, 정착지 1점, 도시 2점이에요. 발전 카드는 무작위 특수 카드예요.</p>`;
@@ -1855,7 +1857,7 @@ function forcedModals(){
 function stepper(idp,vals,max){return `<div class="step" id="${idp}">${RES.map(k=>`<div class="cell bg-${k}"><div>${RN[k]}</div><div class="v">${vals[k]}</div><div class="b"><button data-k="${k}" data-d="-1" ${vals[k]<=0?'disabled':''} aria-label="${RN[k]} 빼기">−</button><button data-k="${k}" data-d="1" ${vals[k]>=max(k)?'disabled':''} aria-label="${RN[k]} 더하기">+</button></div></div>`).join('')}</div>`;}
 function showDiscard(){const n=S.pend.n;const sel=emptyRes();const me=S.players[0];
   const draw=()=>{const left=RES.flatMap(r=>Array(me.res[r]-sel[r]).fill(r)),out=RES.flatMap(r=>Array(sel[r]).fill(r));const k=out.length,full=k>=n;
-    const cw=PH.on?58:84;const cd=r=>`<img class="card" src="${CARDIMG[r]}" alt="${RN[r]}" data-r="${r}">`;
+    const cw=PH.on?48:84;const cd=r=>`<img class="card" src="${CARDIMG[r]}" alt="${RN[r]}" data-r="${r}">`;
     openModal('discard',`<h3>카드 ${n}장 버리기</h3><p>주사위 7이 나왔고 내 카드가 8장 이상이라 절반을 은행에 버려야 해요. 아래 카드 중 버릴 카드를 누르세요.</p>
     <div class="label">버릴 카드 <b class="dcnt${full?' ok':''}">${k} / ${n}</b>${k?' · 다시 누르면 내 자원카드로 돌아가요':''}</div>
     <div class="dzone" id="dOut" style="--cw:${cw}px"></div>
@@ -2025,7 +2027,7 @@ $('#newBtn').onclick=()=>{clearTimeout(aiTimer);openModal('confirm',`<div class=
   bindCount();$('#cNo').onclick=()=>{closeModal();update();};$('#cYes').onclick=()=>{closeModal();startNew();};};
 
 // ---------- painted cards (canvas) ----------
-const CARDIMG={},CW=300,CH=420;
+const CARDIMG={},CW=400,CH=610;
 function rr(x,X,Y,w,h,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+w,Y,X+w,Y+h,r);x.arcTo(X+w,Y+h,X,Y+h,r);x.arcTo(X,Y+h,X,Y,r);x.arcTo(X,Y,X+w,Y,r);x.closePath();}
 function lg(x,y0,y1,stops){const g=x.createLinearGradient(0,y0,0,y1);stops.forEach((c,i)=>g.addColorStop(i/(stops.length-1),c));return g;}
 function strokes(x,rng,n,area,cols,len,w,ang){for(let i=0;i<n;i++){const px=area[0]+rng()*area[2],py=area[1]+rng()*area[3];x.strokeStyle=cols[Math.floor(rng()*cols.length)];x.lineWidth=w*(.6+rng()*.8);const a=(ang||0)+(rng()-.5)*.6,l=len*(.5+rng());x.beginPath();x.moveTo(px,py);x.lineTo(px+Math.cos(a)*l,py+Math.sin(a)*l);x.stroke();}}
@@ -2060,38 +2062,23 @@ function flourish(x,cx,cy,sx,sy,st){x.save();x.translate(cx,cy);x.scale(sx,sy);x
   x.beginPath();x.moveTo(34,0);x.quadraticCurveTo(44,-1,48,5);x.quadraticCurveTo(42,4,38,8);x.stroke();
   x.beginPath();x.moveTo(0,34);x.quadraticCurveTo(-1,44,5,48);x.quadraticCurveTo(4,42,8,38);x.stroke();x.restore();}
 function grain(x,rng,n,a,area){area=area||[0,0,CW,CH];for(let i=0;i<n;i++){x.fillStyle=`rgba(${rng()<.5?'40,22,8':'255,240,210'},${(rng()*a).toFixed(3)})`;x.fillRect(area[0]+rng()*area[2],area[1]+rng()*area[3],1+rng()*1.6,1+rng()*1.6);}}
+const CTINT={wood:'#17502e',brick:'#7a2210',wool:'#5e8212',grain:'#7a560c',ore:'#38495a'},GOLDM={wood:[.94,1.03,.9],brick:[1.04,.94,.9],wool:[.96,1.04,.88],ore:[.9,.97,1.1]};
 function paintCard(res,label,dark){
-  const c=document.createElement('canvas');c.width=CW;c.height=CH;const x=c.getContext('2d');const rng=seeded(res.length*131+label.length*7+3);
-  rr(x,0,0,CW,CH,16);x.save();x.clip();
-  x.fillStyle=lg(x,0,CH,dark?['#3c1410','#170605']:['#3b2615','#1c1008']);x.fillRect(0,0,CW,CH);grain(x,rng,2200,.12);
-  rr(x,10,10,CW-20,CH-20,10);x.save();x.clip();
-  const pg=x.createRadialGradient(CW/2,CH*.45,30,CW/2,CH/2,280);const TT={wood:['#6f9a5a','#4b7440','#26401f'],brick:['#b58a74','#8a5c48','#4f3024'],wool:['#a9b98c','#7e9262','#4a5a36'],grain:['#d6c287','#ae9555','#6e5a2c'],ore:['#a8a8a6','#7e7e7d','#484847']}[res]||['#e9d8ad','#c9ad74','#8f6e3e'];
-  pg.addColorStop(0,dark?'#5a1f19':TT[0]);pg.addColorStop(.7,dark?'#3a120e':TT[1]);pg.addColorStop(1,dark?'#1e0806':TT[2]);x.fillStyle=pg;x.fillRect(0,0,CW,CH);
-  for(let i=0;i<18;i++){const sx=rng()*CW,sy=rng()*CH,r=10+rng()*50;const g=x.createRadialGradient(sx,sy,0,sx,sy,r);g.addColorStop(0,dark?'rgba(0,0,0,.18)':'rgba(120,80,30,.12)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(sx-r,sy-r,r*2,r*2);}
-  grain(x,rng,3500,.09);
-  x.strokeStyle=dark?'rgba(0,0,0,.25)':'rgba(90,60,25,.12)';x.lineWidth=.7;for(let i=0;i<40;i++){let px=rng()*CW,py=rng()*CH;x.beginPath();x.moveTo(px,py);for(let k=0;k<5;k++){px+=(rng()-.5)*26;py+=(rng()-.5)*26;x.lineTo(px,py);}x.stroke();}
-  x.restore();
-  const br=x.createLinearGradient(0,0,CW,CH);br.addColorStop(0,'#f2d58e');br.addColorStop(.35,'#9a6c34');br.addColorStop(.6,'#e6c378');br.addColorStop(1,'#7a5228');
-  x.strokeStyle=br;x.lineWidth=3.2;rr(x,10,10,CW-20,CH-20,10);x.stroke();x.lineWidth=1.2;rr(x,17,17,CW-34,CH-34,7);x.stroke();
-  for(const [cx,cy,sx,sy] of [[17,17,1,1],[CW-17,17,-1,1],[17,CH-17,1,-1],[CW-17,CH-17,-1,-1]])flourish(x,cx,cy,sx,sy,br);
-  const ax=30,ay=32,aw=CW-60,ah=CH-124;
-  x.save();rr(x,ax,ay,aw,ah,5);x.clip();const PH=!!ARTIMG[res];if(PH)x.drawImage(ARTIMG[res],ax,ay,aw,ah);else if(RES.includes(res)){x.fillStyle='#2a241c';x.fillRect(ax,ay,aw,ah);}else{x.translate(ax,ay);x.scale(aw/CW,ah/CH);paintArt(x,res,rng);x.setTransform(1,0,0,1,0,0);}
-  if(!PH)for(let i=0;i<900;i++){const px=ax+rng()*aw,py=ay+rng()*ah,a=rng()*Math.PI,l=4+rng()*10;x.strokeStyle=`rgba(${rng()<.5?'20,10,0':'255,235,200'},${(rng()*.07).toFixed(3)})`;x.lineWidth=1+rng()*2.5;x.beginPath();x.moveTo(px,py);x.lineTo(px+Math.cos(a)*l,py+Math.sin(a)*l);x.stroke();}
-  x.globalCompositeOperation='saturation';x.fillStyle=`rgba(128,128,128,${PH?.1:.28})`;x.fillRect(ax,ay,aw,ah);
-  x.globalCompositeOperation='multiply';x.fillStyle=dark?'rgba(200,150,110,.35)':PH?'rgba(232,200,150,.16)':'rgba(222,178,116,.42)';x.fillRect(ax,ay,aw,ah);
-  x.globalCompositeOperation='soft-light';const lt=x.createLinearGradient(ax,ay,ax+aw,ay+ah);lt.addColorStop(0,'rgba(255,240,200,.55)');lt.addColorStop(1,'rgba(0,0,0,.4)');x.fillStyle=lt;x.fillRect(ax,ay,aw,ah);
-  x.globalCompositeOperation='source-over';
-  const vg=x.createRadialGradient(ax+aw/2,ay+ah*.45,aw*.25,ax+aw/2,ay+ah/2,aw*.85);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(30,14,4,.62)');x.fillStyle=vg;x.fillRect(ax,ay,aw,ah);
-  grain(x,rng,2600,.1,[ax,ay,aw,ah]);
-  x.restore();
-  x.strokeStyle='#160b04';x.lineWidth=5;rr(x,ax,ay,aw,ah,5);x.stroke();x.strokeStyle=br;x.lineWidth=2.2;rr(x,ax-3,ay-3,aw+6,ah+6,7);x.stroke();
-  const py=CH-80,pw=CW-74,px=37,ph=42;
-  x.beginPath();x.moveTo(px,py);x.lineTo(px+pw,py);x.lineTo(px+pw-10,py+ph/2);x.lineTo(px+pw,py+ph);x.lineTo(px,py+ph);x.lineTo(px+10,py+ph/2);x.closePath();
-  x.fillStyle=lg(x,py,py+ph,dark?['#5a1712','#2a0806']:['#4a2e18','#22130a']);x.fill();x.strokeStyle=br;x.lineWidth=2;x.stroke();
-  x.fillStyle='#f2dca6';x.font='700 25px "LevelUp",sans-serif';x.textAlign='center';x.textBaseline='middle';x.shadowColor='rgba(0,0,0,.7)';x.shadowBlur=3;x.shadowOffsetY=1;x.fillText(label,CW/2,py+ph/2+1);x.shadowColor='transparent';
-  x.fillStyle=br;x.beginPath();x.moveTo(CW/2,CH-28);x.lineTo(CW/2+7,CH-22);x.lineTo(CW/2,CH-16);x.lineTo(CW/2-7,CH-22);x.closePath();x.fill();
-  x.strokeStyle=br;x.lineWidth=1;x.beginPath();x.moveTo(70,CH-22);x.lineTo(CW/2-12,CH-22);x.moveTo(CW/2+12,CH-22);x.lineTo(CW-70,CH-22);x.stroke();
-  x.restore();
+  if(!FRAMEIMG)return CARDIMG[res]||'data:image/gif;base64,R0lGODlhAQABAAAAACw=';
+  const K=CW/999,c=document.createElement('canvas');c.width=CW;c.height=CH;const x=c.getContext('2d');
+  const ax=133*K-3,ay=153*K-3,aw=732*K+6,ah=918*K+6;const A=ARTIMG[res];
+  if(A){const r=Math.max(aw/A.width,ah/A.height),dw=A.width*r,dh=A.height*r;x.save();x.beginPath();x.rect(ax,ay,aw,ah);x.clip();x.drawImage(A,ax+(aw-dw)/2,ay+(ah-dh)/2,dw,dh);x.restore();}
+  else{x.fillStyle='#2a2018';x.fillRect(ax,ay,aw,ah);}
+  const f=document.createElement('canvas');f.width=CW;f.height=CH;const fx=f.getContext('2d');fx.drawImage(FRAMEIMG,0,0,CW,CH);
+  const d=fx.getImageData(0,0,CW,CH),p=d.data;const t=(CTINT[res]||'#6a1418').match(/\w\w/g).map(h=>parseInt(h,16)/255);const gm=GOLDM[res]||[1,1,1];
+  for(let i=0;i<p.length;i+=4){if(!p[i+3])continue;const R=p[i]/255,G=p[i+1]/255,B=p[i+2]/255;const mx=Math.max(R,G,B),mn=Math.min(R,G,B),sat=(mx-mn)/(mx+.004),L0=(R+G+B)/3;
+    const w=Math.min(1,Math.max(0,(.36-sat)/.12))*Math.min(1,Math.max(0,(.7-L0)/.12));
+    if(!w){if(sat>.36){const m=L0*.14;p[i]=255*Math.min(1,(R*.86+m)*.94*gm[0]);p[i+1]=255*Math.min(1,(G*.86+m)*.94*gm[1]);p[i+2]=255*Math.min(1,(B*.86+m)*.94*gm[2]);}continue;}
+    const ff=.15+L0;const V=[R,G,B];for(let k=0;k<3;k++)p[i+k]=255*(V[k]*(1-w)+Math.min(1,t[k]*ff)*w);}
+  fx.putImageData(d,0,0);x.drawImage(f,0,0);
+  const ty=1282*K;let fs=216*K;const FF=z=>`800 ${z}px "Hahmlet",serif`;x.font=FF(fs);while(x.measureText(label).width>620*K&&fs>60*K){fs-=4*K;x.font=FF(fs);}
+  x.textAlign='center';x.textBaseline='middle';x.lineJoin='round';x.lineWidth=20*K;x.strokeStyle='rgba(18,9,2,.9)';x.strokeText(label,CW/2,ty);
+  const g=x.createLinearGradient(0,ty-fs/2,0,ty+fs/2);g.addColorStop(0,'#fff4d0');g.addColorStop(.6,'#f0cf86');g.addColorStop(1,'#c99449');x.fillStyle=g;x.shadowColor='rgba(0,0,0,.5)';x.shadowBlur=8*K;x.shadowOffsetY=4*K;x.fillText(label,CW/2,ty);
   return toBlobURL(c.toDataURL('image/png'));}
 function buildCards(resOnly){RES.forEach(r=>CARDIMG[r]=paintCard(r,RN[r]));if(!resOnly)Object.keys(DEVN).forEach(t=>CARDIMG[t]=paintCard(t,DEVN[t],true));}
 
@@ -2130,13 +2117,11 @@ function boot(data){
   newGame();render();showStart();
 }
 try{window.claude?.hot?.snapshot?.(()=>({S}));}catch(e){}
-try{document.fonts.load('700 40px LevelUp').then(()=>{buildCards();for(const k in TEX){if(k[0]==='L'||/^\d/.test(k))delete TEX[k];}if(W.ok&&S){W.boardKey=null;render();}});}catch(e){}
+try{document.fonts.load('800 40px Hahmlet','목재벽돌양모곡물광석기사도로건설풍년독점승점0123456789').then(()=>{buildCards();for(const k in TEX){if(k[0]==='L'||/^\d/.test(k))delete TEX[k];}if(W.ok&&S){W.boardKey=null;render();}});}catch(e){}
 const hot=window.claude?.hot;
 if(hot?.ready)hot.ready(boot);else boot(hot?.data??{});
 </script>
-<style id="levelup">/* 레벨업 (LevelUp) by Hada Type Foundry, SIL Open Font License 1.1, subset */
-@font-face{font-family:"LevelUp";src:url(assets/fonts/levelup-0.woff2) format("woff2");font-weight:100 550;font-display:swap}
-@font-face{font-family:"LevelUp";src:url(assets/fonts/levelup-1.woff2) format("woff2");font-weight:551 950;font-display:swap}</style>
+
 
 </body>
 </html>
