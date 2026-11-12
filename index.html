@@ -904,6 +904,27 @@ html.phone body .sheet-start .cnt .btn{padding:9px 11px!important}
 html:not(.phone) body #leftcol{top:112px!important}
 html.phone body header.top h1.logoimg{width:128px!important}
 html.phone body #leftcol{top:52px!important}
+
+/* build items v2: no boxes */
+html body .builds{grid-template-columns:repeat(4,92px)!important;gap:18px!important;align-items:start}
+html body .bld{background:none!important;border:0!important;box-shadow:none!important;padding:0!important;gap:0!important;border-radius:0!important;transform:none}
+html body .bld .pimg{height:78px!important;padding:0!important;overflow:visible!important;align-items:end!important;display:flex!important;justify-content:center}
+html body .bld .pimg img{width:auto!important;max-width:100%!important;max-height:78px!important;height:auto!important;aspect-ratio:auto!important;object-fit:contain;filter:drop-shadow(0 5px 6px rgba(0,0,0,.6))!important;transition:transform .15s,filter .15s}
+html body .bld b{margin-top:7px;font-size:14px!important;font-weight:700!important;color:#f1e4c8!important;text-shadow:0 1px 3px rgba(0,0,0,.9)!important;line-height:1.2}
+html body .bld .mini,html body .bld .cost{margin-top:5px}
+html body .bld .meta2{display:block!important;margin-top:4px;font-size:11.5px!important;color:#cdbf9f!important;text-shadow:0 1px 2px rgba(0,0,0,.9);white-space:nowrap}
+html body .bld:hover:not(:disabled){background:none!important;transform:none}
+html body .bld:hover:not(:disabled) .pimg img{transform:translateY(-3px);filter:drop-shadow(0 8px 8px rgba(0,0,0,.6)) brightness(1.08)!important}
+html body .bld.active .pimg img{filter:drop-shadow(0 0 10px rgba(243,208,138,.85)) drop-shadow(0 5px 6px rgba(0,0,0,.6))!important}
+html body .bld.active b{color:#f3d08a!important}
+html body .bld:disabled .pimg,html body .bld:disabled b,html body .bld:disabled .meta2{opacity:.45}
+html body .bld:disabled .pimg img{filter:grayscale(.6) drop-shadow(0 5px 6px rgba(0,0,0,.6))!important}
+html.phone body .builds{grid-template-columns:repeat(4,64px)!important;gap:10px!important}
+html.phone body .bld .pimg{height:50px!important}
+html.phone body .bld .pimg img{max-height:50px!important}
+html.phone body .bld b{margin-top:4px;font-size:12.5px!important}
+html.phone body .bld .meta2{display:none!important}
+html.phone body .bld .mini,html.phone body .bld .cost{margin-top:3px}
 /* stepper */
 .step .cell{position:relative;isolation:isolate;background:none!important}
 .step .cell::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.7;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
@@ -1667,6 +1688,7 @@ const SHOT0={"road": "assets/pieces/road.webp", "settlement": "assets/pieces/set
 const SHOT={};for(const k in SHOT0)SHOT[k]=toBlobURL(SHOT0[k]);
 const ARTIMG={};
 // Card art: pre-rendered. Wood & ore use Poly Haven CC0 scans (dead_tree_trunk, boulder_01); others use Poly Haven CC0 textures.
+const BUILDIMG={"dev": "assets/build/dev.webp", "road": "assets/build/road.webp", "settlement": "assets/build/settlement.webp", "city": "assets/build/city.webp"};
 const CARDFRAME="assets/cards/frame.webp";
 const SCANART={"wood": "assets/cards/wood.webp", "wool": "assets/cards/wool.webp", "brick": "assets/cards/brick.webp", "ore": "assets/cards/ore.webp", "grain": "assets/cards/grain.webp", "knight": "assets/cards/knight.webp", "roads": "assets/cards/roads.webp", "plenty": "assets/cards/plenty.webp", "monopoly": "assets/cards/monopoly.webp", "vp": "assets/cards/vp.webp"};
 let FRAMEIMG=null;{let left=Object.keys(SCANART).length+1;const done=()=>{if(--left===0)setTimeout(()=>{try{buildCards();if(S)render();}catch(e){}},0);};{const im=new Image();im.onload=()=>{FRAMEIMG=im;done();};im.src=CARDFRAME;}for(const k in SCANART){const im=new Image();im.onload=()=>{ARTIMG[k]=im;done();};im.src=SCANART[k];}}
@@ -1895,7 +1917,7 @@ function render(){
   renderHand(me,groups);
   const my=S.phase==='main'&&S.cur===0&&!S.pend;const k0=count(0);
   const mini=c=>{const have=S.players[0].res;const seen={};return `<span class="mini">${RES.flatMap(r=>Array(c[r]||0).fill(r)).map(r=>{seen[r]=(seen[r]||0)+1;const ok=seen[r]<=have[r];return `<img src="${CARDIMG[r]}" alt="${RN[r]}" class="${ok?'':'lack'}" title="${RN[r]} ${ok?'있음':'부족'}">`;}).join('')}</span>`;};
-  const bb=(id,label,meta,en,art)=>`<button class="bld${ui.mode===id?' active':''}" data-act="${id}" data-tip="${BTIP[id]}" ${en?'':'disabled'}><span class="pimg">${art}</span><b>${label}</b><span class="meta2">${meta}</span>${mini(COST[id])}</button>`;
+  const bb=(id,label,meta,en,art)=>`<button class="bld${ui.mode===id?' active':''}" data-act="${id}" data-tip="${BTIP[id]}" ${en?'':'disabled'}><span class="pimg"><img src="${BUILDIMG[id]}" alt=""></span><b>${label}</b>${mini(COST[id])}<span class="meta2">${meta}</span></button>`;
   const shot=(k,w)=>SHOT[k]?`<img src="${SHOT[k]}" style="width:${Math.round(w*.8)}px" alt="">`:'';
   $('#actions').innerHTML=`<div class="builds">
     ${bb('road','도로',`${15-k0.r} 남음`,my&&S.rolled&&canBuild(0,'road'),shot('road',76))}
