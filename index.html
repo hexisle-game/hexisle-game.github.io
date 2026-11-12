@@ -875,7 +875,7 @@ html.phone .sheet-start .st-r .label:first-child{margin-top:0!important}
     <div id="coach" class="coach"></div>
     <div id="stage"><div id="maplbls"></div><div id="toast" class="toast" hidden></div><div class="dicebox" id="dicebox"></div><div class="turnplaque" id="turnbar"></div><div class="stagebtns" id="stagebtns"></div></div>
     <div class="tray" id="tray">
-      <div class="tray-hand"><div class="tray-h" id="handHead">내 손패 <span id="handCount"></span></div><div id="hand"></div></div>
+      <div class="tray-hand"><div class="tray-h" id="handHead">내 자원카드 <span id="handCount"></span></div><div id="hand"></div></div>
       <div class="tray-dev"><div class="tray-h">발전 카드 <button class="qi" data-pop="all" aria-label="발전 카드 종류 보기" data-tip="발전 카드 종류 보기">?</button></div><div id="devs"></div></div>
       <div class="tray-act"><div class="tray-h">건설 <button class="qi" data-pop="cost" aria-label="건설 비용 보기" data-tip="건설 비용 보기">?</button></div><div id="actions"></div></div>
     </div>
@@ -1766,7 +1766,7 @@ function renderHand(me,groups){const box=$('#hand');const W0=Math.max(220,box.cl
   const list=RES.flatMap(r=>Array(me.res[r]).fill(r));
   const prev=ui.prevRes||me.res;let nn=0;const flags=list.map((r,i)=>{const idx=i-list.indexOf(r);return idx>=(prev[r]||0)&&ui.prevRes?++nn:0;});ui.prevRes={...me.res};
   const hh=$('#handHead');if(PH.on){if(!ui.handTab)ui.handTab='res';hh.innerHTML=`<button class="htab${ui.handTab==='res'?' on':''}" data-htab="res">내 자원카드 · ${list.length}장</button><button class="htab${ui.handTab==='dev'?' on':''}" data-htab="dev">내 발전카드 · ${me.dev.length}장</button>`;}
-  else hh.innerHTML=`내 손패 <span id="handCount">· ${list.length}장${list.length>7?' (8장 이상: 7이 나오면 절반을 버려요)':''}</span>`;
+  else hh.innerHTML=`내 자원카드 <span id="handCount">· ${list.length}장${list.length>7?' (8장 이상: 7이 나오면 절반을 버려요)':''}</span>`;
   if(PH.on&&ui.handTab==='dev'){box.innerHTML=me.dev.length?row(me.dev.map(d=>`<div style="position:relative"><img class="card" src="${CARDIMG[d.t]}" alt="${DEVN[d.t]}" data-pop="${d.t}">${d.fresh&&d.t!=='vp'?'<span class="newtag">다음 차례</span>':''}</div>`),cw,W0,'devrow2'):`<div class="emptyhand" style="min-height:${cw*1.4+14}px">발전 카드가 없어요.<br>양모·곡물·광석으로 살 수 있어요.</div>`;return;}
   let h=list.length?row(list.map(r=>`<img class="card" src="${CARDIMG[r]}" alt="${RN[r]}" data-tip="${RN[r]}: ${TN[r]}에서 나와요. ${RUSE[r]}에 써요.">`),cw,W0,'',flags):`<div class="emptyhand" style="min-height:${cw*1.4+14}px">아직 자원 카드가 없어요.<br>주사위 숫자에 맞는 땅에서 카드가 들어와요.</div>`;
   h+=`<div class="tally">${RES.map(r=>`<span class="${me.res[r]?'':'z'}">${RN[r]} ${me.res[r]}</span>`).join('')}</div>`;
@@ -1856,13 +1856,13 @@ function stepper(idp,vals,max){return `<div class="step" id="${idp}">${RES.map(k
 function showDiscard(){const n=S.pend.n;const sel=emptyRes();const me=S.players[0];
   const draw=()=>{const left=RES.flatMap(r=>Array(me.res[r]-sel[r]).fill(r)),out=RES.flatMap(r=>Array(sel[r]).fill(r));const k=out.length,full=k>=n;
     const cw=PH.on?58:84;const cd=r=>`<img class="card" src="${CARDIMG[r]}" alt="${RN[r]}" data-r="${r}">`;
-    openModal('discard',`<h3>카드 ${n}장 버리기</h3><p>주사위 7이 나왔고 내 카드가 8장 이상이라 절반을 은행에 버려야 해요. 손패에서 버릴 카드를 누르세요.</p>
-    <div class="label">버릴 카드 <b class="dcnt${full?' ok':''}">${k} / ${n}</b>${k?' · 다시 누르면 손패로 돌아가요':''}</div>
+    openModal('discard',`<h3>카드 ${n}장 버리기</h3><p>주사위 7이 나왔고 내 카드가 8장 이상이라 절반을 은행에 버려야 해요. 아래 카드 중 버릴 카드를 누르세요.</p>
+    <div class="label">버릴 카드 <b class="dcnt${full?' ok':''}">${k} / ${n}</b>${k?' · 다시 누르면 내 자원카드로 돌아가요':''}</div>
     <div class="dzone" id="dOut" style="--cw:${cw}px"></div>
-    <div class="label">내 손패 · ${left.length}장</div>
+    <div class="label">내 자원카드 · ${left.length}장</div>
     <div class="dzone" id="dIn" style="--cw:${cw}px"></div>
     <div class="row"><button class="btn primary" id="dOk" ${full?'':'disabled'}>버리기</button></div>`);
-    const mw=Math.max(cw*2,$('#dIn').clientWidth-4);$('#dOut').innerHTML=k?row(out.map(cd),cw,mw,'dpick'):`<div class="dempty">아래 손패에서 카드를 눌러 주세요</div>`;$('#dIn').innerHTML=row(left.map(cd),cw,mw,'dpick'+(full?' dfull':''));
+    const mw=Math.max(cw*2,$('#dIn').clientWidth-4);$('#dOut').innerHTML=k?row(out.map(cd),cw,mw,'dpick'):`<div class="dempty">아래 내 자원카드에서 카드를 눌러 주세요</div>`;$('#dIn').innerHTML=row(left.map(cd),cw,mw,'dpick'+(full?' dfull':''));
     $('#dIn').onclick=e=>{const t=e.target.closest('[data-r]');if(!t||sumRes(sel)>=n)return;sel[t.dataset.r]++;draw();};
     $('#dOut').onclick=e=>{const t=e.target.closest('[data-r]');if(!t)return;sel[t.dataset.r]--;draw();};
     $('#dOk').onclick=()=>{discard(0,sel);S.pend={k:'robber'};closeModal();update();};};
