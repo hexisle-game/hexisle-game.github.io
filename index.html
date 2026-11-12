@@ -1035,6 +1035,30 @@ html.phone body .sheet.sheet-start .st-btns .btn:not(#sTut){flex:1 1 0;min-width
 html:not(.phone) body .sheet.sheet-start .st-btns.st-btns{display:flex!important;flex-wrap:wrap}
 html:not(.phone) body .sheet.sheet-start .st-btns #sTut{flex:1 1 100%}
 html:not(.phone) body .sheet.sheet-start .st-btns .btn:not(#sTut){flex:1 1 0;min-width:0}
+
+/* start step1/2 */
+html body .sheet-start .st-menu{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+html body .sheet-start .st-menu .btn{width:min(380px,100%)!important;min-height:64px!important;font-size:19px!important}
+html body .sheet-start .st-menu #s1New{min-height:76px!important;font-size:22px!important}
+html.phone body .sheet-start .st-menu{gap:10px}
+html.phone body .sheet-start .st-menu .btn{width:min(300px,100%)!important;min-height:48px!important;font-size:16px!important}
+html.phone body .sheet-start .st-menu #s1New{min-height:56px!important;font-size:18px!important}
+html body .sheet-setup .st-l h3{font-size:36px;margin-bottom:14px}
+html body .sheet-setup .st-l .linkish{display:inline-block;margin-top:4px;font-size:14px;color:#e9c47a}
+html:not(.phone) body .sheet.sheet-setup #cnt.cnt{margin-bottom:40px!important}
+html:not(.phone) body .sheet.sheet-setup .colrow{margin:0 0 40px!important}
+html:not(.phone) body .sheet.sheet-setup #dif.cnt{margin-bottom:48px!important}
+html.phone body .sheet.sheet-setup #cnt.cnt{margin-bottom:16px!important}
+html.phone body .sheet.sheet-setup .colrow{margin:0 0 14px!important}
+html.phone body .sheet.sheet-setup #dif.cnt{margin-bottom:18px!important}
+html.phone body .sheet-setup .st-l h3{font-size:26px;margin-bottom:6px}
+html.phone body .sheet-setup .st-l p{font-size:13px!important;line-height:1.5!important;margin-bottom:6px}
+html body .sheet.sheet-setup .st-btns.st-btns{display:flex!important;flex-wrap:wrap;gap:12px!important}
+html body .sheet.sheet-setup .st-btns .btn{flex:1 1 0;min-width:0}
+html body .sheet-mp .row .btn,html body .sheet-mp #mJoin{width:100%;min-height:56px!important;font-size:17px!important}
+html body .sheet-mp{width:min(560px,100%)!important}
+
+html body .sheet-setup .st-l button.linkish{background:none!important;border:0!important;box-shadow:none!important;padding:2px 0!important;color:#e9c47a!important;text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:14px!important;filter:none!important;min-height:0!important}
 </style>
 
 
@@ -2248,18 +2272,27 @@ function bindCount(){if($('#col'))$('#col').onclick=e=>{const b=e.target.closest
 function migrate(){if(!S.n){S.n=S.players.length;S.order=[...Array(S.n).keys(),...[...Array(S.n).keys()].reverse()];}if(S.logSeq===undefined)S.logSeq=0;if(!S.diff)S.diff='normal';}
 function showStart(){const saved=loadSave();
   openModal('start',`<div class="st-l"><div class="hero-title logo logoimg"><img src="${window.LOGO_URL}" alt="HEXISLE 육각섬 개척기"></div>
-  <p>육각형 땅에서 자원을 모으고, 교환하고,<br class="phbr"> 마을을 넓혀 10점을 먼저 모으세요.<br class="phbr"> 빈자리는 AI가 채워요.</p></div><div class="st-r">${countPick()}
-  <div class="row st-btns" style="justify-content:flex-start">
-   <button class="btn primary" id="sTut">처음이에요: 게임 방법 보고 시작</button>
-   <button class="btn" id="sNew">바로 새 게임</button>
+  <p>육각형 땅에서 자원을 모으고, 교환하고,<br class="phbr"> 마을을 넓혀 10점을 먼저 모으세요.<br class="phbr"> 빈자리는 AI가 채워요.</p></div><div class="st-r st-menu">
+   <button class="btn primary" id="s1New">새 게임</button>
+   <button class="btn sub" id="s1Mp">친구와 함께</button>
    ${saved?`<button class="btn" id="sCont">이어하기 (${saved.players.length}인)</button>`:''}
-   <button class="btn sub" id="sMp">친구와 하기</button>
-  </div></div>`);
-  bindCount();
-  $('#sTut').onclick=()=>{startNew(true);};
-  $('#sNew').onclick=()=>{closeModal();startNew();};
-  $('#sMp').onclick=()=>MP.openEntry();if(!(window.MP_ENABLED||/[?&]mp=1/.test(location.search)))$('#sMp').hidden=true;
+  </div>`);
+  $('#s1New').onclick=()=>showSetup('solo');
+  $('#s1Mp').onclick=()=>showSetup('mp');
   if(saved)$('#sCont').onclick=()=>{S=saved;migrate();ui.shownRoll=S.rollId;ui.seenSeq=undefined;closeModal();ui.mode=null;update();};}
+function showSetup(mode){const mp=mode==='mp';
+  openModal('setup',`<button class="mclose" id="sBack" aria-label="뒤로"></button><div class="st-l"><h3>${mp?'친구와 함께':'새 게임'}</h3>
+   <p>${mp?'방을 만들면 초대 링크가 생겨요. 빈자리는 AI가 채우고, 대기실에서 다시 바꿀 수 있어요.':'인원과 내 말 색상, AI 난이도를 고르세요.'}</p>
+   ${mp?`<div class="label">내 닉네임</div><input class="tin" id="nick" maxlength="10" placeholder="예: 육각왕" value="${(ui.nick||'').replace(/"/g,'')}"><button class="linkish" id="sJoin">초대받았나요? 방 코드로 참가하기</button><p class="muted" id="mMsg"></p>`:''}</div>
+   <div class="st-r">${countPick()}
+   <div class="row st-btns"><button class="btn primary" id="sGo">${mp?'같이 하기':'게임 시작'}</button><button class="btn sub" id="sGoTut">${mp?'게임 방법 보고 같이 하기':'게임 방법 보고 시작'}</button></div></div>`);
+  $('#sheet').classList.add('sheet-start','sheet-setup');bindCount();
+  $('#sBack').onclick=()=>showStart();
+  const nk=()=>{const v=$('#nick').value.trim();if(!v){$('#mMsg').textContent='닉네임을 입력해 주세요.';$('#nick').focus();return false;}ui.nick=v;saveUi();return true;};
+  if(mp){$('#sJoin').onclick=()=>{if($('#nick').value.trim()){ui.nick=$('#nick').value.trim();saveUi();}MP.openEntry();};
+    $('#sGo').onclick=()=>{if(nk())MP.create();};
+    $('#sGoTut').onclick=()=>{if(nk())showRules(0,()=>MP.create());};}
+  else{$('#sGo').onclick=()=>{closeModal();startNew();};$('#sGoTut').onclick=()=>startNew(true);}}
 function myCols(){const c=PCOL.includes(ui.color)?ui.color:PCOL[0];return [c,...PCOL.filter(x=>x!==c)];}
 function startNew(withRules){newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;closeModal();if(withRules)showRules(0,()=>update());else update();}
 
@@ -2377,7 +2410,7 @@ if(hot?.ready)hot.ready(boot);else boot(hot?.data??{});
 const FB_CFG={apiKey:"AIzaSyDNN0_DWoBzcy2W4k59oa-kDRot-1h8VR0",authDomain:"hexisle-a4f78.firebaseapp.com",databaseURL:"https://hexisle-a4f78-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"hexisle-a4f78",storageBucket:"hexisle-a4f78.firebasestorage.app",messagingSenderId:"865054353768",appId:"1:865054353768:web:af2d3954f9fd067339cedd"};
 const FB_SDK=['app','auth','database'].map(n=>`https://www.gstatic.com/firebasejs/10.12.2/firebase-${n}-compat.js`);
 const RECONNECT_MS=60000,HOST_GRACE_MS=8000;
-const MP_ENABLED=/[?&]mp=1/.test(location.search)||/[?&]room=/.test(location.search)&&localStorage.getItem('hexisle-mp')==='1';
+const MP_ENABLED=true;
 window.NET={on:false,isHost:false,uid:null,room:null,members:{},meta:null,
   offline(uid){const m=this.members[uid];return !!(m&&m.online===false);},
   send(name,args){if(!this.room)return;MP.ref('actions').push({uid:this.uid,name,args:JSON.parse(JSON.stringify(args||[])),t:Date.now()});},
@@ -2395,14 +2428,12 @@ const MP={db:null,subs:[],offSince:{},
   err(msg){openModal('confirm',`<button class="mclose" id="mx2" aria-label="닫기"></button><h3>연결 문제</h3><p>${msg}</p><div class="row"><button class="btn sub" id="mOk">확인</button></div>`);$('#mOk').onclick=$('#mx2').onclick=()=>{closeModal();if(!S||NET.on)return;showStart();};},
   // ---------- entry ----------
   openEntry(code){const c=code||'';
-    openModal('mp',`<button class="mclose" id="mx" aria-label="닫기"></button><h3>친구와 하기</h3>
+    openModal('mp',`<button class="mclose" id="mx" aria-label="닫기"></button><h3>방 코드로 참가</h3>
      <div class="label">내 닉네임</div><input class="tin" id="nick" maxlength="10" placeholder="예: 육각왕" value="${(ui.nick||'').replace(/"/g,'')}">
-     <div class="mpgrid"><div><div class="label">새 방 만들기</div><p class="muted">방을 만들고 초대 링크를 친구에게 보내세요.</p><button class="btn sub" id="mCreate">방 만들기</button></div>
-     <div><div class="label">방 코드로 참가</div><input class="tin code" id="mCode" maxlength="5" placeholder="ABCDE" value="${c}"><button class="btn" id="mJoin">참가하기</button></div></div>
-     <p class="muted" id="mMsg"></p>`);
+     <div class="label">방 코드</div><input class="tin code" id="mCode" maxlength="5" placeholder="ABCDE" value="${c}">
+     <div class="row"><button class="btn primary" id="mJoin">참가하기</button></div><p class="muted" id="mMsg"></p>`);
     const nk=()=>{const v=$('#nick').value.trim();if(!v){$('#mMsg').textContent='닉네임을 입력해 주세요.';$('#nick').focus();return null;}ui.nick=v;saveUi();return v;};
-    $('#mx').onclick=()=>{closeModal();if(!S||!S.players)showStart();else update();};
-    $('#mCreate').onclick=()=>{if(nk())this.create();};
+    $('#mx').onclick=()=>{if(NET.on)return;showStart();};
     $('#mJoin').onclick=()=>{const cd=$('#mCode').value.trim().toUpperCase();if(!nk())return;if(cd.length<4){$('#mMsg').textContent='방 코드를 확인해 주세요.';return;}this.join(cd);};},
   async create(){try{$('#mMsg')&&($('#mMsg').textContent='방을 만드는 중…');await this.init();
       let code;for(let i=0;i<5;i++){code=this.code();const ex=await this.db.ref('rooms/'+code+'/meta').once('value');if(!ex.exists())break;}
