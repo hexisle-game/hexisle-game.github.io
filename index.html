@@ -989,6 +989,52 @@ html.phone body .sheet .btn,html.phone body .stagebtns .tbtn{padding-bottom:3px!
 .resp .wait{color:#cdbf9f}
 .sheet-offer .tinfo{margin-top:8px}
 .sheet-offer .cost .pip{display:inline-flex;align-items:center;gap:4px;font-size:14px;padding:4px 8px}
+
+.swatches{display:flex;gap:12px;margin:4px 0 10px}
+.swatches .sw{width:34px;height:34px;border-radius:50%!important;background:var(--c)!important;border:2px solid rgba(0,0,0,.6)!important;box-shadow:0 0 0 2px rgba(255,255,255,.12)!important;cursor:pointer;padding:0;position:relative}
+.swatches .sw.on{box-shadow:0 0 0 3px #f3d08a,0 0 12px rgba(243,208,138,.7)!important}
+.swatches .sw:disabled{opacity:.25;cursor:not-allowed}
+.swatches .sw.taken::after{content:"";position:absolute;inset:6px;border-top:2px solid rgba(0,0,0,.7);transform:rotate(-45deg);top:50%}
+html.phone .swatches .sw{width:28px;height:28px}
+
+.mpnote{position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:60;padding:10px 18px;background:rgba(20,14,8,.92);border:1px solid rgba(233,196,122,.5);color:#f3e2bc;font-size:15px;box-shadow:0 8px 24px rgba(0,0,0,.5);white-space:nowrap}
+.mpnote.show{animation:setfade .25s ease-out}
+.tin{width:100%;box-sizing:border-box;padding:12px 14px;margin:6px 0 14px;background:rgba(0,0,0,.35);border:1px solid rgba(233,196,122,.35);color:#f3e2bc;font:inherit;font-size:17px;border-radius:2px;outline:none}
+.tin:focus{border-color:#e9c47a;box-shadow:0 0 0 2px rgba(233,196,122,.2)}
+.tin.code{text-transform:uppercase;letter-spacing:.3em;font-weight:800;text-align:center}
+.mpgrid,.lgrid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:6px}
+.mpgrid .btn{width:100%;min-height:52px}
+.roomcode{display:flex;align-items:center;gap:14px;margin:6px 0 16px;padding:10px 14px;background:linear-gradient(90deg,rgba(233,185,92,.16),rgba(233,185,92,0))}
+.roomcode b{font-size:30px;letter-spacing:.25em;color:#ffe6a8;text-shadow:0 0 10px rgba(243,190,90,.4)}
+.roomcode .btn{margin-left:auto}
+.lrow{display:flex;align-items:center;gap:10px;padding:9px 4px;border-bottom:1px solid rgba(233,196,122,.09);font-size:16px}
+.lrow .dot{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.15);flex:none}
+.lrow.empty{color:#8f897f}
+.badge.off{background:rgba(200,60,40,.25)!important;color:#ffb3a0!important}
+.sheet-lobby .cnt .btn small{display:none}
+.sheet-lobby .label{margin-top:12px}
+html body .sheet-start .st-btns #sMp{grid-column:1/-1}
+html.phone .mpgrid,html.phone .lgrid{gap:16px}
+html.phone .roomcode b{font-size:24px}
+html.phone .lrow{padding:6px 4px;font-size:14px}
+html.phone .tin{padding:8px 10px;margin:4px 0 8px}
+
+html body .setpanel .msep+.mi{border-top:1px solid rgba(233,196,122,.09)!important}
+html:not(.phone) body .sheet.sheet-start.sheet-start{padding-top:64px!important;padding-bottom:44px!important;min-height:min(640px,calc(100dvh - 60px))}
+html.phone body .sheet.sheet-start.sheet-start{padding-top:34px!important}
+
+.colrow{display:flex;align-items:center;gap:18px;margin:6px 0 18px}
+.colrow .label{margin:0!important}
+.colrow .swatches{margin:0}
+html.phone body .sheet.sheet-start .colrow{margin:0 0 10px}
+html.phone body .sheet.sheet-start #cnt.cnt{margin-bottom:12px!important}
+html.phone body .sheet.sheet-start #dif.cnt{margin-bottom:16px!important}
+html.phone body .sheet.sheet-start .st-btns.st-btns{display:flex!important;flex-wrap:wrap;gap:8px!important}
+html.phone body .sheet.sheet-start .st-btns #sTut{flex:1 1 100%}
+html.phone body .sheet.sheet-start .st-btns .btn:not(#sTut){flex:1 1 0;min-width:0;font-size:14px!important}
+html:not(.phone) body .sheet.sheet-start .st-btns.st-btns{display:flex!important;flex-wrap:wrap}
+html:not(.phone) body .sheet.sheet-start .st-btns #sTut{flex:1 1 100%}
+html:not(.phone) body .sheet.sheet-start .st-btns .btn:not(#sTut){flex:1 1 0;min-width:0}
 </style>
 
 
@@ -1014,6 +1060,7 @@ html.phone body .sheet .btn,html.phone body .stagebtns .tbtn{padding-bottom:3px!
       <div id="setMenu" class="setmenu" hidden><div class="setdim" id="setDim"></div><nav class="setpanel" role="menu" aria-label="설정"><div class="sethead"><span>설정</span><button class="setx" id="setX" aria-label="닫기"></button></div>
         <button id="newBtn" class="mi" role="menuitem">새 게임</button>
         <button id="rulesBtn" class="mi" role="menuitem">게임 방법</button>
+        <button id="leaveBtn" class="mi" role="menuitem" hidden>방 나가기</button>
         <button id="tipBtn" class="mi tg" role="menuitemcheckbox">툴팁</button>
         <button id="hintBtn" class="mi tg" role="menuitemcheckbox">힌트</button>
         <div class="msep"></div>
@@ -1027,7 +1074,7 @@ html.phone body .sheet .btn,html.phone body .stagebtns .tbtn{padding-bottom:3px!
 <main class="game">
   <section class="board-wrap">
     <div id="coach" class="coach"></div>
-    <div id="stage"><div id="maplbls"></div><div id="toast" class="toast" hidden></div><div class="dicebox" id="dicebox"></div><div class="turnplaque" id="turnbar"></div><div class="stagebtns" id="stagebtns"></div></div>
+    <div id="stage"><div id="maplbls"></div><div id="toast" class="toast" hidden></div><div id="mpNote" class="mpnote" hidden></div><div class="dicebox" id="dicebox"></div><div class="turnplaque" id="turnbar"></div><div class="stagebtns" id="stagebtns"></div></div>
     <div class="tray" id="tray">
       <div class="tray-hand"><div class="tray-h" id="handHead">내 자원카드 <span id="handCount"></span></div><div id="hand"></div></div>
       <div class="tray-dev"><div class="tray-h">발전 카드 <button class="qi" data-pop="all" aria-label="발전 카드 종류 보기" data-tip="발전 카드 종류 보기">?</button></div><div id="devs"></div></div>
@@ -1100,7 +1147,7 @@ function log(p,t,k,ex){S.logSeq=(S.logSeq||0)+1;S.log.push({p,t,k:k||'',ex,seq:S
 const NICK_A=['보라색','침착한','민트빛','자유로운','주황빛','졸린','용감한','수줍은','바쁜','느긋한','반짝이는','배고픈','엉뚱한','다정한','꼼꼼한','씩씩한','고요한','신난','하늘색','용감한'].filter((v,i,a)=>a.indexOf(v)===i);
 const NICK_B=['감자','문어','고래','수달','펭귄','부엉이','두더지','고양이','너구리','해달','거북','다람쥐','갈매기','여우','토끼','양','곰','사슴','클로드','버섯'];
 function aiNames(k){const out=[],used=new Set();while(out.length<k){const a=NICK_A[rnd(NICK_A.length)],b=NICK_B[rnd(NICK_B.length)];if(used.has(a)||used.has(b))continue;used.add(a);used.add(b);out.push(a+' '+b);}return out;}
-function newGame(n,diff){n=n||4;
+function newGame(n,diff,cols){n=n||4;
   const tiles=shuffle([...Array(4).fill('wood'),...Array(3).fill('brick'),...Array(4).fill('wool'),...Array(4).fill('grain'),...Array(3).fill('ore'),'desert']);
   let hexes;
   for(let t=0;t<1000;t++){
@@ -1113,7 +1160,7 @@ function newGame(n,diff){n=n||4;
   const gaps=[3,3,4,3,3,4,3,3,4];let idx=rnd(30);const ports=[];
   ptypes.forEach((t,i)=>{ports.push({e:G.coast[idx%30],t});idx+=gaps[i];});
   S={board:{hexes,robber:hexes.findIndex(h=>h.res==='desert'),ports},
-    players:['나',...aiNames(n-1)].map((name,i)=>({name,color:PCOL[i],ai:i!==0,res:emptyRes(),dev:[],knights:0})),
+    players:['나',...aiNames(n-1)].map((name,i)=>({name,color:(cols||PCOL)[i],ai:i!==0,res:emptyRes(),dev:[],knights:0})),
     vb:Array(G.verts.length).fill(null),eo:Array(G.edges.length).fill(-1),
     bank:{wood:19,brick:19,wool:19,grain:19,ore:19},
     deck:shuffle([...Array(14).fill('knight'),...Array(5).fill('vp'),'roads','roads','plenty','plenty','monopoly','monopoly']),
@@ -1370,14 +1417,26 @@ const $=s=>document.querySelector(s);
 const KEY='windisle-save-v1';
 const ui={mode:null,speed:'보통',hints:true,tips:true,n:4,diff:'normal',gfx:'low',modal:null,shownRoll:0};
 const DELAY={'느림':1100,'보통':600,'빠름':180};
-try{const st=JSON.parse(localStorage.getItem('windisle-ui')||'{}');if(st.speed)ui.speed=st.speed;if(st.hints===false)ui.hints=false;if(st.tips===false)ui.tips=false;if(st.n)ui.n=st.n;if(st.diff)ui.diff=st.diff;if(st.gfx)ui.gfx=st.gfx;}catch(e){}
-function saveUi(){try{localStorage.setItem('windisle-ui',JSON.stringify({speed:ui.speed,hints:ui.hints,tips:ui.tips,n:ui.n,diff:ui.diff,gfx:ui.gfx}));}catch(e){}}
+try{const st=JSON.parse(localStorage.getItem('windisle-ui')||'{}');if(st.speed)ui.speed=st.speed;if(st.hints===false)ui.hints=false;if(st.tips===false)ui.tips=false;if(st.n)ui.n=st.n;if(st.diff)ui.diff=st.diff;if(st.gfx)ui.gfx=st.gfx;if(st.color)ui.color=st.color;if(st.nick)ui.nick=st.nick;}catch(e){}
+function saveUi(){try{localStorage.setItem('windisle-ui',JSON.stringify({speed:ui.speed,hints:ui.hints,tips:ui.tips,n:ui.n,diff:ui.diff,gfx:ui.gfx,color:ui.color,nick:ui.nick}));}catch(e){}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 function loadSave(){try{const s=JSON.parse(localStorage.getItem(KEY)||'null');return s&&s.phase&&s.phase!=='over'?s:null;}catch(e){return null;}}
 
 let aiTimer=null;
-function update(){checkWin();save();render();kick();}
-function kick(){clearTimeout(aiTimer);const a=actor();if(a===null||!S.players[a].ai||ui.modal==='start')return;
+const ACTS={settle:(p,v)=>placeSettlement(p,v),city:(p,v)=>placeCity(p,v),road:(p,e)=>placeRoad(p,e),freeRoad:(p,e)=>freeRoad(p,e),
+ robber:(p,h)=>moveRobber(p,h),roll:p=>roll(p),dev:p=>buyDev(p),end:p=>endTurn(),knight:p=>useKnight(p),roads:p=>useRoads(p),
+ plenty:(p,a,b)=>plenty(p,a,b),mono:(p,r)=>monopoly(p,r),bank:(p,g,t)=>bankTrade(p,g,t),
+ discard:(p,sel)=>{discard(p,sel);nextDiscard();},steal:(p,q)=>{steal(p,q);S.pend=null;},
+ offer:(p,g,t)=>proposeOffer(p,g,t),respond:(p,y)=>respondOffer(p,y),accept:(p,q)=>acceptOffer(p,q),cancel:p=>cancelOffer()};
+function validAct(p,name){if(!S||S.phase==='over'||!S.players[p])return false;
+  if(name==='discard')return !!(S.pend&&S.pend.k==='discard'&&S.pend.p===p);
+  if(name==='respond')return !!(S.offer&&S.offer.to[p]);
+  if(name==='accept'||name==='cancel')return !!(S.offer&&S.offer.from===p);
+  return S.cur===p;}
+function isClient(){return !!(S&&S.mp&&window.NET&&NET.on&&!NET.isHost);}
+function act(name,...args){if(isClient()){NET.send(name,args);return;}if(!validAct(ME,name))return;ACTS[name](ME,...args);update();}
+function update(){if(isClient()){render();return;}checkWin();if(!S.mp)save();render();kick();if(S.mp&&window.NET&&NET.on)NET.publish();}
+function kick(){clearTimeout(aiTimer);if(isClient())return;const a=actor();if(a===null||!S.players[a].ai||['start','lobby','mp'].includes(ui.modal))return;
   aiTimer=setTimeout(()=>{if(actor()===a){try{aiStep(a);}catch(err){console.error(err);if(S.phase==='main'&&S.cur===a&&S.rolled&&!S.pend)endTurn();}update();}},DELAY[ui.speed]);}
 
 const icon=(k,cls)=>(typeof RESICON!=='undefined'&&RESICON[k])?`<img class="ricon ${cls||''}" src="${RESICON[k]}" alt="">`:`<svg class="${cls||''}" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-${k}"/></svg>`;
@@ -1408,7 +1467,8 @@ function makeNoise(seed,per){const P=new Uint8Array(512);const r=seeded(seed);co
     return (h(xi,yi)*(1-u)+h(xi+1,yi)*u)*(1-v)+(h(xi,yi+1)*(1-u)+h(xi+1,yi+1)*u)*v;};}
 function fbm(n,x,y,o,per){let s=0,a=.5,f=1,t=0;for(let i=0;i<o;i++){s+=a*n(x*f,y*f,per?per*f:0);t+=a;a*=.5;f*=2;}return s/t;}
 const mix=(a,b,t)=>a.map((v,i)=>v+(b[i]-v)*t);
-function PM(i){return M(PCOL3[i],{emissive:PCOL3[i],emissiveIntensity:.24,roughness:.55,toneMapped:false});}
+function pc3(i){const c=S&&S.players[i]&&S.players[i].color;return c?parseInt(c.slice(1),16):PCOL3[i];}
+function PM(i){return M(pc3(i),{emissive:pc3(i),emissiveIntensity:.24,roughness:.55,toneMapped:false});}
 function initGeo(){
   GEO.box=new THREE.BoxGeometry(1,1,1);GEO.cyl=new THREE.CylinderGeometry(1,1,1,8);GEO.cyl6=new THREE.CylinderGeometry(1,1,1,6);GEO.cyl16=new THREE.CylinderGeometry(1,1,1,16);
   GEO.cone=new THREE.ConeGeometry(1,1,7);GEO.cone8=new THREE.ConeGeometry(1,1,8);GEO.sph=new THREE.SphereGeometry(1,10,8);GEO.ico=new THREE.IcosahedronGeometry(1,0);
@@ -1597,7 +1657,7 @@ const PTC={},PIMG={};function preloadP(){for(const k in PTEX)if(!PIMG[k])PIMG[k]
 function ptex(key,rx,ry,ox,oy){const k=[key,rx,ry,ox||0,oy||0].join(':');if(PTC[k])return PTC[k];preloadP();const im=PIMG[key];const t=new THREE.Texture(im);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rx,ry);t.offset.set(ox||0,oy||0);t.anisotropy=8;
   if(im.complete&&im.naturalWidth)t.needsUpdate=true;else im.addEventListener('load',()=>{t.needsUpdate=true;});return PTC[k]=t;}
 const PMC={};function tmat(key,col,rx,ry,o){const k=[key,col,rx,ry,JSON.stringify(o||{})].join('|');if(PMC[k])return PMC[k];return PMC[k]=new THREE.MeshStandardMaterial(Object.assign({map:ptex(key,rx||1,ry||1),color:col===undefined?0xffffff:col,roughness:.9,envMapIntensity:.4},o||{}));}
-function pmatRoof(o,rx,ry){const c=new THREE.Color(PCOL3[o]).lerp(new THREE.Color(0x3a2a20),.12);return tmat('roof',c.getHex(),rx,ry,{emissive:PCOL3[o],emissiveIntensity:.16,roughness:.8});}
+function pmatRoof(o,rx,ry){const c=new THREE.Color(pc3(o)).lerp(new THREE.Color(0x3a2a20),.12);return tmat('roof',c.getHex(),rx,ry,{emissive:pc3(o),emissiveIntensity:.16,roughness:.8});}
 let PHU=null;
 function phUniforms(){if(PHU)return PHU;PHU={};const ld=new THREE.TextureLoader(TEXMGR);
   for(const k in PHTEX){const t=ld.load(PHTEX[k]);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=8;PHU[k]={value:t};}return PHU;}
@@ -1743,7 +1803,7 @@ const ease=t=>{t=Math.min(1,Math.max(0,t));const c=1.7;return 1+(c+1)*Math.pow(t
 function roadPiece(o,len){const k=new THREE.Group();
   k.add(part('box',0x16120e,[.2,.02,len+.02],[0,.01,0],{noShadow:true}));
   k.add(part('box',tmat('cobble',0xd8d0c0,1,len*5),[.12,.03,len],[0,.02,0]));
-  for(const sx of [-1,1])k.add(part('box',tmat('plank',PCOL3[o],.3,len*3,{emissive:PCOL3[o],emissiveIntensity:.32}),[.04,.05,len],[sx*.08,.026,0]));
+  for(const sx of [-1,1])k.add(part('box',tmat('plank',pc3(o),.3,len*3,{emissive:pc3(o),emissiveIntensity:.32}),[.04,.05,len],[sx*.08,.026,0]));
   k.add(part('cyl',tmat('plank',0x8a6a48,.2,1),[.007,.2,.007],[.08,.15,0]));k.add(part('box',PM(o),[.004,.05,.08],[.08,.22,.04],{noShadow:true}));
   return k;}
 function rhouse(g,x,z,w,d,h,o,ry,sc){const k=new THREE.Group();k.position.set(x,0,z);k.rotation.y=ry||0;
@@ -1766,7 +1826,7 @@ const DIEFACE512="assets/ui/dieface.webp";let DIEFACEIMG=null;{const im=new Imag
 const CARDFRAME="assets/cards/frame.webp";
 const SCANART={"wood": "assets/cards/wood.webp", "wool": "assets/cards/wool.webp", "brick": "assets/cards/brick.webp", "ore": "assets/cards/ore.webp", "grain": "assets/cards/grain.webp", "knight": "assets/cards/knight.webp", "roads": "assets/cards/roads.webp", "plenty": "assets/cards/plenty.webp", "monopoly": "assets/cards/monopoly.webp", "vp": "assets/cards/vp.webp"};
 let FRAMEIMG=null;{let left=Object.keys(SCANART).length+1;const done=()=>{if(--left===0)setTimeout(()=>{try{buildCards();if(S)render();}catch(e){}},0);};{const im=new Image();im.onload=()=>{FRAMEIMG=im;done();};im.src=CARDFRAME;}for(const k in SCANART){const im=new Image();im.onload=()=>{ARTIMG[k]=im;done();};im.src=SCANART[k];}}
-function basePlate(k,o,r){k.add(part('cyl16',o===0?(basePlate.m0||(basePlate.m0=M(0xff2a1a,{emissive:0xff3020,emissiveIntensity:.75,roughness:.5,toneMapped:false}))):PM(o),[r+.03,.02,r+.03],[0,.01,0],{noShadow:true}));k.add(part('cyl16',tmat('slate',0x9a9488,1.5,.2),[r,.034,r],[0,.017,0]));}
+function basePlate(k,o,r){k.add(part('cyl16',pc3(o)===0xff2a1a?(basePlate.m0||(basePlate.m0=M(0xff2a1a,{emissive:0xff3020,emissiveIntensity:.75,roughness:.5,toneMapped:false}))):PM(o),[r+.03,.02,r+.03],[0,.01,0],{noShadow:true}));k.add(part('cyl16',tmat('slate',0x9a9488,1.5,.2),[r,.034,r],[0,.017,0]));}
 function settlementMesh(o,ry){const k=new THREE.Group();basePlate(k,o,.17);const h=new THREE.Group();h.rotation.y=ry;h.position.y=.03;k.add(h);
   rhouse(h,-.02,-.01,.13,.1,.15,o,0);rhouse(h,.1,.06,.075,.065,.095,o,Math.PI/2);
   h.add(part('box',tmat('slate',0xbfb8ac,.3,.6),[.024,.07,.024],[.03,.21,-.03]));
@@ -1807,9 +1867,9 @@ function sync3D(){
   const lastSum=S.dice&&S.phase==='main'&&S.rolled?S.dice[0]+S.dice[1]:0;
   W.tokens.forEach((sp,i)=>{if(!sp)return;const n=S.board.hexes[i].num;sp.material.map=tokenTex(n,n===lastSum);sp.material.opacity=i===S.board.robber?.4:1;sp.material.needsUpdate=true;});
   const now=performance.now();const first=W.prev===null;W.pieces=W.pieces||new Map();const want=new Map();
-  S.eo.forEach((o,e)=>{if(o>=0)want.set('e'+e+':'+o,()=>{const E=G.edges[e],A=vc(E.a),B=vc(E.b);const dx=B.x-A.x,dz=B.z-A.z,L=Math.hypot(dx,dz);
+  S.eo.forEach((o,e)=>{if(o>=0)want.set('e'+e+':'+o+S.players[o].color,()=>{const E=G.edges[e],A=vc(E.a),B=vc(E.b);const dx=B.x-A.x,dz=B.z-A.z,L=Math.hypot(dx,dz);
     const k=roadPiece(o,L*.72);mergeStatic(k,true);k.position.set((A.x+B.x)/2,0,(A.z+B.z)/2);k.rotation.y=Math.atan2(dx,dz);k.userData.info={t:'road',e};return k;});});
-  S.vb.forEach((b,v)=>{if(b)want.set('v'+v+':'+b.o+':'+(b.c?1:0),()=>{const V=vc(v);const ry=Math.atan2(V.x,V.z)+Math.PI;
+  S.vb.forEach((b,v)=>{if(b)want.set('v'+v+':'+b.o+S.players[b.o].color+':'+(b.c?1:0),()=>{const V=vc(v);const ry=Math.atan2(V.x,V.z)+Math.PI;
     const inner=b.c?cityMesh(b.o,ry):settlementMesh(b.o,ry);inner.scale.setScalar(b.c?1.9:2.08);const k=new THREE.Group();k.add(inner);mergeStatic(k,true);k.position.set(V.x,0,V.z);k.userData.info={t:'bld',v};return k;});});
   for(const [key,obj] of W.pieces){if(!want.has(key)){W.dynG.remove(obj);W.pieces.delete(key);W.anim.delete(obj);}}
   for(const [key,mk] of want){if(W.pieces.has(key))continue;const k=mk();if(!first){k.userData.born=now;W.anim.add(k);}W.pieces.set(key,k);W.dynG.add(k);}
@@ -2000,7 +2060,7 @@ function render(){
     ${bb('dev','발전 카드',`덱 ${S.deck.length}장`,my&&S.rolled&&canBuild(ME,'dev'))}
     </div>`;
   $('#players').innerHTML=S.players.map((p,i)=>`<div class="pl${i===S.cur&&S.phase!=='over'?' cur':''}"><span class="dot" style="background:${p.color}"></span>
-    <span class="nm">${p.name}${p.ai?' · AI':''} ${S.lr.o===i?'<span class="badge" data-tip="최장 교역로 +2점: 끊기지 않은 도로가 5칸 이상이면서 가장 긴 사람">최장 교역로</span>':''} ${S.la.o===i?'<span class="badge" data-tip="최강 기사단 +2점: 기사 카드를 3장 이상, 가장 많이 쓴 사람">최강 기사단</span>':''}</span>
+    <span class="nm">${p.name}${p.ai?(p.left?' · AI(나감)':' · AI'):''}${S.mp&&!p.ai&&window.NET&&NET.offline&&NET.offline(p.uid)?' <span class="badge off">연결 끊김</span>':''} ${S.lr.o===i?'<span class="badge" data-tip="최장 교역로 +2점: 끊기지 않은 도로가 5칸 이상이면서 가장 긴 사람">최장 교역로</span>':''} ${S.la.o===i?'<span class="badge" data-tip="최강 기사단 +2점: 기사 카드를 3장 이상, 가장 많이 쓴 사람">최강 기사단</span>':''}</span>
     <span class="vp" data-tip="${i===ME?'내 점수(승점 카드 포함). 10점이 되면 승리!':'공개된 점수예요. 숨겨진 승점 카드는 빠져 있어요.'}">${vp(i,i===ME)}</span>
     <span class="meta"><span data-tip="손에 든 자원 카드 수. 8장 이상이면 7이 나올 때 절반을 버려요.">자원 ${sumRes(p.res)}</span><span data-tip="가진 발전 카드 수. 종류는 본인만 알아요.">발전 ${p.dev.length}</span><span data-tip="지금까지 사용한 기사 카드 수. 3장 이상이며 가장 많으면 최강 기사단 2점.">기사 ${p.knights}</span><span data-tip="가장 길게 이어진 도로 길이. 5 이상이며 가장 길면 최장 교역로 2점.">도로 ${S.rl[i]||0}</span></span></div></nav>`).join('');
   $('#log').innerHTML=S.log.slice(PH.on?-4:0).reverse().map(e=>e.k==='turn'?`<div class="turn">${e.p>=0?pname(e.p):''}${e.p>=0&&e.t.startsWith('의')?'':' '}${e.t}</div>`:`<div class="${e.k}">${e.p>=0?pname(e.p)+' ':''}${e.t}</div>`).join('');
@@ -2038,7 +2098,7 @@ function infoText(f){
   return null;}
 
 // ---------- modals ----------
-function openModal(key,html){ui.modal=key;$('#sheet').className='sheet sheet-'+key;$('#sheet').innerHTML=html;$('#modal').hidden=false;placeCrest();}
+function openModal(key,html){ui.modal=key;$('#sheet').className='sheet sheet-'+key;$('#sheet').innerHTML=html;$('#modal').hidden=false;placeCrest();requestAnimationFrame(placeCrest);setTimeout(placeCrest,120);setTimeout(placeCrest,400);}
 function placeCrest(){const sh=$('#sheet'),c=$('#mcrest');if(!sh||!c||$('#modal').hidden)return;const r=sh.getBoundingClientRect(),o=$('#modal').getBoundingClientRect(),k=PH.on?PH.k:1;c.style.left=((r.left-o.left+r.width/2)/k)+'px';c.style.top=((r.top-o.top)/k)+'px';}
 addEventListener('resize',()=>setTimeout(placeCrest,80));
 function closeModal(){ui.modal=null;$('#modal').hidden=true;$('#sheet').innerHTML='';}
@@ -2051,14 +2111,14 @@ function showOffer(){const o=S.offer;const me=S.players[ME];const lack=RES.some(
   <div class="tinfo"><div><div class="label">내가 받을 것</div><div class="cost">${chips(o.give)}</div></div><div><div class="label">내가 줄 것</div><div class="cost">${chips(o.get)}</div></div></div>
   ${lack?'<p class="muted" style="margin-top:10px">줄 카드가 부족해서 수락할 수 없어요.</p>':''}
   <div class="row"><button class="btn" id="oNo">거절</button><button class="btn sub" id="oYes" ${lack?'disabled':''}>수락</button></div>`);
-  $('#oNo').onclick=()=>{respondOffer(ME,false);closeModal();update();};$('#oYes').onclick=()=>{respondOffer(ME,true);closeModal();update();};}
+  $('#oNo').onclick=()=>{closeModal();act('respond',false);};$('#oYes').onclick=()=>{closeModal();act('respond',true);};}
 function fmtCd(ms){return Math.max(0,Math.ceil(ms/1000))+'초';}
 setInterval(()=>{if(!S)return;const now=Date.now();
   if(S.mp&&(!window.NET||NET.isHost)){if(mpTick(now))update();}
   document.querySelectorAll('[data-cd]').forEach(e=>{const k=e.dataset.cd;const t=k==='offer'?(S.offer&&S.offer.t):S.deadline;e.textContent=t?fmtCd(t-now):'';});
 },500);
 function forcedModals(){
-  if(['start','rules','confirm','closed-over','trade','plenty','mono'].includes(ui.modal))return;
+  if(['start','rules','confirm','closed-over','trade','plenty','mono','lobby','mp'].includes(ui.modal))return;
   if(S.phase==='over'){if(ui.modal!=='over')showOver();return;}
   if(S.pend&&S.pend.k==='discard'&&S.pend.p===ME){if(ui.modal!=='discard')showDiscard();return;}
   if(S.pend&&S.pend.k==='steal'&&S.cur===ME){if(ui.modal!=='steal')showSteal();return;}
@@ -2078,17 +2138,17 @@ function showDiscard(){const n=S.pend.n;const sel=emptyRes();const me=S.players[
     const mw=Math.max(cw*2,$('#dIn').clientWidth-4);$('#dOut').innerHTML=k?row(out.map(cd),cw,mw,'dpick'):`<div class="dempty">아래 내 자원카드에서 카드를 눌러 주세요</div>`;$('#dIn').innerHTML=row(left.map(cd),cw,mw,'dpick'+(full?' dfull':''));
     $('#dIn').onclick=e=>{const t=e.target.closest('[data-r]');if(!t||sumRes(sel)>=n)return;sel[t.dataset.r]++;draw();};
     $('#dOut').onclick=e=>{const t=e.target.closest('[data-r]');if(!t)return;sel[t.dataset.r]--;draw();};
-    $('#dOk').onclick=()=>{discard(ME,sel);nextDiscard();closeModal();update();};};
+    $('#dOk').onclick=()=>{closeModal();act('discard',sel);};};
   draw();}
 function showSteal(){openModal('steal',`<h3>누구에게서 빼앗을까요?</h3><p>도적이 앉은 땅에 건물이 있는 상대 중 한 명을 고르세요. 카드 1장을 무작위로 가져와요.</p>
   <div class="row" style="justify-content:flex-start">${S.pend.v.map(q=>`<button class="btn" data-q="${q}" style="border-color:${S.players[q].color}">${S.players[q].name} (카드 ${sumRes(S.players[q].res)}장)</button>`).join('')}</div>`);
-  $('#sheet').querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{steal(ME,+b.dataset.q);S.pend=null;closeModal();update();});}
+  $('#sheet').querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{closeModal();act('steal',+b.dataset.q);});}
 function showOver(){const order=S.players.map((_,i)=>i).sort((a,b)=>vp(b,true)-vp(a,true));
   openModal('over',`<h3>${S.winner===ME?'승리했어요!':S.players[S.winner].name+'의 승리'}</h3><p>${S.turn}바퀴 만에 게임이 끝났어요.</p>
   <div class="scores">${order.map(i=>`<div><span class="dot" style="width:12px;height:12px;border-radius:3px;background:${S.players[i].color}"></span>${S.players[i].name}${S.players[i].dev.some(d=>d.t==='vp')?` <span class="empty">(승점 카드 ${S.players[i].dev.filter(d=>d.t==='vp').length}장 포함)</span>`:''}<b>${vp(i,true)}점</b></div>`).join('')}</div>
   <div class="row"><button class="btn" id="oClose">보드 보기</button><button class="btn primary" id="oNew">새 게임</button></div>`);
   $('#oClose').onclick=()=>{ui.modal='closed-over';$('#modal').hidden=true;};
-  $('#oNew').onclick=()=>{closeModal();startNew();};}
+  $('#oNew').onclick=()=>{if(window.NET&&NET.on){if(NET.isHost)MP.ref('meta/status').set('lobby');else MP.toast('방장이 새 게임을 시작할 수 있어요.');return;}closeModal();startNew();};}
 function showTrade(tab){tab=tab||'bank';const me=S.players[ME];const rat=ratios(ME);
   const st={give:null,get:null,pg:emptyRes(),pr:emptyRes(),resp:null};if(myOffer()){Object.assign(st.pg,S.offer.give);Object.assign(st.pr,S.offer.get);if(!tab||tab==='bank')tab=arguments[0]||'player';}
   const draw=()=>{
@@ -2102,22 +2162,22 @@ function showTrade(tab){tab=tab||'bank';const me=S.players[ME];const rat=ratios(
       <div class="row"><button class="btn primary" id="tp" ${sumRes(st.pg)||sumRes(st.pr)?'':'disabled'}>${hasHumans()?'제안하기':'AI들에게 제안'}</button></div>
       ${myOffer()?`<div class="resp">${Object.keys(S.offer.to).map(q=>{const r=S.offer.to[q];return `<div class="r"><b style="color:${S.players[q].color}">${S.players[q].name}</b><span class="${r.s==='yes'?'ok':r.s==='no'?'no':'wait'}">${r.s==='wait'?`답변 대기 · <i data-cd="offer"></i>`:r.why}</span>${r.s==='yes'?`<button class="btn sub" data-deal="${q}">거래</button>`:''}</div>`;}).join('')}</div>`:''}`;}
     openModal('trade',`<button class="mclose" id="tx" aria-label="닫기" title="닫기"></button><h3>교환</h3><div class="tabs"><button class="btn${tab==='bank'?' active':''}" id="t1">은행 · 항구</button><button class="btn${tab==='player'?' active':''}" id="t2">${hasHumans()?'다른 플레이어':'AI 플레이어'}</button></div>${body}`);
-    $('#t1').onclick=()=>{tab='bank';draw();};$('#t2').onclick=()=>{tab='player';draw();};$('#tx').onclick=()=>{if(myOffer())cancelOffer();ui.tradeRedraw=null;closeModal();update();};
+    $('#t1').onclick=()=>{tab='bank';draw();};$('#t2').onclick=()=>{tab='player';draw();};$('#tx').onclick=()=>{ui.tradeRedraw=null;closeModal();if(myOffer())act('cancel');else update();};
     if(tab==='bank'){$('#tg').onclick=e=>{const t=e.target.closest('button');if(!t)return;st.give=t.dataset.k;if(st.get===st.give)st.get=null;draw();};
       $('#tr').onclick=e=>{const t=e.target.closest('button');if(!t)return;st.get=t.dataset.k;draw();};
-      $('#tb').onclick=()=>{bankTrade(ME,st.give,st.get);st.give=null;st.get=null;save();render();showTrade('bank');};}
-    else{const h=(id,o)=>{$('#'+id).onclick=e=>{const t=e.target.closest('button');if(!t)return;o[t.dataset.k]+= +t.dataset.d;if(myOffer())cancelOffer();draw();};};h('pg',st.pg);h('pr',st.pr);
-      $('#tp').onclick=()=>{proposeOffer(ME,st.pg,st.pr);update();draw();};
-      $('#sheet').querySelectorAll('[data-deal]').forEach(b=>b.onclick=()=>{if(acceptOffer(ME,+b.dataset.deal)){closeModal();update();}else draw();});}
+      $('#tb').onclick=()=>{act('bank',st.give,st.get);st.give=null;st.get=null;showTrade('bank');};}
+    else{const h=(id,o)=>{$('#'+id).onclick=e=>{const t=e.target.closest('button');if(!t)return;o[t.dataset.k]+= +t.dataset.d;if(myOffer())act('cancel');draw();};};h('pg',st.pg);h('pr',st.pr);
+      $('#tp').onclick=()=>{act('offer',{...st.pg},{...st.pr});draw();};
+      $('#sheet').querySelectorAll('[data-deal]').forEach(b=>b.onclick=()=>{ui.tradeRedraw=null;closeModal();act('accept',+b.dataset.deal);});}
     ui.tradeRedraw=draw;
   };draw();}
 function showPlenty(){const sel=emptyRes();const draw=()=>{openModal('plenty',`<h3>풍년</h3><p>은행에서 원하는 자원 2장을 고르세요. 같은 자원 2장도 돼요.</p>
   ${stepper('pl',sel,k=>Math.min(S.bank[k],sel[k]+(2-sumRes(sel))))}<div class="row"><button class="btn" id="px">취소</button><button class="btn primary" id="pk" ${sumRes(sel)===2?'':'disabled'}>받기</button></div>`);
   $('#pl').onclick=e=>{const t=e.target.closest('button');if(!t)return;sel[t.dataset.k]+= +t.dataset.d;draw();};$('#px').onclick=closeModal;
-  $('#pk').onclick=()=>{const l=[];RES.forEach(k=>{for(let i=0;i<sel[k];i++)l.push(k);});plenty(ME,l[0],l[1]);closeModal();update();};};draw();}
+  $('#pk').onclick=()=>{const l=[];RES.forEach(k=>{for(let i=0;i<sel[k];i++)l.push(k);});closeModal();act('plenty',l[0],l[1]);};};draw();}
 function showMonopoly(){openModal('mono',`<h3>독점</h3><p>자원 하나를 고르면 상대 3명이 가진 그 자원을 전부 가져와요. 상대 손패는 보이지 않으니 기록을 보고 추측해 보세요.</p>
   <div class="pick" id="mp">${RES.map(k=>`<button class="bg-${k}" data-k="${k}">${icon(k)}${RN[k]}</button>`).join('')}</div><div class="row"><button class="btn" id="mx">취소</button></div>`);
-  $('#mx').onclick=closeModal;$('#mp').onclick=e=>{const t=e.target.closest('button');if(!t)return;monopoly(ME,t.dataset.k);closeModal();update();};}
+  $('#mx').onclick=closeModal;$('#mp').onclick=e=>{const t=e.target.closest('button');if(!t)return;closeModal();act('mono',t.dataset.k);};}
 
 // ---------- rules / tutorial ----------
 const DG={wood:'#3a7232',brick:'#a65a36',wool:'#76a845',grain:'#c49b36',ore:'#73777f',desert:'#c8ad78'};
@@ -2181,8 +2241,9 @@ function showRules(i,after){i=i||0;
 
 const DIFF=[['easy','쉬움','AI가 자주 쉬고 거래에 너그러워요'],['normal','보통','기본 전략으로 플레이해요'],['hard','어려움','선두를 견제하고 자원 보너스를 받아요']];
 function countPick(){return `<div class="label" style="margin-top:8px">인원 (최소 2 · 최대 4)</div><div class="cnt" id="cnt">${[2,3,4].map(n=>`<button class="btn${ui.n===n?' active':''}" data-n="${n}">${n}인<small>나 + AI ${n-1}명</small></button>`).join('')}</div>
+  <div class="colrow"><div class="label">내 말 색상</div><div class="swatches" id="col">${PCOL.map(c=>`<button class="sw${(ui.color||PCOL[0])===c?' on':''}" data-c="${c}" style="--c:${c}" aria-label="색상"></button>`).join('')}</div></div>
   <div class="label" style="margin-top:8px">난이도</div><div class="cnt" id="dif">${DIFF.map(([k,l,d])=>`<button class="btn${ui.diff===k?' active':''}" data-d="${k}">${l}</button>`).join('')}</div>`;}
-function bindCount(){$('#cnt').onclick=e=>{const b=e.target.closest('[data-n]');if(!b)return;ui.n=+b.dataset.n;saveUi();$('#cnt').querySelectorAll('[data-n]').forEach(x=>x.classList.toggle('active',+x.dataset.n===ui.n));};
+function bindCount(){if($('#col'))$('#col').onclick=e=>{const b=e.target.closest('[data-c]');if(!b)return;ui.color=b.dataset.c;saveUi();$('#col').querySelectorAll('[data-c]').forEach(x=>x.classList.toggle('on',x.dataset.c===ui.color));};$('#cnt').onclick=e=>{const b=e.target.closest('[data-n]');if(!b)return;ui.n=+b.dataset.n;saveUi();$('#cnt').querySelectorAll('[data-n]').forEach(x=>x.classList.toggle('active',+x.dataset.n===ui.n));};
   $('#dif').onclick=e=>{const b=e.target.closest('[data-d]');if(!b)return;ui.diff=b.dataset.d;saveUi();$('#dif').querySelectorAll('[data-d]').forEach(x=>x.classList.toggle('active',x.dataset.d===ui.diff));};}
 function migrate(){if(!S.n){S.n=S.players.length;S.order=[...Array(S.n).keys(),...[...Array(S.n).keys()].reverse()];}if(S.logSeq===undefined)S.logSeq=0;if(!S.diff)S.diff='normal';}
 function showStart(){const saved=loadSave();
@@ -2192,32 +2253,35 @@ function showStart(){const saved=loadSave();
    <button class="btn primary" id="sTut">처음이에요: 게임 방법 보고 시작</button>
    <button class="btn" id="sNew">바로 새 게임</button>
    ${saved?`<button class="btn" id="sCont">이어하기 (${saved.players.length}인)</button>`:''}
+   <button class="btn sub" id="sMp">친구와 하기</button>
   </div></div>`);
   bindCount();
   $('#sTut').onclick=()=>{startNew(true);};
   $('#sNew').onclick=()=>{closeModal();startNew();};
+  $('#sMp').onclick=()=>MP.openEntry();if(!(window.MP_ENABLED||/[?&]mp=1/.test(location.search)))$('#sMp').hidden=true;
   if(saved)$('#sCont').onclick=()=>{S=saved;migrate();ui.shownRoll=S.rollId;ui.seenSeq=undefined;closeModal();ui.mode=null;update();};}
-function startNew(withRules){newGame(ui.n,ui.diff);ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;closeModal();if(withRules)showRules(0,()=>update());else update();}
+function myCols(){const c=PCOL.includes(ui.color)?ui.color:PCOL[0];return [c,...PCOL.filter(x=>x!==c)];}
+function startNew(withRules){newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;closeModal();if(withRules)showRules(0,()=>update());else update();}
 
 // ---------- events ----------
 function onPick(pk){
   if(ui.modal&&ui.modal!=='closed-over')return;const T=targets();if(!T.kind)return;
   if(pk.v!==undefined){const v=pk.v;if(!T.v.includes(v))return;
-    if(T.kind==='setupS'||T.kind==='settlement')placeSettlement(ME,v);else if(T.kind==='city')placeCity(ME,v);ui.mode=null;}
+    ui.mode=null;if(T.kind==='setupS'||T.kind==='settlement')act('settle',v);else if(T.kind==='city')act('city',v);return;}
   else if(pk.e!==undefined){const e=pk.e;if(!T.e.includes(e))return;
-    if(T.kind==='freeRoad')freeRoad(ME,e);else placeRoad(ME,e);ui.mode=null;}
-  else if(pk.h!==undefined){if(T.kind!=='robber'||!T.h.includes(pk.h))return;moveRobber(ME,pk.h);}
+    ui.mode=null;act(T.kind==='freeRoad'?'freeRoad':'road',e);return;}
+  else if(pk.h!==undefined){if(T.kind!=='robber'||!T.h.includes(pk.h))return;act('robber',pk.h);return;}
   else return;
   update();}
 document.addEventListener('click',ev=>{if(!ev.target.closest('#actions,#stagebtns'))return;const b=ev.target.closest('[data-act]');if(!b||b.disabled)return;const a=b.dataset.act;
-  if(a==='roll'){ui.mode=null;roll(0);}
+  if(a==='roll'){ui.mode=null;return act('roll');}
   else if(['road','settlement','city'].includes(a))ui.mode=ui.mode===a?null:a;
-  else if(a==='dev'){buyDev(ME);ui.mode=null;}
+  else if(a==='dev'){ui.mode=null;return act('dev');}
   else if(a==='trade'){ui.mode=null;showTrade('bank');return;}
-  else if(a==='end'){ui.mode=null;endTurn();}
+  else if(a==='end'){ui.mode=null;return act('end');}
   update();});
 document.addEventListener('click',ev=>{const b=ev.target.closest('[data-play]');if(!b||b.disabled)return;$('#pop').hidden=true;const t=b.dataset.play;ui.mode=null;
-  if(t==='knight')useKnight(ME);else if(t==='roads')useRoads(ME);else if(t==='plenty')return showPlenty();else if(t==='monopoly')return showMonopoly();
+  if(t==='knight')return act('knight');else if(t==='roads')return act('roads');else if(t==='plenty')return showPlenty();else if(t==='monopoly')return showMonopoly();
   update();});
 $('#modal').addEventListener('click',ev=>{if(ev.target.id==='modal'&&['trade','plenty','mono','rules'].includes(ui.modal)){closeModal();update();}});
 document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&['trade','plenty','mono','rules','confirm'].includes(ui.modal)){closeModal();update();}});
@@ -2227,7 +2291,7 @@ $('#speedSeg').onclick=e=>{const b=e.target.closest('[data-sp]');if(!b)return;ui
  sb.onclick=e=>{e.stopPropagation();sb.blur();hideTip();setOpen(sm.hidden);};
  $('#setDim').onclick=$('#setX').onclick=()=>setOpen(false);
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!sm.hidden)setOpen(false);});
- sm.addEventListener('click',e=>{const b=e.target.closest('#newBtn,#rulesBtn');if(b)setOpen(false);});}
+ sm.addEventListener('click',e=>{const b=e.target.closest('#newBtn,#rulesBtn,#leaveBtn');if(b)setOpen(false);});}
 const hintLabel=()=>{$('#hintBtn').setAttribute('aria-checked',ui.hints);$('#hintBtn').classList.toggle('active',ui.hints);};
 const gfxLabel=()=>{$('#gfxBtn').setAttribute('aria-checked',ui.gfx!=='low');$('#gfxBtn').classList.toggle('active',ui.gfx!=='low');$('#gfxBtn').dataset.tip='높음: 그림자 깊이, 빛 번짐, 원근 흐림, 색 보정을 켜요. 화면이 버벅이면 낮음으로 바꾸세요.';};
 $('#gfxBtn').onclick=()=>{ui.gfx=ui.gfx==='low'?'high':'low';saveUi();gfxLabel();invalidate(true);};gfxLabel();
@@ -2308,7 +2372,137 @@ try{document.fonts.load('800 40px Hahmlet','목재벽돌양모곡물광석기사
 const hot=window.claude?.hot;
 if(hot?.ready)hot.ready(boot);else boot(hot?.data??{});
 </script>
+<script id="mp">
+// ================= MULTIPLAYER (Firebase Realtime Database) =================
+const FB_CFG={apiKey:"AIzaSyDNN0_DWoBzcy2W4k59oa-kDRot-1h8VR0",authDomain:"hexisle-a4f78.firebaseapp.com",databaseURL:"https://hexisle-a4f78-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"hexisle-a4f78",storageBucket:"hexisle-a4f78.firebasestorage.app",messagingSenderId:"865054353768",appId:"1:865054353768:web:af2d3954f9fd067339cedd"};
+const FB_SDK=['app','auth','database'].map(n=>`https://www.gstatic.com/firebasejs/10.12.2/firebase-${n}-compat.js`);
+const RECONNECT_MS=60000,HOST_GRACE_MS=8000;
+const MP_ENABLED=/[?&]mp=1/.test(location.search)||/[?&]room=/.test(location.search)&&localStorage.getItem('hexisle-mp')==='1';
+window.NET={on:false,isHost:false,uid:null,room:null,members:{},meta:null,
+  offline(uid){const m=this.members[uid];return !!(m&&m.online===false);},
+  send(name,args){if(!this.room)return;MP.ref('actions').push({uid:this.uid,name,args:JSON.parse(JSON.stringify(args||[])),t:Date.now()});},
+  publish(){if(!this.on||!this.isHost||!S)return;if(S.log.length>80)S.log=S.log.slice(-80);const js=JSON.stringify(S);if(js===this._last)return;this._last=js;MP.ref('state').set(js);}};
+const MP={db:null,subs:[],offSince:{},
+  loadSDK(){if(window.firebase&&firebase.database)return Promise.resolve();
+    return FB_SDK.reduce((p,u)=>p.then(()=>new Promise((res,rej)=>{const s=document.createElement('script');s.src=u;s.onload=res;s.onerror=()=>rej(new Error('sdk'));document.head.appendChild(s);})),Promise.resolve());},
+  async init(){if(this.db)return;await this.loadSDK();if(!firebase.apps.length)firebase.initializeApp(FB_CFG);
+    const cred=await firebase.auth().signInAnonymously();NET.uid=cred.user.uid;this.db=firebase.database();},
+  ref(p){return this.db.ref('rooms/'+NET.room+(p?'/'+p:''));},
+  sub(r,ev,fn){r.on(ev,fn);this.subs.push(()=>r.off(ev,fn));},
+  unsubAll(){this.subs.forEach(f=>f());this.subs=[];},
+  nick(){return (ui.nick||'').trim();},
+  code(){const A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let c='';for(let i=0;i<5;i++)c+=A[Math.floor(Math.random()*A.length)];return c;},
+  err(msg){openModal('confirm',`<button class="mclose" id="mx2" aria-label="닫기"></button><h3>연결 문제</h3><p>${msg}</p><div class="row"><button class="btn sub" id="mOk">확인</button></div>`);$('#mOk').onclick=$('#mx2').onclick=()=>{closeModal();if(!S||NET.on)return;showStart();};},
+  // ---------- entry ----------
+  openEntry(code){const c=code||'';
+    openModal('mp',`<button class="mclose" id="mx" aria-label="닫기"></button><h3>친구와 하기</h3>
+     <div class="label">내 닉네임</div><input class="tin" id="nick" maxlength="10" placeholder="예: 육각왕" value="${(ui.nick||'').replace(/"/g,'')}">
+     <div class="mpgrid"><div><div class="label">새 방 만들기</div><p class="muted">방을 만들고 초대 링크를 친구에게 보내세요.</p><button class="btn sub" id="mCreate">방 만들기</button></div>
+     <div><div class="label">방 코드로 참가</div><input class="tin code" id="mCode" maxlength="5" placeholder="ABCDE" value="${c}"><button class="btn" id="mJoin">참가하기</button></div></div>
+     <p class="muted" id="mMsg"></p>`);
+    const nk=()=>{const v=$('#nick').value.trim();if(!v){$('#mMsg').textContent='닉네임을 입력해 주세요.';$('#nick').focus();return null;}ui.nick=v;saveUi();return v;};
+    $('#mx').onclick=()=>{closeModal();if(!S||!S.players)showStart();else update();};
+    $('#mCreate').onclick=()=>{if(nk())this.create();};
+    $('#mJoin').onclick=()=>{const cd=$('#mCode').value.trim().toUpperCase();if(!nk())return;if(cd.length<4){$('#mMsg').textContent='방 코드를 확인해 주세요.';return;}this.join(cd);};},
+  async create(){try{$('#mMsg')&&($('#mMsg').textContent='방을 만드는 중…');await this.init();
+      let code;for(let i=0;i<5;i++){code=this.code();const ex=await this.db.ref('rooms/'+code+'/meta').once('value');if(!ex.exists())break;}
+      NET.room=code;await this.ref('meta').set({host:NET.uid,status:'lobby',n:Math.max(2,ui.n||4),diff:ui.diff||'normal',created:firebase.database.ServerValue.TIMESTAMP});
+      await this.enter();}catch(e){console.error(e);this.err('방을 만들지 못했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.');}},
+  async join(code){try{$('#mMsg')&&($('#mMsg').textContent='방에 들어가는 중…');await this.init();
+      const m=(await this.db.ref('rooms/'+code+'/meta').once('value')).val();
+      if(!m)return this.err(`<b>${code}</b> 방을 찾을 수 없어요. 코드를 다시 확인해 주세요.`);
+      NET.room=code;
+      if(m.status!=='lobby'){const me=(await this.ref('members/'+NET.uid).once('value')).val();if(!me){NET.room=null;return this.err('이미 게임이 시작된 방이에요.');}}
+      else{const ms=(await this.ref('members').once('value')).val()||{};if(Object.keys(ms).length>=4&&!ms[NET.uid]){NET.room=null;return this.err('방이 가득 찼어요 (최대 4명).');}}
+      await this.enter();}catch(e){console.error(e);this.err('방에 들어가지 못했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.');}},
+  async enter(){const me=this.ref('members/'+NET.uid);
+    const cur=(await me.once('value')).val();
+    const ms=(await this.ref('members').once('value')).val()||{};
+    let color=cur&&cur.color;if(!color){const taken=Object.values(ms).map(x=>x.color);color=[ui.color,...PCOL].find(c=>c&&!taken.includes(c))||PCOL[0];}
+    await me.update({name:this.nick(),color,online:true,joined:cur&&cur.joined||firebase.database.ServerValue.TIMESTAMP});
+    me.child('online').onDisconnect().set(false);
+    this.sub(this.db.ref('.info/connected'),'value',sn=>{if(sn.val()===true){me.child('online').set(true);me.child('online').onDisconnect().set(false);}});
+    NET.on=true;clearTimeout(aiTimer);
+    try{history.replaceState(null,'',location.pathname+'?room='+NET.room);}catch(e){}
+    this.sub(this.ref('meta'),'value',sn=>{NET.meta=sn.val();if(!NET.meta)return this.gone();this.checkHost();if(NET.meta.status==='lobby')this.drawLobby();});
+    this.sub(this.ref('members'),'value',sn=>{NET.members=sn.val()||{};this.onMembers();if(NET.meta&&NET.meta.status==='lobby')this.drawLobby();});
+    this.sub(this.ref('state'),'value',sn=>{const js=sn.val();if(!js)return;if(NET.isHost&&js===NET._last)return;this.applyState(js);});
+    this.sub(this.ref('actions'),'child_added',sn=>{if(!NET.isHost)return;this.handleAction(sn.key,sn.val());});
+    $('#leaveBtn').hidden=false;$('#newBtn').hidden=true;},
+  gone(){if(!NET.on)return;this.cleanup();this.err('방이 닫혔어요.');},
+  // ---------- lobby ----------
+  order(){return Object.entries(NET.members).sort((a,b)=>(a[1].joined||0)-(b[1].joined||0));},
+  drawLobby(){if(!NET.meta||NET.meta.status!=='lobby')return;const host=NET.meta.host===NET.uid,ord=this.order(),n=NET.meta.n;const mine=NET.members[NET.uid]||{};
+    const link=location.origin+location.pathname+'?room='+NET.room;
+    const rows=[];for(let i=0;i<n;i++){const m=ord[i];rows.push(m?`<div class="lrow"><span class="dot" style="background:${m[1].color}"></span><b>${m[1].name}</b>${m[0]===NET.meta.host?'<span class="badge">방장</span>':''}${m[0]===NET.uid?'<span class="muted">(나)</span>':''}${m[1].online===false?'<span class="badge off">연결 끊김</span>':''}</div>`:`<div class="lrow empty"><span class="dot"></span>빈자리 · AI가 채워요</div>`);}
+    const taken=ord.filter(m=>m[0]!==NET.uid).map(m=>m[1].color);
+    const html=`<button class="mclose" id="lx" aria-label="나가기"></button><h3>대기실</h3>
+     <div class="roomcode"><span class="muted">방 코드</span><b>${NET.room}</b><button class="btn sub" id="lShare">초대 링크 보내기</button></div>
+     <div class="lgrid"><div><div class="label">참가자 (${ord.length}/${n})</div>${rows.join('')}</div>
+     <div><div class="label">내 말 색상</div><div class="swatches" id="lcol">${PCOL.map(c=>`<button class="sw${mine.color===c?' on':''}${taken.includes(c)?' taken':''}" data-c="${c}" style="--c:${c}" ${taken.includes(c)?'disabled':''}></button>`).join('')}</div>
+     ${host?`<div class="label">인원</div><div class="cnt" id="lcnt">${[2,3,4].map(k=>`<button class="btn${n===k?' active':''}" data-n="${k}" ${k<ord.length?'disabled':''}>${k}인</button>`).join('')}</div>
+     <div class="label">난이도 (AI)</div><div class="cnt" id="ldif">${DIFF.map(([k,l])=>`<button class="btn${NET.meta.diff===k?' active':''}" data-d="${k}">${l}</button>`).join('')}</div>`
+     :`<p class="muted">인원 ${n}명 · 난이도 ${({easy:'쉬움',normal:'보통',hard:'어려움'})[NET.meta.diff]}<br>방장이 게임을 시작하면 바로 시작돼요.</p>`}</div></div>
+     <div class="row">${host?`<button class="btn primary" id="lStart" ${ord.length<1?'disabled':''}>게임 시작</button>`:''}</div>
+     <p class="muted" id="lMsg"></p>`;
+    if(ui.modal!=='lobby')openModal('lobby',html);else $('#sheet').innerHTML=html;
+    $('#lx').onclick=()=>this.confirmLeave();
+    $('#lShare').onclick=async()=>{const t=`HexIsle 같이 해요! 방 코드 ${NET.room}`;try{if(navigator.share){await navigator.share({title:'HexIsle',text:t,url:link});return;}}catch(e){}
+      try{await navigator.clipboard.writeText(link);$('#lMsg').textContent='초대 링크를 복사했어요. 카톡에 붙여 넣으세요.';}catch(e){$('#lMsg').textContent=link;}};
+    $('#lcol').onclick=e=>{const b=e.target.closest('[data-c]');if(!b||b.disabled)return;this.ref('members/'+NET.uid+'/color').set(b.dataset.c);ui.color=b.dataset.c;saveUi();};
+    if(host){$('#lcnt').onclick=e=>{const b=e.target.closest('[data-n]');if(b&&!b.disabled)this.ref('meta/n').set(+b.dataset.n);};
+      $('#ldif').onclick=e=>{const b=e.target.closest('[data-d]');if(b)this.ref('meta/diff').set(b.dataset.d);};
+      $('#lStart').onclick=()=>this.start();}},
+  start(){const ord=this.order(),n=NET.meta.n;newGame(n,NET.meta.diff);
+    const used=ord.map(m=>m[1].color);const free=PCOL.filter(c=>!used.includes(c));
+    S.players.forEach((p,i)=>{const m=ord[i];if(m){p.name=m[1].name;p.color=m[1].color;p.uid=m[0];p.ai=false;}else{p.color=free.shift()||PCOL[i];p.ai=true;p.uid=null;}});
+    S.mp=true;S.room=NET.room;S.log=[];log(-1,'새 게임이 시작됐어요. 초기 배치부터 진행해요.','sys');
+    NET.isHost=true;ME=S.players.findIndex(p=>p.uid===NET.uid);ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;
+    NET._last=null;closeModal();update();this.ref('meta/status').set('play');},
+  // ---------- game sync ----------
+  applyState(js){let s;try{s=JSON.parse(js);}catch(e){return;}
+    const prevNote=S&&S.note&&S.note.id;S=s;ME=S.players.findIndex(p=>p.uid===NET.uid);if(ME<0)ME=0;
+    if(['lobby','mp'].includes(ui.modal))closeModal();
+    if(S.note&&S.note.id!==prevNote&&S.note.by!==NET.uid)this.toast(S.note.t);
+    render();},
+  handleAction(key,a){this.ref('actions/'+key).remove();if(!S||!a)return;const seat=S.players.findIndex(p=>p.uid===a.uid);
+    if(seat<0||S.players[seat].ai||!ACTS[a.name]||!validAct(seat,a.name))return;
+    try{ACTS[a.name](seat,...(a.args||[]));}catch(e){console.error(e);}update();},
+  note(t){S.note={id:(S.note?S.note.id:0)+1,t};this.toast(t);},
+  toast(t){const el=$('#mpNote');el.innerHTML=t;el.hidden=false;el.classList.remove('show');void el.offsetWidth;el.classList.add('show');clearTimeout(this._nt);this._nt=setTimeout(()=>el.hidden=true,5000);},
+  // ---------- presence / leave / host migration ----------
+  onMembers(){render&&S&&S.players&&NET.meta&&NET.meta.status==='play'&&render();
+    if(!NET.isHost||!S||!S.mp)return;const now=Date.now();let ch=false;
+    S.players.forEach((p,i)=>{if(!p.uid)return;const m=NET.members[p.uid];
+      if(!m){if(!p.ai){takeOverSeat(i);this.note(`${p.name}이(가) 나갔어요. AI가 이어서 플레이해요.`);ch=true;}return;}
+      if(m.online===false){if(!this.offSince[p.uid])this.offSince[p.uid]=now;}
+      else{delete this.offSince[p.uid];if(p.ai&&p.dc){p.ai=false;p.dc=false;log(i,'이(가) 돌아왔어요.','sys');this.note(`${p.name}이(가) 다시 들어왔어요.`);ch=true;}}});
+    if(ch)update();},
+  hostTick(){if(!NET.on)return;this.checkHost();if(!NET.isHost||!S||!S.mp)return;const now=Date.now();let ch=false;
+    S.players.forEach((p,i)=>{if(!p.uid||p.ai)return;const t=this.offSince[p.uid];if(t&&now-t>RECONNECT_MS){takeOverSeat(i);p.left=false;p.dc=true;this.note(`${p.name}의 연결이 끊겨 AI가 대신 플레이해요. 다시 들어오면 이어서 할 수 있어요.`);ch=true;}});
+    if(ch)update();},
+  checkHost(){const m=NET.meta;if(!m)return;const was=NET.isHost;NET.isHost=m.host===NET.uid;
+    if(NET.isHost&&!was&&S&&S.mp){NET._last=null;this.offSince={};log(ME,'이(가) 새 방장이 되었어요.','sys');update();this.ref('actions').once('value').then(sn=>sn.forEach(c=>{this.handleAction(c.key,c.val());}));}
+    if(NET.isHost)return;const h=NET.members[m.host];const now=Date.now();
+    const gone=!h||h.online===false;if(!gone){this._hgone=0;return;}if(!this._hgone)this._hgone=now;if(now-this._hgone<HOST_GRACE_MS)return;
+    const cand=this.order().find(([u,v])=>v.online!==false&&u!==m.host);if(!cand||cand[0]!==NET.uid)return;
+    this.ref('meta/host').transaction(cur=>cur===m.host?NET.uid:undefined);},
+  confirmLeave(){openModal('confirm',`<h3>방에서 나갈까요?</h3><p>${NET.meta&&NET.meta.status==='play'?'나가면 이 자리는 AI가 이어서 플레이해요.':'대기실에서 나가요.'}</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">나가기</button></div>`);
+    $('#cNo').onclick=()=>{closeModal();if(NET.meta&&NET.meta.status==='lobby')this.drawLobby();else update();};
+    $('#cYes').onclick=()=>this.leave();},
+  async leave(){try{const r=this.ref('members/'+NET.uid);await r.child('online').onDisconnect().cancel();
+      if(NET.isHost&&S&&S.mp){const i=S.players.findIndex(p=>p.uid===NET.uid);if(i>=0){takeOverSeat(i);this.note(`${S.players[i].name}이(가) 나갔어요. AI가 이어서 플레이해요.`);NET.publish();}
+        const next=this.order().find(([u,v])=>u!==NET.uid&&v.online!==false);await this.ref('meta/host').set(next?next[0]:null);}
+      await r.remove();
+      if(!this.order().some(([u])=>u!==NET.uid))await this.ref().remove();}catch(e){console.error(e);}
+    this.cleanup();closeModal();newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;render();showStart();},
+  cleanup(){this.unsubAll();NET.on=false;NET.isHost=false;NET.room=null;NET.members={};NET.meta=null;NET._last=null;this.offSince={};
+    $('#leaveBtn').hidden=true;$('#newBtn').hidden=false;try{history.replaceState(null,'',location.pathname);}catch(e){}}};
+setInterval(()=>{try{MP.hostTick();}catch(e){}},1000);
+$('#leaveBtn').onclick=()=>{if(NET.on)MP.confirmLeave();};
+{const q=new URLSearchParams(location.search).get('room');if(q&&MP_ENABLED)setTimeout(()=>MP.openEntry(q.toUpperCase().slice(0,5)),600);}
 
+</script>
 
 </body>
 </html>
