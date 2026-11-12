@@ -725,6 +725,91 @@ html.phone header.top .tools .ib{width:44px;height:44px}
 html.phone .setmenu .mi{font-size:15px;padding:11px 12px}
 html body header.top.menu-open{z-index:20}
 .setmenu .mi,.setmenu .seg button{white-space:nowrap;word-break:keep-all}
+
+/* toolbar v2 */
+header.top .tools{gap:0!important;align-items:center}
+header.top .tools .ib{display:inline-flex;align-items:center;gap:7px;width:auto;height:36px;padding:0 14px;border:0!important;background:none!important;color:#d9d3c8;font:inherit;font-size:13px;white-space:nowrap;position:relative;text-shadow:0 1px 3px rgba(0,0,0,.8)}
+header.top .tools .ib svg{width:19px;height:19px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.7))}
+header.top .tools .ib:last-child,header.top .tools .setwrap .ib{padding-right:2px}
+header.top .tools .ib:hover,header.top .tools .ib.active{color:#f3d08a;background:none!important}
+header.top .tools>.ib+.ib::before,header.top .tools>.ib+.setwrap::before,header.top .tools>.ib[hidden]+.setwrap::before{content:"";position:absolute;left:0;top:50%;height:13px;margin-top:-6.5px;border-left:1px solid rgba(255,255,255,.28)}
+header.top .tools>.setwrap{position:relative;padding-left:12px}
+header.top .tools>.ib[hidden]+.setwrap::before{display:block}
+html.phone header.top .tools .ib{height:44px;width:auto;font-size:13px;padding:0 11px}
+/* settings drawer */
+.setmenu{position:fixed!important;inset:0!important;top:0!important;right:0!important;min-width:0!important;padding:0!important;background:none!important;border:0!important;box-shadow:none!important;display:block!important;z-index:45}
+.setmenu[hidden]{display:none!important}
+.setdim{position:absolute;inset:0;background:rgba(0,0,0,.5);animation:setfade .2s ease-out}
+.setpanel{position:absolute;top:0;right:0;bottom:0;width:30%;min-width:300px;box-sizing:border-box;background:#1f1f21;border-left:1px solid rgba(255,255,255,.12);box-shadow:-12px 0 40px rgba(0,0,0,.5);display:flex;flex-direction:column;padding:0 0 24px;overflow:auto;animation:setin .24s cubic-bezier(.2,.7,.2,1)}
+@keyframes setin{from{transform:translateX(100%)}to{transform:none}}
+@keyframes setfade{from{opacity:0}to{opacity:1}}
+.sethead{display:flex;align-items:center;justify-content:space-between;padding:26px 24px 18px 36px;font-size:15px;letter-spacing:.12em;color:#a39c90}
+.setx{width:44px;height:44px;background:none;border:0;color:#d9d3c8;font-size:30px;line-height:1;cursor:pointer}
+.setx:hover{color:#f3d08a}
+.setpanel .mi{padding:20px 36px!important;font-size:19px!important;border-bottom:1px solid rgba(255,255,255,.07)!important;border-radius:0!important;color:#ece6da}
+.setpanel .mi.tg::after{width:46px;height:24px;border-radius:12px;background:#55524d radial-gradient(circle at 12px 12px,#d9d3c8 8px,transparent 8.5px)}
+.setpanel .mi.tg[aria-checked=true]::after{background:#b8893a radial-gradient(circle at 34px 12px,#fff6e0 8px,transparent 8.5px)}
+.setpanel .msep{height:14px;margin:0;background:none}
+.setpanel .seg button{padding:8px 14px;font-size:15px}
+html.phone .setpanel{min-width:260px}
+html.phone .sethead{padding:14px 14px 8px 26px}
+html.phone .setpanel .mi{padding:14px 26px!important;font-size:17px!important}
+/* info icon */
+.qi{display:inline-grid;place-items:center;width:18px;height:18px;margin-left:6px;padding:0;border:1px solid rgba(243,208,138,.65);border-radius:50%!important;background:rgba(243,208,138,.1);color:#f3d08a;font:700 11.5px/1 var(--body);cursor:pointer;vertical-align:1px}
+.qi:hover{background:rgba(243,208,138,.28)}
+#pop .reftable{font-size:13px}
+/* trade info */
+.tinfo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.1)}
+.tinfo .cost{margin-top:6px;flex-wrap:wrap}
+.tinfo .pdev{background:rgba(255,255,255,.14)}
+/* side panels text-only (PC like phone) */
+.side .panel{background:none!important;border:0!important;box-shadow:none!important}
+.side .pl,.side .log,.side .panel h2,.side .gameinfo,.side .roundline{text-shadow:0 1px 3px rgba(0,0,0,.95),0 0 8px rgba(0,0,0,.6)}
+html:not(.phone) .side .pl.cur{background:rgba(0,0,0,.3)!important}
+/* bigger logo + dice */
+html:not(.phone) header.top h1.logo{font-size:39px}
+html.phone header.top h1.logo{font-size:26px}
+.dicebox .die{width:86px!important;height:86px!important;padding:12px!important;border-radius:14px!important}
+.dicebox .die i{width:15px;height:15px}
+.dicebox .sum{font-size:69px!important}
+.dicebox{gap:18px!important}
+.reelwin{border-radius:14px}
+html.phone .dicebox .die{width:55px!important;height:55px!important;padding:8px!important;border-radius:11px!important}
+html.phone .dicebox .die i{width:10px;height:10px}
+html.phone .dicebox .sum{font-size:44px!important}
+html.phone .dicebox{gap:12px!important}
+html.phone .reelwin{border-radius:11px}
+/* roomier PC modals */
+html:not(.phone) .sheet.sheet-start{width:min(980px,calc(100vw - 48px));display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:0 56px;align-items:center;padding:56px 64px!important;font-size:16px}
+html:not(.phone) .sheet-start .hero-title.logo{font-size:68px;margin:12px 0 22px}
+html:not(.phone) .sheet-start .st-l p{font-size:18px;line-height:1.8}
+html:not(.phone) .sheet-start .label{font-size:15px;margin-top:18px!important;margin-bottom:10px}
+html:not(.phone) .sheet-start .st-l .label{margin-top:0!important}
+html:not(.phone) .sheet-start .cnt{gap:10px}
+html:not(.phone) .sheet-start .cnt .btn{font-size:18px;padding:14px 16px;gap:4px;min-width:0}
+html:not(.phone) .sheet-start .cnt small{font-size:13.5px;line-height:1.45}
+html:not(.phone) .sheet-start .st-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:26px}
+html:not(.phone) .sheet-start .st-btns .btn{font-size:17px;padding:15px 12px}
+html:not(.phone) .sheet-start .st-btns #sTut{grid-column:1/-1}
+html:not(.phone) .sheet-newgame .st-l h3{font-size:38px;line-height:1.25;margin-bottom:16px}
+html:not(.phone) .sheet-newgame .st-btns #cYes{order:2}
+html:not(.phone) .sheet.sheet-rules{width:min(940px,calc(100vw - 48px));height:min(880px,calc(100dvh - 48px));padding:44px 56px 34px!important;font-size:16.5px}
+html:not(.phone) .sheet-rules h3{font-size:32px;margin:6px 0 22px!important}
+html:not(.phone) .sheet-rules .label{font-size:14px}
+html:not(.phone) .sheet-rules .tut-body p,html:not(.phone) .sheet-rules .tut-body li{font-size:16.5px;line-height:1.85}
+html:not(.phone) .sheet-rules .tut-body p{margin-bottom:16px;max-width:none}
+html:not(.phone) .sheet-rules .steps li{margin-bottom:8px}
+html:not(.phone) .sheet-rules .reftable{font-size:15.5px}
+html:not(.phone) .sheet-rules .reftable td{padding:10px 8px 10px 0}
+html:not(.phone) .sheet-rules .row{padding-top:20px}
+html:not(.phone) .sheet-rules .row .btn{font-size:16px;padding:12px 26px}
+html:not(.phone) .sheet-rules .mclose{top:22px;right:22px;width:44px;height:44px;font-size:28px}
+html:not(.phone) body #leftcol{top:100px}
+.dicebox .who{max-width:none;white-space:nowrap}
+.cnt small{word-break:keep-all}
+html.phone .sheet-trade p.empty{display:none}
+html.phone .sheet-trade .tinfo{margin-top:8px;padding-top:8px}
+.sheet-start .st-btns #sNew:last-child{grid-column:1/-1}
 </style>
 
 
@@ -743,11 +828,11 @@ html body header.top.menu-open{z-index:20}
     <h1 class="logo">HEXISLE<small>육각섬 개척기</small></h1>
   </div>
   <div class="tools">
-    <button id="camReset" class="ib" aria-label="시점 초기화" data-tip="시점 초기화: 보드를 처음 시점으로 되돌려요"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 2.64-6.36"/><path d="M3 4v5h5"/></svg></button>
-    <button id="fsBtn" class="ib" aria-label="전체화면 켜기" data-tip="전체화면 켜기" hidden><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="fs-in" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><path class="fs-out" d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg></button>
+    <button id="camReset" class="ib" data-tip="보드를 처음 시점으로 되돌려요"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 2.64-6.36"/><path d="M3 4v5h5"/></svg><span class="lb">시점 초기화</span></button>
+    <button id="fsBtn" class="ib" hidden><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="fs-in" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><path class="fs-out" d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg><span class="lb">전체화면 켜기</span></button>
     <div class="setwrap">
       <button id="setBtn" class="ib" aria-label="설정" aria-haspopup="true" aria-expanded="false" data-tip="설정"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
-      <div id="setMenu" class="setmenu" role="menu" hidden>
+      <div id="setMenu" class="setmenu" hidden><div class="setdim" id="setDim"></div><nav class="setpanel" role="menu" aria-label="설정"><div class="sethead"><span>설정</span><button class="setx" id="setX" aria-label="닫기">×</button></div>
         <button id="newBtn" class="mi" role="menuitem">새 게임</button>
         <button id="rulesBtn" class="mi" role="menuitem">게임 방법</button>
         <button id="tipBtn" class="mi tg" role="menuitemcheckbox">툴팁</button>
@@ -766,8 +851,8 @@ html body header.top.menu-open{z-index:20}
     <div id="stage"><div id="maplbls"></div><div id="toast" class="toast" hidden></div><div class="dicebox" id="dicebox"></div><div class="turnplaque" id="turnbar"></div><div class="stagebtns" id="stagebtns"></div></div>
     <div class="tray" id="tray">
       <div class="tray-hand"><div class="tray-h" id="handHead">내 손패 <span id="handCount"></span></div><div id="hand"></div></div>
-      <div class="tray-dev"><div class="tray-h">발전 카드 <button class="linkish" data-pop="all">종류 보기</button></div><div id="devs"></div></div>
-      <div class="tray-act"><div class="tray-h">건설</div><div id="actions"></div></div>
+      <div class="tray-dev"><div class="tray-h">발전 카드 <button class="qi" data-pop="all" aria-label="발전 카드 종류 보기" data-tip="발전 카드 종류 보기">?</button></div><div id="devs"></div></div>
+      <div class="tray-act"><div class="tray-h">건설 <button class="qi" data-pop="cost" aria-label="건설 비용 보기" data-tip="건설 비용 보기">?</button></div><div id="actions"></div></div>
     </div>
     <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
         <symbol id="ic-wood" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.5 4.5 12h3.6L4 18h7v4.5h2V18h7l-4.1-6h3.6z"/></symbol>
@@ -781,9 +866,6 @@ html body header.top.menu-open{z-index:20}
 
   <aside class="side">
     <div class="panel"><h2>플레이어</h2><div class="gameinfo" id="gameinfo"></div><div id="players" class="players"></div><div class="roundline" id="roundline"></div></div>
-    <div class="panel">
-      <details class="ref" id="refBox"><summary>건설 비용과 은행 잔고</summary><div id="ref"></div></details>
-    </div>
     <div class="panel logpanel"><h2>기록</h2><div id="log" class="log"></div></div>
   </aside>
 </main>
@@ -1664,6 +1746,7 @@ function renderHand(me,groups){const box=$('#hand');const W0=Math.max(220,box.cl
   db.innerHTML=me.dev.length?row(me.dev.map(d=>`<div style="position:relative"><img class="card" src="${CARDIMG[d.t]}" alt="${DEVN[d.t]}" data-pop="${d.t}" data-tip="${DEVN[d.t]}: 눌러서 설명 보기">${d.fresh&&d.t!=='vp'?'<span class="newtag">다음 차례</span>':''}</div>`),innerHeight<900&&innerWidth>1100?50:62,dw,'devrow2'):`<div class="emptyhand" style="min-height:${cw*1.4+14}px">없음<br>양모·곡물·광석으로 구입</div>`;}
 
 function devPop(t){
+  if(t==='cost')return `<h4>건설 비용</h4><table class="reftable"><tbody>${['road','settlement','city','dev'].map(w=>`<tr><td>${BN[w]}</td><td>${costPips(COST[w])}</td></tr>`).join('')}</tbody></table><p class="muted">도로는 길을 넓히고, 정착지 1점, 도시 2점이에요. 발전 카드는 무작위 특수 카드예요.</p>`;
   if(t==='all')return `<h4>발전 카드란?</h4><p>양모·곡물·광석 1장씩으로 사는 무작위 특수 카드예요. 총 25장이 있어요.</p><ul>${Object.keys(DEVCNT).map(k=>`<li><b>${DEVN[k]}</b> ${DEVCNT[k]}장: ${DEVD[k]}</li>`).join('')}</ul><p class="muted">산 차례에는 못 쓰고, 한 차례에 1장만 쓸 수 있어요. 남은 덱 ${S.deck.length}장.</p>`;
   const own=S.players[0].dev.some(d=>d.t===t);const can=canPlayDev(0,t);
   return `<h4>${DEVN[t]} 카드</h4><p>${DEVL[t]}</p><p class="muted">덱에 처음 ${DEVCNT[t]}장. ${t==='vp'?'자동으로 점수에 들어가요.':'산 차례에는 못 쓰고, 한 차례에 발전 카드는 1장만 쓸 수 있어요.'}</p>${own&&t!=='vp'?`<button class="btn primary" data-play="${t}" ${can?'':'disabled'} style="margin-top:4px">${can?'이 카드 사용하기':S.cur!==0||S.phase!=='main'?'내 차례에 쓸 수 있어요':S.devPlayed?'이번 차례엔 이미 사용했어요':S.pend?'지금 하던 행동을 먼저 끝내세요':'다음 차례부터 쓸 수 있어요'}</button>`:''}`;}
@@ -1696,10 +1779,7 @@ function render(){
   $('#players').innerHTML=S.players.map((p,i)=>`<div class="pl${i===S.cur&&S.phase!=='over'?' cur':''}"><span class="dot" style="background:${p.color}"></span>
     <span class="nm">${p.name}${p.ai?' · AI':''} ${S.lr.o===i?'<span class="badge" data-tip="최장 교역로 +2점: 끊기지 않은 도로가 5칸 이상이면서 가장 긴 사람">최장 교역로</span>':''} ${S.la.o===i?'<span class="badge" data-tip="최강 기사단 +2점: 기사 카드를 3장 이상, 가장 많이 쓴 사람">최강 기사단</span>':''}</span>
     <span class="vp" data-tip="${i===0?'내 점수(승점 카드 포함). 10점이 되면 승리!':'공개된 점수예요. 숨겨진 승점 카드는 빠져 있어요.'}">${vp(i,i===0)}</span>
-    <span class="meta"><span data-tip="손에 든 자원 카드 수. 8장 이상이면 7이 나올 때 절반을 버려요.">자원 ${sumRes(p.res)}</span><span data-tip="가진 발전 카드 수. 종류는 본인만 알아요.">발전 ${p.dev.length}</span><span data-tip="지금까지 사용한 기사 카드 수. 3장 이상이며 가장 많으면 최강 기사단 2점.">기사 ${p.knights}</span><span data-tip="가장 길게 이어진 도로 길이. 5 이상이며 가장 길면 최장 교역로 2점.">도로 ${S.rl[i]||0}</span></span></div>`).join('');
-  $('#ref').innerHTML=`<table class="reftable"><tbody>${['road','settlement','city','dev'].map(w=>`<tr><td>${BN[w]}</td><td>${costPips(COST[w])}</td></tr>`).join('')}</tbody></table>
-    <div style="margin-top:10px" class="label">은행 잔고</div><div class="cost" style="margin-top:4px" data-tip="은행에 남은 자원 수. 0이면 그 자원은 생산돼도 받을 수 없어요.">${RES.map(k=>`<span class="pip bg-${k}">${RN[k]} ${S.bank[k]}</span>`).join('')}<span class="pip" style="background:var(--line)">발전 ${S.deck.length}</span></div>
-    <div style="margin-top:8px" class="label">내 교환 비율</div><div class="cost" style="margin-top:4px" data-tip="이 자원 몇 장을 원하는 자원 1장으로 바꿀 수 있는지. 항구에 건물이 있으면 비율이 좋아져요.">${(r=>RES.map(k=>`<span class="pip bg-${k}">${RN[k]} ${r[k]}:1</span>`).join(''))(ratios(0))}</div>`;
+    <span class="meta"><span data-tip="손에 든 자원 카드 수. 8장 이상이면 7이 나올 때 절반을 버려요.">자원 ${sumRes(p.res)}</span><span data-tip="가진 발전 카드 수. 종류는 본인만 알아요.">발전 ${p.dev.length}</span><span data-tip="지금까지 사용한 기사 카드 수. 3장 이상이며 가장 많으면 최강 기사단 2점.">기사 ${p.knights}</span><span data-tip="가장 길게 이어진 도로 길이. 5 이상이며 가장 길면 최장 교역로 2점.">도로 ${S.rl[i]||0}</span></span></div></nav>`).join('');
   $('#log').innerHTML=S.log.slice(PH.on?-4:0).reverse().map(e=>e.k==='turn'?`<div class="turn">${e.p>=0?pname(e.p):''}${e.p>=0&&e.t.startsWith('의')?'':' '}${e.t}</div>`:`<div class="${e.k}">${e.p>=0?pname(e.p)+' ':''}${e.t}</div>`).join('');
   checkToast();try{alignBtns();}catch(e){}
   forcedModals();
@@ -1768,6 +1848,7 @@ function showTrade(tab){tab=tab||'bank';const me=S.players[0];const rat=ratios(0
     if(tab==='bank'){body=`<div class="label">줄 자원 (내 비율)</div><div class="pick" id="tg">${RES.map(k=>`<button class="bg-${k}${st.give===k?' sel':''}" data-k="${k}" ${me.res[k]>=rat[k]?'':'disabled'}>${icon(k)}${RN[k]}<small>${rat[k]}장 → 1장 · 보유 ${me.res[k]}</small></button>`).join('')}</div>
       <div class="label">받을 자원</div><div class="pick" id="tr">${RES.map(k=>`<button class="bg-${k}${st.get===k?' sel':''}" data-k="${k}" ${S.bank[k]>0&&k!==st.give?'':'disabled'}>${icon(k)}${RN[k]}<small>은행 ${S.bank[k]}</small></button>`).join('')}</div>
       <p class="empty">기본은 4:1이에요. 항구에 정착지나 도시가 있으면 3:1, 또는 특정 자원 2:1로 바꿀 수 있어요.</p>
+      <div class="tinfo"><div><div class="label">은행 잔고</div><div class="cost" data-tip="은행에 남은 자원 수. 0이면 그 자원은 생산돼도 받을 수 없어요.">${RES.map(k=>`<span class="pip bg-${k}">${RN[k]} ${S.bank[k]}</span>`).join('')}<span class="pip pdev">발전 ${S.deck.length}</span></div></div><div><div class="label">내 교환 비율</div><div class="cost" data-tip="이 자원 몇 장을 원하는 자원 1장으로 바꿀 수 있는지. 항구에 건물이 있으면 비율이 좋아져요.">${RES.map(k=>`<span class="pip bg-${k}">${RN[k]} ${rat[k]}:1</span>`).join('')}</div></div></div>
       <div class="row"><button class="btn" id="tx">닫기</button><button class="btn primary" id="tb" ${st.give&&st.get?'':'disabled'}>교환하기</button></div>`;}
     else{body=`<div class="label">내가 줄 것</div>${stepper('pg',st.pg,k=>me.res[k])}<div class="label">내가 받을 것</div>${stepper('pr',st.pr,()=>9)}
       <div class="row"><button class="btn" id="tx">닫기</button><button class="btn primary" id="tp" ${sumRes(st.pg)||sumRes(st.pr)?'':'disabled'}>AI들에게 제안</button></div>
@@ -1895,7 +1976,7 @@ const spLabel=()=>document.querySelectorAll('#speedSeg [data-sp]').forEach(b=>b.
 $('#speedSeg').onclick=e=>{const b=e.target.closest('[data-sp]');if(!b)return;ui.speed=b.dataset.sp;saveUi();spLabel();kick();};
 {const sb=$('#setBtn'),sm=$('#setMenu');const setOpen=o=>{sm.hidden=!o;document.querySelector('header.top').classList.toggle('menu-open',o);sb.classList.toggle('active',o);sb.setAttribute('aria-expanded',o);};
  sb.onclick=e=>{e.stopPropagation();sb.blur();hideTip();setOpen(sm.hidden);};
- document.addEventListener('pointerdown',e=>{if(!sm.hidden&&!e.target.closest('.setwrap'))setOpen(false);},true);
+ $('#setDim').onclick=$('#setX').onclick=()=>setOpen(false);
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!sm.hidden)setOpen(false);});
  sm.addEventListener('click',e=>{const b=e.target.closest('#newBtn,#rulesBtn');if(b)setOpen(false);});}
 const hintLabel=()=>{$('#hintBtn').setAttribute('aria-checked',ui.hints);$('#hintBtn').classList.toggle('active',ui.hints);};
@@ -2004,7 +2085,7 @@ function fitChrome(){const h=document.querySelector('header.top');if(h)document.
 fitChrome();window.addEventListener('resize',fitChrome);try{document.fonts.ready.then(fitChrome);}catch(e){}
 {const fb=$('#fsBtn');const el=document.documentElement;const can=document.fullscreenEnabled||document.webkitFullscreenEnabled;fb.hidden=!can;
   fb.onclick=async()=>{fb.blur();try{if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}else{await (el.requestFullscreen||el.webkitRequestFullscreen).call(el);try{await screen.orientation.lock('landscape');}catch(e){}}}catch(e){openModal('confirm',`<h3>전체화면을 쓸 수 없어요</h3><p>${window.top!==window?'이 게임은 다른 페이지 안에 들어 있어서, 브라우저가 게임 쪽의 전체화면 요청을 막고 있어요.':'이 브라우저는 웹페이지의 전체화면을 지원하지 않아요(아이폰 사파리 등).'}</p><p><b>대신 이렇게 해 보세요</b></p><ul class="steps"><li><b>홈 화면에 추가</b>해서 열면 주소창 없는 전체화면으로 실행돼요(사파리: 공유 → 홈 화면에 추가, 크롬·삼성: 메뉴 → 홈 화면에 추가)</li><li>삼성 인터넷: 설정 → 레이아웃 및 메뉴 → <b>상태 표시줄 숨기기</b>, 주소창은 화면을 위로 살짝 밀면 숨겨져요</li><li>사파리: 주소창의 <b>가가(aA) → 도구 막대 가리기</b></li></ul><div class="row"><button class="btn primary" id="fsOk">확인</button></div>`);$('#fsOk').onclick=()=>{closeModal();update();};}};
-  document.addEventListener('fullscreenchange',()=>{{const on=!!document.fullscreenElement,l=on?'전체화면 끄기':'전체화면 켜기';fb.classList.toggle('on',on);fb.setAttribute('aria-label',l);fb.dataset.tip=l;}setTimeout(()=>{applyPhone();fitChrome();},120);});}
+  document.addEventListener('fullscreenchange',()=>{{const on=!!document.fullscreenElement;fb.classList.toggle('on',on);fb.querySelector('.lb').textContent=on?'전체화면 끄기':'전체화면 켜기';}setTimeout(()=>{applyPhone();fitChrome();},120);});}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-htab]');if(!b)return;ui.handTab=b.dataset.htab;render();});
 // ---------- boot ----------
 (function(){const blank='data:image/gif;base64,R0lGODlhAQABAAAAACw=';RES.forEach(r=>CARDIMG[r]=CARDIMG[r]||blank);Object.keys(DEVN).forEach(t=>CARDIMG[t]=paintCard(t,DEVN[t],true));})();
