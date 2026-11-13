@@ -1217,6 +1217,44 @@ html.phone .sheet-frame .frow .tin{padding:7px 10px;font-size:15px}
 
 html body .mclose.mback{transform:scale(1.22);transform-origin:center}
 html body .mclose.mback:hover{transform:scale(1.28)}
+
+/* round 63 */
+*{-webkit-tap-highlight-color:transparent}
+.title,.title *{-webkit-tap-highlight-color:transparent;outline:none}
+.title{background:#0b1428!important}
+.title .tbg{left:-14%!important;right:-14%!important;top:9%!important;bottom:-36%!important;background-position:center top!important;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 14%);mask-image:linear-gradient(180deg,transparent 0,#000 14%)}
+.title .tnoise{position:absolute;inset:0;pointer-events:none;opacity:.10;mix-blend-mode:overlay;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>") 0 0/180px 180px repeat}
+html.phone .title .tbg{top:12%!important;bottom:-40%!important}
+/* active tab: soft both sides */
+.mtab.on{background:radial-gradient(ellipse 60% 120% at 40% 50%,rgba(233,185,92,.30),rgba(233,185,92,.10) 60%,rgba(233,185,92,0) 100%)!important;box-shadow:none!important}
+.mtab.on::before,.mtab.on::after{content:"";position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,rgba(243,208,138,0),rgba(243,208,138,.85) 25%,rgba(243,208,138,.85) 65%,rgba(243,208,138,0))}
+.mtab.on::before{top:0}.mtab.on::after{bottom:0}
+/* dialog */
+#dialog{z-index:56;background:rgba(4,6,10,.62)!important}
+html body .sheet.sheet-dialog{width:min(560px,calc(100vw - 48px))!important;height:auto!important;min-height:0;padding:30px 22px 8px!important;text-align:center;overflow:visible!important;position:relative}
+.sheet-dialog .dorn{position:absolute;left:50%;top:-50px;width:96px;margin-left:-48px;pointer-events:none;filter:drop-shadow(0 3px 5px rgba(0,0,0,.6));z-index:4}
+.sheet-dialog h3{text-align:center!important;margin:6px 0 10px!important;font-size:30px!important}
+.sheet-dialog p{margin:0 auto 8px!important;max-width:none!important;color:#cdbf9f;text-align:center}
+.sheet-dialog .row{justify-content:center!important;gap:14px!important;margin-top:22px!important;padding:0!important}
+.sheet-dialog .row .btn{min-width:150px!important;min-height:52px!important}
+.sheet-dialog .tinfo{text-align:left}
+.sheet-dialog .steps{text-align:left}
+.sheet.sheet-dialog ~ .mcrest,#modal:has(.sheet-dialog) .mcrest{display:none}
+html.phone body .sheet.sheet-dialog{width:min(460px,calc(100vw - 40px))!important;padding:22px 16px 4px!important}
+html.phone .sheet-dialog h3{font-size:22px!important}
+html.phone .sheet-dialog .dorn{width:70px;margin-left:-35px;top:-38px}
+html.phone .sheet-dialog .row .btn{min-width:120px!important;min-height:42px!important}
+/* uniform field rows */
+html body .sheet-frame .frow{height:78px;min-height:0!important}
+html body .sheet-frame .frows{gap:26px!important}
+html.sing-up body .sheet-single .frows{gap:44px!important}
+html body .sheet-single .frows{gap:46px!important;padding-top:26px!important}
+html body .sheet-lobby .frows{gap:30px!important;padding-top:6px!important}
+html.phone body .sheet-frame .frow{height:48px}
+html.phone body .sheet-frame .frows{gap:10px!important}
+html.phone body .sheet-single .frows{gap:22px!important;padding-top:14px!important}
+html.phone body .sheet-lobby .frows{gap:14px!important}
+html body .sheet-frame .rcode{height:100%;box-sizing:border-box;padding-top:0;padding-bottom:0}
 </style>
 
 
@@ -1281,7 +1319,8 @@ html body .mclose.mback:hover{transform:scale(1.28)}
 <div id="tip" hidden></div><div id="pop" hidden></div>
 <div id="leftcol"></div>
 <div id="rotate" hidden><div class="rot-ic"></div><b>가로로 돌려 주세요</b><span>HexIsle은 휴대폰에서 가로 화면으로 플레이해요.</span></div>
-<div id="title" class="title" hidden><div class="tbg"></div><div class="tdim"></div><img class="tlogo" id="tLogo" alt="HEXISLE 육각섬 개척기"><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
+<div id="title" class="title" hidden><div class="tbg"></div><div class="tdim"></div><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 육각섬 개척기"><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
+<div id="dialog" class="overlay dlgov" hidden><div class="sheet sheet-dialog" id="dsheet"></div></div>
 <div id="modal" class="overlay" hidden><div class="sheet" id="sheet"></div><i class="mcrest" id="mcrest" aria-hidden="true"></i></div>
 
 <script>document.getElementById('logoImg')&&(document.getElementById('logoImg').src=window.LOGO_URL);</script>
@@ -2288,9 +2327,11 @@ function infoText(f){
   return null;}
 
 // ---------- modals ----------
-function openModal(key,html){ui.modal=key;$('#sheet').className='sheet sheet-'+key;$('#sheet').innerHTML=html;$('#modal').hidden=false;placeCrest();requestAnimationFrame(placeCrest);setTimeout(placeCrest,120);setTimeout(placeCrest,400);}
+function openModal(key,html){ui.modal=key;$('#sheet').className='sheet sheet-'+key+(['offer','steal'].includes(key)?' sheet-dialog':'');if(['offer','steal'].includes(key))html=`<img class="dorn" src="${TITLEIMG.orn2}" alt="">`+html;$('#sheet').innerHTML=html;$('#modal').hidden=false;placeCrest();requestAnimationFrame(placeCrest);setTimeout(placeCrest,120);setTimeout(placeCrest,400);}
 function placeCrest(){const sh=$('#sheet'),c=$('#mcrest');if(!sh||!c||$('#modal').hidden)return;const r=sh.getBoundingClientRect(),o=$('#modal').getBoundingClientRect(),k=PH.on?PH.k:1;c.style.left=((r.left-o.left+r.width/2)/k)+'px';c.style.top=((r.top-o.top)/k)+'px';}
 addEventListener('resize',()=>setTimeout(placeCrest,80));
+function openDialog(html){$('#dsheet').innerHTML=`<img class="dorn" src="${TITLEIMG.orn2}" alt="">`+html;$('#dialog').hidden=false;ui.dialog=true;}
+function closeDialog(){$('#dialog').hidden=true;$('#dsheet').innerHTML='';ui.dialog=false;}
 function closeModal(){ui.modal=null;$('#modal').hidden=true;$('#sheet').innerHTML='';}
 
 function hasHumans(){return S.players.some((p,i)=>i!==ME&&!p.ai);}
@@ -2517,8 +2558,8 @@ const tipLabel=()=>{$('#tipBtn').setAttribute('aria-checked',ui.tips);$('#tipBtn
 $('#tipBtn').onclick=()=>{ui.tips=!ui.tips;saveUi();tipLabel();hideTip();if(!ui.tips)$('#toast').hidden=true;};tipLabel();
 $('#hintBtn').onclick=()=>{ui.hints=!ui.hints;saveUi();hintLabel();render();};hintLabel();
 $('#rulesBtn').onclick=()=>{clearTimeout(aiTimer);showRules(0);};
-$('#newBtn').onclick=()=>{if(window.NET&&NET.on)return MP.confirmLeave();clearTimeout(aiTimer);openModal('confirm',`<div class="mhead"><h3>새 게임을 시작할까요?</h3><p>지금 진행 중인 게임은 끝나고, 처음 화면으로 돌아가요.</p></div><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">새 게임</button></div>`);
-  $('#cNo').onclick=()=>{closeModal();update();};$('#cYes').onclick=()=>{closeModal();newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;render();showStart();};};
+$('#newBtn').onclick=()=>{if(window.NET&&NET.on)return MP.confirmLeave();openDialog(`<h3>새 게임을 시작할까요?</h3><p>진행 중인 게임은 끝나고, 첫 화면으로 돌아가요.</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">새 게임</button></div>`);
+  $('#cNo').onclick=()=>{closeDialog();};$('#cYes').onclick=()=>{closeDialog();closeModal();newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;render();showStart();};};
 
 // ---------- painted cards (canvas) ----------
 const CARDIMG={},CW=400,CH=610;
@@ -2575,7 +2616,7 @@ function fitChrome(){const h=document.querySelector('header.top');if(h)document.
   if(W.ok)fitCam(false);}
 fitChrome();window.addEventListener('resize',fitChrome);try{document.fonts.ready.then(fitChrome);}catch(e){}
 {const fb=$('#fsBtn');const el=document.documentElement;const can=document.fullscreenEnabled||document.webkitFullscreenEnabled;fb.hidden=!can;
-  fb.onclick=async()=>{fb.blur();try{if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}else{await (el.requestFullscreen||el.webkitRequestFullscreen).call(el);try{await screen.orientation.lock('landscape');}catch(e){}}}catch(e){openModal('confirm',`<h3>전체화면을 쓸 수 없어요</h3><p>${window.top!==window?'이 게임은 다른 페이지 안에 들어 있어서, 브라우저가 게임 쪽의 전체화면 요청을 막고 있어요.':'이 브라우저는 웹페이지의 전체화면을 지원하지 않아요(아이폰 사파리 등).'}</p><p><b>대신 이렇게 해 보세요</b></p><ul class="steps"><li><b>홈 화면에 추가</b>해서 열면 주소창 없는 전체화면으로 실행돼요(사파리: 공유 → 홈 화면에 추가, 크롬·삼성: 메뉴 → 홈 화면에 추가)</li><li>삼성 인터넷: 설정 → 레이아웃 및 메뉴 → <b>상태 표시줄 숨기기</b>, 주소창은 화면을 위로 살짝 밀면 숨겨져요</li><li>사파리: 주소창의 <b>가가(aA) → 도구 막대 가리기</b></li></ul><div class="row"><button class="btn primary" id="fsOk">확인</button></div>`);$('#fsOk').onclick=()=>{closeModal();update();};}};
+  fb.onclick=async()=>{fb.blur();try{if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}else{await (el.requestFullscreen||el.webkitRequestFullscreen).call(el);try{await screen.orientation.lock('landscape');}catch(e){}}}catch(e){openDialog(`<h3>전체화면을 쓸 수 없어요</h3><p>${window.top!==window?'이 게임은 다른 페이지 안에 들어 있어서, 브라우저가 게임 쪽의 전체화면 요청을 막고 있어요.':'이 브라우저는 웹페이지의 전체화면을 지원하지 않아요(아이폰 사파리 등).'}</p><p><b>대신 이렇게 해 보세요</b></p><ul class="steps"><li><b>홈 화면에 추가</b>해서 열면 주소창 없는 전체화면으로 실행돼요(사파리: 공유 → 홈 화면에 추가, 크롬·삼성: 메뉴 → 홈 화면에 추가)</li><li>삼성 인터넷: 설정 → 레이아웃 및 메뉴 → <b>상태 표시줄 숨기기</b>, 주소창은 화면을 위로 살짝 밀면 숨겨져요</li><li>사파리: 주소창의 <b>가가(aA) → 도구 막대 가리기</b></li></ul><div class="row"><button class="btn primary" id="fsOk">확인</button></div>`);$('#fsOk').onclick=()=>{closeDialog();};}};
   document.addEventListener('fullscreenchange',()=>{{const on=!!document.fullscreenElement;fb.classList.toggle('on',on);fb.querySelector('.lb').textContent=on?'전체화면 끄기':'전체화면 켜기';}setTimeout(()=>{applyPhone();fitChrome();},120);});}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-htab]');if(!b)return;ui.handTab=b.dataset.htab;render();});
 // ---------- boot ----------
@@ -2614,7 +2655,7 @@ const MP={db:null,subs:[],offSince:{},
   unsubAll(){this.subs.forEach(f=>f());this.subs=[];},
   nick(){return (ui.nick||'').trim();},
   code(){const A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let c='';for(let i=0;i<5;i++)c+=A[Math.floor(Math.random()*A.length)];return c;},
-  err(msg){openModal('confirm',`<button class="mclose" id="mx2" aria-label="닫기"></button><h3>연결 문제</h3><p>${msg}</p><div class="row"><button class="btn sub" id="mOk">확인</button></div>`);$('#mOk').onclick=$('#mx2').onclick=()=>{closeModal();if(NET.on)return;showTitle(true);showMulti(ui.mtab||'invite');};},
+  err(msg){openDialog(`<h3>연결 문제</h3><p>${msg}</p><div class="row"><button class="btn sub" id="mOk">확인</button></div>`);$('#mOk').onclick=()=>{closeDialog();if(NET.on)return;if(ui.modal!=='multi'){showTitle(true);showMulti(ui.mtab||'invite');}else{const m=$('#fMsg');if(m)m.textContent='';}};},
   // ---------- entry ----------
   openEntry(code){showTitle(true);showMulti('join',code);},
   async create(){try{$('#mMsg')&&($('#mMsg').textContent='방을 만드는 중…');await this.init();
@@ -2725,9 +2766,9 @@ const MP={db:null,subs:[],offSince:{},
     const gone=!h||h.online===false;if(!gone){this._hgone=0;return;}if(!this._hgone)this._hgone=now;if(now-this._hgone<HOST_GRACE_MS)return;
     const cand=this.order().find(([u,v])=>v.online!==false&&u!==m.host);if(!cand||cand[0]!==NET.uid)return;
     this.ref('meta/host').transaction(cur=>cur===m.host?NET.uid:undefined);},
-  confirmLeave(){openModal('confirm',`<h3>방에서 나갈까요?</h3><p>${NET.meta&&NET.meta.status==='play'?'나가면 이 자리는 AI가 이어서 플레이해요.':'대기실에서 나가요.'}</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">나가기</button></div>`);
-    $('#cNo').onclick=()=>{closeModal();if(NET.meta&&NET.meta.status==='lobby')this.drawLobby();else update();};
-    $('#cYes').onclick=()=>this.leave();},
+  confirmLeave(){openDialog(`<h3>방에서 나갈까요?</h3><p>${NET.meta&&NET.meta.status==='play'?'나가면 이 자리는 AI가 이어서 플레이해요.':'대기실에서 나가요.'}</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">나가기</button></div>`);
+    $('#cNo').onclick=()=>closeDialog();
+    $('#cYes').onclick=()=>{closeDialog();this.leave();};},
   async leave(){try{const r=this.ref('members/'+NET.uid);await r.child('online').onDisconnect().cancel();
       if(NET.isHost&&S&&S.mp){const i=S.players.findIndex(p=>p.uid===NET.uid);if(i>=0){takeOverSeat(i);this.note(`${S.players[i].name}이(가) 나갔어요. AI가 이어서 플레이해요.`);NET.publish();}
         const next=this.order().find(([u,v])=>u!==NET.uid&&v.online!==false);await this.ref('meta/host').set(next?next[0]:null);}
