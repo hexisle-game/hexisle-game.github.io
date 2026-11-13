@@ -1330,6 +1330,110 @@ html.in-tut #dialog{z-index:80!important}
 .tdone p{font-size:17px;line-height:1.75;margin:0 0 10px;max-width:none}
 html.phone .tdone .tdh{font-size:18px!important}
 html.phone .tdone p{font-size:14px}
+
+/* round 67: rules */
+html body .sheet-rules.sheet-frame{width:min(1180px,calc(100vw - 64px))!important;height:min(700px,calc(100dvh - 64px))!important}
+.sheet-rules .rhead{flex-direction:column;align-items:flex-start;gap:2px!important}
+.sheet-rules .rlab{font-size:14px;color:#b8a27a}
+.rbody{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:44px;align-items:center;padding:0 14px}
+.rimg{height:100%;min-height:0;display:flex;align-items:center;justify-content:center}
+.rimg img{max-height:100%;max-width:100%;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 8px 18px rgba(0,0,0,.6))}
+.rtxt h4{margin:0 0 18px;font-size:30px;line-height:1.35;color:#ffe2a0;font-weight:800;word-break:keep-all}
+.rtxt p{margin:0;font-size:17px;line-height:1.85;color:#d9cdb4;word-break:keep-all;max-width:none}
+.rtxt p b{color:#ffd88a}
+.sheet-rules .ffoot{flex:none}
+html.phone .rbody{gap:22px;padding:0 6px}
+html.phone .rtxt h4{font-size:20px;margin-bottom:8px}
+html.phone .rtxt p{font-size:13.5px;line-height:1.6}
+html.phone .sheet-rules .rlab{font-size:12px}
+/* info popups */
+.isub{color:#b8ab92;font-size:15px}
+.ibody{flex:1;min-height:0;display:flex;align-items:center;overflow:auto}
+.icols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%}
+.icols.devc{grid-template-columns:repeat(5,minmax(0,1fr))}
+.icol{display:flex;flex-direction:column;align-items:center;gap:10px;padding:6px 12px;text-align:center;border-left:1px solid transparent;border-image:linear-gradient(180deg,transparent,rgba(233,196,122,.25) 20%,rgba(233,196,122,.25) 80%,transparent) 1}
+.icol:first-child{border-left:0}
+.ihd{width:100%;padding:10px 4px;background:radial-gradient(ellipse 60% 100% at 50% 50%,rgba(0,0,0,.35),rgba(0,0,0,0))}
+.ihd b{display:block;font-size:24px;color:#ffe2a0}.ihd small{color:#cdbf9f;font-size:14px}
+.ibld{height:100px;width:auto;max-width:100%;object-fit:contain;filter:drop-shadow(0 5px 6px rgba(0,0,0,.6))}
+.ieq{color:#b8a27a;font-size:22px;line-height:1}
+.icol .ccards{justify-content:center;gap:4px}
+.icol .ic-card{width:46px}
+.isum{font-size:14px;color:#cdbf9f}
+.idev{width:min(140px,90%);border-radius:6px;box-shadow:0 6px 14px rgba(0,0,0,.6)}
+.icols.devc p{margin:4px 0 0;font-size:15px;line-height:1.55;color:#e6dccb;word-break:keep-all;max-width:none}
+.icols.devc small{color:#a89c86;font-size:13.5px}
+html.phone .ihd b{font-size:17px}html.phone .ihd small{font-size:11.5px}
+html.phone .ibld{height:56px}html.phone .icol .ic-card{width:30px}html.phone .icol{gap:5px;padding:2px 6px}
+html.phone .idev{width:min(92px,90%)}html.phone .icols.devc p{font-size:12px}html.phone .isum{font-size:11.5px}
+html.phone .isub{font-size:12px}
+/* trade restyle */
+.tpick{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:10px!important;margin:6px 0 22px!important}
+html body .tpick .tcell{position:relative;display:flex!important;align-items:center;justify-content:flex-start;gap:10px;min-height:70px;padding:8px 12px!important;border:1px solid rgba(233,196,122,.35)!important;box-shadow:inset 0 0 0 3px rgba(0,0,0,.25)!important;text-align:left}
+html body .tpick .tcell::before{opacity:.75}
+html body .tpick .tcell .ricon{width:28px;height:28px}
+html body .tpick .tcell b{display:block;font-size:19px;color:#fff6e0}
+html body .tpick .tcell small{display:block;font-size:13px;color:rgba(255,246,224,.75)}
+html body .tpick .tcell.sel{border:2px solid #f3d08a!important;box-shadow:0 0 12px rgba(243,208,138,.45),inset 0 0 0 2px rgba(0,0,0,.3)!important}
+html body .tpick .tcell:disabled{opacity:.38}
+html body .sheet-trade .step{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:10px!important;margin:6px 0 18px!important}
+html body .sheet-trade .step .cell{border:1px solid rgba(233,196,122,.3);min-height:56px}
+html body .sheet-trade .step .cell>div:first-child{font-size:16px!important}
+html body .sheet-trade .step .cell .v{font-size:19px!important;margin-left:6px!important;margin-right:auto}
+.tresp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:10px}
+.tr1{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.tnm{display:flex;align-items:center;gap:6px;font-weight:700;color:#e6dccb}.tnm i{width:10px;height:10px;border-radius:50%}
+.tst{font-size:15px}.tst.ok{color:#8fd47a}.tst.no{color:#ff8a72}.tst.wait{color:#cdbf9f}
+.tr1 .btn{min-width:120px!important;min-height:46px!important}
+html.phone .tpick{gap:6px!important;margin:3px 0 10px!important}
+html.phone body .tpick .tcell{min-height:46px;padding:4px 8px!important;gap:6px}
+html.phone body .tpick .tcell b{font-size:14px}html.phone body .tpick .tcell small{font-size:10.5px}
+html.phone body .tpick .tcell .ricon{width:18px;height:18px}
+html.phone body .sheet-trade .step{gap:5px!important;margin:3px 0 8px!important}
+html.phone body .sheet-trade .step .cell{min-height:38px;padding:3px 6px!important}
+html.phone body .sheet-trade .step .cell>div:first-child{font-size:12.5px!important}
+html.phone body .sheet-trade .step .cell .v{font-size:15px!important}
+html.phone body .sheet-trade .step .cell button{width:22px!important;height:22px!important;font-size:13px!important}
+html.phone .tst{font-size:12px}html.phone .tr1 .btn{min-width:80px!important;min-height:34px!important}html.phone .tresp{margin-top:4px;gap:6px}
+/* tutorial tweaks */
+#tut .tbub{background:linear-gradient(180deg,rgba(58,39,22,.84),rgba(33,22,12,.84))!important;backdrop-filter:blur(2px)}
+#tut .tbub.tsmall{width:min(300px,40%)!important;padding:16px 16px 12px!important}
+#tut .tbub.tsmall h4{font-size:18px}#tut .tbub.tsmall p{font-size:14px}
+html.phone #tut .tbub.tsmall{width:min(250px,36%)!important;padding:10px 12px 8px!important}
+html.phone #tut .tbub.tsmall h4{font-size:15px}html.phone #tut .tbub.tsmall p{font-size:12.5px}
+.tgest{position:absolute;left:58%;top:50%;width:0;height:0;pointer-events:none}
+.tgest[hidden]{display:none}
+.tgest i{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:radial-gradient(circle,rgba(255,240,200,.95) 0 30%,rgba(255,220,140,.55) 45%,rgba(255,210,120,0) 70%);box-shadow:0 0 0 2px rgba(255,236,190,.8);opacity:0}
+.tgest.g-rot .f1{animation:grot 1.8s ease-in-out infinite}
+.tgest.g-zoom .f1{animation:gz1 1.8s ease-in-out infinite}.tgest.g-zoom .f2{animation:gz2 1.8s ease-in-out infinite}
+.tgest.g-pan .f1{animation:gp1 1.8s ease-in-out infinite}.tgest.g-pan .f2{animation:gp2 1.8s ease-in-out infinite}
+.tgest.mouse.g-zoom .f2,.tgest.mouse.g-pan .f2{display:none}
+@keyframes grot{0%{transform:translate(-90px,0);opacity:0}15%{opacity:1}85%{opacity:1}100%{transform:translate(90px,0);opacity:0}}
+@keyframes gz1{0%{transform:translate(-18px,18px);opacity:0}15%{opacity:1}85%{opacity:1}100%{transform:translate(-90px,90px);opacity:0}}
+@keyframes gz2{0%{transform:translate(18px,-18px);opacity:0}15%{opacity:1}85%{opacity:1}100%{transform:translate(90px,-90px);opacity:0}}
+@keyframes gp1{0%{transform:translate(-80px,-30px);opacity:0}15%{opacity:1}85%{opacity:1}100%{transform:translate(40px,-30px);opacity:0}}
+@keyframes gp2{0%{transform:translate(-80px,30px);opacity:0}15%{opacity:1}85%{opacity:1}100%{transform:translate(40px,30px);opacity:0}}
+.tgest.mouse.g-zoom .f1{animation:gwheel 1.2s ease-in-out infinite}
+@keyframes gwheel{0%{transform:translate(0,-14px);opacity:0}20%{opacity:1}80%{opacity:1}100%{transform:translate(0,14px);opacity:0}}
+
+html.phone body .sheet-trade .tbody .tpick,html.phone body .sheet-trade .tbody .step{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+html.phone body .sheet-trade .tbody .step .cell{gap:2px!important;padding:3px 4px!important}
+html.phone body .sheet-trade .tbody .step .cell .b{gap:2px!important}
+html.phone body .sheet-trade .tbody .step .cell .v{margin-left:3px!important}
+html.phone body .sheet-trade .tbody .tpick .tcell .ricon{display:none}
+html.phone body .sheet-trade .tbody .tpick .tcell{padding:4px 7px!important}
+html.phone body .sheet-trade .fright{padding-left:14px!important}
+html.phone .sheet-frame.sheet-trade .fbody{grid-template-columns:20% 1fr}
+
+.prow{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.pbtn{position:relative;isolation:isolate;flex:1 1 0;min-width:0;max-width:260px;height:58px;border-style:solid;border-width:10px 12px;border-color:transparent;border-image:url(assets/ui/28241176.webp) 34 36 fill / 10px 12px stretch;background:none;font:inherit;font-size:16px;font-weight:800;color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.7),0 2px 5px rgba(0,0,0,.6);cursor:pointer;padding:0 0 2px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.45))}
+.pbtn::after{content:"";position:absolute;inset:-4px -6px;background:var(--pc);mix-blend-mode:color;opacity:.85;z-index:-1;pointer-events:none}
+.pbtn::before{content:"";position:absolute;inset:-4px -6px;background:var(--pc);mix-blend-mode:multiply;opacity:.35;pointer-events:none}
+.pbtn span{position:relative;z-index:1;white-space:nowrap}
+.pbtn:hover{filter:brightness(1.12) drop-shadow(0 3px 6px rgba(0,0,0,.45))}
+html body .sheet.sheet-dialog.dlg-wide .row .btn{min-width:200px!important}
+html.phone .pbtn{height:44px;font-size:13px;border-width:8px 10px;border-image-width:8px 10px}
+html.phone .prow{gap:8px;margin-top:12px}
 /* ===== tutorial ===== */
 #tut{position:fixed;inset:0;z-index:64;pointer-events:none}
 #tut[hidden]{display:none}
@@ -1430,7 +1534,7 @@ html.phone #tut .texit{top:8px;right:10px;font-size:12px;padding:6px 10px}
 <div id="leftcol"></div>
 <div id="rotate" hidden><div class="rot-ic"></div><b>가로로 돌려 주세요</b><span>HexIsle은 휴대폰에서 가로 화면으로 플레이해요.</span></div>
 <div id="title" class="title" hidden><div class="tbg"></div><div class="tdim"></div><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 육각섬 개척기"><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
-<div id="tut" hidden><div class="tblock" id="tBlock"></div><div class="tring" id="tRing" hidden></div><div class="tx" id="tX" hidden>✕</div><div class="tbub" id="tBub"></div></div>
+<div id="tut" hidden><div class="tblock" id="tBlock"></div><div class="tring" id="tRing" hidden></div><div class="tx" id="tX" hidden>✕</div><div class="tbub" id="tBub"></div><div class="tgest" id="tGest" hidden><i class="f1"></i><i class="f2"></i></div></div>
 <div id="dialog" class="overlay dlgov" hidden><div class="sheet sheet-dialog" id="dsheet"></div></div>
 <div id="modal" class="overlay" hidden><div class="sheet" id="sheet"></div><i class="mcrest" id="mcrest" aria-hidden="true"></i></div>
 
@@ -2161,6 +2265,7 @@ const SUMIMG={"2": "assets/sum/2.webp", "3": "assets/sum/3.webp", "4": "assets/s
 const RESICON={"wood": "assets/icons/wood.webp", "brick": "assets/icons/brick.webp", "wool": "assets/icons/wool.webp", "grain": "assets/icons/grain.webp", "ore": "assets/icons/ore.webp"};
 const DIEFACE512="assets/ui/dieface.webp";let DIEFACEIMG=null;{const im=new Image();im.onload=()=>{DIEFACEIMG=im;if(typeof DICE!=='undefined')DICE.mats=null;};im.src=DIEFACE512;}
 const TITLEIMG={"titlebg": "assets/title/titlebg.webp", "back": "assets/title/back.webp", "orn1": "assets/title/orn1.webp", "orn2": "assets/title/orn2.webp"};
+const RULEIMG=["assets/rules/1.webp", "assets/rules/2.webp", "assets/rules/3.webp", "assets/rules/4.webp", "assets/rules/5.webp", "assets/rules/6.webp", "assets/rules/7.webp"];
 const CARDFRAME="assets/cards/frame.webp";
 const SCANART={"wood": "assets/cards/wood.webp", "wool": "assets/cards/wool.webp", "brick": "assets/cards/brick.webp", "ore": "assets/cards/ore.webp", "grain": "assets/cards/grain.webp", "knight": "assets/cards/knight.webp", "roads": "assets/cards/roads.webp", "plenty": "assets/cards/plenty.webp", "monopoly": "assets/cards/monopoly.webp", "vp": "assets/cards/vp.webp"};
 let FRAMEIMG=null;{let left=Object.keys(SCANART).length+1;const done=()=>{if(--left===0)setTimeout(()=>{try{buildCards();if(S)render();}catch(e){}},0);};{const im=new Image();im.onload=()=>{FRAMEIMG=im;done();};im.src=CARDFRAME;}for(const k in SCANART){const im=new Image();im.onload=()=>{ARTIMG[k]=im;done();};im.src=SCANART[k];}}
@@ -2445,11 +2550,15 @@ function infoText(f){
 function openModal(key,html){ui.modal=key;$('#sheet').className='sheet sheet-'+key+(['offer','steal'].includes(key)?' sheet-dialog':'');if(['offer','steal'].includes(key))html=`<img class="dorn" src="${TITLEIMG.orn2}" alt="">`+html;$('#sheet').innerHTML=html;$('#modal').hidden=false;placeCrest();requestAnimationFrame(placeCrest);setTimeout(placeCrest,120);setTimeout(placeCrest,400);}
 function placeCrest(){const sh=$('#sheet'),c=$('#mcrest');if(!sh||!c||$('#modal').hidden)return;const r=sh.getBoundingClientRect(),o=$('#modal').getBoundingClientRect(),k=PH.on?PH.k:1;c.style.left=((r.left-o.left+r.width/2)/k)+'px';c.style.top=((r.top-o.top)/k)+'px';}
 addEventListener('resize',()=>setTimeout(placeCrest,80));
-function infoDialog(k){const ci=r=>`<img class="ic-card" src="${CARDIMG[r]}" alt="${RN[r]}">`;
-  let body;
-  if(k==='cost')body=`<h3>건설 비용</h3><div class="dscroll"><div class="costlist">${['road','settlement','city','dev'].map(w=>`<div class="crow2"><img class="ic-bld" src="${BUILDIMG[w]}" alt=""><div class="cname"><b>${BN[w]}</b><small>${({road:'영역을 넓혀요',settlement:'1점',city:'2점 · 정착지를 업그레이드',dev:'무작위 특수 카드'})[w]}</small></div><div class="ccards">${RES.flatMap(r=>Array(COST[w][r]||0).fill(r)).map(ci).join('')}</div></div>`).join('')}</div></div>`;
-  else body=`<h3>발전 카드</h3><p>양모 · 곡물 · 광석 1장씩으로 사는 무작위 특수 카드예요. 총 25장, 남은 덱 ${S.deck.length}장.</p><div class="dscroll"><div class="devlist">${Object.keys(DEVCNT).map(t=>`<div class="drow2"><img class="ic-dev" src="${CARDIMG[t]}" alt="${DEVN[t]}"><div><b>${DEVN[t]}</b> <small>${DEVCNT[t]}장</small><p>${DEVD[t]}</p></div></div>`).join('')}</div></div><p class="muted">산 차례에는 못 쓰고, 한 차례에 1장만 쓸 수 있어요.</p>`;
-  openDialog(body+`<div class="row"><button class="btn sub" id="iOk">확인</button></div>`,'dlg-wide');$('#iOk').onclick=closeDialog;}
+function infoDialog(k){const ci=r=>`<img class="ic-card" src="${CARDIMG[r]}" alt="${RN[r]}">`;let body,title,sub;
+  if(k==='cost'){title='건설 비용';sub='자원 카드를 모아 지어요.';
+    const D={road:'영역을 넓혀요',settlement:'1점 · 자원 1장씩',city:'2점 · 자원 2장씩',dev:'무작위 특수 카드'};
+    body=`<div class="icols">${['road','settlement','city','dev'].map(w=>`<div class="icol"><div class="ihd"><b>${BN[w]}</b><small>${D[w]}</small></div><img class="ibld" src="${BUILDIMG[w]}" alt=""><div class="ieq">=</div><div class="ccards">${RES.flatMap(r=>Array(COST[w][r]||0).fill(r)).map(ci).join('')}</div><div class="isum">${RES.filter(r=>COST[w][r]).map(r=>RN[r]+' '+COST[w][r]).join(' · ')}</div></div>`).join('')}</div>`;}
+  else{title='발전 카드';sub='한 차례에 1장만, 산 다음 내 차례부터 쓸 수 있어요.';
+    const D={knight:'도적을 옮기고<br>상대 카드 1장을 빼앗아요.',vp:'갖고만 있어도 1점.<br>상대에게는 보이지 않아요.',roads:'도로 2개를<br>무료로 놓아요.',plenty:'은행에서 원하는 자원<br>2장을 받아요.',monopoly:'자원 1종을 골라 상대들이<br>가진 것을 전부 가져와요.'};
+    body=`<div class="icols devc">${['knight','vp','roads','plenty','monopoly'].map(t=>`<div class="icol"><img class="idev" src="${CARDIMG[t]}" alt="${DEVN[t]}"><p>${D[t]}</p><small>총 ${DEVCNT[t]}장</small></div>`).join('')}</div>`;}
+  openModal('info',`<button class="mclose" id="ix" aria-label="닫기"></button><div class="fhead"><h3>${title}</h3><span class="isub">${sub}</span></div><div class="ibody">${body}</div>`);
+  $('#sheet').classList.add('sheet-frame');$('#ix').onclick=()=>{closeModal();update();};}
 function openDialog(html,cls){$('#dsheet').className='sheet sheet-dialog'+(cls?' '+cls:'');$('#dsheet').innerHTML=`<img class="dorn" src="${TITLEIMG.orn2}" alt="">`+html;$('#dialog').hidden=false;ui.dialog=true;}
 function closeDialog(){$('#dialog').hidden=true;$('#dsheet').innerHTML='';ui.dialog=false;}
 function closeModal(){ui.modal=null;$('#modal').hidden=true;$('#sheet').innerHTML='';}
@@ -2469,7 +2578,7 @@ setInterval(()=>{if(!S)return;const now=Date.now();
   document.querySelectorAll('[data-cd]').forEach(e=>{const k=e.dataset.cd;const t=k==='offer'?(S.offer&&S.offer.t):S.deadline;e.textContent=t?fmtCd(t-now):'';});
 },500);
 function forcedModals(){
-  if(['start','rules','confirm','closed-over','trade','plenty','mono','lobby','mp','setup'].includes(ui.modal))return;
+  if(['start','rules','confirm','closed-over','trade','plenty','mono','lobby','mp','setup','info'].includes(ui.modal))return;
   if(S.phase==='over'){if(ui.modal!=='over')showOver();return;}
   if(S.pend&&S.pend.k==='discard'&&S.pend.p===ME){if(ui.modal!=='discard')showDiscard();return;}
   if(S.pend&&S.pend.k==='steal'&&S.cur===ME){if(ui.modal!=='steal')showSteal();return;}
@@ -2491,8 +2600,8 @@ function showDiscard(){const n=S.pend.n;const sel=emptyRes();const me=S.players[
     $('#dOut').onclick=e=>{const t=e.target.closest('[data-r]');if(!t)return;sel[t.dataset.r]--;draw();};
     $('#dOk').onclick=()=>{closeModal();act('discard',sel);};};
   draw();}
-function showSteal(){openModal('steal',`<h3>누구에게서 빼앗을까요?</h3><p>도적이 앉은 땅에 건물이 있는 상대 중 한 명을 고르세요. 카드 1장을 무작위로 가져와요.</p>
-  <div class="row" style="justify-content:flex-start">${S.pend.v.map(q=>`<button class="btn" data-q="${q}" style="border-color:${S.players[q].color}">${S.players[q].name} (카드 ${sumRes(S.players[q].res)}장)</button>`).join('')}</div>`);
+function showSteal(){openModal('steal',`<h3>누구에게서 빼앗을까요?</h3><p>도적이 앉은 땅에 건물이 있는 상대 중 한 명을 고르세요.<br>카드 1장을 무작위로 가져와요.</p>
+  <div class="prow">${S.pend.v.map(q=>`<button class="pbtn" data-q="${q}" style="--pc:${S.players[q].color}"><span>${S.players[q].name} (카드 ${sumRes(S.players[q].res)}장)</span></button>`).join('')}</div>`);$('#sheet').classList.add('dlg-wide');
   $('#sheet').querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{closeModal();act('steal',+b.dataset.q);});}
 function showOver(){const order=S.players.map((_,i)=>i).sort((a,b)=>vp(b,true)-vp(a,true));
   openModal('over',`<h3>${S.winner===ME?'승리했어요!':S.players[S.winner].name+'의 승리'}</h3><p>${S.turn}바퀴 만에 게임이 끝났어요.</p>
@@ -2503,14 +2612,14 @@ function showOver(){const order=S.players.map((_,i)=>i).sort((a,b)=>vp(b,true)-v
 function showTrade(tab){tab=tab||'bank';const me=S.players[ME];const rat=ratios(ME);
   const st={give:null,get:null,pg:emptyRes(),pr:emptyRes(),resp:null};if(myOffer()){Object.assign(st.pg,S.offer.give);Object.assign(st.pr,S.offer.get);if(!arguments[0])tab='player';}
   const draw=()=>{let body='',foot='';
-    if(tab==='bank'){body=`<div class="label">줄 자원 (내 비율)</div><div class="pick" id="tg">${RES.map(k=>`<button class="bg-${k}${st.give===k?' sel':''}" data-k="${k}" ${me.res[k]>=rat[k]?'':'disabled'}><span class="pn">${icon(k)}${RN[k]}</span><span class="pr"><i>${rat[k]}장 → 1장</i><i>보유 ${me.res[k]}</i></span></button>`).join('')}</div>
-      <div class="label">받을 자원</div><div class="pick" id="tr">${RES.map(k=>`<button class="bg-${k}${st.get===k?' sel':''}" data-k="${k}" ${S.bank[k]>0&&k!==st.give?'':'disabled'}><span class="pn">${icon(k)}${RN[k]}</span><span class="pr"><i>은행 ${S.bank[k]}</i></span></button>`).join('')}</div>
-      <div class="tinfo"><div><div class="label">은행 잔고</div><div class="cost">${RES.map(k=>`<span class="pip bg-${k}">${RN[k]} ${S.bank[k]}</span>`).join('')}<span class="pip pdev">발전 ${S.deck.length}</span></div></div><div><div class="label">내 교환 비율</div><div class="cost">${RES.map(k=>`<span class="pip bg-${k}">${RN[k]} ${rat[k]}:1</span>`).join('')}</div></div></div>`;
+    if(tab==='bank'){body=`<div class="label">줄 자원</div><div class="pick tpick" id="tg">${RES.map(k=>`<button class="tcell bg-${k}${st.give===k?' sel':''}" data-k="${k}" ${me.res[k]>=rat[k]?'':'disabled'}>${icon(k)}<span><b>${RN[k]} ${rat[k]}</b><small>보유 ${me.res[k]}</small></span></button>`).join('')}</div>
+      <div class="label">받을 자원</div><div class="pick tpick" id="tr">${RES.map(k=>`<button class="tcell bg-${k}${st.get===k?' sel':''}" data-k="${k}" ${S.bank[k]>0&&k!==st.give&&st.give?'':'disabled'}>${icon(k)}<span><b>${RN[k]} 1</b><small>은행 ${S.bank[k]}</small></span></button>`).join('')}</div>
+`;
       foot=`<p class="fhint">기본은 4:1, 항구에 건물이 있으면 3:1 또는 2:1이에요.</p><button class="btn primary" id="tb" ${st.give&&st.get?'':'disabled'}>교환하기</button>`;}
-    else{body=`<div class="label">내가 줄 것</div>${stepper('pg',st.pg,k=>me.res[k])}<div class="label">내가 받을 것</div>${stepper('pr',st.pr,()=>9)}
-      ${myOffer()?`<div class="resp">${Object.keys(S.offer.to).map(q=>{const r=S.offer.to[q];return `<div class="r"><b style="color:${S.players[q].color}">${S.players[q].name}</b><span class="${r.s==='yes'?'ok':r.s==='no'?'no':'wait'}">${r.s==='wait'?`답변 대기 · <i data-cd="offer"></i>`:r.why}</span>${r.s==='yes'?`<button class="btn sub" data-deal="${q}">거래</button>`:''}</div>`;}).join('')}</div>`:''}`;
-      foot=`<p class="fhint">${myOffer()?'수락한 상대와 거래를 누르면 교환돼요.':'줄 것과 받을 것을 정하고 제안하세요.'}</p><button class="btn primary" id="tp" ${sumRes(st.pg)||sumRes(st.pr)?'':'disabled'}>${hasHumans()?'제안하기':'AI들에게 제안'}</button>`;}
-    const left=`<div class="mtabs">${[['bank','은행 · 항구'],['player',hasHumans()?'다른 플레이어':'AI 플레이어']].map(([k,l])=>`<button class="mtab${k===tab?' on':''}" data-t="${k}">${l}<img class="orn" src="${TITLEIMG.orn1}" alt=""></button>`).join('')}</div>`;
+    else{body=`<div class="label">줄 자원</div>${stepper('pg',st.pg,k=>me.res[k])}<div class="label">받을 자원</div>${stepper('pr',st.pr,()=>9)}
+      ${myOffer()?`<div class="tresp">${Object.keys(S.offer.to).map(q=>{const r=S.offer.to[q];return `<div class="tr1"><div class="tnm"><i style="background:${S.players[q].color}"></i>${S.players[q].name}</div><div class="tst ${r.s==='yes'?'ok':r.s==='no'?'no':'wait'}">${r.s==='wait'?`답변 대기 · <i data-cd="offer"></i>`:r.why}</div><button class="btn sub" data-deal="${q}" ${r.s==='yes'?'':'disabled'}>거래</button></div>`;}).join('')}</div>`:''}`;
+      foot=`<button class="btn primary" id="tp" ${sumRes(st.pg)||sumRes(st.pr)?'':'disabled'}>제안하기</button>`;}
+    const left=`<div class="mtabs">${[['bank','은행·항구'],['player','플레이어']].map(([k,l])=>`<button class="mtab${k===tab?' on':''}" data-t="${k}">${l}<img class="orn" src="${TITLEIMG.orn1}" alt=""></button>`).join('')}</div>`;
     frame('trade','교환','',left,`<div class="tbody">${body}</div>`,foot);
     document.querySelectorAll('.sheet-trade .mtab').forEach(b=>b.onclick=()=>{tab=b.dataset.t;draw();});
     $('#fx').onclick=()=>{ui.tradeRedraw=null;closeModal();if(myOffer())act('cancel');else update();};
@@ -2562,33 +2671,25 @@ const DIA_DIST=dSvg(360,120,`<g font-size="12" fill="currentColor">`+dRoad(40,70
   `<path d="M171 70l6 7 12-14" fill="none" stroke="#7fd6a1" stroke-width="4" stroke-linecap="round"/><path d="M241 40l6 7 12-14" fill="none" stroke="#7fd6a1" stroke-width="4" stroke-linecap="round"/>`+
   `<text x="110" y="20" text-anchor="middle">바로 옆: 불가</text><text x="180" y="100" text-anchor="middle">두 칸 떨어짐: 가능</text></g>`);
 const FLOW=`<div class="flow">${['주사위 굴리기','자원 받기','교환하기','건설하기','점수 쌓기'].map((t,i)=>`<span>${t}</span>`).join('<i>→</i>')}</div>`;
-const PAGES=[
- ['어떤 게임인가요?',`<p>무인도에 처음 정착한 개척자가 되어 <b>마을을 넓혀 가는 게임</b>이에요. 나와 AI 1~3명이 경쟁해요(2~4인).</p>${FLOW}<p>땅에서 나오는 자원(목재, 벽돌, 양모, 곡물, 광석)을 모아 도로, 마을, 도시를 지으면 점수가 올라가요. <b>10점</b>을 가장 먼저 모으면 이겨요.</p><p>한 판은 보통 30~60분 정도예요. 다음 장부터 하나씩 차근차근 설명할게요.</p>`],
- ['보드 읽는 법',`<p>섬은 육각형 땅 19칸으로 되어 있어요. 땅마다 나오는 자원이 정해져 있어요.</p><div class="terr">${['wood','brick','wool','grain','ore','desert'].map(k=>`<div class="bg-${k}"><b>${TN[k]}</b>${k==='desert'?'아무것도 안 나옴':RN[k]+' 생산'}</div>`).join('')}</div><p>땅 위에 떠 있는 <b>동그란 숫자판</b>이 이 게임의 핵심이에요. 곧 자세히 설명할게요. 섬 가장자리의 <b>배와 깃발 표지판</b>은 항구예요(교환 장에서 설명).</p>`],
- ['건물은 어디에 짓나요?',`${DIA_CORNER}<p>정착지와 도시는 땅 위가 아니라 땅의 <b>꼭짓점</b>(땅 2~3개가 만나는 점)에 지어요. 그래서 건물 하나가 최대 <b>3개의 땅</b>에서 자원을 받아요.</p><p>도로는 땅과 땅 사이의 <b>변</b>(선)에 놓아요.</p>`],
- ['숫자판의 뜻',`${DIA_PROD}<p>매 차례 주사위 2개를 굴려 <b>두 눈의 합</b>을 봐요. 그 합과 <b>같은 숫자가 적힌 땅</b>이 자원을 만들어요. 그 땅의 꼭짓점에 건물이 있는 사람은 모두 자원을 받아요.</p><ul class="steps"><li>정착지는 1장, 도시는 2장</li><li><b>내 차례가 아니어도</b> 받아요. 상대가 굴린 주사위로도 자원이 들어와요.</li><li>사막에는 숫자가 없어서 아무것도 안 나와요.</li></ul>`],
- ['숫자마다 나오는 빈도',`${DIA_PROB}<p>주사위 2개의 합은 숫자마다 나오는 확률이 달라요. 예를 들어 6은 (1,5)(2,4)(3,3)(4,2)(5,1) 다섯 가지 경우가 있지만, 2는 (1,1) 하나뿐이에요.</p><p>그래서 <b>7에 가까운 숫자일수록</b> 자주 나와요. 막대 위 숫자는 36번 굴렸을 때 나오는 평균 횟수예요.</p><ul class="steps"><li><b style="color:#e05a4e">6·8</b>: 가장 자주 나와서 빨간 글씨로 표시돼요(36번 중 5번).</li><li>2·12: 36번 굴리면 1번꼴로 아주 드물어요.</li><li>7이 제일 잘 나오지만 7이 적힌 땅은 없어요. 대신 도적이 움직여요.</li></ul><p><b>정리하면:</b> 집이 자주 나오는 숫자의 땅에 많이 닿을수록 자원을 많이 받아요.</p>`],
- ['도로는 왜 깔아요?',`${DIA_ROAD}<p>도로 자체는 점수가 없지만, 도로가 없으면 확장을 할 수 없어요.</p><ul class="steps"><li><b>새 정착지는 내 도로가 이어진 꼭짓점에만</b> 지을 수 있어요. 처음 두 개 이후로는 도로를 깔아 길을 내야 새 마을을 세울 수 있어요.</li><li>좋은 자리를 상대보다 먼저 차지하려고 도로를 뻗어요. 상대 도로는 내 건물을 지나갈 수 없어서 길을 막을 수도 있어요.</li><li>끊기지 않은 도로가 <b>5칸 이상이고 가장 길면</b> '최장 교역로' 보너스 <b>2점</b>을 받아요.</li></ul><p>목표 자리 없이 아무렇게나 깔면 자원 낭비예요. 지을 곳을 정하고 그쪽으로 뻗으세요.</p>`],
- ['거리 규칙',`${DIA_DIST}<p>건물 바로 옆 꼭짓점(도로 1칸 거리)에는 누구의 건물이든 새로 지을 수 없어요. <b>최소 도로 2칸</b>은 떨어져야 해요. 그래서 좋은 자리는 금방 사라져요.</p><p>게임에서 지을 수 있는 자리는 반짝이는 동그라미로 표시되니 직접 계산할 필요는 없어요.</p>`],
- ['무엇을 지을 수 있나요?',`<table class="reftable"><tbody><tr><td><b>도로</b></td><td>${costPips(COST.road)}</td><td>영역 확장, 최장 교역로</td></tr><tr><td><b>정착지</b></td><td>${costPips(COST.settlement)}</td><td><b>1점</b>, 주변 땅에서 1장씩 생산</td></tr><tr><td><b>도시</b></td><td>${costPips(COST.city)}</td><td>내 정착지를 업그레이드. <b>2점</b>, 2장씩 생산</td></tr><tr><td><b>발전 카드</b></td><td>${costPips(COST.dev)}</td><td>무작위 특수 카드 1장</td></tr></tbody></table><p style="margin-top:10px">초반에는 <b>목재·벽돌</b>(도로, 정착지)이 중요하고, 후반에는 <b>곡물·광석</b>(도시, 발전 카드)이 중요해져요. 말은 1인당 도로 15개, 정착지 5개, 도시 4개까지예요.</p>`],
- ['게임 시작: 초기 배치',`<p>주사위를 굴리기 전에 모두 <b>정착지 1개와 거기 붙은 도로 1개</b>를 두 번씩 공짜로 놓아요.</p><p>순서는 뱀 모양이에요. 4인이면 나 → 한결 → 솔 → 도담, 그리고 거꾸로 도담 → 솔 → 한결 → 나. 그래서 나는 첫 번째와 마지막에 놓아요.</p><p><b>두 번째 정착지</b>를 놓으면 닿아 있는 땅의 자원을 1장씩 바로 받고 시작해요.</p><p><b>자리 고르는 요령</b></p><ul class="steps"><li>자주 나오는 숫자(6, 8, 5, 9)에 닿는 꼭짓점</li><li>여러 종류의 자원을 고루 받는 자리</li><li>두 정착지가 서로 다른 자원을 보완하도록</li></ul><p>초기 배치 때는 금색 고리로 추천 자리를 보여 줘요.</p>`],
- ['내 차례에 하는 일',`<ol class="steps"><li><b>주사위 굴리기</b>: 모두 자원을 받아요.</li><li><b>교환</b>(선택): 필요한 자원을 바꿔요.</li><li><b>건설</b>(선택): 도로, 정착지, 도시, 발전 카드</li><li><b>턴 종료</b>: 다음 사람에게 넘겨요.</li></ol><p>교환과 건설은 순서 상관없이 자원이 있는 만큼 여러 번 할 수 있어요. 보드 위 안내 문구가 지금 할 수 있는 일을 알려 줘요.</p><p>AI 차례에는 기다리면서 오른쪽 <b>기록</b>을 보면 누가 뭘 했는지 알 수 있어요.</p>`],
- ['주사위 7과 도적',`<p>7은 가장 잘 나오는 숫자지만 7이 나오면 <b>아무도 자원을 받지 못해요.</b> 대신 이런 일이 생겨요.</p><ol class="steps"><li>카드가 <b>8장 이상</b>인 사람은 절반(내림)을 버려요. 9장이면 4장을 버려요.</li><li>굴린 사람이 <b>도적</b>을 원하는 땅으로 옮겨요. 도적은 보드 위 <b>검은 망토를 쓴 인물</b>이고 머리 위에 '도적' 표지가 떠 있어요. 처음에는 사막에 있어요.</li><li>도적이 앉은 땅은 숫자가 나와도 <b>생산이 멈춰요.</b></li><li>그 땅에 건물이 있는 상대 한 명에게서 카드 1장을 무작위로 빼앗아요.</li></ol><p><b>요령:</b> 카드를 7장 이하로 유지하고, 도적은 선두나 내가 원하는 자원을 많이 받는 상대의 좋은 땅에 보내세요.</p>`],
- ['교환하기',`<ul class="steps"><li><b>은행</b>: 같은 자원 <b>4장</b> → 원하는 자원 1장. 언제든 가능해요.</li><li><b>3:1 항구</b>: 그 항구의 두 꼭짓점 중 하나에 내 건물이 있으면 같은 자원 3장 → 1장</li><li><b>2:1 항구</b>: 표지판에 적힌 자원 2장 → 원하는 자원 1장. 그 자원이 많이 나오는 사람에게 아주 좋아요.</li><li><b>AI와 거래</b>: 교환 → AI 플레이어 탭에서 주고받을 장수를 정해 제안해요. 수락한 AI 중 한 명과 거래할 수 있어요. AI는 손해 보는 거래와 8점 이상인 선두와의 거래는 거절해요.</li></ul><p>내 현재 교환 비율은 오른쪽 '건설 비용과 은행 잔고'에서 확인할 수 있어요.</p>`],
- ['발전 카드',`<p>양모 + 곡물 + 광석으로 사요. 25장 중 무작위로 나와요.</p><ul class="steps">${[['knight',14],['vp',5],['roads',2],['plenty',2],['monopoly',2]].map(([t,n])=>`<li><b>${DEVN[t]}</b>(${n}장): ${DEVD[t]}</li>`).join('')}</ul><ul class="steps"><li>산 차례에는 쓸 수 없고 다음 차례부터 쓸 수 있어요.</li><li>한 차례에 1장만 쓸 수 있어요.</li><li>기사는 주사위 굴리기 전에도 쓸 수 있어요.</li><li>승점 카드는 쓰지 않아도 자동으로 점수에 들어가요.</li></ul>`],
- ['점수와 승리',`<table class="reftable"><tbody><tr><td>정착지</td><td>1점</td></tr><tr><td>도시</td><td>2점</td></tr><tr><td>승점 카드</td><td>1장당 1점</td></tr><tr><td>최장 교역로</td><td>2점. 끊기지 않은 도로가 5칸 이상이고 가장 긴 사람</td></tr><tr><td>최강 기사단</td><td>2점. 기사 카드를 3장 이상, 가장 많이 쓴 사람</td></tr></tbody></table><p style="margin-top:10px">보너스 2점은 다른 사람이 더 길게, 더 많이 하면 빼앗겨요. <b>내 차례에 10점</b>이 되는 순간 이겨요.</p>`],
- ['초보를 위한 다섯 가지 요령',`<ol class="steps"><li><b>숫자가 다양한 자리</b>를 잡으세요. 6만 두 군데 잡으면 6이 안 나올 때 아무것도 못 받아요.</li><li><b>초반엔 확장</b>이에요. 정착지가 늘어야 자원도 늘어요. 도로 → 정착지를 먼저 노리세요.</li><li><b>도시는 효율이 좋아요.</b> 점수 +1에 생산이 두 배가 돼요. 광석·곡물이 모이면 바로 업그레이드하세요.</li><li><b>카드는 7장 이하로.</b> 많이 쥐고 있으면 7이 나올 때 절반을 잃어요. 남는 카드는 교환이나 발전 카드로 바꾸세요.</li><li><b>부족한 자원은 항구로.</b> 많이 나오는 자원의 2:1 항구를 잡으면 사실상 모든 자원을 얻을 수 있어요.</li></ol>`],
- ['조작 방법',`<ul class="steps"><li><b>보드 돌리기</b>: 드래그하면 360도로 돌리고 기울일 수 있어요. <b>보드 옮기기</b>: 오른쪽 드래그(휴대폰은 두 손가락으로 끌기). <b>확대·축소</b>: 마우스 휠이나 두 손가락. <b>시점 초기화</b> 버튼으로 돌아와요.</li><li><b>놓을 수 있는 곳</b>은 하얗게 반짝여요. 그 위를 누르면 지어져요.</li><li><b>건설</b>: 아래 나무판의 '건설'에서 지을 것을 누르면 보드에 자리가 표시돼요. 같은 버튼을 다시 누르면 취소돼요.</li><li>숫자판이 <b>금색 테두리</b>로 빛나면 방금 주사위로 생산한 땅이에요.</li><li><b>툴팁</b>을 켜 두면 보드의 땅, 건물, 도적, 항구와 화면의 숫자에 마우스를 올리거나(휴대폰은 탭) 설명을 볼 수 있어요. 주요 사건은 보드 위에 해설이 떠요.</li><li>이 설명은 언제든 위쪽 <b>게임 방법</b> 버튼으로 다시 볼 수 있어요. 진행 상황은 자동 저장돼요.</li></ul>`],
-];
 
-function showRules(i,after){i=i||0;
-  openModal('rules',`<button class="mclose" id="rx" aria-label="닫기" title="닫기"></button><div class="label">게임 방법 ${i+1} / ${PAGES.length}</div><h3>${PAGES[i][0]}</h3><div class="tut-body">${PAGES[i][1]}</div>
-  <div class="row"><div class="tut-dots">${PAGES.map((_,j)=>`<i class="${j===i?'on':''}"></i>`).join('')}</div>
-  ${i>0?'<button class="btn" id="rp">이전</button>':'<button class="btn" id="rs">건너뛰기</button>'}
-  ${i<PAGES.length-1?'<button class="btn primary" id="rn">다음</button>':'<button class="btn primary" id="rd">게임으로</button>'}</div>`);
+
+const RULES=[
+ ['어떤 게임인가요?','주사위를 굴려 자원을 받고,<br>마을을 넓혀 점수를 쌓아요.','무인도에 처음 정착한 개척자가 되어 마을을 넓혀 가는 게임이에요. 땅에서 나오는 자원으로 도로, 마을, 도시를 지으면 점수가 올라가요. <b>10점</b>을 가장 먼저 모으면 이겨요.'],
+ ['땅과 자원','땅마다 나오는<br>자원이 달라요.','숲은 <b>목재</b>, 언덕은 <b>벽돌</b>, 목초지는 <b>양모</b>, 밭은 <b>곡물</b>, 산은 <b>광석</b>을 줘요. 사막은 아무것도 주지 않아요.'],
+ ['주사위와 생산','주사위 합과 같은 숫자의<br>땅이 자원을 만들어요.','그 땅의 꼭짓점에 건물이 있으면 자원을 받아요. 정착지는 1장, 도시는 2장이에요. <b>6과 8</b>은 자주 나오고, 2와 12는 드물게 나와요.'],
+ ['건설','자원을 모아 짓고,<br>지을수록 점수가 올라요.','도로(목재·벽돌)는 영역을 넓혀요. 정착지(목재·벽돌·양모·곡물)는 <b>1점</b>, 도시(곡물 2·광석 3)는 정착지를 업그레이드해 <b>2점</b>이에요. 정착지는 다른 건물과 한 칸 이상 떨어진, 내 도로와 이어진 꼭짓점에만 지을 수 있어요.'],
+ ['교환','부족한 자원은<br>교환으로 구해요.','같은 자원 <b>4장</b>을 은행에서 원하는 자원 1장으로 바꿀 수 있어요. 항구에 건물이 있으면 3:1이나 2:1로 더 싸게 바꿔요. 다른 플레이어와 직접 거래할 수도 있어요.'],
+ ['주사위 7과 도적','7이 나오면<br>도적이 움직여요.','카드가 <b>8장 이상</b>인 사람은 절반을 버려요. 주사위를 굴린 사람은 도적을 옮기고, 그 땅 주인에게서 카드 1장을 빼앗아요. 도적이 있는 땅은 자원을 만들지 않아요.'],
+ ['발전 카드와 승리','발전 카드와 보너스로<br>10점을 노려요.','발전 카드(양모·곡물·광석)는 기사, 도로 건설, 풍년, 독점, 승점 중 하나가 나와요. 가장 긴 도로(5칸 이상)와 기사를 가장 많이 쓴 사람(3장 이상)은 각각 <b>2점</b>을 더 받아요.']];
+function showRules(i,after){i=i||0;const P=RULES[i],last=i===RULES.length-1;
+  openModal('rules',`<button class="mclose" id="rx" aria-label="닫기"></button>
+   <div class="fhead rhead"><div class="rlab">게임 방법 ${i+1} / ${RULES.length}</div><h3>${P[0]}</h3></div>
+   <div class="rbody"><div class="rimg"><img src="${RULEIMG[i]}" alt=""></div><div class="rtxt"><h4>${P[1]}</h4><p>${P[2]}</p></div></div>
+   <div class="ffoot">${i>0?'<button class="btn" id="rp">이전</button>':''}${last?'':'<button class="btn" id="rs">건너뛰기</button>'}<button class="btn primary" id="rn">${last?'닫기':'다음'}</button></div>`);
+  $('#sheet').classList.add('sheet-frame');
   const done=()=>{closeModal();if(after)after();else update();};
-  $('#rx').onclick=done;if($('#rp'))$('#rp').onclick=()=>showRules(i-1,after);if($('#rs'))$('#rs').onclick=done;
-  if($('#rn'))$('#rn').onclick=()=>showRules(i+1,after);if($('#rd'))$('#rd').onclick=done;}
+  $('#rx').onclick=done;if($('#rs'))$('#rs').onclick=done;if($('#rp'))$('#rp').onclick=()=>showRules(i-1,after);
+  $('#rn').onclick=()=>last?done():showRules(i+1,after);}
 
 const DIFF=[['easy','쉬움','AI가 자주 쉬고 거래에 너그러워요'],['normal','보통','기본 전략으로 플레이해요'],['hard','어려움','선두를 견제하고 자원 보너스를 받아요']];
 function countPick(){return `<div class="label" style="margin-top:8px">인원 (최소 2 · 최대 4)</div><div class="cnt" id="cnt">${[2,3,4].map(n=>`<button class="btn${ui.n===n?' active':''}" data-n="${n}">${n}인</button>`).join('')}</div>
@@ -2916,10 +3017,9 @@ const TUT={on:false,i:0,P:null,traded:false,force7:false,aiDiceIx:0,
     this.plan();this.on=true;this.traded=false;this.force7=false;this.aiDiceIx=0;
     $('#tut').hidden=false;document.documentElement.classList.add('in-tut');$('#tExit').hidden=false;
     try{fitCam(true);}catch(e){}this.go(0);},
-  done(){$('#tut').hidden=true;closeDialog();this.zoomOut();
-    frame('tutdone','튜토리얼 완료!','','',`<div class="tdone"><p class="tdh">이제 기본은 다 익혔어요.</p><p>주사위로 자원을 모으고, 교환하고, 도로 · 정착지 · 도시를 지어 <b>10점</b>을 먼저 모으면 이겨요.</p><p class="muted">더 궁금한 규칙은 설정의 게임 방법에서 다시 볼 수 있어요.</p></div>`,
-      `<button class="btn" id="tdHome">첫 화면으로</button><button class="btn primary" id="tdGo">싱글 플레이 시작</button>`);
-    $('#fx').onclick=$('#tdHome').onclick=()=>this.exit(false);$('#tdGo').onclick=()=>this.exit(true);},
+  done(){$('#tut').hidden=true;this.zoomOut();
+    openDialog(`<h3>튜토리얼 완료!</h3><p>이제 기본은 다 익혔어요.<br>더 궁금한 규칙은 설정의 게임 방법에서 다시 볼 수 있어요.</p><div class="row"><button class="btn" id="tdHome">첫 화면으로</button><button class="btn sub" id="tdGo">싱글 플레이 시작</button></div>`,'dlg-wide');
+    $('#tdHome').onclick=()=>{closeDialog();this.exit(false);};$('#tdGo').onclick=()=>{closeDialog();this.exit(true);};},
   exit(toSingle){this.on=false;$('#tut').hidden=true;$('#tExit').hidden=true;document.documentElement.classList.remove('in-tut');clearTimeout(aiTimer);closeDialog();closeModal();
     newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;render();
     if(toSingle){showTitle(true);showSingle();}else showStart();},
@@ -2927,7 +3027,7 @@ const TUT={on:false,i:0,P:null,traded:false,force7:false,aiDiceIx:0,
   plan(){const adj=v=>G.verts[v].adj;const eid=(a,b)=>G.edges.findIndex(e=>(e.a===a&&e.b===b)||(e.a===b&&e.b===a));
     const pr0=emptyRes();const val=v=>{const h=G.verts[v].h.filter(i=>S.board.hexes[i].res!=='desert');return h.length?spotValue(v,0,pr0):-99;};
     const V=[...G.verts.keys()];let best=null;
-    for(const v1 of V.slice().sort((a,b)=>val(b)-val(a)).slice(0,14))for(const a of adj(v1))for(const b of adj(a)){if(b===v1||adj(v1).includes(b))continue;const sc=val(v1)+.8*val(b);if(!best||sc>best.sc)best={v1,a,b,sc};}
+    for(const v1 of V.slice().sort((a,b)=>val(b)-val(a)).slice(0,14)){const low=adj(v1).slice().sort((p,q)=>G.verts[q].y-G.verts[p].y)[0];if(G.verts[low].y<=G.verts[v1].y)continue;for(const a of [low])for(const b of adj(a)){if(b===v1||adj(v1).includes(b))continue;const sc=val(v1)+.8*val(b);if(!best||sc>best.sc)best={v1,a,b,sc};}}
     const {v1,a,b}=best;const taken=new Set([v1,b]);const ok=v=>!taken.has(v)&&adj(v).every(x=>!taken.has(x));
     const avoid=new Set([v1,a,b,...adj(a),...adj(v1),...adj(b)]);
     const v2=V.filter(v=>ok(v)&&!avoid.has(v)&&val(v)>0).sort((x,y)=>val(y)-val(x))[0];taken.add(v2);
@@ -2943,7 +3043,7 @@ const TUT={on:false,i:0,P:null,traded:false,force7:false,aiDiceIx:0,
     const hexAI=aiHex(s1).filter(h=>!G.hexes[h].v.some(x=>x===s2||x===s2b))[0]??aiHex(s1)[0];
     this.P={v1,a,b,v2,u,e1:userE[0],e3:userE[1],e2:userE[2],ai,hexAI};},
   focus(at,dist){try{if(!W.ok)return;let x,z;if(at.v!==undefined){const p=vc(at.v);x=p.x;z=p.z;}else if(at.e!==undefined){const E=G.edges[at.e],A=vc(E.a),B=vc(E.b);x=(A.x+B.x)/2;z=(A.z+B.z)/2;}else if(at.h!==undefined){const p=hc(at.h);x=p.x;z=p.z;}else return;
-    const tp=new THREE.Vector3(x,0,z);const dir=W.cam.position.clone().sub(W.ctl.target).normalize();if(dir.y<.55){dir.y=.75;dir.normalize();}
+    const tp=new THREE.Vector3(x,0,z);const dir=new THREE.Vector3(0,.82,.58).normalize();
     const cp=tp.clone().add(dir.multiplyScalar(dist||(PH.on?5.2:7.5)));W.camAnim={t0:performance.now(),fp:W.cam.position.clone(),ft:W.ctl.target.clone(),tp,cp};invalidate();}catch(e){console.error(e);}},
   zoomOut(){try{fitCam(true);}catch(e){}},
   camSnap(){const c=W.ctl;return {az:c.getAzimuthalAngle(),po:c.getPolarAngle(),d:W.cam.position.distanceTo(c.target),t:c.target.clone()};},
@@ -2964,7 +3064,7 @@ const TUT={on:false,i:0,P:null,traded:false,force7:false,aiDiceIx:0,
   tick(){document.documentElement.classList.toggle('tut-modal',!!(ui.modal&&ui.modal!=='closed-over'));if(!this.on)return;const st=this.cur();if(!st)return;
     if(st.done&&(()=>{try{return st.done.call(this);}catch(e){return false;}})()){this.go(this.i+1);return;}this.layout();},
   drawBubble(){const st=this.cur();const b=$('#tBub');const txt=v=>typeof v==='function'?v.call(this):v;
-    b.className='tbub'+(st.mini?' tmini':'')+(st.spot?' tspot-'+st.spot:'');
+    b.className='tbub'+(st.mini?' tmini':'')+(st.small?' tsmall':'')+(st.spot?' tspot-'+st.spot:'');const gz=$('#tGest');gz.className='tgest'+(st.gest?' g-'+st.gest+(PH.on?' touch':' mouse'):'');gz.hidden=!st.gest;
     b.innerHTML=`<img class="tborn" src="${TITLEIMG.orn1}" alt=""><div class="tstep">튜토리얼 ${this.i+1} / ${this.steps.length}</div>${st.t?`<h4>${txt(st.t)}</h4>`:''}<p>${txt(st.b)}</p>
       ${st.next?`<div class="trow"><button class="tnext" id="tNext">${st.last?'첫 화면으로':'다음'}</button>${st.last?'<button class="tnext tgo" id="tGo">싱글 플레이 시작</button>':''}</div>`:st.ai?'<div class="twait"><i></i><i></i><i></i></div>':''}`;
     if($('#tNext'))$('#tNext').onclick=()=>{if(st.last)return this.exit(false);if(st.leave)st.leave.call(this);this.go(this.i+1);};
@@ -3000,9 +3100,9 @@ const me0=()=>S.players[0];
 const nameOf=p=>`<b style="color:${S.players[p].color}">${S.players[p].name}</b>`;
 TUT.steps=[
  {t:'헥스아일에 오신 걸 환영해요!',b:'직접 한 판을 따라 하면서 게임 방법을 익혀 볼게요. 상대는 AI 두 명이에요. 빛나는 곳만 누르면 돼요.',next:true},
- {t:'섬 돌려 보기',b:()=>PH.on?'한 손가락으로 화면을 끌어 섬을 <b>돌려</b> 보세요.':'마우스로 화면을 끌어 섬을 <b>돌려</b> 보세요.',at:{sel:'#stage',pad:0},pass:true,mini:true,enter(){this.c0=this.camSnap();},done(){const c=this.camSnap();return Math.abs(c.az-this.c0.az)>.35||Math.abs(c.po-this.c0.po)>.2;}},
- {t:'확대·축소',b:()=>PH.on?'두 손가락을 벌리거나 모아서 <b>확대·축소</b>해 보세요.':'마우스 휠을 굴려 <b>확대·축소</b>해 보세요.',at:{sel:'#stage',pad:0},pass:true,mini:true,enter(){this.c0=this.camSnap();},done(){return Math.abs(this.camSnap().d-this.c0.d)>1.2;}},
- {t:'화면 옮기기',b:()=>PH.on?'두 손가락으로 함께 끌어 화면을 <b>옮겨</b> 보세요.':'마우스 오른쪽 버튼으로 끌어 화면을 <b>옮겨</b> 보세요.',at:{sel:'#stage',pad:0},pass:true,mini:true,enter(){this.c0=this.camSnap();},done(){return this.camSnap().t.distanceTo(this.c0.t)>.5;},leave(){}},
+ {t:'섬 돌려 보기',b:()=>PH.on?'한 손가락으로 화면을 끌어 섬을 <b>돌려</b> 보세요.':'마우스로 화면을 끌어 섬을 <b>돌려</b> 보세요.',at:{sel:'#stage',pad:0},pass:true,spot:'left',small:true,gest:'rot',enter(){this.c0=this.camSnap();},done(){const c=this.camSnap();return Math.abs(c.az-this.c0.az)>.35||Math.abs(c.po-this.c0.po)>.2;}},
+ {t:'확대·축소',b:()=>PH.on?'두 손가락을 벌리거나 모아서 <b>확대·축소</b>해 보세요.':'마우스 휠을 굴려 <b>확대·축소</b>해 보세요.',at:{sel:'#stage',pad:0},pass:true,spot:'left',small:true,gest:'zoom',enter(){this.c0=this.camSnap();},done(){return Math.abs(this.camSnap().d-this.c0.d)>1.2;}},
+ {t:'화면 옮기기',b:()=>PH.on?'두 손가락으로 함께 끌어 화면을 <b>옮겨</b> 보세요.':'마우스 오른쪽 버튼으로 끌어 화면을 <b>옮겨</b> 보세요.',at:{sel:'#stage',pad:0},pass:true,spot:'left',small:true,gest:'pan',enter(){this.c0=this.camSnap();},done(){return this.camSnap().t.distanceTo(this.c0.t)>.5;},leave(){}},
  {t:'좋아요!',b:'시점이 헷갈리면 오른쪽 위 <b>시점 초기화</b>를 누르면 돼요. 이제 게임을 시작해 볼게요.',at:{sel:'#camReset',pad:6},next:true,leave(){this.zoomOut();}},
  {t:'첫 정착지 놓기',b:'정착지는 <b>땅의 꼭짓점</b>에만 지을 수 있어요. 꼭짓점에 닿은 땅들에서 자원이 나와요. 빛나는 꼭짓점을 누르세요.',at(){return {v:this.P.v1};},only:{},enter(){this.steps[this.i].only={v:this.P.v1};this.focus({v:this.P.v1});},done(){return !!S.vb[this.P.v1];}},
  {t:'도로 놓기',b:'도로는 <b>땅과 땅 사이의 변</b>에 놓아요. 방금 지은 정착지에 이어서 빛나는 곳을 누르세요.',at(){return {e:this.P.e1};},enter(){this.steps[this.i].only={e:this.P.e1};this.focus({e:this.P.e1});},done(){return S.eo[this.P.e1]===0;}},
@@ -3025,10 +3125,10 @@ TUT.steps=[
  {t:'발전 카드 사기',b:'<b>양모·곡물·광석</b> 1장씩으로 발전 카드를 살 수 있어요. 어떤 카드가 나올지는 몰라요!',at:{sel:'[data-act="dev"]'},enter(){this.zoomOut();this.topUp(COST.dev);const d=S.deck,i=d.lastIndexOf('knight');if(i>=0){[d[i],d[d.length-1]]=[d[d.length-1],d[i]];}},done(){return me0().dev.length>0;}},
  {t:'기사 카드!',b:'기사 카드를 뽑았어요. 기사는 도적을 옮기고 상대 카드를 1장 빼앗아요. 발전 카드는 <b>산 차례에는 쓸 수 없고</b> 다음 차례부터 써요. 카드를 누르면 설명을 볼 수 있어요.',at:()=>({sel:PH.on?'[data-htab="dev"]':'.tray-dev'}),next:true},
  {t:'교환하기',b:'부족한 자원은 교환으로 구해요. <b>교환</b>을 누르세요.',at:{sel:'[data-act="trade"]'},enter(){this.topUp({wood:3,brick:2});[1,2].forEach(p=>this.topUp({wood:2,brick:2,wool:2,grain:2,ore:2},p));},done(){return ui.modal==='trade';}},
- {t:'AI와 교환',b:'은행에서는 같은 자원 4장을 원하는 1장으로 바꿔요(항구가 있으면 더 싸요). 이번엔 <b>AI 플레이어</b> 탭을 눌러 보세요.',at:{sel:'.sheet-trade .mtab[data-t="player"]'},done(){return !!document.querySelector('.sheet-trade .mtab[data-t="player"].on');}},
+ {t:'AI와 교환',b:'은행에서는 같은 자원 4장을 원하는 1장으로 바꿔요(항구가 있으면 더 싸요). 이번엔 <b>플레이어</b> 탭을 눌러 보세요.',at:{sel:'.sheet-trade .mtab[data-t="player"]'},done(){return !!document.querySelector('.sheet-trade .mtab[data-t="player"].on');}},
  {t:'줄 것 고르기',b:'내가 줄 <b>목재</b>의 <b>+</b>를 눌러 1장으로 정하세요.',at:{sel:'#pg [data-k="wood"][data-d="1"]',pad:5},done(){const b=document.querySelector('#pg [data-k="wood"][data-d="1"]');return !!b&&+b.closest('.cell').querySelector('.v').textContent>=1;}},
  {t:'받을 것 고르기',b:'받고 싶은 <b>광석</b>의 <b>+</b>를 눌러 1장으로 정하세요.',at:{sel:'#pr [data-k="ore"][data-d="1"]',pad:5},done(){const b=document.querySelector('#pr [data-k="ore"][data-d="1"]');return !!b&&+b.closest('.cell').querySelector('.v').textContent>=1;}},
- {t:'제안하기',b:'<b>AI들에게 제안</b>을 누르세요. AI가 바로 답해 줘요.',at:{sel:'#tp',pad:5},done(){return !!myOffer();}},
+ {t:'제안하기',b:'<b>제안하기</b>를 누르세요. AI가 바로 답해 줘요.',at:{sel:'#tp',pad:5},done(){return !!myOffer();}},
  {t:'거래하기',b:'수락한 AI 옆 <b>거래</b>를 누르면 교환이 끝나요.',at:{sel:'[data-deal]',pad:5},done(){return this.traded;}},
  {t:'턴 종료',b:'교환 완료! 턴을 넘겨 주세요.',at:{sel:'[data-act="end"]'},enter(){closeModal();},done(){return S.cur!==0;}},
  {t:'AI들의 차례',b:'AI들이 차례를 진행하고 있어요.',ai:true,spot:'left',done(){return S.cur===0&&!S.rolled;}},
