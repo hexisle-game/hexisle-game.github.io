@@ -2346,7 +2346,7 @@ function showRules(i,after){i=i||0;
   if($('#rn'))$('#rn').onclick=()=>showRules(i+1,after);if($('#rd'))$('#rd').onclick=done;}
 
 const DIFF=[['easy','쉬움','AI가 자주 쉬고 거래에 너그러워요'],['normal','보통','기본 전략으로 플레이해요'],['hard','어려움','선두를 견제하고 자원 보너스를 받아요']];
-function countPick(){return `<div class="label" style="margin-top:8px">인원 (최소 2 · 최대 4)</div><div class="cnt" id="cnt">${[2,3,4].map(n=>`<button class="btn${ui.n===n?' active':''}" data-n="${n}">${n}인<small>나 + AI ${n-1}명</small></button>`).join('')}</div>
+function countPick(){return `<div class="label" style="margin-top:8px">인원 (최소 2 · 최대 4)</div><div class="cnt" id="cnt">${[2,3,4].map(n=>`<button class="btn${ui.n===n?' active':''}" data-n="${n}">${n}인</button>`).join('')}</div>
   <div class="colrow"><div class="label">내 말 색상</div><div class="swatches" id="col">${PCOL.map(c=>`<button class="sw${(ui.color||PCOL[0])===c?' on':''}" data-c="${c}" style="--c:${c}" aria-label="색상"></button>`).join('')}</div></div>
   <div class="label" style="margin-top:8px">난이도</div><div class="cnt" id="dif">${DIFF.map(([k,l,d])=>`<button class="btn${ui.diff===k?' active':''}" data-d="${k}">${l}</button>`).join('')}</div>`;}
 function bindCount(){if($('#col'))$('#col').onclick=e=>{const b=e.target.closest('[data-c]');if(!b)return;ui.color=b.dataset.c;saveUi();$('#col').querySelectorAll('[data-c]').forEach(x=>x.classList.toggle('on',x.dataset.c===ui.color));};$('#cnt').onclick=e=>{const b=e.target.closest('[data-n]');if(!b)return;ui.n=+b.dataset.n;saveUi();$('#cnt').querySelectorAll('[data-n]').forEach(x=>x.classList.toggle('active',+x.dataset.n===ui.n));};
