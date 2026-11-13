@@ -1480,7 +1480,24 @@ html:not(.phone) .icols.devc p{font-size:16.5px}
 html:not(.phone) .ihd b{font-size:26px}
 html.phone body .sheet-frame .frow{grid-template-columns:186px 1fr!important}
 html body .sheet-frame .flab{white-space:nowrap}
-html.phone body .title .tbg{left:-4%!important;right:-4%!important;top:3%!important;bottom:-12%!important;background-position:center 40%!important}
+html.phone body .title .tbg{left:-8%!important;right:-8%!important;top:5%!important;bottom:-18%!important;background-position:center 40%!important}
+
+/* rules v2 */
+.sheet-rules .rbody{flex:1;min-height:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:40px;padding:6px 6px 0}
+.sheet-rules .rimg{height:100%;aspect-ratio:1;max-width:52vw}
+.sheet-rules .rimg img{width:100%;height:100%;max-height:none}
+.sheet-rules .rside{display:flex;flex-direction:column;min-width:0;height:100%}
+.sheet-rules .rtxt{flex:1;display:flex;flex-direction:column;justify-content:center;padding-right:70px}
+.sheet-rules .rlab{font-size:14px;color:#b8a27a;margin:0 0 4px}
+.sheet-rules .rh{margin:0 0 32px!important;font-size:28px!important;color:#f1e4c8}
+.sheet-rules .ffoot{margin-top:0;gap:12px}
+.sheet-rules .ffoot .btn{min-width:120px!important;min-height:52px!important;font-size:17px!important;flex:none}
+html.phone .sheet-rules .rbody{gap:22px;padding:0}
+html.phone .sheet-rules .rtxt{padding-right:46px}
+html.phone .sheet-rules .rlab{font-size:12.5px}
+html.phone .sheet-rules .rh{font-size:21px!important;margin-bottom:24px!important}
+html.phone .sheet-rules .ffoot .btn{min-width:92px!important;min-height:44px!important;font-size:15px!important}
+html.phone body .sheet-frame.sheet-rules{padding-top:4px!important}
 /* ===== tutorial ===== */
 #tut{position:fixed;inset:0;z-index:64;pointer-events:none}
 #tut[hidden]{display:none}
@@ -2733,9 +2750,8 @@ const RULES=[
  ['발전 카드와 승리','발전 카드와 보너스로<br>10점을 노려요.','발전 카드(양모·곡물·광석)는 기사, 도로 건설, 풍년, 독점, 승점 중 하나가 나와요. 가장 긴 도로(5칸 이상)와 기사를 가장 많이 쓴 사람(3장 이상)은 각각 <b>2점</b>을 더 받아요.']];
 function showRules(i,after){i=i||0;const P=RULES[i],last=i===RULES.length-1;
   openModal('rules',`<button class="mclose" id="rx" aria-label="닫기"></button>
-   <div class="fhead rhead"><div class="rlab">게임 방법 ${i+1} / ${RULES.length}</div><h3>${P[0]}</h3></div>
-   <div class="rbody"><div class="rimg"><img src="${RULEIMG[i]}" alt=""></div><div class="rtxt"><h4>${P[1]}</h4><p>${P[2]}</p></div></div>
-   <div class="ffoot">${i>0?'<button class="btn" id="rp">이전</button>':''}${last?'':'<button class="btn" id="rs">건너뛰기</button>'}<button class="btn primary" id="rn">${last?'닫기':'다음'}</button></div>`);
+   <div class="rbody"><div class="rimg"><img src="${RULEIMG[i]}" alt=""></div><div class="rside"><div class="rtxt"><div class="rlab">게임 방법 ${i+1} / ${RULES.length}</div><h3 class="rh">${P[0]}</h3><h4>${P[1]}</h4><p>${P[2]}</p></div>
+   <div class="ffoot">${last?'':'<button class="btn" id="rs">건너뛰기</button>'}${i>0?'<button class="btn" id="rp">이전</button>':''}<button class="btn primary" id="rn">${last?'닫기':'다음'}</button></div></div></div>`);
   $('#sheet').classList.add('sheet-frame');
   const done=()=>{closeModal();if(after)after();else update();};
   $('#rx').onclick=done;if($('#rs'))$('#rs').onclick=done;if($('#rp'))$('#rp').onclick=()=>showRules(i-1,after);
