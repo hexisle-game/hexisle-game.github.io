@@ -1135,6 +1135,88 @@ html.phone .onl{font-size:12px!important;margin-top:4px!important}
 html.phone body .sheet-start .st-menu{gap:7px}
 html.phone body .sheet-start .st-menu .btn{min-height:46px!important}
 html.phone body .sheet-start .st-menu #s1New{min-height:54px!important}
+
+/* ===== title & frame dialogs ===== */
+.title{position:fixed;inset:0;z-index:40;overflow:hidden;background:#05080d;cursor:pointer;user-select:none}
+.title[hidden]{display:none}
+.title .tbg{position:absolute;left:-12%;right:-12%;top:-4%;bottom:-22%;background:#0a1220 center 46%/cover no-repeat}
+.title .tdim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,6,12,.62) 0%,rgba(4,6,12,.18) 26%,rgba(4,6,12,0) 46%,rgba(4,6,12,.12) 66%,rgba(4,6,12,.78) 100%)}
+.title .tlogo{position:absolute;left:50%;top:5.5%;transform:translateX(-50%);width:min(44vw,640px);filter:drop-shadow(0 6px 14px rgba(0,0,0,.75))}
+.title .tbot{position:absolute;left:0;right:0;bottom:7%;display:flex;justify-content:center}
+.title .ttap{margin:0;font-size:20px;letter-spacing:.06em;color:#f3e6c8;text-shadow:0 2px 6px #000,0 0 14px rgba(0,0,0,.8);animation:tpulse 1.8s ease-in-out infinite}
+@keyframes tpulse{50%{opacity:.45}}
+.title .tmenu{display:flex;gap:24px;justify-content:center;width:100%;padding:0 32px;box-sizing:border-box}
+.title .tmenu[hidden]{display:none}
+.title .tm{flex:0 1 330px;height:68px;border-style:solid;border-width:10px 12px;border-color:transparent;background:none;font:inherit;font-size:21px;font-weight:700;color:#fff3dc;text-shadow:0 1px 0 #2a0e04,0 2px 5px rgba(0,0,0,.7);cursor:pointer;filter:drop-shadow(0 4px 10px rgba(0,0,0,.6));display:flex;align-items:center;justify-content:center;padding:0 0 2px;letter-spacing:.02em}
+.title .tm:hover{filter:brightness(1.12) drop-shadow(0 4px 10px rgba(0,0,0,.6))}
+.title .tm:active{transform:translateY(1px)}
+.title .tm-or{border-image:url(assets/ui/0188c1d8.webp) 34 36 fill / 10px 12px stretch}
+.title .tm-gr{border-image:url(assets/ui/bd56379b.webp) 34 36 fill / 10px 12px stretch}
+.title .tm-gy{border-image:url(assets/ui/28241176.webp) 34 36 fill / 10px 12px stretch}
+html.phone .title .tlogo{width:300px;top:4%}
+html.phone .title .tbot{bottom:5%}
+html.phone .title .ttap{font-size:16px}
+html.phone .title .tmenu{gap:12px;padding:0 20px}
+html.phone .title .tm{height:52px;font-size:16px;border-width:8px 10px;border-image-width:8px 10px}
+html.on-title #modal{background:rgba(4,6,10,.62)}
+/* frame dialog */
+html body .sheet.sheet-frame{width:min(1180px,calc(100vw - 64px))!important;height:min(680px,calc(100dvh - 64px));display:flex!important;flex-direction:column;padding:6px 14px 6px!important;overflow:hidden!important}
+html.phone body .sheet.sheet-frame{width:100%!important;height:100%!important}
+.sheet-frame .fhead{display:flex;align-items:baseline;gap:16px;padding:8px 70px 14px 8px;flex:none}
+.sheet-frame .fhead h3{margin:0!important;font-size:32px!important}
+.sheet-frame .fhead .onl{margin:0!important}
+.sheet-frame .fbody{flex:1;min-height:0;display:grid;grid-template-columns:23% 1fr;gap:0}
+.sheet-frame .fleft{border-right:1px solid transparent;border-image:linear-gradient(180deg,transparent,rgba(233,196,122,.35) 15%,rgba(233,196,122,.35) 85%,transparent) 1;padding:6px 18px 6px 0;overflow:auto}
+.sheet-frame .fright{display:flex;flex-direction:column;padding:6px 6px 4px 40px;min-width:0}
+.sheet-frame .frows{display:flex;flex-direction:column;gap:30px;padding-top:10px}
+.sheet-frame .frow{display:grid;grid-template-columns:200px 1fr;align-items:center;gap:16px;min-height:48px}
+.sheet-frame .flab,.sheet-frame .flab2{font-size:16px;color:#d9cdb4}
+.sheet-frame .flab2{margin:4px 0 14px;color:#b8ab92}
+.sheet-frame .frow .cnt{margin:0!important}
+.sheet-frame .frow .swatches{margin:0;gap:22px}
+.sheet-frame .frow .tin{margin:0;max-width:340px}
+.sheet-frame .ffoot{margin-top:auto;display:flex;align-items:center;justify-content:flex-end;gap:22px;padding-top:12px}
+.sheet-frame .fhint{margin:0!important;font-size:14.5px!important;color:#b8ab92!important;text-align:right}
+.sheet-frame .ffoot .btn{min-width:200px!important;min-height:64px!important;font-size:19px!important;flex:none}
+.sheet-frame .cnt.ro .btn{opacity:1!important;filter:none!important;cursor:default}
+.sheet-frame .cnt.ro .btn:not(.active){color:#7d756a!important}
+/* back button */
+html body .mclose.mback{background:url(assets/ui/17ab660c.webp) center/contain no-repeat!important}
+/* multi tabs */
+.mtabs{display:flex;flex-direction:column;gap:8px;padding-top:4px}
+.mtab{position:relative;display:flex;align-items:center;gap:8px;width:100%;padding:16px 16px;background:none;border:0;color:#a89c86;font:inherit;font-size:19px;font-weight:700;text-align:left;cursor:pointer}
+.mtab .orn{width:20px;height:20px;display:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
+.mtab.on{color:#fff0cc;background:linear-gradient(90deg,rgba(233,185,92,.32),rgba(233,185,92,.12) 70%,rgba(233,185,92,0));box-shadow:inset 0 1px 0 rgba(243,208,138,.7),inset 0 -1px 0 rgba(243,208,138,.7);text-shadow:0 0 10px rgba(243,190,90,.4)}
+.mtab.on .orn{display:inline-block}
+.mtab:not(.on):hover{color:#e6dccb}
+/* lobby */
+.sheet-frame .lrow{display:flex;align-items:center;gap:10px;padding:10px 2px;border:0;font-size:17px}
+.sheet-frame .lrow .dot{width:12px;height:12px}
+.sheet-frame .lrow .aitg{margin-left:auto}
+.aitg{display:inline-flex;align-items:center;gap:8px;background:none;border:0;padding:0;color:#c9bca2;font:inherit;font-size:14px;cursor:pointer}
+.aitg i{display:inline-block;width:58px;height:26px;background:url(assets/ui/afc0c8eb.webp) center/contain no-repeat}
+.aitg.on i{background-image:url(assets/ui/2d46c843.webp)}
+.aitg:disabled{cursor:default}
+.rcode{display:flex;align-items:center;justify-content:center;gap:18px;padding:12px 18px;background:linear-gradient(90deg,rgba(233,185,92,0),rgba(233,185,92,.2) 25%,rgba(233,185,92,.2) 75%,rgba(233,185,92,0))}
+.rcode b{font-size:34px;letter-spacing:.3em;color:#ffe6a8;text-shadow:0 0 12px rgba(243,190,90,.45)}
+.rcode .btn{min-height:40px!important;min-width:0!important;padding:0 14px!important;font-size:15px!important}
+/* phone sizes */
+html.phone .sheet-frame .fhead{padding:2px 56px 6px 4px}
+html.phone .sheet-frame .fhead h3{font-size:24px!important}
+html.phone .sheet-frame .fright{padding:2px 2px 0 22px}
+html.phone .sheet-frame .frows{gap:14px;padding-top:4px}
+html.phone .sheet-frame .frow{grid-template-columns:150px 1fr;min-height:36px;gap:10px}
+html.phone .sheet-frame .flab{font-size:14px}
+html.phone .sheet-frame .ffoot .btn{min-width:150px!important;min-height:50px!important;font-size:16px!important}
+html.phone .sheet-frame .fhint{font-size:12.5px!important}
+html.phone .mtab{padding:11px 12px;font-size:16px}
+html.phone .sheet-frame .lrow{padding:6px 2px;font-size:15px}
+html.phone .rcode b{font-size:24px}
+html.phone .rcode{padding:6px 12px}
+html.phone .sheet-frame .frow .tin{padding:7px 10px;font-size:15px}
+
+html body .mclose.mback{transform:scale(1.22);transform-origin:center}
+html body .mclose.mback:hover{transform:scale(1.28)}
 </style>
 
 
@@ -1199,6 +1281,7 @@ html.phone body .sheet-start .st-menu #s1New{min-height:54px!important}
 <div id="tip" hidden></div><div id="pop" hidden></div>
 <div id="leftcol"></div>
 <div id="rotate" hidden><div class="rot-ic"></div><b>가로로 돌려 주세요</b><span>HexIsle은 휴대폰에서 가로 화면으로 플레이해요.</span></div>
+<div id="title" class="title" hidden><div class="tbg"></div><div class="tdim"></div><img class="tlogo" id="tLogo" alt="HEXISLE 육각섬 개척기"><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
 <div id="modal" class="overlay" hidden><div class="sheet" id="sheet"></div><i class="mcrest" id="mcrest" aria-hidden="true"></i></div>
 
 <script>document.getElementById('logoImg')&&(document.getElementById('logoImg').src=window.LOGO_URL);</script>
@@ -1925,6 +2008,7 @@ const BUILDIMG={"dev": "assets/build/dev.webp", "road": "assets/build/road.webp"
 const SUMIMG={"2": "assets/sum/2.webp", "3": "assets/sum/3.webp", "4": "assets/sum/4.webp", "5": "assets/sum/5.webp", "6": "assets/sum/6.webp", "7": "assets/sum/7.webp", "8": "assets/sum/8.webp", "9": "assets/sum/9.webp", "10": "assets/sum/10.webp", "11": "assets/sum/11.webp", "12": "assets/sum/12.webp"};
 const RESICON={"wood": "assets/icons/wood.webp", "brick": "assets/icons/brick.webp", "wool": "assets/icons/wool.webp", "grain": "assets/icons/grain.webp", "ore": "assets/icons/ore.webp"};
 const DIEFACE512="assets/ui/dieface.webp";let DIEFACEIMG=null;{const im=new Image();im.onload=()=>{DIEFACEIMG=im;if(typeof DICE!=='undefined')DICE.mats=null;};im.src=DIEFACE512;}
+const TITLEIMG={"titlebg": "assets/title/titlebg.webp", "back": "assets/title/back.webp", "orn1": "assets/title/orn1.webp", "orn2": "assets/title/orn2.webp"};
 const CARDFRAME="assets/cards/frame.webp";
 const SCANART={"wood": "assets/cards/wood.webp", "wool": "assets/cards/wool.webp", "brick": "assets/cards/brick.webp", "ore": "assets/cards/ore.webp", "grain": "assets/cards/grain.webp", "knight": "assets/cards/knight.webp", "roads": "assets/cards/roads.webp", "plenty": "assets/cards/plenty.webp", "monopoly": "assets/cards/monopoly.webp", "vp": "assets/cards/vp.webp"};
 let FRAMEIMG=null;{let left=Object.keys(SCANART).length+1;const done=()=>{if(--left===0)setTimeout(()=>{try{buildCards();if(S)render();}catch(e){}},0);};{const im=new Image();im.onload=()=>{FRAMEIMG=im;done();};im.src=CARDFRAME;}for(const k in SCANART){const im=new Image();im.onload=()=>{ARTIMG[k]=im;done();};im.src=SCANART[k];}}
@@ -2352,35 +2436,50 @@ function countPick(){return `<div class="label" style="margin-top:8px">인원 (�
 function bindCount(){if($('#col'))$('#col').onclick=e=>{const b=e.target.closest('[data-c]');if(!b)return;ui.color=b.dataset.c;saveUi();$('#col').querySelectorAll('[data-c]').forEach(x=>x.classList.toggle('on',x.dataset.c===ui.color));};$('#cnt').onclick=e=>{const b=e.target.closest('[data-n]');if(!b)return;ui.n=+b.dataset.n;saveUi();$('#cnt').querySelectorAll('[data-n]').forEach(x=>x.classList.toggle('active',+x.dataset.n===ui.n));};
   $('#dif').onclick=e=>{const b=e.target.closest('[data-d]');if(!b)return;ui.diff=b.dataset.d;saveUi();$('#dif').querySelectorAll('[data-d]').forEach(x=>x.classList.toggle('active',x.dataset.d===ui.diff));};}
 function migrate(){if(!S.n){S.n=S.players.length;S.order=[...Array(S.n).keys(),...[...Array(S.n).keys()].reverse()];}if(S.logSeq===undefined)S.logSeq=0;if(!S.diff)S.diff='normal';}
-function showStart(){const saved=loadSave();
-  openModal('start',`<div class="st-l"><div class="hero-title logo logoimg"><img src="${window.LOGO_URL}" alt="HEXISLE 육각섬 개척기"></div>
-  <p>육각형 땅에서 자원을 모으고, 교환하고,<br class="phbr"> 마을을 넓혀 10점을 먼저 모으세요.<br class="phbr"> 빈자리는 AI가 채워요.</p></div><div class="st-r st-menu">
-   <button class="btn primary" id="s1New">새 게임</button>
-   <button class="btn sub" id="s1Mp">친구와 함께</button>
-   <button class="btn sub" id="s1Q">랜덤 참가</button>
-   ${saved?`<button class="btn" id="sCont">이어하기 (${saved.players.length}인)</button>`:''}
-   <div class="st-div"></div><button class="btn" id="s1Rules">게임 방법</button>
-  </div>`);
-  $('#s1Rules').onclick=()=>showRules(0,()=>showStart());
-  $('#s1New').onclick=()=>showSetup('solo');
-  $('#s1Mp').onclick=()=>showSetup('mp');$('#s1Q').onclick=()=>showSetup('quick');if(window.MP)MP.offline();
-  if(saved)$('#sCont').onclick=()=>{S=saved;migrate();ui.shownRoll=S.rollId;ui.seenSeq=undefined;closeModal();ui.mode=null;update();};}
-function showSetup(mode){const mp=mode==='mp',q=mode==='quick',net=mp||q;
-  const T={mp:['친구와 함께','방을 만들면 초대 링크가 생겨요. 빈자리는 AI가 채우고, 대기실에서 다시 바꿀 수 있어요.'],quick:['랜덤 참가','다른 플레이어가 기다리는 방에 들어가요. 4인 · 보통 난이도로 진행하고, 1분 안에 다 모이지 않으면 빈자리는 AI가 채워요.'],solo:['새 게임','인원과 내 말 색상, AI 난이도를 고르세요.']}[mode];
-  openModal('setup',`<button class="mclose" id="sBack" aria-label="뒤로"></button><div class="st-l"><div class="mhead"><h3>${T[0]}</h3><p>${T[1]}</p>${net?'<p class="onl" id="onl">서버에 연결하는 중…</p>':''}</div>
-   ${net?`<div class="label">내 닉네임 <span class="muted">(최대 6자)</span></div><input class="tin" id="nick" maxlength="6" placeholder="예: 육각왕" value="${(ui.nick||'').replace(/"/g,'')}"><p class="muted" id="mMsg"></p>`:''}</div>
-   <div class="st-r">${q?`<div class="colrow"><div class="label">내 말 색상</div><div class="swatches" id="col">${PCOL.map(c=>`<button class="sw${(ui.color||PCOL[0])===c?' on':''}" data-c="${c}" style="--c:${c}" aria-label="색상"></button>`).join('')}</div></div><p class="muted">같은 색을 먼저 고른 사람이 있으면 남은 색 중에서 정해져요.</p>`:countPick()}
-   <div class="row st-btns">${mp?'<button class="btn primary" id="sGo" data-mp="1">초대하기</button><button class="btn sub" id="sJoin" data-mp="1">방 코드로 참가하기</button>':q?'<button class="btn primary" id="qGo" data-mp="1">참가하기</button>':'<button class="btn primary" id="sGo">게임 시작</button>'}</div></div>`);
-  $('#sheet').classList.add('sheet-start','sheet-setup');if(q){$('#col').onclick=e=>{const b=e.target.closest('[data-c]');if(!b)return;ui.color=b.dataset.c;saveUi();$('#col').querySelectorAll('[data-c]').forEach(x=>x.classList.toggle('on',x.dataset.c===ui.color));};}else bindCount();
-  $('#sBack').onclick=()=>showStart();
-  if(net){MP.presence();MP.drawCount();}
-  const nk=()=>{const v=$('#nick').value.trim().slice(0,6);if(!v){$('#mMsg').textContent='닉네임을 입력해 주세요.';$('#nick').focus();return false;}if(nickBad(v)){$('#mMsg').textContent='사용할 수 없는 닉네임이에요. 다른 닉네임을 입력해 주세요.';$('#nick').focus();return false;}ui.nick=v;saveUi();return true;};
-  if(mp){$('#sJoin').onclick=()=>{if($('#nick').value.trim()){ui.nick=$('#nick').value.trim().slice(0,6);saveUi();}MP.openEntry();};
-    $('#sGo').onclick=()=>{if(nk())MP.create();};}
-  else if(q)$('#qGo').onclick=()=>{if(nk())MP.quick();};
-  else $('#sGo').onclick=()=>{closeModal();startNew();};}
+function showTitle(menu){const t=$('#title');t.hidden=false;document.documentElement.classList.add('on-title');
+  const lg=$('#tLogo');if(!lg.src)lg.src=window.LOGO_URL;t.querySelector('.tbg').style.backgroundImage=`url(${TITLEIMG.titlebg})`;
+  if(menu||ui.titleMenu){ui.titleMenu=true;$('#tTap').hidden=true;$('#tMenu').hidden=false;}else{$('#tTap').hidden=false;$('#tMenu').hidden=true;}}
+function hideTitle(){$('#title').hidden=true;document.documentElement.classList.remove('on-title');}
+$('#title').addEventListener('click',e=>{if(ui.modal)return;if($('#tMenu').hidden){ui.titleMenu=true;showTitle(true);}});
+$('#tSingle').onclick=e=>{e.stopPropagation();showSingle();};
+$('#tMulti').onclick=e=>{e.stopPropagation();showMulti('invite');};
+$('#tTut').onclick=e=>{e.stopPropagation();showRules(0,()=>{closeModal();showTitle(true);});};
+function showStart(){closeModal();if(window.MP&&window.NET&&!NET.on)MP.offline();showTitle(ui.titleMenu);}
+const DIFFN={easy:'쉬움',normal:'보통',hard:'어려움'};
+const segRow=(id,label,items,cur)=>`<div class="frow"><div class="flab">${label}</div><div class="cnt" id="${id}">${items.map(([v,t])=>`<button class="btn${cur==v?' active':''}" data-v="${v}">${t}</button>`).join('')}</div></div>`;
+const colRow=(id,cur,taken)=>`<div class="frow"><div class="flab">내 말 색상</div><div class="swatches" id="${id}">${PCOL.map(c=>`<button class="sw${cur===c?' on':''}${taken&&taken.includes(c)?' taken':''}" data-c="${c}" style="--c:${c}" ${taken&&taken.includes(c)?'disabled':''} aria-label="색상"></button>`).join('')}</div></div>`;
+const segBind=(id,fn)=>{const el=$('#'+id);if(!el)return;el.onclick=e=>{const b=e.target.closest('[data-v]');if(!b||b.disabled)return;el.querySelectorAll('[data-v]').forEach(x=>x.classList.toggle('active',x===b));fn(b.dataset.v);};};
+const colBind=(id,fn)=>{const el=$('#'+id);if(!el)return;el.onclick=e=>{const b=e.target.closest('[data-c]');if(!b||b.disabled)return;el.querySelectorAll('[data-c]').forEach(x=>x.classList.toggle('on',x===b));fn(b.dataset.c);};};
+function frame(key,title,extra,left,right,foot,back){openModal(key,`<button class="mclose${back?' mback':''}" id="fx" aria-label="${back?'나가기':'닫기'}"></button>
+  <div class="fhead"><h3>${title}</h3>${extra||''}</div><div class="fbody"><div class="fleft">${left||''}</div><div class="fright"><div class="frows">${right}</div><div class="ffoot">${foot}</div></div></div>`);
+  $('#sheet').classList.add('sheet-frame');}
+function showSingle(){if(window.MP&&!NET.on)MP.offline();
+  frame('single','싱글 플레이','', '',
+   colRow('fcol',PCOL.includes(ui.color)?ui.color:PCOL[0])+segRow('fdif','난이도',DIFF.map(([k,l])=>[k,l]),ui.diff||'normal')+segRow('fcnt','인원 (최소 2 · 최대 4)',[[2,'2인'],[3,'3인'],[4,'4인']],ui.n||4),
+   `<p class="fhint">부족한 인원은 AI가 담당해요.</p><button class="btn primary" id="fGo">게임 시작</button>`);
+  colBind('fcol',c=>{ui.color=c;saveUi();});segBind('fdif',v=>{ui.diff=v;saveUi();});segBind('fcnt',v=>{ui.n=+v;saveUi();});
+  $('#fx').onclick=()=>{closeModal();showTitle(true);};$('#fGo').onclick=()=>{closeModal();startNew();};}
+const nickRow=()=>`<div class="frow"><div class="flab">내 닉네임 <span class="muted">(최대 6자)</span></div><input class="tin" id="nick" maxlength="6" placeholder="예: 육각왕" value="${(ui.nick||'').replace(/"/g,'')}"></div>`;
+function readNick(){const v=($('#nick').value||'').trim().slice(0,6);const m=$('#fMsg');if(!v){m.textContent='닉네임을 입력해 주세요.';$('#nick').focus();return false;}if(nickBad(v)){m.textContent='사용할 수 없는 닉네임이에요.';$('#nick').focus();return false;}ui.nick=v;saveUi();return true;}
+function showMulti(tab,code){tab=tab||'invite';ui.mtab=tab;const tabs=[['invite','초대하기'],['join','초대받기'],['quick','랜덤 참가']];
+  const left=`<div class="mtabs">${tabs.map(([k,l])=>`<button class="mtab${k===tab?' on':''}" data-t="${k}">${l}<img class="orn" src="${TITLEIMG.orn1}" alt=""></button>`).join('')}</div>`;
+  let right='',foot='';
+  if(tab==='invite'){right=nickRow()+segRow('fdif','난이도',DIFF.map(([k,l])=>[k,l]),ui.diff||'normal')+segRow('fcnt','인원 (최소 2 · 최대 4)',[[2,'2인'],[3,'3인'],[4,'4인']],ui.n||4);
+    foot=`<p class="fhint" id="fMsg">방을 만들면 초대 링크가 생겨요. 부족한 인원은 AI가 담당할 수 있어요.</p><button class="btn primary" id="fGo" data-mp="1">초대하기</button>`;}
+  else if(tab==='join'){right=nickRow()+`<div class="frow"><div class="flab">방 코드</div><input class="tin code" id="mCode" maxlength="5" placeholder="ABCDE" value="${code||ui.pendCode||''}"></div>`;
+    foot=`<p class="fhint" id="fMsg">${(code||ui.pendCode)?'초대받은 방 코드를 자동으로 입력했어요.':'초대받은 방 코드를 입력하세요.'}</p><button class="btn primary" id="fGo" data-mp="1">참가하기</button>`;}
+  else{right=nickRow();foot=`<p class="fhint" id="fMsg">4인 · 보통 난이도로 진행돼요. 1분 안에 다 모이지 않으면 빈자리는 AI가 채워요.</p><button class="btn primary" id="fGo" data-mp="1">참가하기</button>`;}
+  frame('multi','멀티 플레이','<p class="onl"></p>',left,right,foot);
+  document.querySelectorAll('.mtab').forEach(b=>b.onclick=()=>{const v=$('#nick')&&$('#nick').value.trim();if(v){ui.nick=v.slice(0,6);}const c=$('#mCode')&&$('#mCode').value;if(c)ui.pendCode=c;showMulti(b.dataset.t);});
+  segBind('fdif',v=>{ui.diff=v;saveUi();});segBind('fcnt',v=>{ui.n=+v;saveUi();});
+  $('#fx').onclick=()=>{closeModal();MP.offline();showTitle(true);};
+  $('#fGo').onclick=()=>{if(!readNick())return;
+    if(tab==='invite'){$('#fMsg').textContent='방을 만드는 중…';MP.create();}
+    else if(tab==='join'){const cd=$('#mCode').value.trim().toUpperCase();if(cd.length<4){$('#fMsg').textContent='방 코드를 확인해 주세요.';return;}ui.pendCode='';$('#fMsg').textContent='방에 들어가는 중…';MP.join(cd);}
+    else{$('#fMsg').textContent='빈자리를 찾는 중…';MP.quick();}};
+  MP.presence();MP.drawCount();}
 function myCols(){const c=PCOL.includes(ui.color)?ui.color:PCOL[0];return [c,...PCOL.filter(x=>x!==c)];}
-function startNew(withRules){if(window.MP&&!NET.on)MP.offline();newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;closeModal();if(withRules)showRules(0,()=>update());else update();}
+function startNew(withRules){hideTitle();if(window.MP&&!NET.on)MP.offline();newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;closeModal();if(withRules)showRules(0,()=>update());else update();}
 
 // ---------- events ----------
 function onPick(pk){
@@ -2515,19 +2614,12 @@ const MP={db:null,subs:[],offSince:{},
   unsubAll(){this.subs.forEach(f=>f());this.subs=[];},
   nick(){return (ui.nick||'').trim();},
   code(){const A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let c='';for(let i=0;i<5;i++)c+=A[Math.floor(Math.random()*A.length)];return c;},
-  err(msg){openModal('confirm',`<button class="mclose" id="mx2" aria-label="닫기"></button><h3>연결 문제</h3><p>${msg}</p><div class="row"><button class="btn sub" id="mOk">확인</button></div>`);$('#mOk').onclick=$('#mx2').onclick=()=>{closeModal();if(!S||NET.on)return;showStart();};},
+  err(msg){openModal('confirm',`<button class="mclose" id="mx2" aria-label="닫기"></button><h3>연결 문제</h3><p>${msg}</p><div class="row"><button class="btn sub" id="mOk">확인</button></div>`);$('#mOk').onclick=$('#mx2').onclick=()=>{closeModal();if(NET.on)return;showTitle(true);showMulti(ui.mtab||'invite');};},
   // ---------- entry ----------
-  openEntry(code){const c=code||'';
-    openModal('mp',`<button class="mclose" id="mx" aria-label="닫기"></button><div class="mhead"><h3>방 코드로 참가</h3><p>초대받은 방 코드와 닉네임을 입력하세요.</p><p class="onl"></p></div>
-     <div class="label">내 닉네임</div><input class="tin" id="nick" maxlength="6" placeholder="예: 육각왕" value="${(ui.nick||'').replace(/"/g,'')}">
-     <div class="label">방 코드</div><input class="tin code" id="mCode" maxlength="5" placeholder="ABCDE" value="${c}">
-     <div class="row jrow"><button class="btn primary" id="mJoin" data-mp="1">참가하기</button></div><p class="muted" id="mMsg"></p>`);this.presence();this.drawCount();
-    const nk=()=>{const v=$('#nick').value.trim().slice(0,6);if(!v){$('#mMsg').textContent='닉네임을 입력해 주세요.';$('#nick').focus();return null;}if(nickBad(v)){$('#mMsg').textContent='사용할 수 없는 닉네임이에요. 다른 닉네임을 입력해 주세요.';$('#nick').focus();return null;}ui.nick=v;saveUi();return v;};
-    $('#mx').onclick=()=>{if(NET.on)return;showStart();};
-    $('#mJoin').onclick=()=>{const cd=$('#mCode').value.trim().toUpperCase();if(!nk())return;if(cd.length<4){$('#mMsg').textContent='방 코드를 확인해 주세요.';return;}this.join(cd);};},
+  openEntry(code){showTitle(true);showMulti('join',code);},
   async create(){try{$('#mMsg')&&($('#mMsg').textContent='방을 만드는 중…');await this.init();
       let code;for(let i=0;i<5;i++){code=this.code();const ex=await this.db.ref('rooms/'+code+'/meta').once('value');if(!ex.exists())break;}
-      NET.room=code;await this.ref('meta').set({host:NET.uid,status:'lobby',n:Math.max(2,ui.n||4),diff:ui.diff||'normal',created:firebase.database.ServerValue.TIMESTAMP});
+      NET.room=code;await this.ref('meta').set({host:NET.uid,status:'lobby',n:Math.max(2,ui.n||4),diff:ui.diff||'normal',ai:0,created:firebase.database.ServerValue.TIMESTAMP});
       await this.enter();}catch(e){console.error(e);this.err('방을 만들지 못했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.');}},
   async join(code){try{$('#mMsg')&&($('#mMsg').textContent='방에 들어가는 중…');await this.init();
       const m=(await this.db.ref('rooms/'+code+'/meta').once('value')).val();
@@ -2575,35 +2667,37 @@ const MP={db:null,subs:[],offSince:{},
   gone(){if(!NET.on)return;this.cleanup();this.err('방이 닫혔어요.');},
   // ---------- lobby ----------
   order(){return Object.entries(NET.members).sort((a,b)=>(a[1].joined||0)-(b[1].joined||0));},
-  drawLobby(){if(!NET.meta||NET.meta.status!=='lobby')return;const host=NET.meta.host===NET.uid,ord=this.order(),n=NET.meta.n;const mine=NET.members[NET.uid]||{};
-    const link=location.origin+location.pathname+'?room='+NET.room;
-    const rows=[];for(let i=0;i<n;i++){const m=ord[i];rows.push(m?`<div class="lrow"><span class="dot" style="background:${m[1].color}"></span><b>${m[1].name}</b>${m[0]===NET.meta.host?'<span class="badge">방장</span>':''}${m[0]===NET.uid?'<span class="muted">(나)</span>':''}${m[1].online===false?'<span class="badge off">연결 끊김</span>':''}</div>`:`<div class="lrow empty"><span class="dot"></span>빈자리 · AI가 채워요</div>`);}
+  drawLobby(){if(!NET.meta||NET.meta.status!=='lobby')return;const M=NET.meta,host=M.host===NET.uid,ord=this.order(),n=M.n;const mine=NET.members[NET.uid]||{};
+    const ai=Math.max(0,Math.min(M.ai||0,n-ord.length)),emp=n-ord.length-ai;const link=location.origin+location.pathname+'?room='+NET.room;
+    const rows=ord.map(([u,m])=>`<div class="lrow"><span class="dot" style="background:${m.color}"></span><b>${m.name}</b>${u===M.host?'<span class="badge">방장</span>':''}${m.online===false?'<span class="badge off">연결 끊김</span>':''}</div>`);
+    for(let k=0;k<emp;k++)rows.push(`<div class="lrow empty"><span class="dot"></span>빈자리<button class="aitg" data-ai="1" ${host?'':'disabled'} aria-label="AI 켜기"><span>AI</span><i></i></button></div>`);
+    for(let k=0;k<ai;k++)rows.push(`<div class="lrow ai"><span class="dot"></span><b>AI</b><button class="aitg on" data-ai="-1" ${host?'':'disabled'} aria-label="AI 끄기"><span>AI</span><i></i></button></div>`);
     const taken=ord.filter(m=>m[0]!==NET.uid).map(m=>m[1].color);
-    const html=`<button class="mclose" id="lx" aria-label="나가기"></button>
-     <div class="lgrid"><div><div class="mhead"><h3>대기실</h3><p>${NET.meta.pub?(NET.meta.autoAt?`랜덤 참가 방 · <b class="cdwrap">${Math.max(0,Math.ceil((NET.meta.autoAt-Date.now())/1000))}초</b> 뒤에 시작해요 (빈자리는 AI)`:'랜덤 참가 방 · 다른 사람을 기다리는 중이에요'):'친구가 모두 들어오면 방장이 게임을 시작해요.'}</p><p class="onl"></p></div>
-       <div class="roomcode"><span class="muted">방 코드</span><b>${NET.room}</b><button class="btn sub" id="lShare">초대 링크 보내기</button></div>
-       <div class="label">참가자 (${ord.length}/${n})</div>${rows.join('')}</div>
-     <div class="lright">${host&&!NET.meta.pub?`<div class="label">인원</div><div class="cnt" id="lcnt">${[2,3,4].map(k=>`<button class="btn${n===k?' active':''}" data-n="${k}" ${k<ord.length?'disabled':''}>${k}인</button>`).join('')}</div>`:`<div class="label">인원</div><p class="muted lval">${n}명</p>`}
-     <div class="colrow"><div class="label">내 말 색상</div><div class="swatches" id="lcol">${PCOL.map(c=>`<button class="sw${mine.color===c?' on':''}${taken.includes(c)?' taken':''}" data-c="${c}" style="--c:${c}" ${taken.includes(c)?'disabled':''}></button>`).join('')}</div></div>
-     ${host&&!NET.meta.pub?`<div class="label">난이도 (AI)</div><div class="cnt" id="ldif">${DIFF.map(([k,l])=>`<button class="btn${NET.meta.diff===k?' active':''}" data-d="${k}">${l}</button>`).join('')}</div>`:`<div class="label">난이도 (AI)</div><p class="muted lval">${({easy:'쉬움',normal:'보통',hard:'어려움'})[NET.meta.diff]} · 방장이 시작하면 바로 시작돼요.</p>`}
-     <div class="row">${host?`<button class="btn primary" id="lStart">${NET.meta.pub?'지금 시작':'게임 시작'}</button>`:''}</div></div></div>
-     <p class="muted" id="lMsg"></p>`;
-    if(ui.modal!=='lobby')openModal('lobby',html);else $('#sheet').innerHTML=html;
-    $('#lx').onclick=()=>this.confirmLeave();
-    $('#lShare').onclick=async()=>{const t=`HexIsle 같이 해요! 방 코드 ${NET.room}`;try{if(navigator.share){await navigator.share({title:'HexIsle',text:t,url:link});return;}}catch(e){}
+    const full=ord.length+ai>=n;const cd=M.pub&&M.autoAt?Math.max(0,Math.ceil((M.autoAt-Date.now())/1000)):null;
+    const hint=host?(full?'부족한 인원은 AI가 담당해요.':(M.pub?(cd!==null?`${cd}초 뒤에 자동으로 시작해요. 빈자리는 AI가 채워요.`:'다른 플레이어를 기다리고 있어요.'):'참가자를 기다리고 있어요. 바로 시작하려면 AI를 활성화해 주세요.')):(M.pub&&cd!==null?`${cd}초 뒤에 자동으로 시작해요.`:'방장이 시작하면 게임이 바로 시작돼요.');
+    const left=`<div class="flab2">참가자(${ord.length}/${n})</div>${rows.join('')}`;
+    const right=`<div class="frow"><div class="flab">방 코드</div><div class="rcode"><b>${NET.room}</b>${host&&!M.pub?'<button class="btn sub" id="lShare">초대</button>':''}</div></div>`+
+      (host&&!M.pub?segRow('ldif','난이도',DIFF.map(([k,l])=>[k,l]),M.diff):`<div class="frow"><div class="flab">난이도</div><div class="cnt ro">${DIFF.map(([k,l])=>`<button class="btn${M.diff===k?' active':''}" disabled>${l}</button>`).join('')}</div></div>`)+
+      colRow('lcol',mine.color,taken);
+    const foot=`<p class="fhint" id="lMsg">${hint}</p>${host&&(full||M.pub&&ord.length>=2)?`<button class="btn primary" id="lStart">게임 시작</button>`:`<button class="btn primary" id="lWait" disabled>대기중</button>`}`;
+    const html=`<button class="mclose mback" id="fx" aria-label="나가기"></button><div class="fhead"><h3>대기실</h3><p class="onl"></p></div><div class="fbody"><div class="fleft">${left}</div><div class="fright"><div class="frows">${right}</div><div class="ffoot">${foot}</div></div></div>`;
+    if(ui.modal!=='lobby'){openModal('lobby',html);$('#sheet').classList.add('sheet-frame');}else $('#sheet').innerHTML=html;
+    this.drawCount();
+    $('#fx').onclick=()=>this.confirmLeave();
+    if($('#lShare'))$('#lShare').onclick=async()=>{const t=`HexIsle 같이 해요! 방 코드 ${NET.room}`;try{if(navigator.share){await navigator.share({title:'HexIsle',text:t,url:link});return;}}catch(e){}
       try{await navigator.clipboard.writeText(link);$('#lMsg').textContent='초대 링크를 복사했어요. 카톡에 붙여 넣으세요.';}catch(e){$('#lMsg').textContent=link;}};
-    $('#lcol').onclick=e=>{const b=e.target.closest('[data-c]');if(!b||b.disabled)return;this.ref('members/'+NET.uid+'/color').set(b.dataset.c);ui.color=b.dataset.c;saveUi();};
-    MP.drawCount();if(host&&!NET.meta.pub){$('#lcnt').onclick=e=>{const b=e.target.closest('[data-n]');if(b&&!b.disabled)this.ref('meta/n').set(+b.dataset.n);};
-      $('#ldif').onclick=e=>{const b=e.target.closest('[data-d]');if(b)this.ref('meta/diff').set(b.dataset.d);};
-      }if(host)$('#lStart').onclick=()=>this.start();},
-  start(){const ord=this.order(),n=NET.meta.n;newGame(n,NET.meta.diff);
+    colBind('lcol',c=>{this.ref('members/'+NET.uid+'/color').set(c);ui.color=c;saveUi();});
+    if(host){segBind('ldif',v=>this.ref('meta/diff').set(v));
+      document.querySelectorAll('.aitg').forEach(b=>b.onclick=()=>this.ref('meta/ai').set(Math.max(0,Math.min(n-ord.length,ai+(+b.dataset.ai)))));
+      if($('#lStart'))$('#lStart').onclick=()=>this.start();}},
+  start(){hideTitle();const ord=this.order(),n=NET.meta.n;newGame(n,NET.meta.diff);
     const used=ord.map(m=>m[1].color);const free=PCOL.filter(c=>!used.includes(c));
     S.players.forEach((p,i)=>{const m=ord[i];if(m){p.name=m[1].name;p.color=m[1].color;p.uid=m[0];p.ai=false;}else{p.color=free.shift()||PCOL[i];p.ai=true;p.uid=null;}});
     S.mp=true;S.room=NET.room;S.log=[];log(-1,'새 게임이 시작됐어요. 초기 배치부터 진행해요.','sys');
     NET.isHost=true;ME=S.players.findIndex(p=>p.uid===NET.uid);ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;
     NET._last=null;closeModal();update();this.ref('meta/status').set('play');try{this.db.ref('open/'+NET.room).remove();}catch(e){}},
   // ---------- game sync ----------
-  applyState(js){let s;try{s=JSON.parse(js);}catch(e){return;}
+  applyState(js){let s;try{s=JSON.parse(js);}catch(e){return;}hideTitle();
     const prevNote=S&&S.note&&S.note.id;S=s;ME=S.players.findIndex(p=>p.uid===NET.uid);if(ME<0)ME=0;
     if(['lobby','mp'].includes(ui.modal))closeModal();
     if(S.note&&S.note.id!==prevNote&&S.note.by!==NET.uid)this.toast(S.note.t);
