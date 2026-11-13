@@ -1255,6 +1255,52 @@ html.phone body .sheet-frame .frows{gap:10px!important}
 html.phone body .sheet-single .frows{gap:22px!important;padding-top:14px!important}
 html.phone body .sheet-lobby .frows{gap:14px!important}
 html body .sheet-frame .rcode{height:100%;box-sizing:border-box;padding-top:0;padding-bottom:0}
+
+/* round 64 */
+.nickrow{height:auto!important;min-height:78px!important}
+.nickcell{display:flex;flex-direction:column;gap:6px}
+.ferr{margin:0!important;color:#ff9c86!important;font-size:14px!important}
+.tin.err{border-color:#d0573f!important;box-shadow:0 0 0 2px rgba(208,87,63,.25)}
+html.phone .nickrow{min-height:48px!important}
+html.phone .ferr{font-size:12px!important}
+.sheet-dialog .dorn{width:67px!important;margin-left:-33.5px!important;top:-62px!important}
+html.phone .sheet-dialog .dorn{width:49px!important;margin-left:-24.5px!important;top:-42px!important}
+/* info dialogs */
+html body .sheet.sheet-dialog.dlg-wide{width:min(760px,calc(100vw - 48px))!important}
+.sheet-dialog .dscroll{max-height:calc(100dvh - 300px);overflow:auto;margin:10px 0 0;text-align:left}
+html.phone .sheet-dialog .dscroll{max-height:calc(var(--vh) - 170px)}
+.costlist,.devlist{display:flex;flex-direction:column;gap:6px}
+.crow2{display:grid;grid-template-columns:76px 130px 1fr;align-items:center;gap:14px;padding:8px 10px;background:linear-gradient(90deg,rgba(0,0,0,.25),rgba(0,0,0,0))}
+.crow2 .ic-bld{width:72px;height:56px;object-fit:contain;filter:drop-shadow(0 3px 4px rgba(0,0,0,.6))}
+.crow2 .cname b{display:block;font-size:17px;color:#f1e4c8}.crow2 .cname small{color:#b8ab92;font-size:12.5px}
+.ccards{display:flex;gap:4px;flex-wrap:wrap}
+.ic-card{width:40px;height:auto;border-radius:3px;box-shadow:0 2px 4px rgba(0,0,0,.6)}
+.drow2{display:grid;grid-template-columns:64px 1fr;align-items:center;gap:14px;padding:8px 10px;background:linear-gradient(90deg,rgba(0,0,0,.25),rgba(0,0,0,0))}
+.drow2 .ic-dev{width:60px;border-radius:4px;box-shadow:0 2px 5px rgba(0,0,0,.6)}
+.drow2 b{font-size:17px;color:#f1e4c8}.drow2 small{color:#b8ab92}.drow2 p{margin:2px 0 0!important;text-align:left!important;font-size:14px}
+html.phone .crow2{grid-template-columns:54px 96px 1fr;gap:8px;padding:4px 6px}
+html.phone .crow2 .ic-bld{width:50px;height:40px}
+html.phone .ic-card{width:30px}
+html.phone .drow2{grid-template-columns:44px 1fr;gap:10px;padding:4px 6px}
+html.phone .drow2 .ic-dev{width:42px}
+html.phone .drow2 p{font-size:12.5px}
+/* qi sizes */
+html.phone .qi{width:24px!important;height:24px!important;font-size:14px!important}
+#handHead .qi{align-self:center;margin-left:-4px}
+/* trade frame */
+html body .sheet.sheet-frame.sheet-trade{width:min(1180px,calc(100vw - 64px))!important}
+.sheet-trade .frows{gap:0!important;padding-top:0!important;flex:1;min-height:0;overflow:auto}
+.sheet-trade .tbody .label{margin:6px 0 6px}
+.sheet-trade .tbody .tinfo{margin-top:12px}
+html.phone .sheet-trade .tbody .pick,html.phone .sheet-trade .tbody .step{margin:2px 0 6px}
+html.phone .sheet-trade .tbody .tinfo{display:none}
+
+html.phone #dialog{padding:30px 20px 10px!important}
+html.phone .sheet-trade .tbody .pick,html.phone .sheet-trade .tbody .step{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important}
+html.phone .sheet-trade .tbody .pick button{min-height:38px!important}
+html.phone .sheet-trade .tbody .step .cell{padding:4px 8px!important}
+html.phone .sheet-trade .tbody .step .cell button{width:26px!important;height:26px!important}
+html.phone .sheet-trade .mtabs .mtab{font-size:15px}
 </style>
 
 
@@ -1297,7 +1343,7 @@ html body .sheet-frame .rcode{height:100%;box-sizing:border-box;padding-top:0;pa
     <div id="stage"><div id="maplbls"></div><div id="toast" class="toast" hidden></div><div id="mpNote" class="mpnote" hidden></div><div class="dicebox" id="dicebox"></div><div class="turnplaque" id="turnbar"></div><div class="stagebtns" id="stagebtns"></div></div>
     <div class="tray" id="tray">
       <div class="tray-hand"><div class="tray-h" id="handHead">내 자원카드 <span id="handCount"></span></div><div id="hand"></div></div>
-      <div class="tray-dev"><div class="tray-h">발전 카드 <button class="qi" data-pop="all" aria-label="발전 카드 종류 보기" data-tip="발전 카드 종류 보기">?</button></div><div id="devs"></div></div>
+      <div class="tray-dev"><div class="tray-h" id="devHead">내 발전카드 <span id="devCount"></span> <button class="qi" data-pop="all" aria-label="발전 카드 종류 보기" data-tip="발전 카드 종류 보기">?</button></div><div id="devs"></div></div>
       <div class="tray-act"><div class="tray-h">건설 <button class="qi" data-pop="cost" aria-label="건설 비용 보기" data-tip="건설 비용 보기">?</button></div><div id="actions"></div></div>
     </div>
     <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -2249,12 +2295,13 @@ function fan(items,cw,maxW,extra){const n=items.length;if(!n)return '';const ch=
 function renderHand(me,groups){const box=$('#hand');const W0=Math.max(220,box.clientWidth||520);const cw=Math.round((W0<360?66:innerHeight<900&&innerWidth>1100?66:86)*(PH.on?.67:1));
   const list=RES.flatMap(r=>Array(me.res[r]).fill(r));
   const prev=ui.prevRes||me.res;let nn=0;const flags=list.map((r,i)=>{const idx=i-list.indexOf(r);return idx>=(prev[r]||0)&&ui.prevRes?++nn:0;});ui.prevRes={...me.res};
-  const hh=$('#handHead');if(PH.on){if(!ui.handTab)ui.handTab='res';hh.innerHTML=`<button class="htab${ui.handTab==='res'?' on':''}" data-htab="res">내 자원카드 · ${list.length}장</button><button class="htab${ui.handTab==='dev'?' on':''}" data-htab="dev">내 발전카드 · ${me.dev.length}장</button>`;}
+  const hh=$('#handHead');if(PH.on){if(!ui.handTab)ui.handTab='res';hh.innerHTML=`<button class="htab${ui.handTab==='res'?' on':''}" data-htab="res">내 자원카드 · ${list.length}장</button><button class="htab${ui.handTab==='dev'?' on':''}" data-htab="dev">내 발전카드 · ${me.dev.length}장</button><button class="qi" data-pop="all" aria-label="발전 카드 종류 보기">?</button>`;}
   else hh.innerHTML=`내 자원카드 <span id="handCount">· ${list.length}장${list.length>7?' (8장 이상: 7이 나오면 절반을 버려요)':''}</span>`;
   if(PH.on&&ui.handTab==='dev'){box.innerHTML=me.dev.length?row(me.dev.map(d=>`<div style="position:relative"><img class="card" src="${CARDIMG[d.t]}" alt="${DEVN[d.t]}" data-pop="${d.t}">${d.fresh&&d.t!=='vp'?'<span class="newtag">다음 차례</span>':''}</div>`),cw,W0,'devrow2'):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">발전 카드가 없어요.</div>`;return;}
   let h=list.length?row(list.map(r=>`<img class="card" src="${CARDIMG[r]}" alt="${RN[r]}" data-tip="${RN[r]}: ${TN[r]}에서 나와요. ${RUSE[r]}에 써요.">`),cw,W0,'',flags):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">자원 카드가 없어요.</div>`;
   h+=`<div class="tally">${RES.map(r=>`<span class="${me.res[r]?'':'z'}">${RN[r]} ${me.res[r]}</span>`).join('')}</div>`;
   box.innerHTML=h;
+  {const dc=$('#devCount');if(dc)dc.textContent='· '+me.dev.length+'장';}
   const db=$('#devs');const dw=Math.max(150,Math.min(300,db.clientWidth||220));
   db.innerHTML=me.dev.length?row(me.dev.map(d=>`<div style="position:relative"><img class="card" src="${CARDIMG[d.t]}" alt="${DEVN[d.t]}" data-pop="${d.t}" data-tip="${DEVN[d.t]}: 눌러서 설명 보기">${d.fresh&&d.t!=='vp'?'<span class="newtag">다음 차례</span>':''}</div>`),innerHeight<900&&innerWidth>1100?50:62,dw,'devrow2'):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">발전 카드가 없어요.</div>`;}
 
@@ -2313,6 +2360,7 @@ document.addEventListener('pointerdown',e=>{if(!ui.tips||e.pointerType==='mouse'
       const vw=PH.on?PH.vw:innerWidth;let l=(r.left+r.width/2)/k-w/2;l=Math.max(8,Math.min(vw-w-8,l));tipEl.style.left=l+'px';tipEl.style.top=(r.top/k-h-12)+'px';{const br=t.getBoundingClientRect();tipEl.style.setProperty('--ax',((br.left+br.width/2)/k-l)+'px');}}
     else{tipEl.classList.remove('bubble');showTipAt(t.dataset.tip,e.clientX,e.clientY);}clearTimeout(tipTimer);tipTimer=setTimeout(()=>{hideTip();tipEl.classList.remove('bubble');},2800);}});
 document.addEventListener('click',e=>{const b=e.target.closest('[data-pop]');
+  if(b&&(b.dataset.pop==='all'||b.dataset.pop==='cost')){e.stopPropagation();hideTip();popEl.hidden=true;infoDialog(b.dataset.pop);return;}
   if(b){e.stopPropagation();hideTip();popEl.innerHTML=devPop(b.dataset.pop);const r=b.getBoundingClientRect();placeFloat(popEl,r.left,r.bottom-8);return;}
   if(!popEl.hidden&&!e.target.closest('#pop'))popEl.hidden=true;},true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){popEl.hidden=true;hideTip();}});
@@ -2330,7 +2378,12 @@ function infoText(f){
 function openModal(key,html){ui.modal=key;$('#sheet').className='sheet sheet-'+key+(['offer','steal'].includes(key)?' sheet-dialog':'');if(['offer','steal'].includes(key))html=`<img class="dorn" src="${TITLEIMG.orn2}" alt="">`+html;$('#sheet').innerHTML=html;$('#modal').hidden=false;placeCrest();requestAnimationFrame(placeCrest);setTimeout(placeCrest,120);setTimeout(placeCrest,400);}
 function placeCrest(){const sh=$('#sheet'),c=$('#mcrest');if(!sh||!c||$('#modal').hidden)return;const r=sh.getBoundingClientRect(),o=$('#modal').getBoundingClientRect(),k=PH.on?PH.k:1;c.style.left=((r.left-o.left+r.width/2)/k)+'px';c.style.top=((r.top-o.top)/k)+'px';}
 addEventListener('resize',()=>setTimeout(placeCrest,80));
-function openDialog(html){$('#dsheet').innerHTML=`<img class="dorn" src="${TITLEIMG.orn2}" alt="">`+html;$('#dialog').hidden=false;ui.dialog=true;}
+function infoDialog(k){const ci=r=>`<img class="ic-card" src="${CARDIMG[r]}" alt="${RN[r]}">`;
+  let body;
+  if(k==='cost')body=`<h3>건설 비용</h3><div class="dscroll"><div class="costlist">${['road','settlement','city','dev'].map(w=>`<div class="crow2"><img class="ic-bld" src="${BUILDIMG[w]}" alt=""><div class="cname"><b>${BN[w]}</b><small>${({road:'영역을 넓혀요',settlement:'1점',city:'2점 · 정착지를 업그레이드',dev:'무작위 특수 카드'})[w]}</small></div><div class="ccards">${RES.flatMap(r=>Array(COST[w][r]||0).fill(r)).map(ci).join('')}</div></div>`).join('')}</div></div>`;
+  else body=`<h3>발전 카드</h3><p>양모 · 곡물 · 광석 1장씩으로 사는 무작위 특수 카드예요. 총 25장, 남은 덱 ${S.deck.length}장.</p><div class="dscroll"><div class="devlist">${Object.keys(DEVCNT).map(t=>`<div class="drow2"><img class="ic-dev" src="${CARDIMG[t]}" alt="${DEVN[t]}"><div><b>${DEVN[t]}</b> <small>${DEVCNT[t]}장</small><p>${DEVD[t]}</p></div></div>`).join('')}</div></div><p class="muted">산 차례에는 못 쓰고, 한 차례에 1장만 쓸 수 있어요.</p>`;
+  openDialog(body+`<div class="row"><button class="btn sub" id="iOk">확인</button></div>`,'dlg-wide');$('#iOk').onclick=closeDialog;}
+function openDialog(html,cls){$('#dsheet').className='sheet sheet-dialog'+(cls?' '+cls:'');$('#dsheet').innerHTML=`<img class="dorn" src="${TITLEIMG.orn2}" alt="">`+html;$('#dialog').hidden=false;ui.dialog=true;}
 function closeDialog(){$('#dialog').hidden=true;$('#dsheet').innerHTML='';ui.dialog=false;}
 function closeModal(){ui.modal=null;$('#modal').hidden=true;$('#sheet').innerHTML='';}
 
@@ -2381,19 +2434,19 @@ function showOver(){const order=S.players.map((_,i)=>i).sort((a,b)=>vp(b,true)-v
   $('#oClose').onclick=()=>{ui.modal='closed-over';$('#modal').hidden=true;};
   $('#oNew').onclick=()=>{if(window.NET&&NET.on){if(NET.isHost)MP.ref('meta/status').set('lobby');else MP.toast('방장이 새 게임을 시작할 수 있어요.');return;}closeModal();startNew();};}
 function showTrade(tab){tab=tab||'bank';const me=S.players[ME];const rat=ratios(ME);
-  const st={give:null,get:null,pg:emptyRes(),pr:emptyRes(),resp:null};if(myOffer()){Object.assign(st.pg,S.offer.give);Object.assign(st.pr,S.offer.get);if(!tab||tab==='bank')tab=arguments[0]||'player';}
-  const draw=()=>{
-    let body='';
+  const st={give:null,get:null,pg:emptyRes(),pr:emptyRes(),resp:null};if(myOffer()){Object.assign(st.pg,S.offer.give);Object.assign(st.pr,S.offer.get);if(!arguments[0])tab='player';}
+  const draw=()=>{let body='',foot='';
     if(tab==='bank'){body=`<div class="label">줄 자원 (내 비율)</div><div class="pick" id="tg">${RES.map(k=>`<button class="bg-${k}${st.give===k?' sel':''}" data-k="${k}" ${me.res[k]>=rat[k]?'':'disabled'}><span class="pn">${icon(k)}${RN[k]}</span><span class="pr"><i>${rat[k]}장 → 1장</i><i>보유 ${me.res[k]}</i></span></button>`).join('')}</div>
       <div class="label">받을 자원</div><div class="pick" id="tr">${RES.map(k=>`<button class="bg-${k}${st.get===k?' sel':''}" data-k="${k}" ${S.bank[k]>0&&k!==st.give?'':'disabled'}><span class="pn">${icon(k)}${RN[k]}</span><span class="pr"><i>은행 ${S.bank[k]}</i></span></button>`).join('')}</div>
-      <p class="empty">기본은 4:1이에요. 항구에 정착지나 도시가 있으면 3:1, 또는 특정 자원 2:1로 바꿀 수 있어요.</p>
-      <div class="tinfo"><div><div class="label">은행 잔고</div><div class="cost" data-tip="은행에 남은 자원 수. 0이면 그 자원은 생산돼도 받을 수 없어요.">${RES.map(k=>`<span class="pip bg-${k}">${RN[k]} ${S.bank[k]}</span>`).join('')}<span class="pip pdev">발전 ${S.deck.length}</span></div></div><div><div class="label">내 교환 비율</div><div class="cost" data-tip="이 자원 몇 장을 원하는 자원 1장으로 바꿀 수 있는지. 항구에 건물이 있으면 비율이 좋아져요.">${RES.map(k=>`<span class="pip bg-${k}">${RN[k]} ${rat[k]}:1</span>`).join('')}</div></div></div>
-      <div class="row"><button class="btn primary" id="tb" ${st.give&&st.get?'':'disabled'}>교환하기</button></div>`;}
+      <div class="tinfo"><div><div class="label">은행 잔고</div><div class="cost">${RES.map(k=>`<span class="pip bg-${k}">${RN[k]} ${S.bank[k]}</span>`).join('')}<span class="pip pdev">발전 ${S.deck.length}</span></div></div><div><div class="label">내 교환 비율</div><div class="cost">${RES.map(k=>`<span class="pip bg-${k}">${RN[k]} ${rat[k]}:1</span>`).join('')}</div></div></div>`;
+      foot=`<p class="fhint">기본은 4:1, 항구에 건물이 있으면 3:1 또는 2:1이에요.</p><button class="btn primary" id="tb" ${st.give&&st.get?'':'disabled'}>교환하기</button>`;}
     else{body=`<div class="label">내가 줄 것</div>${stepper('pg',st.pg,k=>me.res[k])}<div class="label">내가 받을 것</div>${stepper('pr',st.pr,()=>9)}
-      <div class="row"><button class="btn primary" id="tp" ${sumRes(st.pg)||sumRes(st.pr)?'':'disabled'}>${hasHumans()?'제안하기':'AI들에게 제안'}</button></div>
-      ${myOffer()?`<div class="resp">${Object.keys(S.offer.to).map(q=>{const r=S.offer.to[q];return `<div class="r"><b style="color:${S.players[q].color}">${S.players[q].name}</b><span class="${r.s==='yes'?'ok':r.s==='no'?'no':'wait'}">${r.s==='wait'?`답변 대기 · <i data-cd="offer"></i>`:r.why}</span>${r.s==='yes'?`<button class="btn sub" data-deal="${q}">거래</button>`:''}</div>`;}).join('')}</div>`:''}`;}
-    openModal('trade',`<button class="mclose" id="tx" aria-label="닫기" title="닫기"></button><h3>교환</h3><div class="tabs"><button class="btn${tab==='bank'?' active':''}" id="t1">은행 · 항구</button><button class="btn${tab==='player'?' active':''}" id="t2">${hasHumans()?'다른 플레이어':'AI 플레이어'}</button></div>${body}`);
-    $('#t1').onclick=()=>{tab='bank';draw();};$('#t2').onclick=()=>{tab='player';draw();};$('#tx').onclick=()=>{ui.tradeRedraw=null;closeModal();if(myOffer())act('cancel');else update();};
+      ${myOffer()?`<div class="resp">${Object.keys(S.offer.to).map(q=>{const r=S.offer.to[q];return `<div class="r"><b style="color:${S.players[q].color}">${S.players[q].name}</b><span class="${r.s==='yes'?'ok':r.s==='no'?'no':'wait'}">${r.s==='wait'?`답변 대기 · <i data-cd="offer"></i>`:r.why}</span>${r.s==='yes'?`<button class="btn sub" data-deal="${q}">거래</button>`:''}</div>`;}).join('')}</div>`:''}`;
+      foot=`<p class="fhint">${myOffer()?'수락한 상대와 거래를 누르면 교환돼요.':'줄 것과 받을 것을 정하고 제안하세요.'}</p><button class="btn primary" id="tp" ${sumRes(st.pg)||sumRes(st.pr)?'':'disabled'}>${hasHumans()?'제안하기':'AI들에게 제안'}</button>`;}
+    const left=`<div class="mtabs">${[['bank','은행 · 항구'],['player',hasHumans()?'다른 플레이어':'AI 플레이어']].map(([k,l])=>`<button class="mtab${k===tab?' on':''}" data-t="${k}">${l}<img class="orn" src="${TITLEIMG.orn1}" alt=""></button>`).join('')}</div>`;
+    frame('trade','교환','',left,`<div class="tbody">${body}</div>`,foot);
+    document.querySelectorAll('.sheet-trade .mtab').forEach(b=>b.onclick=()=>{tab=b.dataset.t;draw();});
+    $('#fx').onclick=()=>{ui.tradeRedraw=null;closeModal();if(myOffer())act('cancel');else update();};
     if(tab==='bank'){$('#tg').onclick=e=>{const t=e.target.closest('button');if(!t)return;st.give=t.dataset.k;if(st.get===st.give)st.get=null;draw();};
       $('#tr').onclick=e=>{const t=e.target.closest('button');if(!t)return;st.get=t.dataset.k;draw();};
       $('#tb').onclick=()=>{act('bank',st.give,st.get);st.give=null;st.get=null;showTrade('bank');};}
@@ -2500,8 +2553,10 @@ function showSingle(){if(window.MP&&!NET.on)MP.offline();
    `<p class="fhint">부족한 인원은 AI가 담당해요.</p><button class="btn primary" id="fGo">게임 시작</button>`);
   colBind('fcol',c=>{ui.color=c;saveUi();});segBind('fdif',v=>{ui.diff=v;saveUi();});segBind('fcnt',v=>{ui.n=+v;saveUi();});
   $('#fx').onclick=()=>{closeModal();showTitle(true);};$('#fGo').onclick=()=>{closeModal();startNew();};}
-const nickRow=()=>`<div class="frow"><div class="flab">내 닉네임 <span class="muted">(최대 6자)</span></div><input class="tin" id="nick" maxlength="6" placeholder="예: 육각왕" value="${(ui.nick||'').replace(/"/g,'')}"></div>`;
-function readNick(){const v=($('#nick').value||'').trim().slice(0,6);const m=$('#fMsg');if(!v){m.textContent='닉네임을 입력해 주세요.';$('#nick').focus();return false;}if(nickBad(v)){m.textContent='사용할 수 없는 닉네임이에요.';$('#nick').focus();return false;}ui.nick=v;saveUi();return true;}
+function defNick(){if(!ui.defNick){let n='';for(let k=0;k<20&&!n;k++){const c=aiNames(1)[0];if(c.length<=6)n=c;}ui.defNick=n||'육각왕';}return ui.defNick;}
+const nickRow=()=>`<div class="frow nickrow"><div class="flab">내 닉네임 <span class="muted">(최대 6자)</span></div><div class="nickcell"><input class="tin" id="nick" maxlength="6" placeholder="예: 육각왕" value="${(ui.nick||defNick()).replace(/"/g,'')}"><p class="ferr" id="nErr" hidden></p></div></div>`;
+function readNick(){const v=($('#nick').value||'').trim().slice(0,6);const m=$('#nErr');const bad=t=>{m.textContent=t;m.hidden=false;$('#nick').classList.add('err');$('#nick').focus();return false;};
+  if(!v)return bad('닉네임을 입력해 주세요.');if(nickBad(v))return bad('사용할 수 없는 닉네임이에요. 다른 닉네임을 입력해 주세요.');m.hidden=true;$('#nick').classList.remove('err');ui.nick=v;saveUi();return true;}
 function showMulti(tab,code){tab=tab||'invite';ui.mtab=tab;const tabs=[['invite','초대하기'],['join','초대받기'],['quick','랜덤 참가']];
   const left=`<div class="mtabs">${tabs.map(([k,l])=>`<button class="mtab${k===tab?' on':''}" data-t="${k}">${l}<img class="orn" src="${TITLEIMG.orn1}" alt=""></button>`).join('')}</div>`;
   let right='',foot='';
