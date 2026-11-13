@@ -1307,6 +1307,50 @@ html.phone body .title .tbg{top:5%!important;bottom:-32%!important}
 html body .sheet.sheet-dialog{padding-top:14px!important;padding-bottom:22px!important}
 html body .sheet-dialog h3{margin-top:0!important}
 html.phone body .sheet.sheet-dialog{padding-top:10px!important;padding-bottom:14px!important}
+
+
+#tut .tbub{display:block!important}
+#tut .tbub.tspot-bl{padding:16px 14px 12px}
+#tut .tbub.tspot-bl h4{font-size:17px}
+#tut .tbub.tspot-bl p{font-size:13.5px;line-height:1.55}
+html.phone #tut .tbub.tspot-bl{padding:10px 10px 8px}
+html.phone #tut .tbub.tspot-bl h4{font-size:14px;margin-bottom:2px}
+html.phone #tut .tbub.tspot-bl p{font-size:11.5px;line-height:1.45}
+html.phone #tut .tbub.tspot-bl .tstep{display:none}
+/* ===== tutorial ===== */
+#tut{position:fixed;inset:0;z-index:64;pointer-events:none}
+#tut[hidden]{display:none}
+#tut .tblock{position:absolute;inset:0;background:rgba(3,5,10,.62);pointer-events:auto;transition:background .2s}
+#tut .tblock.light{background:rgba(3,5,10,.22)}
+#tut .tring{position:absolute;border:3px solid #f6d98e;border-radius:6px;box-shadow:0 0 0 2px rgba(0,0,0,.45),0 0 22px rgba(255,210,120,.85),inset 0 0 14px rgba(255,210,120,.45);pointer-events:none;animation:tring 1.1s ease-in-out infinite}
+#tut .tring.round{border-radius:50%}
+#tut .tring.bad{border-color:#ff5a46;box-shadow:0 0 0 2px rgba(0,0,0,.45),0 0 22px rgba(255,80,60,.85);animation:none}
+#tut .tring[hidden],#tut .tx[hidden]{display:none}
+@keyframes tring{50%{transform:scale(1.08);box-shadow:0 0 0 2px rgba(0,0,0,.45),0 0 34px rgba(255,220,140,1),inset 0 0 18px rgba(255,210,120,.6)}}
+#tut .tx{position:absolute;transform:translate(-50%,-50%);font:900 40px/1 sans-serif;color:#ff4a36;text-shadow:0 0 8px #000,0 2px 4px #000;pointer-events:none}
+#tut .tbub{position:absolute;width:min(440px,calc(100% - 28px));box-sizing:border-box;padding:24px 24px 18px;background:linear-gradient(180deg,#3a2716,#21160c);border:2px solid #c9a35a;box-shadow:inset 0 0 0 1px rgba(0,0,0,.6),inset 0 0 30px rgba(0,0,0,.45),0 16px 40px rgba(0,0,0,.65);color:#eadfc8;pointer-events:auto}
+#tut .tbub.tmini{width:min(620px,calc(100% - 28px));padding:16px 20px 14px}
+#tut .tborn{position:absolute;left:50%;top:-17px;width:34px;margin-left:-17px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.6))}
+#tut .tstep{font-size:12.5px;color:#b8a27a;letter-spacing:.04em;margin-bottom:4px}
+#tut .tbub h4{margin:0 0 8px;font-size:22px;color:#ffe2a0;text-shadow:0 1px 2px #000}
+#tut .tbub p{margin:0;font-size:16.5px;line-height:1.65;word-break:keep-all}
+#tut .tbub p b{color:#ffd88a}
+#tut .trow{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}
+#tut .tnext{min-width:120px;height:46px;border-style:solid;border-width:9px 11px;border-color:transparent;border-image:url(assets/ui/0188c1d8.webp) 34 36 fill / 9px 11px stretch;background:none;font:inherit;font-size:16px;font-weight:700;color:#fff0d2;text-shadow:0 1px 0 #4a1c02;cursor:pointer;padding:0 0 2px}
+#tut .tnext:hover{filter:brightness(1.12)}
+#tut .twait{display:flex;gap:6px;justify-content:flex-end;margin-top:10px}
+#tut .twait i{width:8px;height:8px;border-radius:50%;background:#e9c47a;animation:twait 1s infinite}
+#tut .twait i:nth-child(2){animation-delay:.15s}#tut .twait i:nth-child(3){animation-delay:.3s}
+@keyframes twait{50%{opacity:.2;transform:translateY(-3px)}}
+#tut .texit{position:absolute;right:16px;top:14px;pointer-events:auto;padding:8px 14px;background:rgba(20,14,8,.85);border:1px solid rgba(233,196,122,.55);color:#f3e2bc;font:inherit;font-size:14px;cursor:pointer;z-index:2}
+html.in-tut header.top .tools{visibility:hidden}
+html.phone #tut .tbub{width:min(360px,calc(100% - 20px));padding:16px 16px 12px}
+html.phone #tut .tbub.tmini{width:min(520px,calc(100% - 20px));padding:12px 14px 10px}
+html.phone #tut .tbub h4{font-size:17px;margin-bottom:4px}
+html.phone #tut .tbub p{font-size:13.5px;line-height:1.55}
+html.phone #tut .tnext{height:38px;min-width:96px;font-size:14px}
+html.phone #tut .trow{margin-top:8px}
+html.phone #tut .texit{top:8px;right:10px;font-size:12px;padding:6px 10px}
 </style>
 
 
@@ -1372,6 +1416,7 @@ html.phone body .sheet.sheet-dialog{padding-top:10px!important;padding-bottom:14
 <div id="leftcol"></div>
 <div id="rotate" hidden><div class="rot-ic"></div><b>가로로 돌려 주세요</b><span>HexIsle은 휴대폰에서 가로 화면으로 플레이해요.</span></div>
 <div id="title" class="title" hidden><div class="tbg"></div><div class="tdim"></div><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 육각섬 개척기"><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
+<div id="tut" hidden><div class="tblock" id="tBlock"></div><div class="tring" id="tRing" hidden></div><div class="tx" id="tX" hidden>✕</div><div class="tbub" id="tBub"></div><button class="texit" id="tExit">튜토리얼 나가기</button></div>
 <div id="dialog" class="overlay dlgov" hidden><div class="sheet sheet-dialog" id="dsheet"></div></div>
 <div id="modal" class="overlay" hidden><div class="sheet" id="sheet"></div><i class="mcrest" id="mcrest" aria-hidden="true"></i></div>
 
@@ -1494,7 +1539,7 @@ function buyDev(p){pay(p,COST.dev);const t=S.deck.pop();S.players[p].dev.push({t
   log(p,p===0?`발전 카드를 샀어요. (${DEVN[t]})`:'발전 카드를 샀어요.','',p===0?DEVD[t]+' 산 차례에는 쓸 수 없어요.':'어떤 카드인지는 비공개예요. 다음 차례부터 쓸 수 있어요.');return t;}
 
 function roll(p){
-  const a=1+rnd(6),b=1+rnd(6),n=a+b;S.dice=[a,b];S.rolled=true;S.rollId++;
+  const [a,b]=(typeof TUT!=='undefined'&&TUT.on)?TUT.dice(p):[1+rnd(6),1+rnd(6)],n=a+b;S.dice=[a,b];S.rolled=true;S.rollId++;
   log(p,`주사위 ${a} + ${b} = ${n}`,'',n===7?'7은 아무 땅도 생산하지 않아요. 카드가 8장 이상인 사람은 절반을 버리고, 굴린 사람이 도적을 옮겨요.':`숫자 ${n}이 적힌 땅에 건물이 닿아 있는 사람이 자원을 받아요.`);
   if(n===7){
     let human=false;
@@ -1556,7 +1601,7 @@ function updateLongest(){
 }
 function bankTrade(p,give,get){const r=ratios(p)[give];S.players[p].res[give]-=r;S.bank[give]+=r;S.players[p].res[get]++;S.bank[get]--;
   log(p,`${RN[give]} ${r}장을 ${RN[get]} 1장으로 교환했어요. (${r===4?'은행':'항구 '+r+':1'})`);}
-function playerTrade(p,q,give,get){RES.forEach(r=>{const a=give[r]||0,b=get[r]||0;S.players[p].res[r]+=b-a;S.players[q].res[r]+=a-b;});
+function playerTrade(p,q,give,get){if(typeof TUT!=='undefined')TUT.traded=true;RES.forEach(r=>{const a=give[r]||0,b=get[r]||0;S.players[p].res[r]+=b-a;S.players[q].res[r]+=a-b;});
   log(p,`${S.players[q].name}와 거래: ${fmt(give)} 주고 ${fmt(get)} 받음`);}
 function endTurn(){S.offer=null;const pl=S.players[S.cur];pl.dev.forEach(d=>d.fresh=false);
   S.cur=(S.cur+1)%S.players.length;S.rolled=false;S.devPlayed=false;S.pend=null;S.acts=0;if(S.cur===0)S.turn++;
@@ -1626,6 +1671,7 @@ function aiDiscard(p,k){const r=S.players[p].res;if(DF()==='easy'){const out=emp
   for(let i=0;i<k;i++){const pick=argmax(RES.filter(x=>r[x]-out[x]>0),x=>(r[x]-out[x])-(c[x]||0)*1.5);out[pick]++;}
   discard(p,out);}
 function aiStep(p){
+  if(typeof TUT!=='undefined'&&TUT.on){if(S.phase==='setup'){TUT.aiPlace(p);return;}if(S.pend){if(S.pend.k==='discard'&&S.pend.p===p){aiDiscard(p,S.pend.n);nextDiscard();}else S.pend=null;return;}if(!S.rolled){roll(p);return;}endTurn();return;}
   if(S.phase==='setup'){
     const pr=prodOf(p);
     const nz={easy:7,normal:.6,hard:.15}[DF()];if(S.sub==='settlement')placeSettlement(p,argmax(settleSpots(p,true),v=>spotValue(v,p,pr)+Math.random()*nz));
@@ -1657,7 +1703,7 @@ function aiStep(p){
       if(give.length){bankTrade(p,argmax(give,k=>res[k]-(c[k]||0)-rat[k]),need[0]);return;}}}
   endTurn();
 }
-function aiAccepts(q,give,get,from){from=from===undefined?ME:from;
+function aiAccepts(q,give,get,from){if(typeof TUT!=='undefined'&&TUT.on){const lack=RES.some(k=>(get[k]||0)>S.players[q].res[k]);return sumRes(give)>0&&!lack?{ok:true,why:'좋아요, 거래해요'}:{ok:false,why:lack?'그 카드가 없어요':'빈 제안이에요'};}from=from===undefined?ME:from;
   const r=S.players[q].res;
   if(!sumRes(give)&&!sumRes(get))return{ok:false,why:'빈 제안이에요'};
   const d=DF();const lack=RES.filter(k=>(get[k]||0)>r[k]);
@@ -1711,14 +1757,15 @@ function validAct(p,name){if(!S||S.phase==='over'||!S.players[p])return false;
 function isClient(){return !!(S&&S.mp&&window.NET&&NET.on&&!NET.isHost);}
 function act(name,...args){if(isClient()){NET.send(name,args);return;}if(!validAct(ME,name))return;ACTS[name](ME,...args);update();}
 function update(){if(isClient()){render();return;}checkWin();if(!S.mp)save();render();kick();if(S.mp&&window.NET&&NET.on)NET.publish();}
-function kick(){clearTimeout(aiTimer);if(isClient())return;const a=actor();if(a===null||!S.players[a].ai||['start','lobby','mp','setup'].includes(ui.modal))return;
+function kick(){clearTimeout(aiTimer);if(isClient())return;if(typeof TUT!=='undefined'&&TUT.on&&!(TUT.cur()&&TUT.cur().ai))return;const a=actor();if(a===null||!S.players[a].ai||['start','lobby','mp','setup'].includes(ui.modal))return;
   aiTimer=setTimeout(()=>{if(actor()===a){try{aiStep(a);}catch(err){console.error(err);if(S.phase==='main'&&S.cur===a&&S.rolled&&!S.pend)endTurn();}update();}},DELAY[ui.speed]);}
 
 const icon=(k,cls)=>(typeof RESICON!=='undefined'&&RESICON[k])?`<img class="ricon ${cls||''}" src="${RESICON[k]}" alt="">`:`<svg class="${cls||''}" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-${k}"/></svg>`;
 const costPips=c=>`<span class="cost">${RES.filter(k=>c[k]).map(k=>`<span class="pip bg-${k}" title="${RN[k]}">${RN[k][0]}${c[k]>1?'×'+c[k]:''}</span>`).join('')}</span>`;
 const pname=p=>`<b style="color:${S.players[p].color}">${S.players[p].name}</b>`;
 
-function targets(){const t={v:[],e:[],h:[],kind:null};
+function targets(){const t=targets0();if(typeof TUT!=='undefined'&&TUT.on)TUT.filter(t);return t;}
+function targets0(){const t={v:[],e:[],h:[],kind:null};
   if(!S||S.phase==='over'||S.cur!==ME||ui.modal==='start')return t;
   if(S.phase==='setup'){if(S.sub==='settlement'){t.kind='setupS';t.v=settleSpots(ME,true);}else{t.kind='setupR';t.e=roadSpots(ME,true);}return t;}
   if(S.pend){if(S.pend.k==='robber'){t.kind='robber';t.h=HIDX.filter(i=>i!==S.board.robber);}else if(S.pend.k==='roads'){t.kind='freeRoad';t.e=roadSpots(ME);}return t;}
@@ -2841,6 +2888,135 @@ const MP={db:null,subs:[],offSince:{},
 setInterval(()=>{try{MP.hostTick();MP.pubTick();if(ui.modal==='lobby'&&NET.meta&&NET.meta.autoAt)MP.drawLobby();}catch(e){}},1000);
 $('#leaveBtn').onclick=()=>{if(NET.on)MP.confirmLeave();};
 {const q=new URLSearchParams(location.search).get('room');if(q&&MP_ENABLED)setTimeout(()=>MP.openEntry(q.toUpperCase().slice(0,5)),600);}
+
+</script>
+<script id="tut-js">
+// ================= TUTORIAL =================
+const TUT={on:false,i:0,P:null,traded:false,force7:false,aiDiceIx:0,
+  cur(){return this.on?this.steps[this.i]:null;},
+  start(){hideTitle();closeModal();closeDialog();clearTimeout(aiTimer);
+    const R=Math.random;let s=20261113;Math.random=()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296;};
+    try{newGame(3,'easy',myCols());}finally{Math.random=R;}
+    S.players[1].name='느긋한 감자';S.players[2].name='졸린 고양이';S.tut=true;ME=0;
+    ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;
+    this.plan();this.on=true;this.traded=false;this.force7=false;this.aiDiceIx=0;
+    $('#tut').hidden=false;document.documentElement.classList.add('in-tut');
+    try{fitCam(true);}catch(e){}this.go(0);},
+  exit(toSingle){this.on=false;$('#tut').hidden=true;document.documentElement.classList.remove('in-tut');clearTimeout(aiTimer);closeDialog();closeModal();
+    newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;render();
+    if(toSingle){showTitle(true);showSingle();}else showStart();},
+  // ---------- scripted plan ----------
+  plan(){const adj=v=>G.verts[v].adj;const eid=(a,b)=>G.edges.findIndex(e=>(e.a===a&&e.b===b)||(e.a===b&&e.b===a));
+    const pr0=emptyRes();const val=v=>{const h=G.verts[v].h.filter(i=>S.board.hexes[i].res!=='desert');return h.length?spotValue(v,0,pr0):-99;};
+    const V=[...G.verts.keys()];let best=null;
+    for(const v1 of V.slice().sort((a,b)=>val(b)-val(a)).slice(0,14))for(const a of adj(v1))for(const b of adj(a)){if(b===v1||adj(v1).includes(b))continue;const sc=val(v1)+.8*val(b);if(!best||sc>best.sc)best={v1,a,b,sc};}
+    const {v1,a,b}=best;const taken=new Set([v1,b]);const ok=v=>!taken.has(v)&&adj(v).every(x=>!taken.has(x));
+    const avoid=new Set([v1,a,b,...adj(a),...adj(v1),...adj(b)]);
+    const v2=V.filter(v=>ok(v)&&!avoid.has(v)&&val(v)>0).sort((x,y)=>val(y)-val(x))[0];taken.add(v2);
+    const u=adj(v2).filter(x=>!avoid.has(x)).sort((x,y)=>val(y)-val(x))[0];
+    const userE=[eid(v1,a),eid(a,b),eid(v2,u)];const block=new Set([v1,v2,b,a,u]);
+    const mine=new Set([v1,v2,b]);
+    const cand=V.filter(v=>val(v)>0).sort((x,y)=>val(x)-val(y));
+    const pick=(need)=>{for(const v of cand){if(!ok(v)||block.has(v))continue;if(need&&!need(v))continue;taken.add(v);return v;}};
+    const aiHex=v=>G.verts[v].h.filter(h=>S.board.hexes[h].res!=='desert'&&h!==S.board.robber&&!G.hexes[h].v.some(x=>mine.has(x)));
+    const s1=pick(v=>aiHex(v).length>0),s2=pick(),s2b=pick(),s1b=pick();
+    const road=(sp)=>{const x=adj(sp).find(x=>!block.has(x)&&!taken.has(x))??adj(sp).find(x=>!block.has(x));const e=eid(sp,x);block.add(x);return e;};
+    const ai={1:{s:[s1,s1b],e:[road(s1),road(s1b)]},2:{s:[s2,s2b],e:[road(s2),road(s2b)]}};
+    const hexAI=aiHex(s1).filter(h=>!G.hexes[h].v.some(x=>x===s2||x===s2b))[0]??aiHex(s1)[0];
+    this.P={v1,a,b,v2,u,e1:userE[0],e3:userE[1],e2:userE[2],ai,hexAI};},
+  aiPlace(p){const A=this.P.ai[p];const k=count(p).s;if(S.sub==='settlement')placeSettlement(p,A.s[k]);else placeRoad(p,A.e[k-1]);},
+  dice(p){if(p!==0){const n=[2,3,11,12,3,11][this.aiDiceIx++%6];const a=Math.max(1,n-6);return [a,n-a];}
+    if(this.force7){this.force7=false;return [3,4];}
+    const cnt={};S.vb.forEach((bb,v)=>{if(bb&&bb.o===0)for(const h of G.verts[v].h){const t=S.board.hexes[h];if(t.res!=='desert'&&h!==S.board.robber&&t.num!==7)cnt[t.num]=(cnt[t.num]||0)+(bb.c?2:1);}});
+    const n=+Object.keys(cnt).sort((x,y)=>cnt[y]-cnt[x]||Math.abs(7-x)-Math.abs(7-y))[0]||8;const a=Math.max(1,n-6);this.lastN=n;return [a,n-a];},
+  filter(t){const st=this.cur();if(!st)return;const r=st.only||{};
+    if(t.v.length)t.v=r.v!==undefined?t.v.filter(x=>x===r.v):[];
+    if(t.e.length)t.e=r.e!==undefined?t.e.filter(x=>x===r.e):[];
+    if(t.h.length)t.h=r.h!==undefined?t.h.filter(x=>x===r.h):[];},
+  topUp(c,p){p=p||0;RES.forEach(k=>{const need=(c[k]||0)-S.players[p].res[k];if(need>0){S.players[p].res[k]+=need;S.bank[k]-=need;}});},
+  // ---------- flow ----------
+  go(i){this.i=i;const st=this.steps[i];if(!st){this.exit();return;}
+    if(st.enter)try{st.enter.call(this);}catch(e){console.error(e);}
+    this.drawBubble();update();this.layout();},
+  tick(){if(!this.on)return;const st=this.cur();if(!st)return;
+    if(st.done&&(()=>{try{return st.done.call(this);}catch(e){return false;}})()){this.go(this.i+1);return;}this.layout();},
+  drawBubble(){const st=this.cur();const b=$('#tBub');const txt=v=>typeof v==='function'?v.call(this):v;
+    b.className='tbub'+(st.mini?' tmini':'')+(st.spot?' tspot-'+st.spot:'');
+    b.innerHTML=`<img class="tborn" src="${TITLEIMG.orn1}" alt=""><div class="tstep">튜토리얼 ${this.i+1} / ${this.steps.length}</div>${st.t?`<h4>${txt(st.t)}</h4>`:''}<p>${txt(st.b)}</p>
+      ${st.next?`<div class="trow"><button class="tnext" id="tNext">${st.last?'첫 화면으로':'다음'}</button>${st.last?'<button class="tnext tgo" id="tGo">싱글 플레이 시작</button>':''}</div>`:st.ai?'<div class="twait"><i></i><i></i><i></i></div>':''}`;
+    if($('#tNext'))$('#tNext').onclick=()=>{if(st.last)return this.exit(false);if(st.leave)st.leave.call(this);this.go(this.i+1);};
+    if($('#tGo'))$('#tGo').onclick=()=>this.exit(true);},
+  rectOf(at){const k=PH.on?PH.k:1;if(!at)return null;
+    if(at.sel){const el=document.querySelector(at.sel);if(!el||!el.offsetParent&&el!==document.body)return null;const r=el.getBoundingClientRect();if(!r.width)return null;const p=at.pad??6;return {l:r.left/k-p,t:r.top/k-p,r:r.right/k+p,b:r.bottom/k+p};}
+    if(!W.ok)return null;const cr=W.r.domElement.getBoundingClientRect();
+    const scr=(x,y,z)=>{const v=new THREE.Vector3(x,y,z).project(W.cam);return {x:(cr.left+(v.x+1)/2*cr.width)/k,y:(cr.top+(1-v.y)/2*cr.height)/k};};
+    let c,rad=30;
+    if(at.v!==undefined){const p=vc(at.v);c=scr(p.x,heightAt(p.x,p.z)+.06,p.z);}
+    else if(at.e!==undefined){const E=G.edges[at.e],A=vc(E.a),B=vc(E.b);const x=(A.x+B.x)/2,z=(A.z+B.z)/2;c=scr(x,heightAt(x,z)+.04,z);}
+    else if(at.h!==undefined){const p=hc(at.h);c=scr(p.x,heightAt(p.x,p.z),p.z);const q=vc(G.hexes[at.h].v[0]);const d=scr(q.x,heightAt(q.x,q.z),q.z);rad=Math.max(34,Math.hypot(d.x-c.x,d.y-c.y)*.9);}
+    if(!c)return null;return {l:c.x-rad,t:c.y-rad,r:c.x+rad,b:c.y+rad,round:true};},
+  layout(){const st=this.cur();if(!st)return;const vw=PH.on?PH.vw:innerWidth,vh=PH.on?PH.vh:innerHeight;
+    const at=typeof st.at==='function'?st.at.call(this):st.at;const R=this.rectOf(at);const blk=$('#tBlock'),ring=$('#tRing'),bub=$('#tBub'),xm=$('#tX');
+    blk.classList.toggle('light',!!st.ai);
+    if(R&&!st.x){const p=`polygon(evenodd,0 0,${vw}px 0,${vw}px ${vh}px,0 ${vh}px,0 0,${R.l}px ${R.t}px,${R.r}px ${R.t}px,${R.r}px ${R.b}px,${R.l}px ${R.b}px,${R.l}px ${R.t}px)`;blk.style.clipPath=p;blk.style.webkitClipPath=p;}
+    else{blk.style.clipPath='none';blk.style.webkitClipPath='none';}
+    if(R&&!st.pass){Object.assign(ring.style,{left:R.l+'px',top:R.t+'px',width:(R.r-R.l)+'px',height:(R.b-R.t)+'px'});ring.hidden=false;ring.classList.toggle('round',!!R.round);ring.classList.toggle('bad',!!st.x);}else ring.hidden=true;
+    if(R&&st.x){xm.hidden=false;xm.style.left=((R.l+R.r)/2)+'px';xm.style.top=((R.t+R.b)/2)+'px';}else xm.hidden=true;
+    const w=bub.offsetWidth,h=bub.offsetHeight,m=14;let x,y;
+    if(st.spot==='bl'){const L=document.querySelector('.sheet-frame .fleft');const r=L&&L.getBoundingClientRect(),k=PH.on?PH.k:1;bub.style.width=r?Math.max(200,r.width/k)+'px':'';x=r?r.left/k:m;y=r?Math.max(m,r.bottom/k-h-4):vh-h-m;}
+    else{bub.style.width='';}
+    if(st.spot==='bl'){}
+    else if(st.mini||!R||st.pass){x=(vw-w)/2;y=st.mini?m:(R&&st.pass?m+50:(vh-h)/2);}
+    else{const cx=(R.l+R.r)/2;x=Math.max(m,Math.min(vw-w-m,cx-w/2));
+      if(R.b+m+h<vh-m)y=R.b+m+6;else if(R.t-m-h>m)y=R.t-m-h-6;
+      else{y=Math.max(m,Math.min(vh-h-m,(R.t+R.b)/2-h/2));x=(R.l>vw-R.r)?Math.max(m,R.l-w-m-6):Math.min(vw-w-m,R.r+m+6);}}
+    bub.style.left=x+'px';bub.style.top=y+'px';}};
+const me0=()=>S.players[0];
+const nameOf=p=>`<b style="color:${S.players[p].color}">${S.players[p].name}</b>`;
+TUT.steps=[
+ {t:'헥스아일에 오신 걸 환영해요!',b:'직접 한 판을 따라 하면서 게임 방법을 익혀 볼게요. 상대는 AI 두 명이에요. 빛나는 곳만 누르면 돼요.',next:true},
+ {t:'보드 살펴보기',b:()=>PH.on?'한 손가락으로 끌면 섬을 <b>돌리고 기울일 수</b> 있어요. 두 손가락을 벌리거나 모으면 <b>확대·축소</b>, 두 손가락으로 끌면 <b>화면을 옮겨요</b>. 직접 움직여 본 뒤 다음을 누르세요.':'마우스로 끌면 섬을 <b>돌리고 기울일 수</b> 있어요. 휠로 <b>확대·축소</b>, 오른쪽 버튼으로 끌면 <b>화면을 옮겨요</b>. 직접 움직여 본 뒤 다음을 누르세요.',at:{sel:'#stage',pad:0},pass:true,mini:true,next:true,leave(){fitCam(true);}},
+ {t:'첫 정착지 놓기',b:'정착지는 <b>땅의 꼭짓점</b>에만 지을 수 있어요. 꼭짓점에 닿은 땅들에서 자원이 나와요. 빛나는 꼭짓점을 누르세요.',at(){return {v:this.P.v1};},only:{},enter(){this.steps[this.i].only={v:this.P.v1};fitCam(true);},done(){return !!S.vb[this.P.v1];}},
+ {t:'도로 놓기',b:'도로는 <b>땅과 땅 사이의 변</b>에 놓아요. 방금 지은 정착지에 이어서 빛나는 곳을 누르세요.',at(){return {e:this.P.e1};},enter(){this.steps[this.i].only={e:this.P.e1};},done(){return S.eo[this.P.e1]===0;}},
+ {t:'AI들의 차례',b:'AI들이 차례대로 첫 정착지와 도로를 놓고 있어요.',ai:true,done(){return S.si>=3;}},
+ {t:'두 번째 바퀴는 거꾸로!',b:`초기 배치 두 번째 바퀴는 <b>반대 순서</b>로 돌아요. 마지막 사람(${'졸린 고양이'})이 연달아 두 번 놓고, 처음 놓은 사람(나)은 맨 마지막에 놓아요. 먼저 고른 사람과 공평해지도록 하는 규칙이에요.`,next:true},
+ {t:'AI들의 두 번째 배치',b:'AI들이 두 번째 정착지를 놓고 있어요.',ai:true,done(){return S.si>=5&&S.sub==='settlement';}},
+ {t:'여기는 지을 수 없어요',b:'정착지는 다른 건물과 <b>최소 두 칸</b> 떨어져야 해요. 도로 한 칸 거리인 바로 옆 꼭짓점에는 지을 수 없어요.',at(){return {v:this.P.a};},x:true,next:true,enter(){fitCam(true);}},
+ {t:'두 번째 정착지 놓기',b:'두 번째 정착지는 <b>닿은 땅의 자원을 1장씩 바로</b> 받아요. 빛나는 꼭짓점을 누르세요.',at(){return {v:this.P.v2};},enter(){this.steps[this.i].only={v:this.P.v2};},done(){return !!S.vb[this.P.v2];}},
+ {t:'두 번째 도로 놓기',b:'이 정착지에도 도로를 하나 이어 주세요.',at(){return {e:this.P.e2};},enter(){this.steps[this.i].only={e:this.P.e2};},done(){return S.eo[this.P.e2]===0;}},
+ {t:'첫 자원을 받았어요',b:'두 번째 정착지에 닿은 땅마다 자원 카드를 1장씩 받았어요. 이제 본 게임이 시작돼요!',at:{sel:'.tray-hand'},next:true},
+ {t:'주사위 굴리기',b:'내 차례는 항상 <b>주사위 굴리기</b>로 시작해요.',at:{sel:'[data-act="roll"]'},done(){return S.cur===0&&S.rolled;}},
+ {t:'자원 생산',b(){return `주사위 합은 <b>${S.dice?S.dice[0]+S.dice[1]:''}</b>이에요. 숫자 ${S.dice?S.dice[0]+S.dice[1]:''}이 적힌 땅에 닿아 있는 정착지가 자원을 받아요. 다른 사람이 굴려도 내 땅이면 받아요!`;},at:{sel:'.tray-hand'},next:true},
+ {t:'도로 건설',b:'자원이 모였어요. <b>도로</b>를 눌러 건설 모드를 켜세요. 도로는 목재 1 + 벽돌 1이 들어요.',at:{sel:'[data-act="road"]'},enter(){this.topUp(COST.road);},done(){return ui.mode==='road';}},
+ {t:'도로 잇기',b:'도로는 <b>내 도로나 건물에 이어서만</b> 지을 수 있어요. 빛나는 곳을 누르세요.',at(){return {e:this.P.e3};},enter(){this.steps[this.i].only={e:this.P.e3};fitCam(true);},done(){return S.eo[this.P.e3]===0;}},
+ {t:'턴 종료',b:'할 일을 다 했으면 <b>턴 종료</b>를 눌러 다음 사람에게 넘겨요.',at:{sel:'[data-act="end"]'},done(){return S.cur!==0;}},
+ {t:'AI들의 차례',b:'AI들이 주사위를 굴리고 있어요. 이때도 내 땅의 숫자가 나오면 자원을 받아요.',ai:true,done(){return S.cur===0&&!S.rolled;}},
+ {t:'다시 내 차례',b:'주사위를 굴려 주세요.',at:{sel:'[data-act="roll"]'},done(){return S.rolled;}},
+ {t:'정착지 짓기',b:'정착지는 <b>목재·벽돌·양모·곡물</b> 1장씩으로 지어요. 짓기만 해도 1점! <b>정착지</b>를 누르세요.',at:{sel:'[data-act="settlement"]'},enter(){this.topUp(COST.settlement);},done(){return ui.mode==='settlement';}},
+ {t:'새 정착지 자리',b:'새 정착지는 <b>내 도로와 이어진</b> 꼭짓점에, 다른 건물과 두 칸 이상 떨어진 곳에 지어요.',at(){return {v:this.P.b};},enter(){this.steps[this.i].only={v:this.P.b};fitCam(true);},done(){return !!S.vb[this.P.b];}},
+ {t:'발전 카드 사기',b:'<b>양모·곡물·광석</b> 1장씩으로 발전 카드를 살 수 있어요. 어떤 카드가 나올지는 몰라요!',at:{sel:'[data-act="dev"]'},enter(){this.topUp(COST.dev);const d=S.deck,i=d.lastIndexOf('knight');if(i>=0){[d[i],d[d.length-1]]=[d[d.length-1],d[i]];}},done(){return me0().dev.length>0;}},
+ {t:'기사 카드!',b:'기사 카드를 뽑았어요. 기사는 도적을 옮기고 상대 카드를 1장 빼앗아요. 발전 카드는 <b>산 차례에는 쓸 수 없고</b> 다음 차례부터 써요. 카드를 누르면 설명을 볼 수 있어요.',at:()=>({sel:PH.on?'[data-htab="dev"]':'.tray-dev'}),next:true},
+ {t:'교환하기',b:'부족한 자원은 교환으로 구해요. <b>교환</b>을 누르세요.',at:{sel:'[data-act="trade"]'},enter(){this.topUp({wood:3,brick:2});[1,2].forEach(p=>this.topUp({wood:2,brick:2,wool:2,grain:2,ore:2},p));},done(){return ui.modal==='trade';}},
+ {t:'AI와 교환',b:'은행에서는 같은 자원 4장을 원하는 1장으로 바꿔요(항구가 있으면 더 싸요). 이번엔 <b>AI 플레이어</b> 탭을 눌러 보세요.',at:{sel:'.sheet-trade .mtab[data-t="player"]'},done(){return !!document.querySelector('.sheet-trade .mtab[data-t="player"].on');}},
+ {t:'제안하고 거래하기',b:'<b>내가 줄 것</b>(예: 목재 1)과 <b>받을 것</b>(예: 광석 1)을 + 로 정하고 <b>AI들에게 제안</b>을 누르세요. 수락한 AI 옆 <b>거래</b>를 누르면 교환돼요.',at:{sel:'#sheet',pad:0},spot:'bl',done(){return this.traded;}},
+ {t:'턴 종료',b:'교환 완료! 턴을 넘겨 주세요.',at:{sel:'[data-act="end"]'},enter(){closeModal();},done(){return S.cur!==0;}},
+ {t:'AI들의 차례',b:'AI들이 차례를 진행하고 있어요.',ai:true,done(){return S.cur===0&&!S.rolled;}},
+ {t:'주사위 굴리기',b:'주사위를 굴려 주세요.',at:{sel:'[data-act="roll"]'},done(){return S.rolled;}},
+ {t:'도시로 업그레이드',b:'도시는 <b>곡물 2 + 광석 3</b>으로 정착지를 업그레이드해요. 자원을 <b>2장씩</b> 받고 점수도 2점이에요. <b>도시</b>를 누르세요.',at:{sel:'[data-act="city"]'},enter(){this.topUp(COST.city);},done(){return ui.mode==='city';}},
+ {t:'업그레이드할 정착지',b:'첫 정착지를 도시로 바꿔 볼게요.',at(){return {v:this.P.v1};},enter(){this.steps[this.i].only={v:this.P.v1};fitCam(true);},done(){return !!(S.vb[this.P.v1]&&S.vb[this.P.v1].c);}},
+ {t:'턴 종료',b:'좋아요! 턴을 넘겨 주세요.',at:{sel:'[data-act="end"]'},done(){return S.cur!==0;}},
+ {t:'AI들의 차례',b:'AI들이 차례를 진행하고 있어요.',ai:true,done(){return S.cur===0&&!S.rolled;}},
+ {t:'주사위 7과 도적',b:'이번엔 <b>7</b>이 나와요! 7이 나오면 아무 땅도 생산하지 않고, <b>카드가 8장 이상인 사람은 절반을 버려요</b>. 주사위를 굴려 보세요.',at:{sel:'[data-act="roll"]'},enter(){this.topUp({wood:3,brick:3,wool:2,grain:2,ore:1});this.force7=true;},done(){return S.rolled;}},
+ {t:'카드 버리기',b:'카드가 많아서 절반을 버려야 해요. 버릴 카드를 눌러 고른 뒤 <b>버리기</b>를 누르세요.',at:{sel:'#sheet',pad:0},mini:true,done(){return !(S.pend&&S.pend.k==='discard');}},
+ {t:'도적 옮기기',b(){return `7을 굴린 사람은 <b>도적</b>을 옮겨요. 도적이 앉은 땅은 자원이 나오지 않아요. 빛나는 땅(AI의 건물이 있는 땅)을 누르세요.`;},at(){return {h:this.P.hexAI};},enter(){this.steps[this.i].only={h:this.P.hexAI};this.topUp({wool:1,grain:1},1);fitCam(true);},done(){return S.board.robber===this.P.hexAI;}},
+ {t:'누구에게서 빼앗을까요?',b:'이 땅에는 여러 상대의 건물이 있어요. 카드를 빼앗을 상대를 고르세요.',at:{sel:'#sheet',pad:0},mini:true,done(){return !(S.pend&&S.pend.k==='steal');}},
+ {t:'카드를 빼앗았어요',b(){const L=S.lastSteal;return `도적을 옮긴 사람은 그 땅에 건물이 있는 상대의 카드 1장을 무작위로 가져와요. ${L?nameOf(L.q)+'에게서 <b>'+RN[L.r]+'</b> 1장을':'카드 1장을'} 가져왔어요. 기사 카드를 써도 똑같이 도적을 옮길 수 있어요.`;},next:true},
+ {t:'보너스 점수',b:'끊기지 않은 도로가 <b>5칸 이상</b>이면서 가장 긴 사람은 <b>최장 교역로 +2점</b>, 기사 카드를 <b>3장 이상</b> 가장 많이 쓴 사람은 <b>최강 기사단 +2점</b>을 받아요. 상대가 도로를 먼저 깔면 길이 막힐 수 있으니 서두르세요!',next:true},
+ {t:'튜토리얼 완료!',b:'이제 기본은 다 익혔어요. <b>10점</b>을 먼저 모으면 이겨요. 직접 한 판 해 볼까요?',next:true,last:true}];
+$('#tExit').onclick=()=>{openDialog(`<h3>튜토리얼을 그만할까요?</h3><p>첫 화면으로 돌아가요.</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">그만하기</button></div>`);$('#cNo').onclick=closeDialog;$('#cYes').onclick=()=>{closeDialog();TUT.exit(false);};};
+setInterval(()=>{try{TUT.tick();}catch(e){console.error(e);}},150);
+addEventListener('resize',()=>setTimeout(()=>TUT.on&&TUT.layout(),120));
+$('#tTut').onclick=e=>{e.stopPropagation();TUT.start();};
 
 </script>
 
