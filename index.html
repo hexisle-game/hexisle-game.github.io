@@ -1545,6 +1545,16 @@ html.phone body .icols.devc p{font-size:15px!important;line-height:1.5}
 html.phone body .icols.devc small{font-size:13.5px!important}
 html.phone body .isub{font-size:14.5px!important}
 html.phone body .icol .ic-card{width:36px}
+
+/* color tiles */
+html body .sheet-frame .frow .swatches{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:0!important;width:100%;justify-items:center}
+html body .sheet-frame .swatches .sw{width:min(62%,96px)!important;height:46px!important;border-radius:2px!important;border:2px solid #a8803e!important;outline:1px solid rgba(233,196,122,.4);outline-offset:-6px;background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,0) 45%,rgba(0,0,0,.25)),var(--c)!important;box-shadow:inset 0 0 0 2px rgba(0,0,0,.4),0 3px 6px rgba(0,0,0,.55)!important}
+html body .sheet-frame .swatches .sw.on{border:3px solid #f6d98e!important;outline-color:#fff0c4;box-shadow:inset 0 0 0 2px rgba(0,0,0,.35),0 0 14px rgba(243,208,138,.7),0 3px 6px rgba(0,0,0,.55)!important}
+html body .sheet-frame .swatches .sw.taken{opacity:.25}
+html.phone body .sheet-frame .swatches .sw{width:min(66%,78px)!important;height:36px!important}
+/* lobby list spacing */
+html body .sheet-lobby .lrow{padding:16px 2px!important}
+html.phone body .sheet-lobby .lrow{padding:9px 2px!important}
 /* ===== tutorial ===== */
 #tut{position:fixed;inset:0;z-index:64;pointer-events:none}
 #tut[hidden]{display:none}
