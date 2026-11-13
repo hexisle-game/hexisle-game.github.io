@@ -3132,7 +3132,7 @@ const TUT={on:false,i:0,P:null,traded:false,force7:false,aiDiceIx:0,
     const at=typeof st.at==='function'?st.at.call(this):st.at;const R=this.rectOf(at);const blk=$('#tBlock'),ring=$('#tRing'),bub=$('#tBub'),xm=$('#tX');
     blk.classList.toggle('light',!!st.ai);
     blk.style.webkitMaskImage=blk.style.maskImage='';
-    if(R&&R.round&&!st.x){const cx=(R.l+R.r)/2,cy=(R.t+R.b)/2,r=(R.r-R.l)/2;const mk=`radial-gradient(circle at ${cx}px ${cy}px,transparent ${r}px,#000 ${r+1.5}px)`;blk.style.clipPath='none';blk.style.webkitClipPath='none';blk.style.webkitMaskImage=mk;blk.style.maskImage=mk;}
+    if(R&&R.round&&!st.x){const cx=(R.l+R.r)/2,cy=(R.t+R.b)/2,r=(R.r-R.l)/2;const p=`path(evenodd,'M0 0H${vw}V${vh}H0Z M${cx-r} ${cy}a${r} ${r} 0 1 0 ${2*r} 0a${r} ${r} 0 1 0 ${-2*r} 0Z')`;blk.style.clipPath=p;blk.style.webkitClipPath=p;}
     else if(R&&!st.x){const p=`polygon(evenodd,0 0,${vw}px 0,${vw}px ${vh}px,0 ${vh}px,0 0,${R.l}px ${R.t}px,${R.r}px ${R.t}px,${R.r}px ${R.b}px,${R.l}px ${R.b}px,${R.l}px ${R.t}px)`;blk.style.clipPath=p;blk.style.webkitClipPath=p;}
     else{blk.style.clipPath='none';blk.style.webkitClipPath='none';}
     if(R&&!st.pass){Object.assign(ring.style,{left:R.l+'px',top:R.t+'px',width:(R.r-R.l)+'px',height:(R.b-R.t)+'px'});ring.hidden=false;ring.classList.toggle('round',!!R.round);ring.classList.toggle('bad',!!st.x);}else ring.hidden=true;
