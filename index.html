@@ -1515,13 +1515,13 @@ if(sumRes(get)&&d!=='easy'&&lead0&&vp(from)>=(d==='hard'?6:8))return{ok:false,wh
 <script>
 // ================= UI =================
 const $=s=>document.querySelector(s);
-const KEY='windisle-save-v1';
+const KEY='windisle-save-v1';try{localStorage.removeItem(KEY);}catch(e){}
 const ui={mode:null,speed:'보통',hints:true,tips:true,n:4,diff:'normal',gfx:'low',modal:null,shownRoll:0};
 const DELAY={'느림':1100,'보통':600,'빠름':180};
 try{const st=JSON.parse(localStorage.getItem('windisle-ui')||'{}');if(st.speed)ui.speed=st.speed;if(st.hints===false)ui.hints=false;if(st.tips===false)ui.tips=false;if(st.n)ui.n=st.n;if(st.diff)ui.diff=st.diff;if(st.gfx)ui.gfx=st.gfx;if(st.color)ui.color=st.color;if(st.nick)ui.nick=st.nick;}catch(e){}
 function saveUi(){try{localStorage.setItem('windisle-ui',JSON.stringify({speed:ui.speed,hints:ui.hints,tips:ui.tips,n:ui.n,diff:ui.diff,gfx:ui.gfx,color:ui.color,nick:ui.nick}));}catch(e){}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
-function loadSave(){try{const s=JSON.parse(localStorage.getItem(KEY)||'null');return s&&s.phase&&s.phase!=='over'?s:null;}catch(e){return null;}}
+function save(){return;try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function loadSave(){return null;try{const s=JSON.parse(localStorage.getItem(KEY)||'null');return s&&s.phase&&s.phase!=='over'?s:null;}catch(e){return null;}}
 
 let aiTimer=null;
 const ACTS={settle:(p,v)=>placeSettlement(p,v),city:(p,v)=>placeCity(p,v),road:(p,e)=>placeRoad(p,e),freeRoad:(p,e)=>freeRoad(p,e),
@@ -1537,7 +1537,7 @@ function validAct(p,name){if(!S||S.phase==='over'||!S.players[p])return false;
 function isClient(){return !!(S&&S.mp&&window.NET&&NET.on&&!NET.isHost);}
 function act(name,...args){if(isClient()){NET.send(name,args);return;}if(!validAct(ME,name))return;ACTS[name](ME,...args);update();}
 function update(){if(isClient()){render();return;}checkWin();if(!S.mp)save();render();kick();if(S.mp&&window.NET&&NET.on)NET.publish();}
-function kick(){clearTimeout(aiTimer);if(isClient())return;const a=actor();if(a===null||!S.players[a].ai||['start','lobby','mp'].includes(ui.modal))return;
+function kick(){clearTimeout(aiTimer);if(isClient())return;const a=actor();if(a===null||!S.players[a].ai||['start','lobby','mp','setup'].includes(ui.modal))return;
   aiTimer=setTimeout(()=>{if(actor()===a){try{aiStep(a);}catch(err){console.error(err);if(S.phase==='main'&&S.cur===a&&S.rolled&&!S.pend)endTurn();}update();}},DELAY[ui.speed]);}
 
 const icon=(k,cls)=>(typeof RESICON!=='undefined'&&RESICON[k])?`<img class="ricon ${cls||''}" src="${RESICON[k]}" alt="">`:`<svg class="${cls||''}" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-${k}"/></svg>`;
@@ -2224,7 +2224,7 @@ setInterval(()=>{if(!S)return;const now=Date.now();
   document.querySelectorAll('[data-cd]').forEach(e=>{const k=e.dataset.cd;const t=k==='offer'?(S.offer&&S.offer.t):S.deadline;e.textContent=t?fmtCd(t-now):'';});
 },500);
 function forcedModals(){
-  if(['start','rules','confirm','closed-over','trade','plenty','mono','lobby','mp'].includes(ui.modal))return;
+  if(['start','rules','confirm','closed-over','trade','plenty','mono','lobby','mp','setup'].includes(ui.modal))return;
   if(S.phase==='over'){if(ui.modal!=='over')showOver();return;}
   if(S.pend&&S.pend.k==='discard'&&S.pend.p===ME){if(ui.modal!=='discard')showDiscard();return;}
   if(S.pend&&S.pend.k==='steal'&&S.cur===ME){if(ui.modal!=='steal')showSteal();return;}
@@ -2418,8 +2418,8 @@ const tipLabel=()=>{$('#tipBtn').setAttribute('aria-checked',ui.tips);$('#tipBtn
 $('#tipBtn').onclick=()=>{ui.tips=!ui.tips;saveUi();tipLabel();hideTip();if(!ui.tips)$('#toast').hidden=true;};tipLabel();
 $('#hintBtn').onclick=()=>{ui.hints=!ui.hints;saveUi();hintLabel();render();};hintLabel();
 $('#rulesBtn').onclick=()=>{clearTimeout(aiTimer);showRules(0);};
-$('#newBtn').onclick=()=>{clearTimeout(aiTimer);openModal('confirm',`<div class="st-l"><h3>새 게임을 시작할까요?</h3><p>지금 진행 중인 게임은 사라지고 새 섬이 만들어져요.</p></div><div class="st-r">${countPick()}<div class="row st-btns"><button class="btn" id="cNo">계속하기</button><button class="btn primary" id="cYes">새 게임 시작</button></div></div>`);$('#sheet').classList.add('sheet-start','sheet-newgame');
-  bindCount();$('#cNo').onclick=()=>{closeModal();update();};$('#cYes').onclick=()=>{closeModal();startNew();};};
+$('#newBtn').onclick=()=>{if(window.NET&&NET.on)return MP.confirmLeave();clearTimeout(aiTimer);openModal('confirm',`<div class="mhead"><h3>새 게임을 시작할까요?</h3><p>지금 진행 중인 게임은 끝나고, 처음 화면으로 돌아가요.</p></div><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">새 게임</button></div>`);
+  $('#cNo').onclick=()=>{closeModal();update();};$('#cYes').onclick=()=>{closeModal();newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;render();showStart();};};
 
 // ---------- painted cards (canvas) ----------
 const CARDIMG={},CW=400,CH=610;
@@ -2497,7 +2497,7 @@ const FB_CFG={apiKey:"AIzaSyDNN0_DWoBzcy2W4k59oa-kDRot-1h8VR0",authDomain:"hexis
 const FB_SDK=['app','auth','database'].map(n=>`https://www.gstatic.com/firebasejs/10.12.2/firebase-${n}-compat.js`);
 const RECONNECT_MS=60000,HOST_GRACE_MS=8000;
 const MAX_ONLINE=100,PUB_WAIT_MS=60000;
-const BADW=['시발','씨발','씨빨','시빨','씨팔','시팔','쉬발','싀발','씨벌','시벌','ㅅㅂ','ㅆㅂ','ㅅ1ㅂ','병신','븅신','빙신','병쉰','ㅂㅅ','ㅄ','좆','존나','졸라','ㅈㄴ','개새','개색','개세','새끼','색기','섀끼','ㅅㄲ','미친','미췬','ㅁㅊ','지랄','ㅈㄹ','염병','엠창','엿먹','닥쳐','꺼져','니미','느금','니애미','애미','애비','에미','창녀','걸레','보지','자지','섹스','쎅스','야동','강간','장애인','한남','김치녀','일베','틀딱','짱깨','쪽바리','fuck','fuk','shit','bitch','dick','pussy','porn','sex','nigg','asshole','cunt','sibal','ssibal','byung'];
+const BADW=['시발','씨발','씨빨','시빨','씨팔','시팔','쉬발','싀발','씨벌','시벌','ㅅㅂ','ㅆㅂ','ㅅ1ㅂ','병신','븅신','빙신','병쉰','ㅂㅅ','ㅄ','좆','존나','졸라','ㅈㄴ','개새','개색','개세','새끼','색기','섀끼','ㅅㄲ','미친','미췬','ㅁㅊ','지랄','ㅈㄹ','염병','엠창','엿먹','닥쳐','꺼져','니미','느금','니애미','애미','애비','에미','창녀','걸레','보지','자지','섹스','쎅스','야동','강간','장애인','한남','김치녀','일베','틀딱','짱깨','쪽바리','된장녀','보슬','보르노','맘충','메갈','꼴페미','페미년','썅년','쌍년','미친년','개년','걸레년','창년','한녀','화냥','보짓','잠지','젖','빨통','따먹','따묵','박고싶','강간','성폭','꼴린','꼴려','발정','야스','떡치','떡각','질싸','질내','딸딸','딸치','자위','오나홀','로리','롤리','원조교제','조건만남','육변기','몸팔','몸매좋','가슴만','핥','빨아','sex','slut','whore','rape','milf','boob','tits','nude','horny','hentai','fuck','fuk','shit','bitch','dick','pussy','porn','sex','nigg','asshole','cunt','sibal','ssibal','byung'];
 function nickBad(n){const t=(n||'').toLowerCase().replace(/[\s0-9._\-~!@#$%^&*()=+\[\]{}|\\:;"'<>,.?\/`]/g,'');return BADW.some(w=>t.includes(w));}
 
 const MP_ENABLED=true;
