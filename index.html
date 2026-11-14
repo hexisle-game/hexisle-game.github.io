@@ -1296,13 +1296,28 @@ html.phone body .sheet-trade .tpick .tcell .ricon{width:20px;height:20px}
 html body .tpick .tcell{border:1px solid #c9a35a!important;outline:1px solid rgba(233,196,122,.45);outline-offset:-5px;box-shadow:inset 0 0 0 2px rgba(0,0,0,.35),0 3px 6px rgba(0,0,0,.55),0 1px 0 rgba(255,230,170,.15)!important}
 html body .tpick .tcell.sel{border:2px solid #f6d98e!important;outline-color:#f6d98e;box-shadow:0 0 14px rgba(243,208,138,.55),0 3px 6px rgba(0,0,0,.55)!important}
 html body .tpick .tcell:disabled{box-shadow:none!important}
-.title.intro .tbg{animation:tbgIn 2.4s cubic-bezier(.2,.7,.2,1) both}
-.title.intro .tlogo{animation:tlogoIn 1.2s ease-out 1.1s both}
-.title.intro .tbot{animation:tlogoIn .8s ease-out 1.8s both}
+.title.intro .tbg{animation:tbgIn 4.2s cubic-bezier(.22,.6,.2,1) both}
+.title.intro .tlogo{animation:tlogoIn 1.8s ease-out 2.3s both}
+.title.intro .tbot{animation:tlogoIn 1s ease-out 3.6s both}
 @keyframes tbgIn{from{transform:scale(.86) translateY(-9%)}to{transform:none}}
 @keyframes tlogoIn{from{opacity:0;transform:translate(-50%,-14px)}to{opacity:1;transform:translate(-50%,0)}}
 .title.intro .tbot{animation-name:tbotIn}
 @keyframes tbotIn{from{opacity:0}to{opacity:1}}
+/* title ambience: sun glow + rays, gold dust, logo shine */
+.title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
+.title .trays{position:absolute;left:calc(3vw - 60vmax);top:calc(37% - 60vmax);width:120vmax;height:120vmax;pointer-events:none;mix-blend-mode:screen;opacity:.5;
+  background:repeating-conic-gradient(from 0deg at 50% 50%,rgba(255,214,150,.0) 0deg,rgba(255,220,160,.42) 3.5deg,rgba(255,214,150,0) 7deg,rgba(255,214,150,0) 13deg);
+  -webkit-mask-image:radial-gradient(closest-side,transparent 6%,#000 14%,rgba(0,0,0,.45) 45%,transparent 80%);mask-image:radial-gradient(closest-side,transparent 6%,#000 14%,rgba(0,0,0,.45) 45%,transparent 80%);animation:trayR 26s ease-in-out infinite alternate}
+@keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
+@keyframes trayR{from{transform:rotate(-4deg);opacity:.55}50%{opacity:.9}to{transform:rotate(5deg);opacity:.6}}
+.title .tmotes{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.title .tshine{position:absolute;pointer-events:none;mix-blend-mode:screen;-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  background:linear-gradient(105deg,transparent 42%,rgba(255,244,214,.75) 50%,transparent 58%) no-repeat;background-size:300% 100%;background-position:130% 0;animation:tshine 8s ease-in-out 5s infinite}
+@keyframes tshine{0%{background-position:130% 0}18%,100%{background-position:-30% 0}}
+.title.intro .tsun{animation:tfxIn 3s ease 1.5s both}.title.intro .trays{animation:tfxIn 3s ease 2s both}.title.intro .tmotes{animation:tfxIn 3s ease 2.5s both}
+@keyframes tfxIn{from{opacity:0}}
+@media (prefers-reduced-motion:reduce){.title .trays,.title .tsun,.title .tshine{animation:none}}
+
 html body .setmenu .setpanel .mi,html body .setmenu .setpanel .mi span{color:#e9c47a!important}
 html body .setpanel .seg button:not(.on){color:#c9b48a!important}
 html body .sheet-frame .frow{grid-template-columns:150px 1fr!important;padding-left:56px}
@@ -1333,8 +1348,9 @@ html body .sheet-frame .swatches .sw{width:min(62%,96px)!important;height:46px!i
 html body .sheet-frame .swatches .sw.on{border:3px solid #f6d98e!important;outline-color:#fff0c4;box-shadow:inset 0 0 0 2px rgba(0,0,0,.35),0 0 14px rgba(243,208,138,.7),0 3px 6px rgba(0,0,0,.55)!important}
 html body .sheet-frame .swatches .sw.taken{opacity:.25}
 html.phone body .sheet-frame .swatches .sw{width:min(66%,78px)!important;height:36px!important}
-html body .sheet-lobby .lrow{padding:16px 2px!important}
-html.phone body .sheet-lobby .lrow{padding:9px 2px!important}
+html body .sheet-lobby .lrow{padding:18px 2px!important}
+html.phone body .sheet-lobby .lrow{padding:14px 2px!important}
+html body .sheet-lobby .aitg{pointer-events:none}html body .sheet-lobby .aitg i,html body .sheet-lobby .aitg span{pointer-events:auto}html body .sheet-lobby .aitg{line-height:1}
 #tut{position:fixed;inset:0;z-index:64;pointer-events:none}
 #tut[hidden]{display:none}
 #tut .tblock{position:absolute;inset:0;background:rgba(3,5,10,.62);pointer-events:auto;transition:background .2s}
@@ -1377,6 +1393,10 @@ html.phone #tut .trow{margin-top:8px}
 html.phone .sndbox{gap:14px;margin-top:12px}
 html.phone .sndl{font-size:15px}
 html.phone .sndrow{grid-template-columns:70px 1fr 60px;gap:12px}
+html body .sheet.sheet-dialog.dlg-snd{width:min(430px,calc(100vw - 48px))!important}
+html body .dlg-snd .sndbox{margin:18px auto 4px;width:max-content}
+html body .dlg-snd .sndrow{grid-template-columns:auto 170px 66px;gap:16px}
+html.phone body .dlg-snd .sndrow{grid-template-columns:auto 150px 60px;gap:12px}
 </style>
 
 
@@ -1443,7 +1463,7 @@ html.phone .sndrow{grid-template-columns:70px 1fr 60px;gap:12px}
 <div id="tip" hidden></div><div id="pop" hidden></div>
 <div id="leftcol"></div>
 <div id="rotate" hidden><div class="rot-ic"></div><b>가로로 돌려 주세요</b><span>HexIsle은 휴대폰에서 가로 화면으로 플레이해요.</span></div>
-<div id="title" class="title" hidden><div class="tbg"></div><div class="tdim"></div><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 육각섬 개척기"><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
+<div id="title" class="title" hidden><div class="tbg"></div><div class="tsun"></div><div class="trays"></div><div class="tdim"></div><canvas class="tmotes" id="tMotes"></canvas><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 육각섬 개척기"><div class="tshine" id="tShine"></div><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
 <div id="tut" hidden><div class="tblock" id="tBlock"></div><div class="tring" id="tRing" hidden></div><div class="tx" id="tX" hidden>✕</div><div class="tbub" id="tBub"></div><div class="tgest" id="tGest" hidden><i class="f1"></i><i class="f2"></i></div></div>
 <div id="dialog" class="overlay dlgov" hidden><div class="sheet sheet-dialog" id="dsheet"></div></div>
 <div id="modal" class="overlay" hidden><div class="sheet" id="sheet"></div><i class="mcrest" id="mcrest" aria-hidden="true"></i></div>
@@ -2611,8 +2631,26 @@ function countPick(){return `<div class="label" style="margin-top:8px">인원 (�
 function bindCount(){if($('#col'))$('#col').onclick=e=>{const b=e.target.closest('[data-c]');if(!b)return;ui.color=b.dataset.c;saveUi();$('#col').querySelectorAll('[data-c]').forEach(x=>x.classList.toggle('on',x.dataset.c===ui.color));};$('#cnt').onclick=e=>{const b=e.target.closest('[data-n]');if(!b)return;ui.n=+b.dataset.n;saveUi();$('#cnt').querySelectorAll('[data-n]').forEach(x=>x.classList.toggle('active',+x.dataset.n===ui.n));};
   $('#dif').onclick=e=>{const b=e.target.closest('[data-d]');if(!b)return;ui.diff=b.dataset.d;saveUi();$('#dif').querySelectorAll('[data-d]').forEach(x=>x.classList.toggle('active',x.dataset.d===ui.diff));};}
 function migrate(){if(!S.n){S.n=S.players.length;S.order=[...Array(S.n).keys(),...[...Array(S.n).keys()].reverse()];}if(S.logSeq===undefined)S.logSeq=0;if(!S.diff)S.diff='normal';}
-function showTitle(menu){try{SND.music('title');}catch(e){}const t=$('#title');if(t.hidden&&!ui.titleIntro){ui.titleIntro=1;t.classList.add('intro');setTimeout(()=>t.classList.remove('intro'),2600);}t.hidden=false;document.documentElement.classList.add('on-title');
-  const lg=$('#tLogo');if(!lg.src)lg.src=window.LOGO_URL;t.querySelector('.tbg').style.backgroundImage=`url(${(Math.max(innerWidth,innerHeight)*(devicePixelRatio||1)<1500)?TITLEIMG.titlebgS:TITLEIMG.titlebg})`;
+// ---- title ambience: drifting gold dust + sea glints (canvas, ~30fps, only while title is visible) ----
+function titleFx(){const lg=$('#tLogo'),sh=$('#tShine');const place=()=>{if(!lg.complete||!lg.naturalWidth)return;const r=lg.getBoundingClientRect(),pr=lg.offsetParent.getBoundingClientRect(),k=PH.on?PH.k:1;
+    Object.assign(sh.style,{left:lg.offsetLeft-lg.offsetWidth/2+'px',top:lg.offsetTop+'px',width:lg.offsetWidth+'px',height:lg.offsetHeight+'px'});const u=`url(${lg.src})`;if(sh.style.webkitMaskImage!==u){sh.style.webkitMaskImage=u;sh.style.maskImage=u;}};
+  if(lg.complete)place();else lg.addEventListener('load',place,{once:true});if(!titleFx.rs){titleFx.rs=1;addEventListener('resize',()=>setTimeout(place,150));}
+  if(titleFx.run)return;titleFx.run=1;const cv=$('#tMotes'),cx=cv.getContext('2d');let W=0,H=0,last=0;const P=[],G=[];
+  const R=Math.random;const mk=(p,init)=>{p.x=R()*W;p.y=init?R()*H:H*(.55+R()*.5);p.r=.9+R()*2.1;p.vx=(R()-.3)*.12;p.vy=-(.08+R()*.22);p.ph=R()*6.3;p.sp=.6+R()*1.6;p.a=.45+R()*.5;return p;};
+  const mkG=(g)=>{g.x=W*(R()*.2);g.y=H*(.37+R()*.2);g.t=0;g.d=40+R()*70;g.r=1+R()*2.2;return g;};
+  const fit=()=>{const d=Math.min(devicePixelRatio||1,2);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);};
+  const loop=ts=>{const t=$('#title');if(t.hidden){titleFx.run=0;return;}requestAnimationFrame(loop);if(ts-last<33)return;last=ts;
+    if(cv.clientWidth!==W||cv.clientHeight!==H){fit();P.length=0;G.length=0;}
+    if(!P.length){const n=Math.round(Math.min(80,W*H/16000));for(let i=0;i<n;i++)P.push(mk({},1));for(let i=0;i<9;i++){const g=mkG({});g.t=R()*g.d;G.push(g);}}
+    cx.clearRect(0,0,W,H);cx.globalCompositeOperation='lighter';const s=ts/1000;
+    for(const p of P){p.x+=p.vx+Math.sin(s*.5+p.ph)*.08;p.y+=p.vy;if(p.y<-10||p.x>W+10)mk(p);const tw=.55+.45*Math.sin(s*p.sp+p.ph);const a=p.a*tw;
+      const gr=cx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*3.2);gr.addColorStop(0,`rgba(255,236,180,${a})`);gr.addColorStop(.35,`rgba(255,200,110,${a*.45})`);gr.addColorStop(1,'rgba(255,180,90,0)');cx.fillStyle=gr;cx.beginPath();cx.arc(p.x,p.y,p.r*3.2,0,6.3);cx.fill();}
+    for(const g of G){g.t++;if(g.t>g.d)mkG(g);const k=Math.sin(Math.PI*g.t/g.d),a=k*k*.8,l=g.r*5*k;cx.strokeStyle=`rgba(255,226,170,${a})`;cx.lineWidth=.8;cx.beginPath();cx.moveTo(g.x-l,g.y);cx.lineTo(g.x+l,g.y);cx.moveTo(g.x,g.y-l*.6);cx.lineTo(g.x,g.y+l*.6);cx.stroke();
+      cx.fillStyle=`rgba(255,240,210,${a})`;cx.beginPath();cx.arc(g.x,g.y,g.r*.7,0,6.3);cx.fill();}
+    cx.globalCompositeOperation='source-over';};
+  requestAnimationFrame(loop);}
+function showTitle(menu){try{SND.music('title');}catch(e){}const t=$('#title');if(t.hidden&&!ui.titleIntro){ui.titleIntro=1;t.classList.add('intro');setTimeout(()=>t.classList.remove('intro'),4800);}t.hidden=false;document.documentElement.classList.add('on-title');
+  const lg=$('#tLogo');if(!lg.src)lg.src=window.LOGO_URL;titleFx();t.querySelector('.tbg').style.backgroundImage=`url(${(Math.max(innerWidth,innerHeight)*(devicePixelRatio||1)<1500)?TITLEIMG.titlebgS:TITLEIMG.titlebg})`;
   if(menu||ui.titleMenu){ui.titleMenu=true;$('#tTap').hidden=true;$('#tMenu').hidden=false;}else{$('#tTap').hidden=false;$('#tMenu').hidden=true;}}
 function hideTitle(){try{SND.music('game');}catch(e){}$('#title').hidden=true;document.documentElement.classList.remove('on-title');}
 $('#title').addEventListener('click',e=>{if(ui.modal)return;if($('#tMenu').hidden){ui.titleMenu=true;showTitle(true);}});
@@ -2844,11 +2882,12 @@ const MP={db:null,subs:[],offSince:{},
   gone(){if(!NET.on)return;this.cleanup();this.err('방이 닫혔어요.');},
   // ---------- lobby ----------
   order(){return Object.entries(NET.members).sort((a,b)=>(a[1].joined||0)-(b[1].joined||0));},
+  aiSlots(m,ai){const pos=((NET.meta&&NET.meta.aiPos)||'').split('').map(x=>x==='1');const sl=Array(m).fill(false);let c=0;for(let i=0;i<m&&c<ai;i++)if(pos[i]){sl[i]=true;c++;}for(let i=0;i<m&&c<ai;i++)if(!sl[i]){sl[i]=true;c++;}return sl;},
   drawLobby(){if(!NET.meta||NET.meta.status!=='lobby')return;const M=NET.meta,host=M.host===NET.uid,ord=this.order(),n=M.n;const mine=NET.members[NET.uid]||{};
     const ai=Math.max(0,Math.min(M.ai||0,n-ord.length)),emp=n-ord.length-ai;const link=location.origin+location.pathname+'?room='+NET.room;
     const rows=ord.map(([u,m])=>`<div class="lrow"><span class="dot" style="background:${m.color}"></span><b>${m.name}</b>${u===M.host?'<span class="badge">방장</span>':''}${m.online===false?'<span class="badge off">연결 끊김</span>':''}</div>`);
-    for(let k=0;k<emp;k++)rows.push(`<div class="lrow empty"><span class="dot"></span>빈자리<button class="aitg" data-ai="1" ${host?'':'disabled'} aria-label="AI 켜기"><span>AI</span><i></i></button></div>`);
-    for(let k=0;k<ai;k++)rows.push(`<div class="lrow ai"><span class="dot"></span><b>AI</b><button class="aitg on" data-ai="-1" ${host?'':'disabled'} aria-label="AI 끄기"><span>AI</span><i></i></button></div>`);
+    const slots=this.aiSlots(n-ord.length,ai);
+    slots.forEach((on,k)=>rows.push(on?`<div class="lrow ai"><span class="dot"></span><b>AI</b><button class="aitg on" data-slot="${k}" ${host?'':'disabled'} aria-label="AI 끄기"><span>AI</span><i></i></button></div>`:`<div class="lrow empty"><span class="dot"></span>빈자리<button class="aitg" data-slot="${k}" ${host?'':'disabled'} aria-label="AI 켜기"><span>AI</span><i></i></button></div>`));
     const taken=ord.filter(m=>m[0]!==NET.uid).map(m=>m[1].color);
     const full=ord.length+ai>=n;const cd=M.pub&&M.autoAt?Math.max(0,Math.ceil((M.autoAt-Date.now())/1000)):null;
     const hint=host?(full?'부족한 인원은 AI가 담당해요.':(M.pub?(cd!==null?`${cd}초 뒤에 자동으로 시작해요. 빈자리는 AI가 채워요.`:'다른 플레이어를 기다리고 있어요.'):'참가자를 기다리고 있어요. 바로 시작하려면 AI를 활성화해 주세요.')):(M.pub&&cd!==null?`${cd}초 뒤에 자동으로 시작해요.`:'방장이 시작하면 게임이 바로 시작돼요.');
@@ -2865,7 +2904,7 @@ const MP={db:null,subs:[],offSince:{},
       try{await navigator.clipboard.writeText(link);$('#lMsg').textContent='초대 링크를 복사했어요. 카톡에 붙여 넣으세요.';}catch(e){$('#lMsg').textContent=link;}};
     colBind('lcol',c=>{this.ref('members/'+NET.uid+'/color').set(c);ui.color=c;saveUi();});
     if(host){segBind('ldif',v=>this.ref('meta/diff').set(v));
-      document.querySelectorAll('.aitg').forEach(b=>b.onclick=()=>this.ref('meta/ai').set(Math.max(0,Math.min(n-ord.length,ai+(+b.dataset.ai)))));
+      document.querySelectorAll('.aitg').forEach(b=>b.onclick=e=>{e.stopPropagation();const sl=this.aiSlots(n-ord.length,ai);const k=+b.dataset.slot;sl[k]=!sl[k];this.ref('meta/ai').set(sl.filter(Boolean).length);try{const r=this.ref('meta/aiPos').set(sl.map(x=>x?1:0).join(''));r&&r.catch&&r.catch(()=>{});}catch(x){}});
       if($('#lStart'))$('#lStart').onclick=()=>this.start();}},
   start(){hideTitle();const ord=this.order(),n=NET.meta.n;newGame(n,NET.meta.diff);
     const used=ord.map(m=>m[1].color);const free=PCOL.filter(c=>!used.includes(c));
@@ -3068,7 +3107,7 @@ $('#tTut').onclick=e=>{e.stopPropagation();try{const el=document.documentElement
 </script>
 <script id="snd">
 // ================= AUDIO v3 (procedural piano-centric) =================
-const SND={ctx:null,playing:null,next:0,timer:null,vol:{bgm:.55,sfx:.8},on:{bgm:true,sfx:true},
+const SND={ctx:null,playing:null,next:0,timer:null,vol:{bgm:.3,sfx:.55},on:{bgm:true,sfx:true},
   load(){try{const v=JSON.parse(localStorage.getItem('hexisle-audio')||'{}');Object.assign(this.vol,v.vol||{});Object.assign(this.on,v.on||{});}catch(e){}},
   save(){try{localStorage.setItem('hexisle-audio',JSON.stringify({vol:this.vol,on:this.on}));}catch(e){}},
   init(){if(this.ctx)return true;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;
@@ -3078,7 +3117,7 @@ const SND={ctx:null,playing:null,next:0,timer:null,vol:{bgm:.55,sfx:.8},on:{bgm:
     this.rev=c.createConvolver();this.rev.buffer=mk(3.2,2.2);const rg=c.createGain();rg.gain.value=.42;this.rev.connect(rg);rg.connect(this.bgmG);
     this.revS=c.createConvolver();this.revS.buffer=mk(1.8,2.6);const rs=c.createGain();rs.gain.value=.22;this.revS.connect(rs);rs.connect(this.sfxG);
     this.apply();return true;},
-  apply(){if(!this.ctx)return;const t=this.ctx.currentTime;this.bgmG.gain.setTargetAtTime(this.on.bgm?this.vol.bgm*.75:0,t,.15);this.sfxG.gain.setTargetAtTime(this.on.sfx?this.vol.sfx:0,t,.05);},
+  apply(){if(!this.ctx)return;const t=this.ctx.currentTime;this.bgmG.gain.setTargetAtTime(this.on.bgm?this.vol.bgm:0,t,.15);this.sfxG.gain.setTargetAtTime(this.on.sfx?this.vol.sfx:0,t,.05);},
   unlock(){if(!this.init())return;if(this.ctx.state==='suspended')this.ctx.resume();this.apply();},
   hz(n){return 440*Math.pow(2,(n-69)/12);},
   nbuf:null,noiseBuf(){if(this.nbuf)return this.nbuf;const c=this.ctx,b=c.createBuffer(1,c.sampleRate*2,c.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;return this.nbuf=b;},
@@ -3132,33 +3171,41 @@ const SND={ctx:null,playing:null,next:0,timer:null,vol:{bgm:.55,sfx:.8},on:{bgm:
 };
 
 // ---------- recorded music (Pixabay, free license) — streamed <audio> → WebAudio gain ----------
-const MUSIC={title:'assets/music/title.mp3',game:['assets/music/game1.mp3','assets/music/game2.mp3','assets/music/game3.mp3','assets/music/game4.mp3']};
-Object.assign(SND,{cur:null,want:null,lastGame:-1,FADE:2.5,
+// plays: how many times a game track repeats (loop versions) before crossfading to another random track
+const MUSIC={title:'assets/music/title.mp3',game:[{src:'assets/music/game1.mp3',plays:[1,1]},{src:'assets/music/game2.mp3',plays:[2,3]},{src:'assets/music/game3.mp3',plays:[2,3]},{src:'assets/music/game4.mp3',plays:[2,3]}]};
+Object.assign(SND,{cur:null,want:null,lastGame:-1,nextGame:-1,FADE:2.5,pre:{},
+  el(src){let a=this.pre[src];if(a){delete this.pre[src];return a;}a=new Audio();a.preload='auto';a.src=src;return a;},
+  preload(src){if(this.pre[src]||(this.cur&&this.cur.src===src))return;for(const k in this.pre)if(k!==MUSIC.title){this.pre[k].removeAttribute('src');delete this.pre[k];}const a=new Audio();a.preload='auto';a.src=src;try{a.load();}catch(e){}this.pre[src]=a;},
+  pickGame(){let i;do{i=Math.floor(Math.random()*MUSIC.game.length);}while(i===this.lastGame&&MUSIC.game.length>1);return i;},
   music(mode){this.want=mode;if(!this.ctx||!this.on.bgm||this.vol.bgm<=0)return;if(this.cur&&this.cur.mode===mode&&!this.cur.ending)return;this.startMusic(mode);},
-  startMusic(mode){let src;if(mode==='title')src=MUSIC.title;else{let i;do{i=Math.floor(Math.random()*MUSIC.game.length);}while(i===this.lastGame&&MUSIC.game.length>1);this.lastGame=i;src=MUSIC.game[i];}
-    this.fadeOut(this.cur);const c=this.ctx,a=new Audio();a.crossOrigin='anonymous';a.preload='auto';a.src=src;a.loop=mode==='title';
-    const g=c.createGain();g.gain.value=0;let n;try{n=c.createMediaElementSource(a);n.connect(g);g.connect(this.bgmBus);}catch(e){a.volume=.5;}
-    const cur=this.cur={mode,a,g,n};
-    const go=()=>{if(this.cur!==cur)return;const t=c.currentTime;g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(1,t+this.FADE);};
-    a.addEventListener('playing',go,{once:true});
-    if(mode==='game')a.addEventListener('timeupdate',()=>{if(this.cur===cur&&!cur.ending&&a.duration&&a.duration-a.currentTime<this.FADE+.3){cur.ending=true;this.startMusic('game');}});
+  startMusic(mode){let src,plays=1;
+    if(mode==='title')src=MUSIC.title;else{const i=this.nextGame>=0&&this.nextGame!==this.lastGame?this.nextGame:this.pickGame();this.lastGame=i;const tr=MUSIC.game[i];src=tr.src;plays=tr.plays[0]+Math.floor(Math.random()*(tr.plays[1]-tr.plays[0]+1));
+      this.nextGame=this.pickGame();}
+    const prev=this.cur;const c=this.ctx,a=this.el(src);a.loop=mode==='title'||plays>1;
+    const g=c.createGain();g.gain.value=0;let n;try{n=c.createMediaElementSource(a);n.connect(g);g.connect(this.bgmBus);}catch(e){a.volume=.4;}
+    const cur=this.cur={mode,src,a,g,n,plays,loopN:0,lastT:0};const fin=mode==='title'&&!prev?.35:this.FADE;
+    const go=()=>{if(this.cur!==cur)return;const t=c.currentTime;g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(1,t+fin);this.fadeOut(prev);if(mode==='game')this.preload(MUSIC.game[this.nextGame].src);};
+    if(prev)prev.ending=true;a.addEventListener('playing',go,{once:true});
+    if(mode==='game')a.addEventListener('timeupdate',()=>{if(this.cur!==cur||cur.ending)return;const ct=a.currentTime;if(ct+1<cur.lastT){cur.loopN++;if(cur.loopN>=cur.plays-1)a.loop=false;}cur.lastT=ct;
+      if(cur.loopN>=cur.plays-1&&a.duration&&a.duration-ct<this.FADE+.3){this.startMusic('game');}});
     a.addEventListener('ended',()=>{if(this.cur===cur){this.cur=null;this.music(this.want);}});
     const p=a.play();if(p&&p.catch)p.catch(()=>{cur.blocked=true;});},
-  fadeOut(o,d){if(!o)return;const t=this.ctx.currentTime;d=d||this.FADE;o.ending=true;o.g.gain.cancelScheduledValues(t);o.g.gain.setValueAtTime(o.g.gain.value,t);o.g.gain.linearRampToValueAtTime(0,t+d);
+  fadeOut(o,d){if(!o||o.dead)return;o.dead=true;const t=this.ctx.currentTime;d=d||this.FADE;o.ending=true;o.g.gain.cancelScheduledValues(t);o.g.gain.setValueAtTime(o.g.gain.value,t);o.g.gain.linearRampToValueAtTime(0,t+d);
     setTimeout(()=>{try{o.a.pause();o.n&&o.n.disconnect();o.a.removeAttribute('src');o.a.load();}catch(e){}},d*1000+150);},
   stopMusic(){if(!this.cur)return;const o=this.cur;this.cur=null;this.fadeOut(o,1);}});
 {const ap=SND.apply.bind(SND);SND.apply=function(){ap();if(!this.ctx)return;if(!this.on.bgm||this.vol.bgm<=0)this.stopMusic();else if(this.cur&&this.cur.blocked){this.cur.blocked=false;const p=this.cur.a.play();if(p&&p.catch)p.catch(()=>{this.cur&&(this.cur.blocked=true);});}else if(this.want&&!this.cur)this.music(this.want);};}
 
 
 SND.load();
-if(document.getElementById('title')&&!document.getElementById('title').hidden)SND.want='title';
-['pointerdown','keydown','touchstart'].forEach(ev=>addEventListener(ev,()=>SND.unlock(),{capture:true,passive:true}));
-document.addEventListener('visibilitychange',()=>{if(!SND.ctx)return;if(document.hidden)SND.ctx.suspend();else SND.ctx.resume();});
+['pointerdown','pointerup','touchend','click','keydown'].forEach(ev=>addEventListener(ev,()=>SND.unlock(),{capture:true,passive:true}));
+document.addEventListener('visibilitychange',()=>{if(!SND.ctx)return;const a=SND.cur&&SND.cur.a;if(document.hidden){SND.ctx.suspend();a&&a.pause();}else{SND.ctx.resume();a&&!SND.cur.dead&&a.play().catch(()=>{});}});
+// warm up: buffer the title track right away and try to start it (plays instantly if the browser allows autoplay, otherwise on the first touch)
+SND.preload(MUSIC.title);try{if(SND.init())SND.music(SND.want||'title');}catch(e){}
 // global click sound for buttons
 document.addEventListener('click',e=>{const cd=e.target.closest('.dzone [data-r],.tcell,.tpick [data-r],img.card,.dvc,[data-dev]');if(cd){SND.sfx('card');return;}const b=e.target.closest('button,.tm,.mi,.mtab,[data-act],[data-v],[data-c]');if(!b||b.disabled)return;if(b.matches('[data-act="roll"]'))return;SND.sfx('click');},true);
 // sound settings dialog
 function showSound(){const row=(k,label)=>`<div class="sndrow"><span class="sndl">${label}</span><input type="range" min="0" max="100" value="${Math.round(SND.vol[k]*100)}" data-k="${k}" class="sndr"><button class="sndt" data-t="${k}" aria-checked="${SND.on[k]}"></button></div>`;
-  openDialog(`<h3>사운드</h3><div class="sndbox">${row('bgm','배경음')}${row('sfx','효과음')}</div><div class="row"><button class="btn sub" id="sndOk">확인</button></div>`,'dlg-wide');
+  openDialog(`<h3>사운드</h3><div class="sndbox">${row('bgm','배경음')}${row('sfx','효과음')}</div><div class="row"><button class="btn sub" id="sndOk">확인</button></div>`,'dlg-snd');
   const upd=()=>document.querySelectorAll('#dsheet .sndr').forEach(r=>r.style.setProperty('--p',r.value+'%'));upd();
   document.querySelectorAll('#dsheet .sndr').forEach(r=>{r.oninput=()=>{SND.vol[r.dataset.k]=r.value/100;if(r.value>0){SND.on[r.dataset.k]=true;document.querySelector(`#dsheet [data-t="${r.dataset.k}"]`).setAttribute('aria-checked',true);}SND.unlock();SND.apply();SND.save();upd();};
     r.onchange=()=>{if(r.dataset.k==='sfx')SND.sfx('gain');};});
