@@ -1365,7 +1365,19 @@ html.phone #tut .tbub.tmini{width:min(520px,calc(100% - 20px));padding:12px 14px
 html.phone #tut .tbub h4{font-size:17px;margin-bottom:4px}
 html.phone #tut .tbub p{font-size:13.5px;line-height:1.55}
 html.phone #tut .tnext{height:38px;min-width:96px;font-size:14px}
-html.phone #tut .trow{margin-top:8px}</style>
+html.phone #tut .trow{margin-top:8px}
+.sndbox{display:flex;flex-direction:column;gap:22px;margin:22px 10px 4px}
+.sndrow{display:grid;grid-template-columns:90px 1fr 70px;align-items:center;gap:18px}
+.sndl{font-size:18px;color:#efd9a6;text-align:left}
+.sndr{-webkit-appearance:none;appearance:none;width:100%;height:10px;border-radius:5px;background:linear-gradient(90deg,#c9953e var(--p,50%),rgba(0,0,0,.45) var(--p,50%));box-shadow:inset 0 0 0 1px rgba(233,196,122,.5);outline:none;margin:0}
+.sndr::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff0c4,#d9a64c 55%,#7a5222);border:2px solid #3a2410;box-shadow:0 2px 5px rgba(0,0,0,.6);cursor:pointer}
+.sndr::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff0c4,#d9a64c 55%,#7a5222);border:2px solid #3a2410;cursor:pointer}
+.sndt{display:block;width:66px;height:29px;padding:0;border:0;background:url(assets/ui/afc0c8eb.webp) center/contain no-repeat;cursor:pointer}
+.sndt[aria-checked=true]{background-image:url(assets/ui/2d46c843.webp)}
+html.phone .sndbox{gap:14px;margin-top:12px}
+html.phone .sndl{font-size:15px}
+html.phone .sndrow{grid-template-columns:70px 1fr 60px;gap:12px}
+</style>
 
 
 
@@ -1391,6 +1403,7 @@ html.phone #tut .trow{margin-top:8px}</style>
       <div id="setMenu" class="setmenu" hidden><div class="setdim" id="setDim"></div><nav class="setpanel" role="menu" aria-label="설정"><div class="sethead"><span>설정</span><button class="setx" id="setX" aria-label="닫기"></button></div>
         <button id="newBtn" class="mi" role="menuitem">새 게임</button>
         <button id="rulesBtn" class="mi" role="menuitem">게임 방법</button>
+        <button id="sndBtn" class="mi" role="menuitem">사운드</button>
         <button id="leaveBtn" class="mi" role="menuitem" hidden>방 나가기</button>
         <button id="tipBtn" class="mi tg" role="menuitemcheckbox">툴팁</button>
         <button id="hintBtn" class="mi tg" role="menuitemcheckbox">힌트</button>
@@ -2383,6 +2396,7 @@ function devPop(t){
   const own=S.players[ME].dev.some(d=>d.t===t);const can=canPlayDev(ME,t);
   return `<h4>${DEVN[t]} 카드</h4><p>${DEVL[t]}</p><p class="muted">덱에 처음 ${DEVCNT[t]}장. ${t==='vp'?'자동으로 점수에 들어가요.':'산 차례에는 못 쓰고, 한 차례에 발전 카드는 1장만 쓸 수 있어요.'}</p>${own&&t!=='vp'?`<button class="btn primary" data-play="${t}" ${can?'':'disabled'} style="margin-top:4px">${can?'이 카드 사용하기':S.cur!==ME||S.phase!=='main'?'내 차례에 쓸 수 있어요':S.devPlayed?'이번 차례엔 이미 사용했어요':S.pend?'지금 하던 행동을 먼저 끝내세요':'다음 차례부터 쓸 수 있어요'}</button>`:''}`;}
 function render(){
+  try{sndWatch();}catch(e){}
   renderBoard();
   $('#coach').innerHTML=coachText()+(S.mp&&S.phase!=='over'&&actor()!==null&&!S.players[actor()].ai?` <span class="cdwrap">· <i data-cd="dl"></i></span>`:'');
   const cp=S.players[S.cur];
@@ -2672,7 +2686,7 @@ $('#speedSeg').onclick=e=>{const b=e.target.closest('[data-sp]');if(!b)return;ui
  sb.onclick=e=>{e.stopPropagation();sb.blur();hideTip();setOpen(sm.hidden);};
  $('#setDim').onclick=$('#setX').onclick=()=>setOpen(false);
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!sm.hidden)setOpen(false);});
- sm.addEventListener('click',e=>{const b=e.target.closest('#newBtn,#rulesBtn,#leaveBtn');if(b)setOpen(false);});}
+ sm.addEventListener('click',e=>{const b=e.target.closest('#newBtn,#rulesBtn,#leaveBtn,#sndBtn');if(b)setOpen(false);if(e.target.closest('#sndBtn'))showSound();});}
 const hintLabel=()=>{$('#hintBtn').setAttribute('aria-checked',ui.hints);$('#hintBtn').classList.toggle('active',ui.hints);};
 const gfxLabel=()=>{$('#gfxBtn').setAttribute('aria-checked',ui.gfx!=='low');$('#gfxBtn').classList.toggle('active',ui.gfx!=='low');$('#gfxBtn').dataset.tip='높음: 그림자 깊이, 빛 번짐, 원근 흐림, 색 보정을 켜요. 화면이 버벅이면 낮음으로 바꾸세요.';};
 $('#gfxBtn').onclick=()=>{ui.gfx=ui.gfx==='low'?'high':'low';saveUi();gfxLabel();invalidate(true);};gfxLabel();
@@ -3051,6 +3065,107 @@ setInterval(()=>{try{TUT.tick();}catch(e){console.error(e);}},150);
 addEventListener('resize',()=>setTimeout(()=>TUT.on&&TUT.layout(),120));
 $('#tTut').onclick=e=>{e.stopPropagation();try{const el=document.documentElement;if(!(document.fullscreenElement||document.webkitFullscreenElement)&&(el.requestFullscreen||el.webkitRequestFullscreen)){const r=(el.requestFullscreen||el.webkitRequestFullscreen).call(el);if(r&&r.then)r.then(()=>{try{screen.orientation.lock('landscape').catch(()=>{});}catch(x){}}).catch(()=>{});}}catch(x){}TUT.start();};
 
+</script>
+<script id="snd">
+// ================= AUDIO (procedural, no files) =================
+const SND={ctx:null,bgmG:null,sfxG:null,rev:null,playing:false,next:0,step:0,timer:null,
+  vol:{bgm:.55,sfx:.8},on:{bgm:true,sfx:true},
+  load(){try{const v=JSON.parse(localStorage.getItem('hexisle-audio')||'{}');Object.assign(this.vol,v.vol||{});Object.assign(this.on,v.on||{});}catch(e){}},
+  save(){try{localStorage.setItem('hexisle-audio',JSON.stringify({vol:this.vol,on:this.on}));}catch(e){}},
+  init(){if(this.ctx)return true;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;
+    const c=this.ctx=new AC();const master=c.createDynamicsCompressor();master.threshold.value=-14;master.ratio.value=3;master.connect(c.destination);
+    this.bgmG=c.createGain();this.sfxG=c.createGain();this.bgmG.connect(master);this.sfxG.connect(master);
+    const len=c.sampleRate*2.6,ir=c.createBuffer(2,len,c.sampleRate);for(let ch=0;ch<2;ch++){const d=ir.getChannelData(ch);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6);}
+    this.rev=c.createConvolver();this.rev.buffer=ir;const rg=c.createGain();rg.gain.value=.32;this.rev.connect(rg);rg.connect(this.bgmG);
+    this.revS=c.createConvolver();this.revS.buffer=ir;const rs=c.createGain();rs.gain.value=.18;this.revS.connect(rs);rs.connect(this.sfxG);
+    this.apply();return true;},
+  apply(){if(!this.ctx)return;const t=this.ctx.currentTime;this.bgmG.gain.setTargetAtTime(this.on.bgm?this.vol.bgm*.5:0,t,.15);this.sfxG.gain.setTargetAtTime(this.on.sfx?this.vol.sfx:0,t,.05);
+    if(this.on.bgm&&this.vol.bgm>0)this.startBgm();},
+  unlock(){if(!this.init())return;if(this.ctx.state==='suspended')this.ctx.resume();this.apply();},
+  // ---------- instruments ----------
+  hz(n){return 440*Math.pow(2,(n-69)/12);},
+  env(g,t,a,peak,d){g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(peak,t+a);g.gain.exponentialRampToValueAtTime(.0001,t+a+d);},
+  pluck(n,t,v,dur,dest){const c=this.ctx;dest=dest||this.bgmG;const o=c.createOscillator(),o2=c.createOscillator(),f=c.createBiquadFilter(),g=c.createGain();
+    o.type='triangle';o2.type='sawtooth';o.frequency.value=this.hz(n);o2.frequency.value=this.hz(n)*1.003;const g2=c.createGain();g2.gain.value=.18;
+    f.type='lowpass';f.frequency.setValueAtTime(3200,t);f.frequency.exponentialRampToValueAtTime(500,t+dur*.6);f.Q.value=1.2;
+    o.connect(f);o2.connect(g2);g2.connect(f);f.connect(g);g.connect(dest);g.connect(this.rev);this.env(g,t,.004,v,dur);o.start(t);o2.start(t);o.stop(t+dur+.05);o2.stop(t+dur+.05);},
+  flute(n,t,v,dur){const c=this.ctx;const o=c.createOscillator(),g=c.createGain(),lfo=c.createOscillator(),lg=c.createGain(),f=c.createBiquadFilter();
+    o.type='sine';o.frequency.value=this.hz(n);lfo.frequency.value=5.2;lg.gain.value=this.hz(n)*.006;lfo.connect(lg);lg.connect(o.frequency);
+    const nb=c.createBufferSource();nb.buffer=this.noiseBuf();const nf=c.createBiquadFilter();nf.type='bandpass';nf.frequency.value=this.hz(n)*2;nf.Q.value=4;const ng=c.createGain();ng.gain.value=.05;nb.connect(nf);nf.connect(ng);ng.connect(g);
+    f.type='lowpass';f.frequency.value=2600;o.connect(f);f.connect(g);g.connect(this.bgmG);g.connect(this.rev);
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.12);g.gain.setValueAtTime(v*.85,t+dur*.7);g.gain.linearRampToValueAtTime(0,t+dur);
+    o.start(t);lfo.start(t);nb.start(t);o.stop(t+dur+.05);lfo.stop(t+dur+.05);nb.stop(t+dur+.05);},
+  pad(ns,t,v,dur){const c=this.ctx;ns.forEach(n=>{const o=c.createOscillator(),g=c.createGain(),f=c.createBiquadFilter();o.type='triangle';o.frequency.value=this.hz(n);
+    f.type='lowpass';f.frequency.value=900;o.connect(f);f.connect(g);g.connect(this.bgmG);g.connect(this.rev);
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+dur*.35);g.gain.linearRampToValueAtTime(0,t+dur);o.start(t);o.stop(t+dur+.05);});},
+  drum(t,v,lo){const c=this.ctx;const o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.setValueAtTime(lo?110:180,t);o.frequency.exponentialRampToValueAtTime(lo?55:90,t+.18);
+    o.connect(g);g.connect(this.bgmG);this.env(g,t,.003,v,.25);o.start(t);o.stop(t+.3);},
+  nbuf:null,noiseBuf(){if(this.nbuf)return this.nbuf;const c=this.ctx,b=c.createBuffer(1,c.sampleRate,c.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;return this.nbuf=b;},
+  // ---------- music: gentle village tune in D dorian, 6/8 feel ----------
+  song:(()=>{const D=62;// chords as root offsets (from D4)
+    const prog=[[0,7,15],[-2,5,14],[-4,3,12],[-2,5,14],[0,7,15],[3,10,19],[-2,5,14],[0,7,12]];
+    const melA=[[14,2],[12,1],[10,1],[12,2],[14,1],[17,3],[15,2],[14,1],[12,3],[10,2],[12,1],[14,2],[10,1],[9,3],[12,2],[10,1],[7,3],[0,3],
+                [14,2],[17,1],[19,2],[17,1],[15,3],[14,2],[12,1],[10,2],[12,1],[14,3],[12,2],[10,1],[9,2],[7,1],[10,3],[7,6]];
+    return {D,prog,melA};})(),
+  startBgm(){if(this.playing||!this.ctx)return;this.playing=true;this.next=this.ctx.currentTime+.3;this.bar=0;this.mi=0;this.mt=0;this.tick();},
+  tick(){if(!this.playing)return;const c=this.ctx;const beat=60/76;// dotted quarter pulse
+    while(this.next<c.currentTime+1.2){const t=this.next,S=this.song,ch=S.prog[this.bar%8];const D=S.D;
+      // arpeggio (6 eighths per bar)
+      const e=beat/3;const arp=[0,1,2,1,2,1];arp.forEach((k,i)=>this.pluck(D-12+ch[k],t+i*e,i===0?.11:.07,1.1));
+      this.pluck(D-24+ch[0],t,.12,2.2);
+      if(this.bar%2===0)this.pad([D-12+ch[0],D-12+ch[1],D-12+ch[2]],t,.035,beat*4);
+      if(this.bar%4===3)this.drum(t+beat*1.5,.12,true);
+      // melody only on bars 8..23 of 32-bar cycle (rest = calm)
+      const cyc=this.bar%32;if(cyc>=8&&cyc<26){let mt=0;while(mt<6){const m=S.melA[this.mi%S.melA.length];this.flute(D+m[0],t+mt*e,.075,m[1]*e*.95);mt+=m[1];this.mi++;}}else this.mi=0;
+      this.next+=beat*2;this.bar++;}
+    this.timer=setTimeout(()=>this.tick(),300);},
+  stopBgm(){this.playing=false;clearTimeout(this.timer);},
+  // ---------- sfx ----------
+  sfx(k){if(!this.ctx||!this.on.sfx||this.vol.sfx<=0)return;if(this.ctx.state==='suspended')this.ctx.resume();const c=this.ctx,t=c.currentTime,G=this.sfxG;
+    const tone=(n,dt,v,d,type)=>{const o=c.createOscillator(),g=c.createGain();o.type=type||'triangle';o.frequency.value=this.hz(n);o.connect(g);g.connect(G);g.connect(this.revS);this.env(g,t+dt,.004,v,d);o.start(t+dt);o.stop(t+dt+d+.05);};
+    const noise=(dt,v,d,fq,q)=>{const s=c.createBufferSource();s.buffer=this.noiseBuf();const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=fq;f.Q.value=q||1;const g=c.createGain();s.connect(f);f.connect(g);g.connect(G);this.env(g,t+dt,.002,v,d);s.start(t+dt,Math.random()*.5);s.stop(t+dt+d+.05);};
+    const thunk=(dt,v,f0)=>{const o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.setValueAtTime(f0||220,t+dt);o.frequency.exponentialRampToValueAtTime((f0||220)*.45,t+dt+.12);o.connect(g);g.connect(G);this.env(g,t+dt,.002,v,.16);o.start(t+dt);o.stop(t+dt+.2);noise(dt,v*.5,.05,900,1.5);};
+    switch(k){
+      case 'click':noise(0,.14,.03,2600,2);tone(84,0,.05,.05,'sine');break;
+      case 'roll':for(let i=0;i<9;i++)noise(i*.07+Math.random()*.03,.22-i*.015,.04,1800+Math.random()*1400,3);thunk(.68,.3,300);break;
+      case 'gain':[81,85,88].forEach((n,i)=>tone(n,i*.07,.11,.5,'sine'));break;
+      case 'build':thunk(0,.45,180);thunk(.11,.35,240);[74,79].forEach((n,i)=>tone(n,.2+i*.09,.1,.6,'triangle'));break;
+      case 'road':thunk(0,.4,200);noise(.02,.15,.12,600,.8);break;
+      case 'city':thunk(0,.5,150);thunk(.12,.4,200);thunk(.24,.35,260);[74,78,81,86].forEach((n,i)=>tone(n,.32+i*.08,.1,.8,'triangle'));break;
+      case 'dev':noise(0,.18,.12,3500,1);noise(.09,.14,.1,4200,1);tone(88,.15,.06,.3,'sine');break;
+      case 'trade':for(let i=0;i<5;i++)tone(90+Math.floor(Math.random()*6),i*.06,.06,.25,'sine');break;
+      case 'turn':tone(74,0,.12,1.2,'sine');tone(81,0,.05,1.2,'sine');break;
+      case 'robber':tone(45,0,.18,1.1,'sawtooth');tone(46,0,.1,1.1,'sawtooth');noise(0,.12,.6,300,.7);break;
+      case 'steal':noise(0,.18,.15,2000,1);tone(70,.05,.08,.2,'triangle');tone(66,.13,.08,.25,'triangle');break;
+      case 'error':tone(58,0,.1,.18,'square');tone(55,.12,.1,.22,'square');break;
+      case 'win':[62,66,69,74,78,81,86].forEach((n,i)=>tone(n,i*.11,.13,1.3,'triangle'));tone(50,0,.12,2.2,'triangle');break;
+      case 'lose':[69,67,64,62].forEach((n,i)=>tone(n,i*.2,.11,.9,'triangle'));break;
+      case 'open':tone(79,0,.05,.25,'sine');tone(86,.05,.04,.3,'sine');break;}},
+};
+SND.load();
+['pointerdown','keydown','touchstart'].forEach(ev=>addEventListener(ev,()=>SND.unlock(),{capture:true,passive:true}));
+document.addEventListener('visibilitychange',()=>{if(!SND.ctx)return;if(document.hidden)SND.ctx.suspend();else SND.ctx.resume();});
+// global click sound for buttons
+document.addEventListener('click',e=>{const b=e.target.closest('button,.tm,.mi,.mtab,[data-act],[data-v],[data-c]');if(!b||b.disabled)return;if(b.matches('[data-act="roll"]'))return;SND.sfx('click');},true);
+// sound settings dialog
+function showSound(){const row=(k,label)=>`<div class="sndrow"><span class="sndl">${label}</span><input type="range" min="0" max="100" value="${Math.round(SND.vol[k]*100)}" data-k="${k}" class="sndr"><button class="sndt" data-t="${k}" aria-checked="${SND.on[k]}"></button></div>`;
+  openDialog(`<h3>사운드</h3><div class="sndbox">${row('bgm','배경음')}${row('sfx','효과음')}</div><div class="row"><button class="btn sub" id="sndOk">확인</button></div>`,'dlg-wide');
+  const upd=()=>document.querySelectorAll('#dsheet .sndr').forEach(r=>r.style.setProperty('--p',r.value+'%'));upd();
+  document.querySelectorAll('#dsheet .sndr').forEach(r=>{r.oninput=()=>{SND.vol[r.dataset.k]=r.value/100;if(r.value>0){SND.on[r.dataset.k]=true;document.querySelector(`#dsheet [data-t="${r.dataset.k}"]`).setAttribute('aria-checked',true);}SND.unlock();SND.apply();SND.save();upd();};
+    r.onchange=()=>{if(r.dataset.k==='sfx')SND.sfx('gain');};});
+  document.querySelectorAll('#dsheet .sndt').forEach(b=>b.onclick=()=>{const k=b.dataset.t;SND.on[k]=!SND.on[k];b.setAttribute('aria-checked',SND.on[k]);SND.unlock();SND.apply();SND.save();});
+  $('#sndOk').onclick=closeDialog;}
+
+function sndWatch(){if(typeof SND==='undefined'||!S||!S.players||!S.players[ME])return;const me=S.players[ME];const k=count(ME);
+  const cur={id:S.rollId,res:sumRes(me.res),s:k.s,c:k.c,r:k.r,dev:me.dev.length,cur:S.cur,ph:S.phase,rob:S.board.robber,st:S.lastSteal?JSON.stringify(S.lastSteal):'',g:S.board.hexes.map(h=>h.num).join('')+S.board.ports.map(p=>p.e).join('')};
+  const p=ui.sndPrev;ui.sndPrev=cur;if(!p||p.g!==cur.g)return;
+  if(cur.id!==p.id)SND.sfx('roll');
+  if(cur.c>p.c)SND.sfx('city');else if(cur.s>p.s)SND.sfx('build');else if(cur.r>p.r)SND.sfx('road');else if(cur.dev>p.dev)SND.sfx('dev');
+  if(cur.st!==p.st&&cur.st){const L=S.lastSteal;if(L.q===ME||L.p===ME)setTimeout(()=>SND.sfx('steal'),200);}
+  else if(cur.rob!==p.rob)SND.sfx('robber');
+  if(cur.res>p.res){if(cur.id!==p.id)setTimeout(()=>SND.sfx('gain'),1100);else if(cur.s===p.s&&cur.r===p.r&&cur.c===p.c)SND.sfx(cur.dev===p.dev?'trade':'gain');}
+  if(cur.ph==='main'&&cur.cur===ME&&(p.cur!==ME||p.ph!=='main'))setTimeout(()=>SND.sfx('turn'),150);
+  if(cur.ph==='over'&&p.ph!=='over')SND.sfx(S.winner===ME?'win':'lose');}
 </script>
 
 </body>
