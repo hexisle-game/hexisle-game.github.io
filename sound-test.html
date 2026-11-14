@@ -20,11 +20,18 @@ button:disabled{opacity:.35;cursor:default}
 .file{background:rgba(255,255,255,.04);border:1px dashed var(--line);color:var(--mut);display:inline-block}.file input{display:none}
 .gain{display:flex;align-items:center;gap:8px;color:var(--mut);font-size:13px}.gain input{width:140px}.gain b{color:var(--txt);min-width:34px}
 .fname{font-size:12px;color:var(--mut);word-break:break-all}
+
+.gain{display:grid;grid-template-columns:96px 1fr 44px;align-items:center;gap:8px;color:var(--mut);font-size:13px}.gain input{width:100%}.gain b{color:var(--txt);text-align:right}
+.act{display:flex;gap:10px;flex-wrap:wrap;margin-left:auto}
+.note{background:rgba(233,196,122,.08);border:1px solid var(--line);border-radius:10px;padding:10px 14px;color:var(--txt);font-size:13px;margin:-8px 0 20px}
+button.x{background:none;border:0;color:var(--mut);padding:0 4px;font-size:12px;text-decoration:underline}
 </style></head><body><div class="wrap">
-<h1>효과음 테스트</h1><p class="sub">게임에 넣기 전에 들어보는 페이지예요. <b>새 효과음</b>은 올려준 파일, <b>현재</b>는 지금 게임에 들어 있는 소리예요. 빈 칸은 파일을 고르면 바로 들어볼 수 있어요(내 기기에서만 재생, 업로드 안 됨).</p>
-<div class="top"><label>전체 효과음 음량</label><input type="range" id="master" min="0" max="100" value="55"><b id="mv">55%</b></div>
-<h2>새 효과음 슬롯</h2><div class="grid" id="slots"></div>
-<h2>기존 효과음 (참고)</h2><div class="grid"><div class="slot" style="grid-column:1/-1"><div class="btns" id="old"></div></div></div>
+<h1>효과음 테스트</h1><p class="sub"><b>새 효과음</b>은 등록된 파일, <b>현재</b>는 지금 게임에 들어 있는 소리예요. 칸마다 <b>내 파일 등록</b>으로 파일을 넣고 볼륨을 맞춰 보세요.</p>
+<div class="top"><label>전체 효과음 음량</label><input type="range" id="master" min="0" max="100" value="55"><b id="mv">55%</b>
+<div class="act"><button class="alt" id="reset">초기화</button><button id="export">설정 내보내기 (파일 저장)</button></div></div>
+<div class="note">등록한 파일과 볼륨은 이 기기 브라우저에 자동 저장돼요. 다 맞췄으면 <b>설정 내보내기</b>를 눌러 저장된 <b>hexisle-sfx.json</b> 파일 하나를 채팅에 올려 주세요. 파일과 볼륨이 통째로 들어 있어서 그대로 게임에 넣을 수 있어요.</div>
+<h2>새 효과음</h2><div class="grid" id="g-new"></div>
+<h2>기존 효과음</h2><div class="grid" id="g-old"></div>
 </div>
 <script>
 // ================= AUDIO v3 (procedural piano-centric) =================
@@ -95,35 +102,67 @@ const SND={ctx:null,playing:null,next:0,timer:null,vol:{bgm:.55,sfx:.8},on:{bgm:
       case 'lose':st([45,52,57],0,.035,3);[57,55,52,50].forEach((n,i)=>pn(n,i*.28,.1,2));pn(38,.1,.11,3);break;}},
 };
 
+
 SND.vol.sfx=.55;
 const SLOTS=[
- {id:'card',name:'카드 선택',desc:'자원·발전 카드를 고르거나 버릴 카드를 누를 때',file:'assets/sfx/card.mp3',fname:'taking-playing-card-3',gain:.5,cur:['card']},
- {id:'dice',name:'주사위 굴리기',desc:'주사위를 굴릴 때',file:'assets/sfx/dice.mp3',fname:'dice-sound',gain:.7,cur:['roll']},
- {id:'win',name:'승리',desc:'게임에서 이겼을 때',file:'assets/sfx/win.mp3',fname:'victory sound',gain:.6,cur:['win']},
- {id:'ui',name:'UI 펼치기 / 닫기',desc:'팝업·다이얼로그·설정 창을 열고 닫을 때',gain:.6,cur:[]},
- {id:'btn1',name:'주요 버튼',desc:'시작, 확인, 주사위, 건설 등 메인 버튼',gain:.6,cur:['click']},
- {id:'btn2',name:'보조 버튼',desc:'교환 후 거래, 취소, 탭 전환 같은 보조 버튼',gain:.6,cur:['click']},
- {id:'place',name:'건설 요소 놓기',desc:'도로·마을·도시를 보드에 놓을 때',gain:.6,cur:[['road','도로'],['build','마을'],['city','도시']]},
+ {id:'card',sec:'new',name:'카드 선택',desc:'자원·발전 카드를 고르거나 버릴 카드를 누를 때',file:'assets/sfx/card.mp3',fname:'taking-playing-card-3',gain:.5,cur:['card']},
+ {id:'dice',sec:'new',name:'주사위 굴리기',desc:'주사위를 굴릴 때',file:'assets/sfx/dice.mp3',fname:'dice-sound',gain:.7,cur:['roll']},
+ {id:'win',sec:'new',name:'승리',desc:'게임에서 이겼을 때',file:'assets/sfx/win.mp3',fname:'victory sound',gain:.6,cur:['win']},
+ {id:'ui',sec:'new',name:'UI 펼치기 / 닫기',desc:'팝업·다이얼로그·설정 창을 열고 닫을 때',gain:.6,cur:[]},
+ {id:'btn1',sec:'new',name:'주요 버튼',desc:'시작, 확인, 주사위, 건설 등 메인 버튼',gain:.6,cur:['click']},
+ {id:'btn2',sec:'new',name:'보조 버튼',desc:'교환 후 거래, 취소, 탭 전환 같은 보조 버튼',gain:.6,cur:['click']},
+ {id:'place',sec:'new',name:'건설 요소 놓기',desc:'도로·마을·도시를 보드에 놓을 때',gain:.6,cur:[['road','도로'],['build','마을'],['city','도시']]},
+ {id:'gain',sec:'old',name:'자원 획득',desc:'주사위 결과로 자원 카드를 받을 때',gain:.6,cur:['gain']},
+ {id:'road',sec:'old',name:'도로 건설',desc:'도로를 지었을 때',gain:.6,cur:['road']},
+ {id:'build',sec:'old',name:'마을 건설',desc:'마을을 지었을 때',gain:.6,cur:['build']},
+ {id:'city',sec:'old',name:'도시 업그레이드',desc:'마을을 도시로 올렸을 때',gain:.6,cur:['city']},
+ {id:'dev',sec:'old',name:'발전 카드',desc:'발전 카드를 사거나 사용할 때',gain:.6,cur:['dev']},
+ {id:'trade',sec:'old',name:'교환 성사',desc:'은행·플레이어 교환이 이뤄졌을 때',gain:.6,cur:['trade']},
+ {id:'turn',sec:'old',name:'내 턴 시작',desc:'내 차례가 돌아왔을 때',gain:.6,cur:['turn']},
+ {id:'robber',sec:'old',name:'도둑',desc:'7이 나오거나 도둑을 옮길 때',gain:.6,cur:['robber']},
+ {id:'steal',sec:'old',name:'훔치기',desc:'다른 플레이어 카드를 훔칠 때',gain:.6,cur:['steal']},
+ {id:'error',sec:'old',name:'오류 / 불가',desc:'할 수 없는 행동을 눌렀을 때',gain:.6,cur:['error']},
+ {id:'lose',sec:'old',name:'패배',desc:'게임에서 졌을 때',gain:.6,cur:['lose']},
+ {id:'click',sec:'old',name:'기본 클릭',desc:'지금 모든 버튼에 쓰이는 공통 클릭',gain:.6,cur:['click']},
 ];
-const bufs={};
-async function loadBuf(key,ab){SND.unlock();const b=await new Promise((r,j)=>SND.ctx.decodeAudioData(ab,r,j));bufs[key]=b;return b;}
-async function fileBuf(s){if(bufs[s.id])return bufs[s.id];if(!s.file)return null;const r=await fetch(s.file);return loadBuf(s.id,await r.arrayBuffer());}
-async function playNew(s){SND.unlock();const b=await fileBuf(s);if(!b)return;const c=SND.ctx,src=c.createBufferSource(),g=c.createGain();g.gain.value=s.gain;src.buffer=b;src.connect(g);g.connect(SND.sfxBus);src.start();}
-const box=document.getElementById('slots');
-SLOTS.forEach(s=>{const el=document.createElement('div');el.className='slot'+(s.file?'':' empty');
+SLOTS.forEach(s=>{s.cg=1;s.def={gain:s.gain,file:s.file,fname:s.fname};});
+// ---- persistence: IndexedDB for files, localStorage for volumes ----
+const DB={db:null,open(){return this.db||(this.db=new Promise((r,j)=>{const q=indexedDB.open('hexisle-sfx',1);q.onupgradeneeded=()=>q.result.createObjectStore('f');q.onsuccess=()=>r(q.result);q.onerror=()=>j(q.error);}));},
+  async put(k,v){const d=await this.open();return new Promise(r=>{const t=d.transaction('f','readwrite');v==null?t.objectStore('f').delete(k):t.objectStore('f').put(v,k);t.oncomplete=r;t.onerror=r;});},
+  async all(){const d=await this.open();return new Promise(r=>{const o={},t=d.transaction('f'),st=t.objectStore('f'),q=st.openCursor();q.onsuccess=()=>{const c=q.result;if(c){o[c.key]=c.value;c.continue();}else r(o);};q.onerror=()=>r(o);});}};
+const LS='hexisle-sfx-test';const saveVol=()=>{try{localStorage.setItem(LS,JSON.stringify({master:SND.vol.sfx,g:Object.fromEntries(SLOTS.map(s=>[s.id,[s.gain,s.cg]]))}));}catch(e){}};
+const bufs={},user={};
+async function decode(ab){SND.unlock();return new Promise((r,j)=>SND.ctx.decodeAudioData(ab.slice(0),r,j));}
+async function getBuf(s){if(bufs[s.id])return bufs[s.id];let ab;if(user[s.id])ab=await user[s.id].blob.arrayBuffer();else if(s.file)ab=await (await fetch(s.file)).arrayBuffer();else return null;return bufs[s.id]=await decode(ab);}
+async function playNew(s){SND.unlock();const b=await getBuf(s);if(!b)return;const c=SND.ctx,src=c.createBufferSource(),g=c.createGain();g.gain.value=s.gain;src.buffer=b;src.connect(g);g.connect(SND.sfxBus);src.start();}
+function playCur(s,k){SND.unlock();if(!SND.ctx)return;SND.sfxBus.gain.value=s.cg;SND.sfx(k);clearTimeout(playCur.t);playCur.t=setTimeout(()=>SND.sfxBus.gain.value=1,2500);}
+const has=s=>!!(user[s.id]||s.file);
+function draw(s){const el=s.el;const nm=user[s.id]?'내 파일: '+user[s.id].name:(s.file?'파일: '+s.fname:'');
+  el.className='slot'+(has(s)?'':' empty');el.querySelector('.tag').textContent=user[s.id]?'내 파일':(s.file?'파일 등록됨':'파일 대기');
+  el.querySelector('.new').disabled=!has(s);el.querySelector('.fname').innerHTML=nm+(user[s.id]?' <button class="x">지우기</button>':'');
+  const x=el.querySelector('.x');if(x)x.onclick=async()=>{delete user[s.id];delete bufs[s.id];await DB.put(s.id,null);draw(s);};}
+SLOTS.forEach(s=>{const el=s.el=document.createElement('div');
   const cur=s.cur.map(c=>Array.isArray(c)?`<button class="alt" data-cur="${c[0]}">현재 · ${c[1]}</button>`:`<button class="alt" data-cur="${c}">현재 ▶</button>`).join('')||'<span class="desc">현재 게임엔 소리가 없어요</span>';
-  el.innerHTML=`<h3>${s.name}<span class="tag">${s.file?'파일 등록됨':'파일 대기'}</span></h3><p class="desc">${s.desc}</p>
-  <div class="btns"><button class="new" ${s.file?'':'disabled'}>새 효과음 ▶</button>${cur}</div>
-  <div class="gain">볼륨 <input type="range" min="0" max="150" value="${Math.round(s.gain*100)}"><b>${Math.round(s.gain*100)}%</b></div>
-  <div class="fname">${s.file?'파일: '+s.fname:''}</div>
-  <label class="file">내 파일로 들어보기<input type="file" accept="audio/*"></label>`;
+  const sl=(cls,lab,v)=>`<div class="gain ${cls}">${lab}<input type="range" min="0" max="150" value="${Math.round(v*100)}"><b>${Math.round(v*100)}%</b></div>`;
+  el.innerHTML=`<h3>${s.name}<span class="tag"></span></h3><p class="desc">${s.desc}</p>
+  <div class="btns"><button class="new">새 효과음 ▶</button>${cur}</div>
+  ${sl('gn','새 효과음 볼륨',s.gain)}${s.cur.length?sl('gc','현재 소리 볼륨',s.cg):''}
+  <div class="fname"></div><label class="file">내 파일 등록<input type="file" accept="audio/*"></label>`;
   el.querySelector('.new').onclick=()=>playNew(s);
-  el.querySelectorAll('[data-cur]').forEach(b=>b.onclick=()=>{SND.unlock();SND.sfx(b.dataset.cur);});
-  const r=el.querySelector('.gain input');r.oninput=()=>{s.gain=r.value/100;el.querySelector('.gain b').textContent=r.value+'%';};
-  el.querySelector('input[type=file]').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{await loadBuf(s.id,await f.arrayBuffer());el.querySelector('.new').disabled=false;el.querySelector('.fname').textContent='내 파일: '+f.name+' (이 기기에서만)';playNew(s);}catch(x){alert('이 파일은 재생할 수 없어요');}};
-  box.appendChild(el);});
-const OLD=[['click','클릭'],['card','카드'],['roll','주사위'],['gain','자원 획득'],['road','도로'],['build','마을'],['city','도시'],['dev','발전카드'],['trade','교환'],['turn','턴 시작'],['robber','도둑'],['steal','훔치기'],['error','오류'],['win','승리'],['lose','패배']];
-document.getElementById('old').innerHTML=OLD.map(([k,n])=>`<button class="alt" data-k="${k}">${n}</button>`).join('');
-document.querySelectorAll('#old [data-k]').forEach(b=>b.onclick=()=>{SND.unlock();SND.sfx(b.dataset.k);});
-const m=document.getElementById('master');m.oninput=()=>{SND.vol.sfx=m.value/100;document.getElementById('mv').textContent=m.value+'%';SND.unlock();SND.apply();};
+  el.querySelectorAll('[data-cur]').forEach(b=>b.onclick=()=>playCur(s,b.dataset.cur));
+  const bind=(cls,key)=>{const w=el.querySelector('.'+cls);if(!w)return;const r=w.querySelector('input');r.oninput=()=>{s[key]=r.value/100;w.querySelector('b').textContent=r.value+'%';saveVol();};};bind('gn','gain');bind('gc','cg');
+  el.querySelector('input[type=file]').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{const ab=await f.arrayBuffer();const b=await decode(ab);user[s.id]={name:f.name,type:f.type||'audio/mpeg',blob:new Blob([ab],{type:f.type||'audio/mpeg'})};bufs[s.id]=b;await DB.put(s.id,user[s.id]);draw(s);playNew(s);}catch(x){alert('이 파일은 재생할 수 없어요');}};
+  document.getElementById('g-'+s.sec).appendChild(el);draw(s);});
+const setSlider=(s,cls,v)=>{const w=s.el.querySelector('.'+cls);if(!w)return;w.querySelector('input').value=Math.round(v*100);w.querySelector('b').textContent=Math.round(v*100)+'%';};
+const m=document.getElementById('master');const setM=v=>{SND.vol.sfx=v;m.value=Math.round(v*100);document.getElementById('mv').textContent=m.value+'%';if(SND.ctx)SND.apply();};
+m.oninput=()=>{SND.unlock();setM(m.value/100);saveVol();};
+// restore
+try{const v=JSON.parse(localStorage.getItem(LS)||'null');if(v){setM(v.master);SLOTS.forEach(s=>{const g=v.g[s.id];if(g){s.gain=g[0];s.cg=g[1];setSlider(s,'gn',s.gain);setSlider(s,'gc',s.cg);}});}}catch(e){}
+DB.all().then(o=>{for(const k in o){const s=SLOTS.find(x=>x.id===k);if(s&&o[k]&&o[k].blob){user[k]=o[k];draw(s);}}}).catch(()=>{});
+// export: one JSON with volumes + user files (base64)
+const b64=blob=>new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(String(fr.result).split(',')[1]);fr.readAsDataURL(blob);});
+document.getElementById('export').onclick=async()=>{const out={app:'hexisle-sfx',v:1,date:new Date().toISOString(),master:SND.vol.sfx,slots:{}};
+  for(const s of SLOTS){const o={name:s.name,newGain:s.gain};if(s.cur.length)o.curGain=s.cg;if(user[s.id])o.file={name:user[s.id].name,type:user[s.id].type,base64:await b64(user[s.id].blob)};else if(s.file)o.builtin=s.file;out.slots[s.id]=o;}
+  const blob=new Blob([JSON.stringify(out)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='hexisle-sfx.json';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);};
+document.getElementById('reset').onclick=async()=>{if(!confirm('등록한 파일과 볼륨을 모두 지울까요?'))return;try{localStorage.removeItem(LS);}catch(e){}for(const s of SLOTS){delete user[s.id];delete bufs[s.id];await DB.put(s.id,null);s.gain=s.def.gain;s.cg=1;setSlider(s,'gn',s.gain);setSlider(s,'gc',1);draw(s);}setM(.55);};
 </script></body></html>
