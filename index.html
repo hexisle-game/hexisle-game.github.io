@@ -1813,7 +1813,7 @@ function validAct(p,name){if(!S||S.phase==='over'||!S.players[p])return false;
   if(name==='accept'||name==='cancel')return !!(S.offer&&S.offer.from===p);
   return S.cur===p;}
 function isClient(){return !!(S&&S.mp&&window.NET&&NET.on&&!NET.isHost);}
-function act(name,...args){if(isClient()){NET.send(name,args);return;}if(!validAct(ME,name))return;ACTS[name](ME,...args);update();}
+function act(name,...args){if(isClient()){NET.send(name,args);return;}if(!validAct(ME,name)){try{SND.sfx('error');}catch(e){}return;}ACTS[name](ME,...args);update();}
 function update(){if(isClient()){render();return;}checkWin();if(!S.mp)save();render();kick();if(S.mp&&window.NET&&NET.on)NET.publish();}
 function kick(){clearTimeout(aiTimer);if(isClient())return;if(typeof TUT!=='undefined'&&TUT.on&&!(TUT.cur()&&TUT.cur().ai))return;const a=actor();if(a===null||!S.players[a].ai||['start','lobby','mp','setup'].includes(ui.modal))return;
   aiTimer=setTimeout(()=>{if(actor()===a){try{aiStep(a);}catch(err){console.error(err);if(S.phase==='main'&&S.cur===a&&S.rolled&&!S.pend)endTurn();}update();}},DELAY[ui.speed]);}
@@ -2491,7 +2491,7 @@ function infoText(f){
   return null;}
 
 // ---------- modals ----------
-function openModal(key,html){ui.modal=key;$('#sheet').className='sheet sheet-'+key+(['offer','steal'].includes(key)?' sheet-dialog':'');if(['offer','steal'].includes(key))html=`<img class="dorn" src="${TITLEIMG.orn2}" alt="">`+html;$('#sheet').innerHTML=html;$('#modal').hidden=false;placeCrest();requestAnimationFrame(placeCrest);setTimeout(placeCrest,120);setTimeout(placeCrest,400);}
+function openModal(key,html){if(!ui.modal&&typeof SND!=='undefined')SND.sfx('ui');ui.modal=key;$('#sheet').className='sheet sheet-'+key+(['offer','steal'].includes(key)?' sheet-dialog':'');if(['offer','steal'].includes(key))html=`<img class="dorn" src="${TITLEIMG.orn2}" alt="">`+html;$('#sheet').innerHTML=html;$('#modal').hidden=false;placeCrest();requestAnimationFrame(placeCrest);setTimeout(placeCrest,120);setTimeout(placeCrest,400);}
 function placeCrest(){const sh=$('#sheet'),c=$('#mcrest');if(!sh||!c||$('#modal').hidden)return;const r=sh.getBoundingClientRect(),o=$('#modal').getBoundingClientRect(),k=PH.on?PH.k:1;c.style.left=((r.left-o.left+r.width/2)/k)+'px';c.style.top=((r.top-o.top)/k)+'px';}
 addEventListener('resize',()=>setTimeout(placeCrest,80));
 function infoDialog(k){const ci=r=>`<img class="ic-card" src="${CARDIMG[r]}" alt="${RN[r]}">`;let body,title,sub;
@@ -2503,9 +2503,9 @@ function infoDialog(k){const ci=r=>`<img class="ic-card" src="${CARDIMG[r]}" alt
     body=`<div class="icols devc">${['knight','vp','roads','plenty','monopoly'].map(t=>`<div class="icol"><img class="idev" src="${CARDIMG[t]}" alt="${DEVN[t]}"><p>${D[t]}</p><small>총 ${DEVCNT[t]}장</small></div>`).join('')}</div>`;}
   openModal('info',`<button class="mclose" id="ix" aria-label="닫기"></button><div class="fhead"><h3>${title}</h3><span class="isub">${sub}</span></div><div class="ibody">${body}</div>`);
   $('#sheet').classList.add('sheet-frame');$('#ix').onclick=()=>{closeModal();update();};}
-function openDialog(html,cls){$('#dsheet').className='sheet sheet-dialog'+(cls?' '+cls:'');$('#dsheet').innerHTML=`<img class="dorn" src="${TITLEIMG.orn2}" alt="">`+html;$('#dialog').hidden=false;ui.dialog=true;}
-function closeDialog(){$('#dialog').hidden=true;$('#dsheet').innerHTML='';ui.dialog=false;}
-function closeModal(){ui.modal=null;$('#modal').hidden=true;$('#sheet').innerHTML='';}
+function openDialog(html,cls){if(!ui.dialog&&typeof SND!=='undefined')SND.sfx('ui');$('#dsheet').className='sheet sheet-dialog'+(cls?' '+cls:'');$('#dsheet').innerHTML=`<img class="dorn" src="${TITLEIMG.orn2}" alt="">`+html;$('#dialog').hidden=false;ui.dialog=true;}
+function closeDialog(){if(ui.dialog&&typeof SND!=='undefined')SND.sfx('ui');$('#dialog').hidden=true;$('#dsheet').innerHTML='';ui.dialog=false;}
+function closeModal(){if(ui.modal&&typeof SND!=='undefined')SND.sfx('ui');ui.modal=null;$('#modal').hidden=true;$('#sheet').innerHTML='';}
 
 function hasHumans(){return S.players.some((p,i)=>i!==ME&&!p.ai);}
 function myOffer(){return S.offer&&S.offer.from===ME;}
@@ -2631,8 +2631,8 @@ function showRules(i,after){i=i||0;const P=RULES[i],last=i===RULES.length-1;
    <div class="ffoot">${last?'':'<button class="btn" id="rs">건너뛰기</button>'}${i>0?'<button class="btn" id="rp">이전</button>':''}<button class="btn primary" id="rn">${last?'닫기':'다음'}</button></div></div></div>`);
   $('#sheet').classList.add('sheet-frame');
   const done=()=>{closeModal();if(after)after();else update();};
-  $('#rx').onclick=done;if($('#rs'))$('#rs').onclick=done;if($('#rp'))$('#rp').onclick=()=>showRules(i-1,after);
-  $('#rn').onclick=()=>last?done():showRules(i+1,after);}
+  $('#rx').onclick=done;if($('#rs'))$('#rs').onclick=done;if($('#rp'))$('#rp').onclick=()=>{SND.sfx('page');showRules(i-1,after);};
+  $('#rn').onclick=()=>{if(last)return done();SND.sfx('page');showRules(i+1,after);};}
 
 const DIFF=[['easy','쉬움','AI가 자주 쉬고 거래에 너그러워요'],['normal','보통','기본 전략으로 플레이해요'],['hard','어려움','선두를 견제하고 자원 보너스를 받아요']];
 function countPick(){return `<div class="label" style="margin-top:8px">인원 (최소 2 · 최대 4)</div><div class="cnt" id="cnt">${[2,3,4].map(n=>`<button class="btn${ui.n===n?' active':''}" data-n="${n}">${n}인</button>`).join('')}</div>
@@ -2744,7 +2744,7 @@ $('#modal').addEventListener('click',ev=>{if(ev.target.id==='modal'&&['trade','p
 document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&['trade','plenty','mono','rules','confirm'].includes(ui.modal)){closeModal();update();}});
 const spLabel=()=>document.querySelectorAll('#speedSeg [data-sp]').forEach(b=>b.classList.toggle('on',b.dataset.sp===ui.speed));spLabel();
 $('#speedSeg').onclick=e=>{const b=e.target.closest('[data-sp]');if(!b)return;ui.speed=b.dataset.sp;saveUi();spLabel();kick();};
-{const sb=$('#setBtn'),sm=$('#setMenu');const setOpen=o=>{sm.hidden=!o;document.querySelector('header.top').classList.toggle('menu-open',o);sb.classList.toggle('active',o);sb.setAttribute('aria-expanded',o);};
+{const sb=$('#setBtn'),sm=$('#setMenu');const setOpen=o=>{if(sm.hidden===o&&typeof SND!=='undefined')SND.sfx('ui');sm.hidden=!o;document.querySelector('header.top').classList.toggle('menu-open',o);sb.classList.toggle('active',o);sb.setAttribute('aria-expanded',o);};
  sb.onclick=e=>{e.stopPropagation();sb.blur();hideTip();setOpen(sm.hidden);};
  $('#setDim').onclick=$('#setX').onclick=()=>setOpen(false);
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!sm.hidden)setOpen(false);});
@@ -2877,8 +2877,8 @@ const MP={db:null,subs:[],offSince:{},
     this.sub(this.db.ref('.info/connected'),'value',sn=>{if(sn.val()===true){me.child('online').set(true);me.child('online').onDisconnect().set(false);}});
     NET.on=true;clearTimeout(aiTimer);
     try{history.replaceState(null,'',location.pathname+'?room='+NET.room);}catch(e){}
-    this.sub(this.ref('meta'),'value',sn=>{NET.meta=sn.val();if(!NET.meta)return this.gone();this.checkHost();if(NET.meta.status==='lobby')this.drawLobby();});
-    this.sub(this.ref('members'),'value',sn=>{NET.members=sn.val()||{};this.onMembers();if(NET.meta&&NET.meta.status==='lobby')this.drawLobby();});
+    this.sub(this.ref('meta'),'value',sn=>{const ps=NET.meta&&NET.meta.status;NET.meta=sn.val();if(!NET.meta)return this.gone();if(ps==='lobby'&&NET.meta.status!=='lobby')SND.sfx('start');this.checkHost();if(NET.meta.status==='lobby')this.drawLobby();});
+    this.sub(this.ref('members'),'value',sn=>{const pc=NET.members?Object.keys(NET.members).length:-1;NET.members=sn.val()||{};{const nc=Object.keys(NET.members).length;if(pc>0&&nc>pc&&NET.meta&&NET.meta.status==='lobby')SND.sfx('join');}this.onMembers();if(NET.meta&&NET.meta.status==='lobby')this.drawLobby();});
     this.sub(this.ref('state'),'value',sn=>{const js=sn.val();if(!js)return;if(NET.isHost&&js===NET._last)return;this.applyState(js);});
     this.sub(this.ref('actions'),'child_added',sn=>{if(!NET.isHost)return;this.handleAction(sn.key,sn.val());});
     $('#leaveBtn').hidden=false;$('#newBtn').hidden=true;},
@@ -3218,6 +3218,17 @@ Object.assign(SND,{cur:null,want:null,lastGame:-1,nextGame:-1,FADE:2.5,pre:{},
   fadeOut(o,d){if(!o||o.dead)return;o.dead=true;const t=this.ctx.currentTime;d=d||this.FADE;o.ending=true;o.g.gain.cancelScheduledValues(t);o.g.gain.setValueAtTime(o.g.gain.value,t);o.g.gain.linearRampToValueAtTime(0,t+d);
     setTimeout(()=>{try{o.a.pause();o.n&&o.n.disconnect();o.a.removeAttribute('src');o.a.load();}catch(e){}},d*1000+150);},
   stopMusic(){if(!this.cur)return;const o=this.cur;this.cur=null;this.fadeOut(o,1);}});
+
+// ---------- recorded SFX (assets/sfx, volumes tuned on sound-test.html) ----------
+const SFXG={"ui": 1.5, "btn1": 0.56, "btn2": 0.38, "click": 0.58, "toggle": 0.17, "page": 0.23, "join": 0.42, "start": 0.22, "card": 0.2, "gain": 0.22, "dice": 0.33, "turn": 0.25, "tick": 0.17, "dev": 0.26, "trade": 0.32, "robber": 0.35, "robber2": 0.34, "steal": 0.12, "error": 0.23, "place_other": 0.3, "road": 0.48, "build": 0.54, "city": 0.57, "win": 0.22, "lose": 0.19};
+const SFXALIAS={roll:'dice'};
+Object.assign(SND,{fx:{},fxLoading:false,lastUi:0,
+  loadSfx(){if(this.fxLoading||!this.ctx)return;this.fxLoading=true;const c=this.ctx;
+    Object.keys(SFXG).forEach((k,i)=>setTimeout(()=>fetch('assets/sfx/'+k+'.mp3').then(r=>r.arrayBuffer()).then(ab=>new Promise((res,rej)=>c.decodeAudioData(ab,res,rej))).then(b=>{this.fx[k]=b;}).catch(e=>console.warn('sfx',k,e)),i*40));},
+  sfx(k,delay){if(!this.ctx||!this.on.sfx||this.vol.sfx<=0)return;k=SFXALIAS[k]||k;if(this.ctx.state==='suspended')this.ctx.resume();this.loadSfx();
+    if(k==='ui')this.lastUi=performance.now();const b=this.fx[k];if(!b)return;const c=this.ctx,src=c.createBufferSource(),g=c.createGain();g.gain.value=SFXG[k]??.5;src.buffer=b;src.connect(g);g.connect(this.sfxBus);src.start(c.currentTime+(delay||0));},
+  sfxN(k,n,gap){n=Math.max(1,Math.min(10,n|0));for(let i=0;i<n;i++)this.sfx(k,i*(gap||.09));}});
+{const ul=SND.unlock.bind(SND);SND.unlock=function(){ul();this.loadSfx();};}
 {const ap=SND.apply.bind(SND);SND.apply=function(){ap();if(!this.ctx)return;if(!this.on.bgm||this.vol.bgm<=0)this.stopMusic();else if(this.cur&&this.cur.blocked){this.cur.blocked=false;const p=this.cur.a.play();if(p&&p.catch)p.catch(()=>{this.cur&&(this.cur.blocked=true);});}else if(this.want&&!this.cur)this.music(this.want);};}
 
 
@@ -3227,7 +3238,12 @@ document.addEventListener('visibilitychange',()=>{if(!SND.ctx)return;const a=SND
 // buffer the title track right away; it starts on the splash tap together with the intro
 SND.preload(MUSIC.title);
 // global click sound for buttons
-document.addEventListener('click',e=>{const cd=e.target.closest('.dzone [data-r],.tcell,.tpick [data-r],img.card,.dvc,[data-dev]');if(cd){SND.sfx('card');return;}const b=e.target.closest('button,.tm,.mi,.mtab,[data-act],[data-v],[data-c]');if(!b||b.disabled)return;if(b.matches('[data-act="roll"]'))return;SND.sfx('click');},true);
+document.addEventListener('click',e=>{if(e.target.closest('#splash'))return;
+  if(e.target.closest('.aitg,.sndt,[role="switch"]')){SND.sfx('toggle');return;}
+  if(e.target.closest('.dzone [data-r],.tcell,.tpick [data-r],img.card,.dvc,[data-dev]')){SND.sfx('card');return;}
+  const b=e.target.closest('button,.tm,.mi,.mtab,[data-act],[data-v],[data-c]');if(!b||b.disabled)return;if(b.matches('[data-act="roll"],#rp,#rn'))return;
+  const k=b.matches('.btn.primary,.tm,[data-act],#fGo')?'btn1':b.matches('.btn,.mtab,.pbtn,.seg button')?'btn2':'click';const t0=performance.now();
+  setTimeout(()=>{if(SND.lastUi<t0-5)SND.sfx(k);},0);},true);
 // sound settings dialog
 function showSound(){const row=(k,label)=>`<div class="sndrow"><span class="sndl">${label}</span><input type="range" min="0" max="100" value="${Math.round(SND.vol[k]*100)}" data-k="${k}" class="sndr"><button class="sndt" data-t="${k}" aria-checked="${SND.on[k]}"></button></div>`;
   openDialog(`<h3>사운드</h3><div class="sndbox">${row('bgm','배경음')}${row('sfx','효과음')}</div><div class="row"><button class="btn sub" id="sndOk">확인</button></div>`,'dlg-snd');
@@ -3238,15 +3254,20 @@ function showSound(){const row=(k,label)=>`<div class="sndrow"><span class="sndl
   $('#sndOk').onclick=closeDialog;}
 
 function sndWatch(){if(typeof SND==='undefined'||!S||!S.players||!S.players[ME])return;const me=S.players[ME];const k=count(ME);
-  const cur={id:S.rollId,res:sumRes(me.res),s:k.s,c:k.c,r:k.r,dev:me.dev.length,cur:S.cur,ph:S.phase,rob:S.board.robber,st:S.lastSteal?JSON.stringify(S.lastSteal):'',g:S.board.hexes.map(h=>h.num).join('')+S.board.ports.map(p=>p.e).join('')};
+  let ob=0;S.players.forEach((q,i)=>{if(i!==ME){const c=count(i);ob+=c.s+c.c+c.r;}});
+  const cur={id:S.rollId,res:sumRes(me.res),s:k.s,c:k.c,r:k.r,ob,dev:me.dev.length,cur:S.cur,ph:S.phase,rob:S.board.robber,st:S.lastSteal?JSON.stringify(S.lastSteal):'',g:S.board.hexes.map(h=>h.num).join('')+S.board.ports.map(p=>p.e).join('')};
   const p=ui.sndPrev;ui.sndPrev=cur;if(!p||p.g!==cur.g)return;
   if(cur.id!==p.id)SND.sfx('roll');
   if(cur.c>p.c)SND.sfx('city');else if(cur.s>p.s)SND.sfx('build');else if(cur.r>p.r)SND.sfx('road');else if(cur.dev>p.dev)SND.sfx('dev');
+  else if(cur.ob>p.ob)SND.sfx('place_other');
   if(cur.st!==p.st&&cur.st){const L=S.lastSteal;if(L.q===ME||L.p===ME)setTimeout(()=>SND.sfx('steal'),200);}
-  else if(cur.rob!==p.rob)SND.sfx('robber');
-  if(cur.res>p.res){if(cur.id!==p.id)setTimeout(()=>SND.sfx('gain'),1100);else if(cur.s===p.s&&cur.r===p.r&&cur.c===p.c)SND.sfx(cur.dev===p.dev?'trade':'gain');}
+  else if(cur.rob!==p.rob){const mine=G.hexes[cur.rob]&&G.hexes[cur.rob].v.some(v=>S.vb[v]&&S.vb[v].o===ME);SND.sfx(mine?'robber':'robber2');}
+  if(cur.res>p.res){const n=cur.res-p.res;if(cur.id!==p.id)setTimeout(()=>SND.sfxN('gain',n),1100);else if(cur.s===p.s&&cur.r===p.r&&cur.c===p.c){if(cur.dev===p.dev&&!(S.pend&&S.pend.k))SND.sfx('trade');else SND.sfxN('gain',n);}}
   if(cur.ph==='main'&&cur.cur===ME&&(p.cur!==ME||p.ph!=='main'))setTimeout(()=>SND.sfx('turn'),150);
   if(cur.ph==='over'&&p.ph!=='over')SND.sfx(S.winner===ME?'win':'lose');}
+// last 9 seconds of my own time limit: one tick per second
+setInterval(()=>{try{if(typeof SND==='undefined'||!S||!S.mp||!S.deadline||S.phase==='over'||actor()!==ME){ui.lastTick=null;return;}
+  const r=Math.ceil((S.deadline-Date.now())/1000);if(r>=1&&r<=9&&r!==ui.lastTick){ui.lastTick=r;SND.sfx('tick');}else if(r>9)ui.lastTick=null;}catch(e){}},200);
 </script>
 
 </body>
