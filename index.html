@@ -994,7 +994,7 @@ html.phone .onl{font-size:12px!important;margin-top:4px!important}
 .title .tbot{position:absolute;left:0;right:0;bottom:7%;display:flex;justify-content:center}
 .title .ttap{margin:0;font-size:20px;letter-spacing:.06em;color:#f3e6c8;text-shadow:0 2px 6px #000,0 0 14px rgba(0,0,0,.8);animation:tpulse 1.8s ease-in-out infinite}
 @keyframes tpulse{50%{opacity:.45}}
-.title .tmenu{display:flex;gap:24px;justify-content:center;width:100%;padding:0 32px;box-sizing:border-box}
+.title .tmenu{display:flex;gap:24px;justify-content:center;width:100%;padding:0 80px;box-sizing:border-box}
 .title .tmenu[hidden]{display:none}
 .title .tm{flex:0 1 330px;height:68px;border-style:solid;border-width:10px 12px;border-color:transparent;background:none;font:inherit;font-size:21px;font-weight:700;color:#fff3dc;text-shadow:0 1px 0 #2a0e04,0 2px 5px rgba(0,0,0,.7);cursor:pointer;filter:drop-shadow(0 4px 10px rgba(0,0,0,.6));display:flex;align-items:center;justify-content:center;padding:0 0 2px;letter-spacing:.02em}
 .title .tm:hover{filter:brightness(1.12) drop-shadow(0 4px 10px rgba(0,0,0,.6))}
@@ -1005,7 +1005,7 @@ html.phone .onl{font-size:12px!important;margin-top:4px!important}
 html.phone .title .tlogo{width:300px;top:4%}
 html.phone .title .tbot{bottom:5%}
 html.phone .title .ttap{font-size:16px}
-html.phone .title .tmenu{gap:12px;padding:0 20px}
+html.phone .title .tmenu{gap:14px;padding:0 80px}
 html.phone .title .tm{height:52px;font-size:16px;border-width:8px 10px;border-image-width:8px 10px}
 html.on-title #modal{background:rgba(4,6,10,.62)}
 html body .sheet.sheet-frame{width:min(1180px,calc(100vw - 64px))!important;height:min(680px,calc(100dvh - 64px));display:flex!important;flex-direction:column;padding:6px 14px 6px!important;overflow:hidden!important}
@@ -1319,8 +1319,8 @@ html body .tpick .tcell:disabled{box-shadow:none!important}
 .title video{pointer-events:none;mix-blend-mode:screen;background:transparent;object-fit:cover}
 .title .tgods{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen}
 .title .tgod{position:absolute;inset:0;pointer-events:none;background:center top/100% 100% no-repeat;transform-origin:50% 0;will-change:opacity,transform}
-.title .trA{background-image:url(assets/fx/rays_a.webp);animation:trayA 7s ease-in-out infinite alternate}
-.title .trB{background-image:url(assets/fx/rays_b.webp);animation:trayB 7s ease-in-out infinite alternate}
+.title .trA{background-image:url(assets/fx/rays_a.webp);opacity:.3}
+.title .trB{background-image:url(assets/fx/rays_b.webp);opacity:.2}
 @keyframes trayA{from{opacity:.5;transform:scaleY(1.04)}to{opacity:.04;transform:scaleY(.94)}}
 @keyframes trayB{from{opacity:.04;transform:scaleY(.94)}to{opacity:.46;transform:scaleY(1.04)}}
 .title .tmotes{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
@@ -1330,7 +1330,7 @@ html body .tpick .tcell:disabled{box-shadow:none!important}
 @keyframes tshine{0%{background-position:130% 0}18%,100%{background-position:-30% 0}}
 .title.intro .tsun{animation:tfxIn 3s ease 1.5s both}.title.intro .tgods{animation:tfxIn 3s ease 1.2s both}.title.intro .ttwk{animation:tfxIn 3s ease 2.6s both}.title.intro .tmotes{animation:tfxIn 3s ease 2.2s both}
 @keyframes tfxIn{from{opacity:0}}
-@media (prefers-reduced-motion:reduce){.title .tsun,.title .tshine,.title .tgod{animation:none}.title video{display:none}}
+@media (prefers-reduced-motion:reduce){.title .tsun,.title .tshine{animation:none}.title video{display:none}}
 
 html body .setmenu .setpanel .mi,html body .setmenu .setpanel .mi span{color:#e9c47a!important}
 html body .setpanel .seg button:not(.on){color:#c9b48a!important}
@@ -2660,6 +2660,7 @@ function titleFx(){const lg=$('#tLogo'),sh=$('#tShine');const place=()=>{if(!lg.
     if(!P.length){const n=Math.round(Math.min(60,W*H/20000));for(let i=0;i<n;i++)P.push(mk({},1));for(let i=0;i<7;i++){const g=mkG({});g.t=R()*g.d;G.push(g);}}
     cx.clearRect(0,0,W,H);cx.globalCompositeOperation='lighter';const s=ts/1000;
     for(const p of P){p.x+=p.vx+Math.sin(s*.5+p.ph)*.08;p.y+=p.vy;if(p.y<-10||p.x>W+10)mk(p);const tw=.55+.45*Math.sin(s*p.sp+p.ph);cx.globalAlpha=p.a*tw;const z=p.r*8;cx.drawImage(SP,0,0,64,64,p.x-z/2,p.y-z/2,z,z);}
+    {const ph=(Math.sin(s*Math.PI/7)+1)/2,e=ph*ph*(3-2*ph);if(!titleFx.ra)titleFx.ra=[$('.trA'),$('.trB')];const[ra,rb]=titleFx.ra;ra.style.opacity=(.04+.46*e).toFixed(3);rb.style.opacity=(.46-.42*e).toFixed(3);ra.style.transform=`scaleY(${(.94+.1*e).toFixed(3)})`;rb.style.transform=`scaleY(${(1.04-.1*e).toFixed(3)})`;}
     for(const g of G){g.t++;if(g.t>g.d)mkG(g);const k=Math.sin(Math.PI*g.t/g.d);cx.globalAlpha=k*k*.75;const z=g.s*(.6+.4*k);cx.drawImage(SP,g.k*64,0,64,64,g.x-z/2,g.y-z/2,z,z);}
     cx.globalAlpha=1;cx.globalCompositeOperation='source-over';};
   requestAnimationFrame(loop);}
