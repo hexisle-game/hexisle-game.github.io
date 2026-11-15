@@ -1316,6 +1316,25 @@ html body .tpick .tcell:disabled{box-shadow:none!important}
 @keyframes sptap{50%{opacity:.18}}
 #splash.out{opacity:0;pointer-events:none}
 #splash.out img{transition:opacity .5s ease;opacity:0}
+
+/* ===== rules: open book ===== */
+html body .sheet.sheet-rules{background:none!important;border:0!important;border-image:none!important;box-shadow:none!important;padding:0!important;width:auto!important;height:auto!important;max-width:none!important;max-height:none!important;overflow:visible!important;filter:none!important}
+#modal:has(.sheet-rules) #mcrest,.sheet-rules .dorn{display:none!important}
+.rbook{position:relative;background:url(assets/rules/book.webp) center/100% 100% no-repeat;filter:drop-shadow(0 18px 34px rgba(0,0,0,.7));font-family:var(--body);text-align:left}
+.rbook .rpg{position:absolute;top:8%;bottom:8%;display:flex;flex-direction:column}
+.rbook .rpl{left:8.5%;right:53%;align-items:center;justify-content:center}
+.rbook .rpl img{max-width:90%;max-height:90%;aspect-ratio:1;object-fit:contain;mix-blend-mode:multiply}
+.rbook .rpr{left:53.5%;right:10%;padding:2% 0 2.5%}
+.rbook .rlab{font-size:.75em;letter-spacing:.18em;color:#8a2a14;font-weight:600}
+.rbook .rh{font-size:2em!important;font-weight:800;color:#3a2210!important;margin:.25em 0 0!important;line-height:1.2;text-shadow:none!important;text-align:left!important}
+.rbook .rdiv{height:1px;margin:.5em 0 .9em;background:linear-gradient(90deg,transparent,rgba(91,61,34,.28) 12%,rgba(91,61,34,.28) 88%,transparent)}
+.rbook .rkey{font-size:1.2em!important;font-weight:700;color:#3a2210!important;line-height:1.45;margin:0 0 .7em!important;text-shadow:none!important}
+.rbook .rtx{font-size:.95em!important;color:#5b3d22!important;line-height:1.75;margin:0!important;text-shadow:none!important}
+.rbook .rtx b{color:#8a2a14!important}
+.rbook .rkey,.rbook .rtx{max-width:66%;word-break:keep-all;overflow-wrap:break-word}
+.rbook .rfoot{margin-top:auto;display:flex;justify-content:flex-end;align-items:center;gap:.6em}
+.rbook .rfoot .btn{font-size:.95em!important;margin:0!important}
+.rbook #rx{position:absolute;right:-1.2%;top:-2%;left:auto;bottom:auto;z-index:3}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
@@ -2497,7 +2516,7 @@ function infoText(f){
   return null;}
 
 // ---------- modals ----------
-function openModal(key,html){if(!ui.modal&&typeof SND!=='undefined')SND.sfx('ui');ui.modal=key;$('#sheet').className='sheet sheet-'+key+(['offer','steal'].includes(key)?' sheet-dialog':'');if(['offer','steal'].includes(key))html=`<img class="dorn" src="${TITLEIMG.orn2}" alt="">`+html;$('#sheet').innerHTML=html;$('#modal').hidden=false;placeCrest();requestAnimationFrame(placeCrest);setTimeout(placeCrest,120);setTimeout(placeCrest,400);}
+function openModal(key,html){{const c=document.getElementById('mcrest');if(c)c.style.visibility='';}if(!ui.modal&&typeof SND!=='undefined')SND.sfx('ui');ui.modal=key;$('#sheet').className='sheet sheet-'+key+(['offer','steal'].includes(key)?' sheet-dialog':'');if(['offer','steal'].includes(key))html=`<img class="dorn" src="${TITLEIMG.orn2}" alt="">`+html;$('#sheet').innerHTML=html;$('#modal').hidden=false;placeCrest();requestAnimationFrame(placeCrest);setTimeout(placeCrest,120);setTimeout(placeCrest,400);}
 function placeCrest(){const sh=$('#sheet'),c=$('#mcrest');if(!sh||!c||$('#modal').hidden)return;const r=sh.getBoundingClientRect(),o=$('#modal').getBoundingClientRect(),k=PH.on?PH.k:1;c.style.left=((r.left-o.left+r.width/2)/k)+'px';c.style.top=((r.top-o.top)/k)+'px';}
 addEventListener('resize',()=>setTimeout(placeCrest,80));
 function infoDialog(k){const ci=r=>`<img class="ic-card" src="${CARDIMG[r]}" alt="${RN[r]}">`;let body,title,sub;
@@ -2624,21 +2643,26 @@ const FLOW=`<div class="flow">${['주사위 굴리기','자원 받기','교환�
 
 
 const RULES=[
- ['어떤 게임인가요?','주사위를 굴려 자원을 받고,<br>마을을 넓혀 점수를 쌓아요.','무인도에 처음 정착한 개척자가 되어 마을을 넓혀 가는 게임이에요. 땅에서 나오는 자원으로 도로, 마을, 도시를 지으면 점수가 올라가요. <b>10점</b>을 가장 먼저 모으면 이겨요.'],
+ ['어떤 게임인가요?','주사위를 굴려 자원을 받고,<br>마을을 넓혀 점수를 쌓아요.','무인도의 개척자가 되어 마을을 넓혀 가요. 땅에서 나온 자원으로 도로, 마을, 도시를 지어 <b>10점</b>을 먼저 모으면 이겨요.'],
  ['땅과 자원','땅마다 나오는<br>자원이 달라요.','숲은 <b>목재</b>, 언덕은 <b>벽돌</b>, 목초지는 <b>양모</b>, 밭은 <b>곡물</b>, 산은 <b>광석</b>을 줘요. 사막은 아무것도 주지 않아요.'],
- ['주사위와 생산','주사위 합과 같은 숫자의<br>땅이 자원을 만들어요.','그 땅의 꼭짓점에 건물이 있으면 자원을 받아요. 정착지는 1장, 도시는 2장이에요. <b>6과 8</b>은 자주 나오고, 2와 12는 드물게 나와요.'],
- ['건설','자원을 모아 짓고,<br>지을수록 점수가 올라요.','도로(목재·벽돌)는 영역을 넓혀요. 정착지(목재·벽돌·양모·곡물)는 <b>1점</b>, 도시(곡물 2·광석 3)는 정착지를 업그레이드해 <b>2점</b>이에요. 정착지는 다른 건물과 한 칸 이상 떨어진, 내 도로와 이어진 꼭짓점에만 지을 수 있어요.'],
- ['교환','부족한 자원은<br>교환으로 구해요.','같은 자원 <b>4장</b>을 은행에서 원하는 자원 1장으로 바꿀 수 있어요. 항구에 건물이 있으면 3:1이나 2:1로 더 싸게 바꿔요. 다른 플레이어와 직접 거래할 수도 있어요.'],
- ['주사위 7과 도적','7이 나오면<br>도적이 움직여요.','카드가 <b>8장 이상</b>인 사람은 절반을 버려요. 주사위를 굴린 사람은 도적을 옮기고, 그 땅 주인에게서 카드 1장을 빼앗아요. 도적이 있는 땅은 자원을 만들지 않아요.'],
- ['발전 카드와 승리','발전 카드와 보너스로<br>10점을 노려요.','발전 카드(양모·곡물·광석)는 기사, 도로 건설, 풍년, 독점, 승점 중 하나가 나와요. 가장 긴 도로(5칸 이상)와 기사를 가장 많이 쓴 사람(3장 이상)은 각각 <b>2점</b>을 더 받아요.']];
+ ['주사위와 생산','주사위 합과 같은 숫자의<br>땅이 자원을 만들어요.','그 땅의 꼭짓점에 있는 정착지는 1장, 도시는 2장을 받아요. <b>6과 8</b>은 자주, 2와 12는 드물게 나와요.'],
+ ['건설','자원을 모아 짓고,<br>지을수록 점수가 올라요.','도로(목재·벽돌)로 영역을 넓혀요. 정착지(목재·벽돌·양모·곡물)는 <b>1점</b>, 정착지를 올린 도시(곡물 2·광석 3)는 <b>2점</b>이에요. 정착지는 다른 건물과 한 칸 떨어진, 내 도로와 이어진 곳에 지어요.'],
+ ['교환','부족한 자원은<br>교환으로 구해요.','같은 자원 <b>4장</b>을 은행에서 원하는 자원 1장으로 바꿔요. 항구에 건물이 있으면 3:1이나 2:1로 바꾸고, 다른 플레이어와도 거래해요.'],
+ ['주사위 7과 도적','7이 나오면<br>도적이 움직여요.','카드가 <b>8장 이상</b>이면 절반을 버려요. 굴린 사람은 도적을 옮겨 그 땅 주인의 카드 1장을 빼앗아요. 도적이 있는 땅은 자원이 나오지 않아요.'],
+ ['발전 카드와 승리','발전 카드와 보너스로<br>10점을 노려요.','발전 카드(양모·곡물·광석)로 기사, 도로 건설, 풍년, 독점, 승점을 얻어요. 최장 교역로(5칸 이상)와 최강 기사단(기사 3장 이상)은 각각 <b>2점</b>을 더 받아요.']];
 function showRules(i,after){i=i||0;const P=RULES[i],last=i===RULES.length-1;
-  openModal('rules',`<button class="mclose" id="rx" aria-label="닫기"></button>
-   <div class="rbody"><div class="rimg"><img src="${RULEIMG[i]}" alt=""></div><div class="rside"><div class="rtxt"><div class="rlab">게임 방법 ${i+1} / ${RULES.length}</div><h3 class="rh">${P[0]}</h3><h4>${P[1]}</h4><p>${P[2]}</p></div>
-   <div class="ffoot">${last?'':'<button class="btn" id="rs">건너뛰기</button>'}${i>0?'<button class="btn" id="rp">이전</button>':''}<button class="btn primary" id="rn">${last?'닫기':'다음'}</button></div></div></div>`);
-  $('#sheet').classList.add('sheet-frame');
+  openModal('rules',`<div class="rbook" id="rbook"><div class="rpg rpl"><img src="${RULEIMG[i]}" alt=""></div>
+   <div class="rpg rpr"><div class="rlab">게임 방법 · ${i+1} / ${RULES.length}</div><h3 class="rh">${P[0]}</h3><div class="rdiv"></div><h4 class="rkey">${P[1]}</h4><p class="rtx">${P[2]}</p>
+   <div class="rfoot">${last?'':'<button class="btn" id="rs">건너뛰기</button>'}${i>0?'<button class="btn" id="rp">이전</button>':''}<button class="btn primary" id="rn">${last?'닫기':'다음'}</button></div></div>
+   <button class="mclose" id="rx" aria-label="닫기"></button></div>`);
+  fitRules();
   const done=()=>{closeModal();if(after)after();else update();};
   $('#rx').onclick=done;if($('#rs'))$('#rs').onclick=done;if($('#rp'))$('#rp').onclick=()=>{SND.sfx('page');showRules(i-1,after);};
   $('#rn').onclick=()=>{if(last)return done();SND.sfx('page');showRules(i+1,after);};}
+// size the book from the popup area (phone mode scales the page, so screen units can't be used); text scales with the book
+function fitRules(){const bk=$('#rbook');if(!bk)return;const m=$('#modal'),W=m.clientWidth,H=m.clientHeight,AR=1907/978;
+  const w=Math.min(1240,W*.98,(H-8)*AR);bk.style.width=w+'px';bk.style.height=(w/AR)+'px';bk.style.fontSize=(w/(PH.on?64:78))+'px';$('#mcrest')&&($('#mcrest').style.visibility='hidden');}
+addEventListener('resize',()=>setTimeout(fitRules,80));
 
 const DIFF=[['easy','쉬움','AI가 자주 쉬고 거래에 너그러워요'],['normal','보통','기본 전략으로 플레이해요'],['hard','어려움','선두를 견제하고 자원 보너스를 받아요']];
 function countPick(){return `<div class="label" style="margin-top:8px">인원 (최소 2 · 최대 4)</div><div class="cnt" id="cnt">${[2,3,4].map(n=>`<button class="btn${ui.n===n?' active':''}" data-n="${n}">${n}인</button>`).join('')}</div>
