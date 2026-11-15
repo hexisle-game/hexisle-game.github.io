@@ -87,7 +87,8 @@ html,body{margin:0;height:100%;background:#05070c;font-family:Hahmlet,serif;colo
 .erow{display:flex;align-items:center;gap:12px}
 .erow .etg{width:62px;flex:none;cursor:pointer}
 .erow .elab{width:44px;font-size:14px;color:#f3dfae;font-weight:700;flex:none}
-.erow .vdiv{width:1px;height:30px;background:rgba(233,196,122,.35);flex:none;margin-right:4px}
+.erow .vdiv{width:1px;height:44px;background:linear-gradient(180deg,transparent,rgba(233,196,122,.22) 50%,transparent);flex:none;margin-right:4px}
+.cstrip .ring{width:44px;height:44px;flex:none;border-radius:50%;box-shadow:inset 0 0 0 5px var(--c),0 0 0 2px rgba(0,0,0,.5);opacity:.85}
 </style></head><body>
 <div class="var"><button data-v="E1">E. 캐릭터 모드</button><button data-v="E2">E. 색상 모드</button><button data-v="A">A. 초상화 눌러 선택 창</button><button data-v="A2">A. 선택 창(목록)</button><button data-v="B">B. 한 줄 + 색상 줄</button><button data-v="C1">C. 글자 토글·캐릭터</button><button data-v="C2">C. 글자 토글·색상</button><button data-v="D1">D. 아이콘 토글·캐릭터</button><button data-v="D2">D. 아이콘 토글·색상</button></div>
 <div id="vp"></div>
@@ -112,8 +113,8 @@ const frame2=(rows)=>`<div class="bg"></div><div class="frame"><button class="x"
 const strip=(mode)=>mode==='p'?`<div class="cstrip">${MANY.map((p,i)=>av(p,i==0?'on':'')).join('')}</div>`:`<div class="cstrip">${COL.map((c,i)=>`<i class="${i==0?'on':''}" style="background:${c}"></i>`).join('')}</div>`;
 const tgl=(mode,icon)=>icon?`<div class="ctg"><img src="pt/tg_icon${mode==='p'?'L':'R'}.webp"></div>`:`<div class="ctg"><span class="${mode==='p'?'on':''}">캐릭터</span><img src="pt/tg_plain${mode==='p'?'L':'R'}.webp"><span class="${mode==='c'?'on':''}">색상</span></div>`;
 const crow=(mode,icon)=>frame2(`<div class="row"><div class="lab">내 캐릭터</div><div class="crow">${tgl(mode,icon)}${strip(mode)}</div></div>`);
-const COL8=['#ff2a1a','#3a8cff','#e046e0','#f5c400','#2fb36b','#ff8a1f','#8a5cff','#e8e2d0'];
-const estrip=(mode)=>`<div class="cstrip">${mode==='p'?MANY.map((p,i)=>av(p,i==0?'on':'')).join(''):COL8.map((c,i)=>av('otter',i==0?'on sel':'cc',c)).join('')}</div>`;
+const COL6=['#ff2a1a','#3a8cff','#e046e0','#f5c400','#2fb36b','#e8e2d0'];
+const estrip=(mode)=>`<div class="cstrip">${mode==='p'?MANY.map((p,i)=>av(p,i==0?'on':'')).join(''):COL6.map((c,i)=>i==0?av('otter','on sel',c):`<span class="ring" style="--c:${mute(c)}"></span>`).join('')}</div>`;
 const erow=(mode)=>frame2(`<div class="row"><div class="lab">내 캐릭터</div><div class="erow"><img class="etg" src="pt/tg_plain${mode==='p'?'L':'R'}.webp"><span class="elab">${mode==='p'?'캐릭터':'색상'}</span><span class="vdiv"></span>${estrip(mode)}</div></div>`);
 const V={
  E1:()=>erow('p'),E2:()=>erow('c'),
