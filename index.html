@@ -1317,15 +1317,19 @@ html body .tpick .tcell:disabled{box-shadow:none!important}
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
 .title video{pointer-events:none;mix-blend-mode:screen;background:transparent;object-fit:cover}
-.title .tflare{position:absolute;left:50%;top:-16%;width:max(230vw,410vh);aspect-ratio:16/9;height:auto;transform:translate(-50%,-50%);opacity:.5;-webkit-mask-image:radial-gradient(closest-side,#000 30%,rgba(0,0,0,.5) 55%,transparent 85%);mask-image:radial-gradient(closest-side,#000 30%,rgba(0,0,0,.5) 55%,transparent 85%)}
+.title .tgod{position:absolute;inset:0;width:auto;height:auto;padding:0;pointer-events:none;mix-blend-mode:screen;background:center top/100% 100% no-repeat;display:block}
+.title .trA{background-image:url(assets/fx/rays_a.webp);animation:trayA 11s ease-in-out infinite alternate}
+.title .trB{background-image:url(assets/fx/rays_b.webp);animation:trayB 11s ease-in-out infinite alternate}
+@keyframes trayA{from{opacity:.42}to{opacity:.08}}
+@keyframes trayB{from{opacity:.06}to{opacity:.38}}
 .title .tmotes{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .title .ttwk{position:absolute;inset:0;width:100%;height:100%;opacity:.38;-webkit-mask-image:linear-gradient(180deg,#000 0,#000 26%,rgba(0,0,0,.35) 40%,transparent 50%);mask-image:linear-gradient(180deg,#000 0,#000 26%,rgba(0,0,0,.35) 40%,transparent 50%)}
 .title .tshine{position:absolute;pointer-events:none;mix-blend-mode:screen;-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
   background:linear-gradient(105deg,transparent 42%,rgba(255,244,214,.75) 50%,transparent 58%) no-repeat;background-size:300% 100%;background-position:130% 0;animation:tshine 8s ease-in-out 5s infinite}
 @keyframes tshine{0%{background-position:130% 0}18%,100%{background-position:-30% 0}}
-.title.intro .tsun{animation:tfxIn 3s ease 1.5s both}.title.intro .tflare{animation:tfxIn 3s ease 1.2s both}.title.intro .ttwk{animation:tfxIn 3s ease 2.6s both}.title.intro .tmotes{animation:tfxIn 3s ease 2.2s both}
+.title.intro .tsun{animation:tfxIn 3s ease 1.5s both}.title.intro .tgod{animation:tfxIn 3s ease 1.2s both}.title.intro .ttwk{animation:tfxIn 3s ease 2.6s both}.title.intro .tmotes{animation:tfxIn 3s ease 2.2s both}
 @keyframes tfxIn{from{opacity:0}}
-@media (prefers-reduced-motion:reduce){.title .tsun,.title .tshine{animation:none}.title video{display:none}}
+@media (prefers-reduced-motion:reduce){.title .tsun,.title .tshine,.title .tgod{animation:none}.title video{display:none}}
 
 html body .setmenu .setpanel .mi,html body .setmenu .setpanel .mi span{color:#e9c47a!important}
 html body .setpanel .seg button:not(.on){color:#c9b48a!important}
@@ -1472,7 +1476,7 @@ html.phone body .dlg-snd .sndrow{grid-template-columns:auto 150px 60px;gap:12px}
 <div id="tip" hidden></div><div id="pop" hidden></div>
 <div id="leftcol"></div>
 <div id="rotate" hidden><div class="rot-ic"></div><b>가로로 돌려 주세요</b><span>HexIsle은 휴대폰에서 가로 화면으로 플레이해요.</span></div>
-<div id="splash"><img id="spLogo" alt="HEXISLE"><p class="spnote">이 게임은 수익 창출을 하지 않으며,<br>개인 목적으로 제작되었습니다.</p><p class="sptap">화면을 탭 하여 시작</p></div><div id="title" class="title" hidden><div class="tbg"></div><div class="tsun"></div><div class="tdim"></div><video class="tflare" muted playsinline loop autoplay preload="auto" disablepictureinpicture aria-hidden="true" src="assets/fx/flare.mp4"></video><video class="ttwk" muted playsinline loop autoplay preload="auto" disablepictureinpicture aria-hidden="true" src="assets/fx/twinkle.mp4"></video><canvas class="tmotes" id="tMotes"></canvas><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 육각섬 개척기"><div class="tshine" id="tShine"></div><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
+<div id="splash"><img id="spLogo" alt="HEXISLE"><p class="spnote">이 게임은 수익 창출을 하지 않으며,<br>개인 목적으로 제작되었습니다.</p><p class="sptap">화면을 탭 하여 시작</p></div><div id="title" class="title" hidden><div class="tbg"></div><div class="tsun"></div><div class="tdim"></div><div class="tgod trA"></div><div class="tgod trB"></div><video class="ttwk" muted playsinline loop autoplay preload="auto" disablepictureinpicture aria-hidden="true" src="assets/fx/twinkle.mp4"></video><canvas class="tmotes" id="tMotes"></canvas><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 육각섬 개척기"><div class="tshine" id="tShine"></div><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
 <div id="tut" hidden><div class="tblock" id="tBlock"></div><div class="tring" id="tRing" hidden></div><div class="tx" id="tX" hidden>✕</div><div class="tbub" id="tBub"></div><div class="tgest" id="tGest" hidden><i class="f1"></i><i class="f2"></i></div></div>
 <div id="dialog" class="overlay dlgov" hidden><div class="sheet sheet-dialog" id="dsheet"></div></div>
 <div id="modal" class="overlay" hidden><div class="sheet" id="sheet"></div><i class="mcrest" id="mcrest" aria-hidden="true"></i></div>
