@@ -2488,6 +2488,7 @@ function devPop(t){
 function render(){
   try{sndWatch();}catch(e){}
   renderBoard();
+  if(ui.camFresh&&typeof W!=='undefined'&&W.ok){ui.camFresh=false;try{fitCam('now');syncTilt();}catch(e){}}
   $('#coach').innerHTML=coachText()+(S.mp&&S.phase!=='over'&&actor()!==null&&!S.players[actor()].ai?` <span class="cdwrap">· <i data-cd="dl"></i></span>`:'');
   const cp=S.players[S.cur];
   const rolledNow=S.rollId!==ui.shownRoll;ui.shownRoll=S.rollId;
@@ -2754,7 +2755,7 @@ function splashOff(){const sp=$('#splash');if(!sp||!ui.splash)return;ui.splash=0
 function showTitle(menu){try{SND.music('title');}catch(e){}const t=$('#title');if(t.hidden&&!ui.titleIntro){ui.titleIntro=1;if(!ui.splash)titleIntro(t);}if(t.classList.contains('tout')){clearTimeout(ui.tfT);t.classList.remove('tout');ui.titleFading=false;}else if(t.hidden&&ui.titleIntro&&!t.classList.contains('intro')){t.classList.remove('tin');void t.offsetWidth;t.classList.add('tin');clearTimeout(ui.tinT);ui.tinT=setTimeout(()=>t.classList.remove('tin'),700);}t.hidden=false;document.documentElement.classList.add('on-title');
   const lg=$('#tLogo');if(!lg.src)lg.src=window.LOGO_URL;titleFx();shineOn();t.querySelector('.tbg').style.backgroundImage=`url(${(Math.max(innerWidth,innerHeight)*(devicePixelRatio||1)<1500)?TITLEIMG.titlebgS:TITLEIMG.titlebg})`;
   if(menu||ui.titleMenu){ui.titleMenu=true;$('#tTap').hidden=true;$('#tMenu').hidden=false;}else{$('#tTap').hidden=false;$('#tMenu').hidden=true;}}
-function hideTitle(){try{SND.music('game');}catch(e){}const t=$('#title');document.documentElement.classList.remove('on-title');
+function hideTitle(){ui.camFresh=true;try{SND.music('game');}catch(e){}const t=$('#title');document.documentElement.classList.remove('on-title');
   if(t.hidden||ui.splash){t.hidden=true;return;}
   // fade the title (and whatever popup sits on it) away over the game instead of cutting
   clearTimeout(ui.tfT);t.classList.remove('tin');t.classList.add('tout');ui.titleFading=true;
@@ -2804,7 +2805,8 @@ function showMulti(tab,code){tab=tab||'invite';ui.mtab=tab;const tabs=[['invite'
     else{$('#fMsg').textContent='빈자리를 찾는 중…';MP.quick();}};
   MP.presence();MP.drawCount();}
 function myCols(){const c=PCOL.includes(ui.color)?ui.color:PCOL[0];return [c,...PCOL.filter(x=>x!==c)];}
-function startNew(withRules){ui.handTab='res';hideTitle();if(window.MP&&!NET.on)MP.offline();newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;closeModal();if(withRules)showRules(0,()=>update());else update();}
+function resetBehind(){clearTimeout(ui.rbT);ui.rbT=setTimeout(()=>{if($('#title').hidden)return;newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;render();},700);}
+function startNew(withRules){clearTimeout(ui.rbT);ui.handTab='res';hideTitle();if(window.MP&&!NET.on)MP.offline();newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;closeModal();if(withRules)showRules(0,()=>update());else update();}
 
 // ---------- events ----------
 function onPick(pk){
@@ -2843,7 +2845,7 @@ $('#tipBtn').onclick=()=>{ui.tips=!ui.tips;saveUi();tipLabel();hideTip();if(!ui.
 $('#hintBtn').onclick=()=>{ui.hints=!ui.hints;saveUi();hintLabel();render();};hintLabel();
 $('#rulesBtn').onclick=()=>{clearTimeout(aiTimer);showRules(0);};
 $('#newBtn').onclick=()=>{if(window.NET&&NET.on)return MP.confirmLeave();openDialog(`<h3>새 게임을 시작할까요?</h3><p>진행 중인 게임은 끝나고, 첫 화면으로 돌아가요.</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">새 게임</button></div>`);
-  $('#cNo').onclick=()=>{closeDialog();};$('#cYes').onclick=()=>{closeDialog();closeModal();newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;render();showStart();};};
+  $('#cNo').onclick=()=>{closeDialog();};$('#cYes').onclick=()=>{closeDialog();closeModal();showStart();resetBehind();};};
 
 // ---------- painted cards (canvas) ----------
 const CARDIMG={},CW=400,CH=610;
@@ -3060,7 +3062,7 @@ const MP={db:null,subs:[],offSince:{},
         const next=this.order().find(([u,v])=>u!==NET.uid&&v.online!==false);await this.ref('meta/host').set(next?next[0]:null);}
       await r.remove();
       if(!this.order().some(([u])=>u!==NET.uid))await this.ref().remove();}catch(e){console.error(e);}
-    this.cleanup();closeModal();newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;render();showStart();},
+    this.cleanup();closeModal();showStart();resetBehind();},
   cleanup(){this.unsubAll();NET.on=false;NET.isHost=false;NET.room=null;NET.members={};NET.meta=null;NET._last=null;this.offSince={};
     $('#leaveBtn').hidden=true;$('#newBtn').hidden=false;try{history.replaceState(null,'',location.pathname);}catch(e){}}};
 setInterval(()=>{if(!NET.on)return;try{MP.hostTick();MP.pubTick();if(ui.modal==='lobby'&&NET.meta&&NET.meta.autoAt)MP.drawLobby();}catch(e){}},1000);
@@ -3084,8 +3086,7 @@ const TUT={on:false,i:0,P:null,traded:false,force7:false,aiDiceIx:0,
     openDialog(`<h3>튜토리얼 완료!</h3><p>이제 기본은 다 익혔어요.<br>더 궁금한 규칙은 설정의 게임 방법에서 다시 볼 수 있어요.</p><div class="row"><button class="btn" id="tdHome">첫 화면으로</button><button class="btn sub" id="tdGo">싱글 플레이 시작</button></div>`,'dlg-wide');
     $('#tdHome').onclick=()=>{closeDialog();this.exit(false);};$('#tdGo').onclick=()=>{closeDialog();this.exit(true);};},
   exit(toSingle){this.on=false;document.documentElement.classList.remove('tut-modal');ui.handTab='res';$('#tut').hidden=true;$('#tExit').hidden=true;document.documentElement.classList.remove('in-tut');clearTimeout(aiTimer);closeDialog();closeModal();
-    newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;render();
-    if(toSingle){showTitle(true);showSingle();}else showStart();},
+    if(toSingle){showTitle(true);showSingle();}else showStart();resetBehind();},
   // ---------- scripted plan ----------
   plan(){const adj=v=>G.verts[v].adj;const eid=(a,b)=>G.edges.findIndex(e=>(e.a===a&&e.b===b)||(e.a===b&&e.b===a));
     const pr0=emptyRes();const val=v=>{const h=G.verts[v].h.filter(i=>S.board.hexes[i].res!=='desert');return h.length?spotValue(v,0,pr0):-99;};
