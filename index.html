@@ -1303,6 +1303,16 @@ html body .tpick .tcell:disabled{box-shadow:none!important}
 @keyframes tlogoIn{from{opacity:0;transform:translate(-50%,-14px)}to{opacity:1;transform:translate(-50%,0)}}
 .title.intro .tbot{animation-name:tbotIn}
 @keyframes tbotIn{from{opacity:0}to{opacity:1}}
+
+/* splash: black screen + small logo; tap brightens into the title intro (music starts on the same tap) */
+#splash{position:fixed;inset:0;z-index:9999;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity 1.6s ease}
+#splash img{width:clamp(150px,20vw,250px);opacity:0;transition:opacity 1s ease;filter:drop-shadow(0 4px 10px rgba(0,0,0,.8))}
+#splash img.on{opacity:.92}
+#splash .spnote{margin:18px 0 0;font-size:11px;line-height:1.6;color:#fff;opacity:.22;text-align:center;letter-spacing:.02em}
+#splash .sptap{position:absolute;bottom:9%;margin:0;font-size:13px;color:#e9c47a;opacity:.55;animation:sptap 2.4s ease-in-out infinite}
+@keyframes sptap{50%{opacity:.18}}
+#splash.out{opacity:0;pointer-events:none}
+#splash.out img{transition:opacity .5s ease;opacity:0}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 .title .trays{position:absolute;left:calc(3vw - 60vmax);top:calc(37% - 60vmax);width:120vmax;height:120vmax;pointer-events:none;mix-blend-mode:screen;opacity:.5;
@@ -1463,7 +1473,7 @@ html.phone body .dlg-snd .sndrow{grid-template-columns:auto 150px 60px;gap:12px}
 <div id="tip" hidden></div><div id="pop" hidden></div>
 <div id="leftcol"></div>
 <div id="rotate" hidden><div class="rot-ic"></div><b>가로로 돌려 주세요</b><span>HexIsle은 휴대폰에서 가로 화면으로 플레이해요.</span></div>
-<div id="title" class="title" hidden><div class="tbg"></div><div class="tsun"></div><div class="trays"></div><div class="tdim"></div><canvas class="tmotes" id="tMotes"></canvas><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 육각섬 개척기"><div class="tshine" id="tShine"></div><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
+<div id="splash"><img id="spLogo" alt="HEXISLE"><p class="spnote">이 게임은 수익 창출을 하지 않으며,<br>개인 목적으로 제작되었습니다.</p><p class="sptap">화면을 탭 하여 시작</p></div><div id="title" class="title" hidden><div class="tbg"></div><div class="tsun"></div><div class="trays"></div><div class="tdim"></div><canvas class="tmotes" id="tMotes"></canvas><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 육각섬 개척기"><div class="tshine" id="tShine"></div><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
 <div id="tut" hidden><div class="tblock" id="tBlock"></div><div class="tring" id="tRing" hidden></div><div class="tx" id="tX" hidden>✕</div><div class="tbub" id="tBub"></div><div class="tgest" id="tGest" hidden><i class="f1"></i><i class="f2"></i></div></div>
 <div id="dialog" class="overlay dlgov" hidden><div class="sheet sheet-dialog" id="dsheet"></div></div>
 <div id="modal" class="overlay" hidden><div class="sheet" id="sheet"></div><i class="mcrest" id="mcrest" aria-hidden="true"></i></div>
@@ -2649,7 +2659,9 @@ function titleFx(){const lg=$('#tLogo'),sh=$('#tShine');const place=()=>{if(!lg.
       cx.fillStyle=`rgba(255,240,210,${a})`;cx.beginPath();cx.arc(g.x,g.y,g.r*.7,0,6.3);cx.fill();}
     cx.globalCompositeOperation='source-over';};
   requestAnimationFrame(loop);}
-function showTitle(menu){try{SND.music('title');}catch(e){}const t=$('#title');if(t.hidden&&!ui.titleIntro){ui.titleIntro=1;t.classList.add('intro');setTimeout(()=>t.classList.remove('intro'),4800);}t.hidden=false;document.documentElement.classList.add('on-title');
+function titleIntro(t){t.classList.add('intro');setTimeout(()=>t.classList.remove('intro'),4800);}
+function splashOff(){const sp=$('#splash');if(!sp||!ui.splash)return;ui.splash=0;try{SND.unlock();SND.music('title');}catch(e){}sp.classList.add('out');const t=$('#title');if(!t.hidden)titleIntro(t);setTimeout(()=>sp.remove(),1700);}
+function showTitle(menu){try{SND.music('title');}catch(e){}const t=$('#title');if(t.hidden&&!ui.titleIntro){ui.titleIntro=1;if(!ui.splash)titleIntro(t);}t.hidden=false;document.documentElement.classList.add('on-title');
   const lg=$('#tLogo');if(!lg.src)lg.src=window.LOGO_URL;titleFx();t.querySelector('.tbg').style.backgroundImage=`url(${(Math.max(innerWidth,innerHeight)*(devicePixelRatio||1)<1500)?TITLEIMG.titlebgS:TITLEIMG.titlebg})`;
   if(menu||ui.titleMenu){ui.titleMenu=true;$('#tTap').hidden=true;$('#tMenu').hidden=false;}else{$('#tTap').hidden=false;$('#tMenu').hidden=true;}}
 function hideTitle(){try{SND.music('game');}catch(e){}$('#title').hidden=true;document.documentElement.classList.remove('on-title');}
@@ -2798,6 +2810,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-htab]');if
 function boot(data){
   init3D();phoneDPR();fitChrome();
   if(data&&data.S){S=data.S;migrate();ui.shownRoll=S.rollId;ui.mode=null;closeModal();update();return;}
+  ui.splash=1;ui.titleMenu=true;{const sp=$('#splash'),im=$('#spLogo');im.onload=()=>im.classList.add('on');im.src=window.LOGO_URL;sp.addEventListener('click',splashOff);}
   newGame();render();showStart();
 }
 try{window.claude?.hot?.snapshot?.(()=>({S}));}catch(e){}
@@ -3199,8 +3212,8 @@ Object.assign(SND,{cur:null,want:null,lastGame:-1,nextGame:-1,FADE:2.5,pre:{},
 SND.load();
 ['pointerdown','pointerup','touchend','click','keydown'].forEach(ev=>addEventListener(ev,()=>SND.unlock(),{capture:true,passive:true}));
 document.addEventListener('visibilitychange',()=>{if(!SND.ctx)return;const a=SND.cur&&SND.cur.a;if(document.hidden){SND.ctx.suspend();a&&a.pause();}else{SND.ctx.resume();a&&!SND.cur.dead&&a.play().catch(()=>{});}});
-// warm up: buffer the title track right away and try to start it (plays instantly if the browser allows autoplay, otherwise on the first touch)
-SND.preload(MUSIC.title);try{if(SND.init())SND.music(SND.want||'title');}catch(e){}
+// buffer the title track right away; it starts on the splash tap together with the intro
+SND.preload(MUSIC.title);
 // global click sound for buttons
 document.addEventListener('click',e=>{const cd=e.target.closest('.dzone [data-r],.tcell,.tpick [data-r],img.card,.dvc,[data-dev]');if(cd){SND.sfx('card');return;}const b=e.target.closest('button,.tm,.mi,.mtab,[data-act],[data-v],[data-c]');if(!b||b.disabled)return;if(b.matches('[data-act="roll"]'))return;SND.sfx('click');},true);
 // sound settings dialog
