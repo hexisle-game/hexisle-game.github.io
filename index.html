@@ -1325,8 +1325,9 @@ html body .tpick .tcell:disabled{box-shadow:none!important}
 @keyframes trayB{from{opacity:.04;transform:scaleY(.94)}to{opacity:.46;transform:scaleY(1.04)}}
 .title .tmotes{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .title .ttwk{position:absolute;inset:0;width:100%;height:100%;opacity:.38;-webkit-mask-image:linear-gradient(180deg,#000 0,#000 26%,rgba(0,0,0,.35) 40%,transparent 50%);mask-image:linear-gradient(180deg,#000 0,#000 26%,rgba(0,0,0,.35) 40%,transparent 50%)}
-.title .tshine{position:absolute;pointer-events:none;mix-blend-mode:screen;-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
-  background:linear-gradient(105deg,transparent 42%,rgba(255,244,214,.75) 50%,transparent 58%) no-repeat;background-size:300% 100%;background-position:130% 0;animation:tshine 8s ease-in-out 5s infinite}
+.title .tshine{position:absolute;pointer-events:none;mix-blend-mode:screen;visibility:hidden;-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  background:linear-gradient(105deg,transparent 42%,rgba(255,244,214,.75) 50%,transparent 58%) no-repeat;background-size:300% 100%;background-position:130% 0}
+.title.shine-on .tshine{visibility:visible;animation:tshine 8s ease-in-out 1.5s infinite}
 @keyframes tshine{0%{background-position:130% 0}18%,100%{background-position:-30% 0}}
 .title.intro .tsun{animation:tfxIn 3s ease 1.5s both}.title.intro .tgods{animation:tfxIn 3s ease 1.2s both}.title.intro .ttwk{animation:tfxIn 3s ease 2.6s both}.title.intro .tmotes{animation:tfxIn 3s ease 2.2s both}
 @keyframes tfxIn{from{opacity:0}}
@@ -2660,14 +2661,15 @@ function titleFx(){const lg=$('#tLogo'),sh=$('#tShine');const place=()=>{if(!lg.
     if(!P.length){const n=Math.round(Math.min(60,W*H/20000));for(let i=0;i<n;i++)P.push(mk({},1));for(let i=0;i<7;i++){const g=mkG({});g.t=R()*g.d;G.push(g);}}
     cx.clearRect(0,0,W,H);cx.globalCompositeOperation='lighter';const s=ts/1000;
     for(const p of P){p.x+=p.vx+Math.sin(s*.5+p.ph)*.08;p.y+=p.vy;if(p.y<-10||p.x>W+10)mk(p);const tw=.55+.45*Math.sin(s*p.sp+p.ph);cx.globalAlpha=p.a*tw;const z=p.r*8;cx.drawImage(SP,0,0,64,64,p.x-z/2,p.y-z/2,z,z);}
-    {const ph=(Math.sin(s*Math.PI/7)+1)/2,e=ph*ph*(3-2*ph);if(!titleFx.ra)titleFx.ra=[$('.trA'),$('.trB')];const[ra,rb]=titleFx.ra;ra.style.opacity=(.04+.46*e).toFixed(3);rb.style.opacity=(.46-.42*e).toFixed(3);ra.style.transform=`scaleY(${(.94+.1*e).toFixed(3)})`;rb.style.transform=`scaleY(${(1.04-.1*e).toFixed(3)})`;}
+    {const ph=(Math.sin(s*Math.PI/3.2)+1)/2,e=ph*ph*(3-2*ph);if(!titleFx.ra)titleFx.ra=[$('.trA'),$('.trB')];const[ra,rb]=titleFx.ra;ra.style.opacity=(.34*e).toFixed(3);rb.style.opacity=(.34*(1-e)).toFixed(3);ra.style.transform=`scale(${(.92+.1*e).toFixed(3)},${(.78+.3*e).toFixed(3)})`;rb.style.transform=`scale(${(1.02-.1*e).toFixed(3)},${(1.08-.3*e).toFixed(3)})`;}
     for(const g of G){g.t++;if(g.t>g.d)mkG(g);const k=Math.sin(Math.PI*g.t/g.d);cx.globalAlpha=k*k*.75;const z=g.s*(.6+.4*k);cx.drawImage(SP,g.k*64,0,64,64,g.x-z/2,g.y-z/2,z,z);}
     cx.globalAlpha=1;cx.globalCompositeOperation='source-over';};
   requestAnimationFrame(loop);}
-function titleIntro(t){t.classList.add('intro');setTimeout(()=>t.classList.remove('intro'),4800);}
+function titleIntro(t){t.classList.remove('shine-on');t.classList.add('intro');setTimeout(()=>{t.classList.remove('intro');shineOn();},4800);}
+function shineOn(){const t=$('#title'),lg=$('#tLogo');if(t.classList.contains('intro')||ui.splash)return;if(lg.complete&&lg.naturalWidth)t.classList.add('shine-on');else lg.addEventListener('load',()=>{if(!t.classList.contains('intro'))t.classList.add('shine-on');},{once:true});}
 function splashOff(){const sp=$('#splash');if(!sp||!ui.splash)return;ui.splash=0;try{SND.unlock();SND.music('title');}catch(e){}sp.classList.add('out');const t=$('#title');document.querySelectorAll('#title video').forEach(v=>{const p=v.play();p&&p.catch&&p.catch(()=>{});});if(!t.hidden)titleIntro(t);setTimeout(()=>sp.remove(),1700);}
 function showTitle(menu){try{SND.music('title');}catch(e){}const t=$('#title');if(t.hidden&&!ui.titleIntro){ui.titleIntro=1;if(!ui.splash)titleIntro(t);}t.hidden=false;document.documentElement.classList.add('on-title');
-  const lg=$('#tLogo');if(!lg.src)lg.src=window.LOGO_URL;titleFx();t.querySelector('.tbg').style.backgroundImage=`url(${(Math.max(innerWidth,innerHeight)*(devicePixelRatio||1)<1500)?TITLEIMG.titlebgS:TITLEIMG.titlebg})`;
+  const lg=$('#tLogo');if(!lg.src)lg.src=window.LOGO_URL;titleFx();shineOn();t.querySelector('.tbg').style.backgroundImage=`url(${(Math.max(innerWidth,innerHeight)*(devicePixelRatio||1)<1500)?TITLEIMG.titlebgS:TITLEIMG.titlebg})`;
   if(menu||ui.titleMenu){ui.titleMenu=true;$('#tTap').hidden=true;$('#tMenu').hidden=false;}else{$('#tTap').hidden=false;$('#tMenu').hidden=true;}}
 function hideTitle(){try{SND.music('game');}catch(e){}document.querySelectorAll('#title video').forEach(v=>v.pause());$('#title').hidden=true;document.documentElement.classList.remove('on-title');}
 $('#title').addEventListener('click',e=>{if(ui.modal)return;if($('#tMenu').hidden){ui.titleMenu=true;showTitle(true);}});
