@@ -1315,18 +1315,16 @@ html body .tpick .tcell:disabled{box-shadow:none!important}
 #splash.out img{transition:opacity .5s ease;opacity:0}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
-.title .trays{position:absolute;left:calc(3vw - 60vmax);top:calc(37% - 60vmax);width:120vmax;height:120vmax;pointer-events:none;mix-blend-mode:screen;opacity:.5;
-  background:repeating-conic-gradient(from 0deg at 50% 50%,rgba(255,214,150,.0) 0deg,rgba(255,220,160,.42) 3.5deg,rgba(255,214,150,0) 7deg,rgba(255,214,150,0) 13deg);
-  -webkit-mask-image:radial-gradient(closest-side,transparent 6%,#000 14%,rgba(0,0,0,.45) 45%,transparent 80%);mask-image:radial-gradient(closest-side,transparent 6%,#000 14%,rgba(0,0,0,.45) 45%,transparent 80%);animation:trayR 26s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
-@keyframes trayR{from{transform:rotate(-4deg);opacity:.55}50%{opacity:.9}to{transform:rotate(5deg);opacity:.6}}
-.title .tmotes{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.title video{pointer-events:none;mix-blend-mode:screen;background:transparent;object-fit:cover}
+.title .tflare{position:absolute;left:3vw;top:37%;width:max(133vw,236vh);aspect-ratio:16/9;height:auto;transform:translate(-50%,-50%);opacity:.9}
+.title .ttwk{position:absolute;inset:0;width:100%;height:100%;opacity:.75;-webkit-mask-image:linear-gradient(180deg,#000 0,#000 26%,rgba(0,0,0,.35) 40%,transparent 50%);mask-image:linear-gradient(180deg,#000 0,#000 26%,rgba(0,0,0,.35) 40%,transparent 50%)}
 .title .tshine{position:absolute;pointer-events:none;mix-blend-mode:screen;-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
   background:linear-gradient(105deg,transparent 42%,rgba(255,244,214,.75) 50%,transparent 58%) no-repeat;background-size:300% 100%;background-position:130% 0;animation:tshine 8s ease-in-out 5s infinite}
 @keyframes tshine{0%{background-position:130% 0}18%,100%{background-position:-30% 0}}
-.title.intro .tsun{animation:tfxIn 3s ease 1.5s both}.title.intro .trays{animation:tfxIn 3s ease 2s both}.title.intro .tmotes{animation:tfxIn 3s ease 2.5s both}
+.title.intro .tsun{animation:tfxIn 3s ease 1.5s both}.title.intro .tflare{animation:tfxIn 3s ease 1.2s both}.title.intro .ttwk{animation:tfxIn 3s ease 2.6s both}
 @keyframes tfxIn{from{opacity:0}}
-@media (prefers-reduced-motion:reduce){.title .trays,.title .tsun,.title .tshine{animation:none}}
+@media (prefers-reduced-motion:reduce){.title .tsun,.title .tshine{animation:none}.title video{display:none}}
 
 html body .setmenu .setpanel .mi,html body .setmenu .setpanel .mi span{color:#e9c47a!important}
 html body .setpanel .seg button:not(.on){color:#c9b48a!important}
@@ -1473,7 +1471,7 @@ html.phone body .dlg-snd .sndrow{grid-template-columns:auto 150px 60px;gap:12px}
 <div id="tip" hidden></div><div id="pop" hidden></div>
 <div id="leftcol"></div>
 <div id="rotate" hidden><div class="rot-ic"></div><b>가로로 돌려 주세요</b><span>HexIsle은 휴대폰에서 가로 화면으로 플레이해요.</span></div>
-<div id="splash"><img id="spLogo" alt="HEXISLE"><p class="spnote">이 게임은 수익 창출을 하지 않으며,<br>개인 목적으로 제작되었습니다.</p><p class="sptap">화면을 탭 하여 시작</p></div><div id="title" class="title" hidden><div class="tbg"></div><div class="tsun"></div><div class="trays"></div><div class="tdim"></div><canvas class="tmotes" id="tMotes"></canvas><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 육각섬 개척기"><div class="tshine" id="tShine"></div><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
+<div id="splash"><img id="spLogo" alt="HEXISLE"><p class="spnote">이 게임은 수익 창출을 하지 않으며,<br>개인 목적으로 제작되었습니다.</p><p class="sptap">화면을 탭 하여 시작</p></div><div id="title" class="title" hidden><div class="tbg"></div><div class="tsun"></div><div class="tdim"></div><video class="tflare" muted playsinline loop autoplay preload="auto" disablepictureinpicture aria-hidden="true" src="assets/fx/flare.mp4"></video><video class="ttwk" muted playsinline loop autoplay preload="auto" disablepictureinpicture aria-hidden="true" src="assets/fx/twinkle.mp4"></video><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 육각섬 개척기"><div class="tshine" id="tShine"></div><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
 <div id="tut" hidden><div class="tblock" id="tBlock"></div><div class="tring" id="tRing" hidden></div><div class="tx" id="tX" hidden>✕</div><div class="tbub" id="tBub"></div><div class="tgest" id="tGest" hidden><i class="f1"></i><i class="f2"></i></div></div>
 <div id="dialog" class="overlay dlgov" hidden><div class="sheet sheet-dialog" id="dsheet"></div></div>
 <div id="modal" class="overlay" hidden><div class="sheet" id="sheet"></div><i class="mcrest" id="mcrest" aria-hidden="true"></i></div>
@@ -2641,30 +2639,17 @@ function countPick(){return `<div class="label" style="margin-top:8px">인원 (�
 function bindCount(){if($('#col'))$('#col').onclick=e=>{const b=e.target.closest('[data-c]');if(!b)return;ui.color=b.dataset.c;saveUi();$('#col').querySelectorAll('[data-c]').forEach(x=>x.classList.toggle('on',x.dataset.c===ui.color));};$('#cnt').onclick=e=>{const b=e.target.closest('[data-n]');if(!b)return;ui.n=+b.dataset.n;saveUi();$('#cnt').querySelectorAll('[data-n]').forEach(x=>x.classList.toggle('active',+x.dataset.n===ui.n));};
   $('#dif').onclick=e=>{const b=e.target.closest('[data-d]');if(!b)return;ui.diff=b.dataset.d;saveUi();$('#dif').querySelectorAll('[data-d]').forEach(x=>x.classList.toggle('active',x.dataset.d===ui.diff));};}
 function migrate(){if(!S.n){S.n=S.players.length;S.order=[...Array(S.n).keys(),...[...Array(S.n).keys()].reverse()];}if(S.logSeq===undefined)S.logSeq=0;if(!S.diff)S.diff='normal';}
-// ---- title ambience: drifting gold dust + sea glints (canvas, ~30fps, only while title is visible) ----
+// ---- title ambience: logo shine placement + light videos (flare on the sun, twinkles in the sky) ----
 function titleFx(){const lg=$('#tLogo'),sh=$('#tShine');const place=()=>{if(!lg.complete||!lg.naturalWidth)return;const r=lg.getBoundingClientRect(),pr=lg.offsetParent.getBoundingClientRect(),k=PH.on?PH.k:1;
     Object.assign(sh.style,{left:lg.offsetLeft-lg.offsetWidth/2+'px',top:lg.offsetTop+'px',width:lg.offsetWidth+'px',height:lg.offsetHeight+'px'});const u=`url(${lg.src})`;if(sh.style.webkitMaskImage!==u){sh.style.webkitMaskImage=u;sh.style.maskImage=u;}};
   if(lg.complete)place();else lg.addEventListener('load',place,{once:true});if(!titleFx.rs){titleFx.rs=1;addEventListener('resize',()=>setTimeout(place,150));}
-  if(titleFx.run)return;titleFx.run=1;const cv=$('#tMotes'),cx=cv.getContext('2d');let W=0,H=0,last=0;const P=[],G=[];
-  const R=Math.random;const mk=(p,init)=>{p.x=R()*W;p.y=init?R()*H:H*(.55+R()*.5);p.r=.9+R()*2.1;p.vx=(R()-.3)*.12;p.vy=-(.08+R()*.22);p.ph=R()*6.3;p.sp=.6+R()*1.6;p.a=.45+R()*.5;return p;};
-  const mkG=(g)=>{g.x=W*(R()*.2);g.y=H*(.37+R()*.2);g.t=0;g.d=40+R()*70;g.r=1+R()*2.2;return g;};
-  const fit=()=>{const d=Math.min(devicePixelRatio||1,2);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);};
-  const loop=ts=>{const t=$('#title');if(t.hidden){titleFx.run=0;return;}requestAnimationFrame(loop);if(ts-last<33)return;last=ts;
-    if(cv.clientWidth!==W||cv.clientHeight!==H){fit();P.length=0;G.length=0;}
-    if(!P.length){const n=Math.round(Math.min(80,W*H/16000));for(let i=0;i<n;i++)P.push(mk({},1));for(let i=0;i<9;i++){const g=mkG({});g.t=R()*g.d;G.push(g);}}
-    cx.clearRect(0,0,W,H);cx.globalCompositeOperation='lighter';const s=ts/1000;
-    for(const p of P){p.x+=p.vx+Math.sin(s*.5+p.ph)*.08;p.y+=p.vy;if(p.y<-10||p.x>W+10)mk(p);const tw=.55+.45*Math.sin(s*p.sp+p.ph);const a=p.a*tw;
-      const gr=cx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*3.2);gr.addColorStop(0,`rgba(255,236,180,${a})`);gr.addColorStop(.35,`rgba(255,200,110,${a*.45})`);gr.addColorStop(1,'rgba(255,180,90,0)');cx.fillStyle=gr;cx.beginPath();cx.arc(p.x,p.y,p.r*3.2,0,6.3);cx.fill();}
-    for(const g of G){g.t++;if(g.t>g.d)mkG(g);const k=Math.sin(Math.PI*g.t/g.d),a=k*k*.8,l=g.r*5*k;cx.strokeStyle=`rgba(255,226,170,${a})`;cx.lineWidth=.8;cx.beginPath();cx.moveTo(g.x-l,g.y);cx.lineTo(g.x+l,g.y);cx.moveTo(g.x,g.y-l*.6);cx.lineTo(g.x,g.y+l*.6);cx.stroke();
-      cx.fillStyle=`rgba(255,240,210,${a})`;cx.beginPath();cx.arc(g.x,g.y,g.r*.7,0,6.3);cx.fill();}
-    cx.globalCompositeOperation='source-over';};
-  requestAnimationFrame(loop);}
+  document.querySelectorAll('#title video').forEach(v=>{if(v.paused){const p=v.play();p&&p.catch&&p.catch(()=>{});}});}
 function titleIntro(t){t.classList.add('intro');setTimeout(()=>t.classList.remove('intro'),4800);}
-function splashOff(){const sp=$('#splash');if(!sp||!ui.splash)return;ui.splash=0;try{SND.unlock();SND.music('title');}catch(e){}sp.classList.add('out');const t=$('#title');if(!t.hidden)titleIntro(t);setTimeout(()=>sp.remove(),1700);}
+function splashOff(){const sp=$('#splash');if(!sp||!ui.splash)return;ui.splash=0;try{SND.unlock();SND.music('title');}catch(e){}sp.classList.add('out');const t=$('#title');document.querySelectorAll('#title video').forEach(v=>{const p=v.play();p&&p.catch&&p.catch(()=>{});});if(!t.hidden)titleIntro(t);setTimeout(()=>sp.remove(),1700);}
 function showTitle(menu){try{SND.music('title');}catch(e){}const t=$('#title');if(t.hidden&&!ui.titleIntro){ui.titleIntro=1;if(!ui.splash)titleIntro(t);}t.hidden=false;document.documentElement.classList.add('on-title');
   const lg=$('#tLogo');if(!lg.src)lg.src=window.LOGO_URL;titleFx();t.querySelector('.tbg').style.backgroundImage=`url(${(Math.max(innerWidth,innerHeight)*(devicePixelRatio||1)<1500)?TITLEIMG.titlebgS:TITLEIMG.titlebg})`;
   if(menu||ui.titleMenu){ui.titleMenu=true;$('#tTap').hidden=true;$('#tMenu').hidden=false;}else{$('#tTap').hidden=false;$('#tMenu').hidden=true;}}
-function hideTitle(){try{SND.music('game');}catch(e){}$('#title').hidden=true;document.documentElement.classList.remove('on-title');}
+function hideTitle(){try{SND.music('game');}catch(e){}document.querySelectorAll('#title video').forEach(v=>v.pause());$('#title').hidden=true;document.documentElement.classList.remove('on-title');}
 $('#title').addEventListener('click',e=>{if(ui.modal)return;if($('#tMenu').hidden){ui.titleMenu=true;showTitle(true);}});
 $('#tSingle').onclick=e=>{e.stopPropagation();showSingle();};
 $('#tMulti').onclick=e=>{e.stopPropagation();showMulti('invite');};
