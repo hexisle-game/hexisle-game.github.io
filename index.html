@@ -710,9 +710,9 @@ html.phone .sheet-trade .tinfo{margin-top:8px;padding-top:8px}
 .dcnt{margin-left:4px;color:#e9c47a}
 .dcnt.ok{color:#9fd68a}
 .setpanel .msep{display:none}
-.setpanel .mi{box-sizing:border-box;height:68px;padding:0 36px!important;margin:0}
+.setpanel .mi{box-sizing:border-box;height:58px;padding:0 36px!important;margin:0}
 .setpanel .seg button{padding:7px 14px;line-height:1.2}
-html.phone .setpanel .mi{height:52px;padding:0 26px!important}
+html.phone .setpanel .mi{height:44px;padding:0 26px!important}
 html.phone .setpanel .seg button{padding:5px 11px;font-size:14px}
 html:not(.phone) .sheet-start .cnt .btn{gap:6px}
 html.phone .sheet-start .cnt .btn{gap:4px}
@@ -1327,7 +1327,7 @@ html body .sheet.sheet-rules{background:none!important;border:0!important;border
 .rbook .rpr{left:53.5%;right:10%;padding:2% 0 2.5%}
 .rbook .rlab{font-size:.75em;letter-spacing:.18em;color:#8a2a14;font-weight:600}
 .rbook .rh{font-size:2em!important;font-weight:800;color:#3a2210!important;margin:.25em 0 0!important;line-height:1.2;text-shadow:none!important;text-align:left!important}
-.rbook .rdiv{height:1px;margin:.5em 0 .9em;background:linear-gradient(90deg,transparent,rgba(91,61,34,.28) 12%,rgba(91,61,34,.28) 88%,transparent)}
+.rbook .rdiv{height:1px;margin:calc(.5em - 8px) 0 .9em;background:linear-gradient(90deg,transparent,rgba(91,61,34,.28) 12%,rgba(91,61,34,.28) 88%,transparent)}
 .rbook .rkey{font-size:1.2em!important;font-weight:700;color:#3a2210!important;line-height:1.45;margin:0 0 .7em!important;text-shadow:none!important}
 .rbook .rtx{font-size:.95em!important;color:#5b3d22!important;line-height:1.75;margin:0!important;text-shadow:none!important}
 .rbook .rtx b{color:#8a2a14!important}
@@ -1344,7 +1344,8 @@ html body .sheet.sheet-rules{background:none!important;border:0!important;border
 @keyframes fRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 /* tooltips: dev cards 90%, cost: settlement + dev card art 110% (centre kept), whole tooltip popup 85% */
 .icols.devc .idev{transform:scale(.9);transform-origin:50% 50%}
-.icols:not(.devc) .icol:nth-child(2) .ibld,.icols:not(.devc) .icol:nth-child(4) .ibld{transform:scale(1.1);transform-origin:50% 50%;position:relative;z-index:1}
+.icols:not(.devc) .icol:nth-child(3) .ibld{transform:scale(1.15);transform-origin:50% 50%;position:relative;z-index:1}
+.icols:not(.devc) .icol:nth-child(2) .ibld,.icols:not(.devc) .icol:nth-child(4) .ibld{transform:scale(1.265);transform-origin:50% 50%;position:relative;z-index:1}
 html body .sheet.sheet-info{transform:scale(.85)!important;transform-origin:50% 50%!important}
 /* rules book: always centred; text block 20px further right */
 html body .sheet.sheet-rules{position:absolute!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;margin:0!important;transform:translate(-50%,-50%)!important}
@@ -2740,7 +2741,11 @@ function showTitle(menu){try{SND.music('title');}catch(e){}const t=$('#title');i
 function hideTitle(){try{SND.music('game');}catch(e){}document.querySelectorAll('#title video').forEach(v=>v.pause());$('#title').hidden=true;document.documentElement.classList.remove('on-title');}
 $('#title').addEventListener('click',e=>{if(ui.modal)return;if($('#tMenu').hidden){ui.titleMenu=true;showTitle(true);}});
 $('#tSingle').onclick=e=>{e.stopPropagation();showSingle();};
-$('#tMulti').onclick=e=>{e.stopPropagation();if(ui.invite){const c=ui.invite;ui.invite=null;$('#tSingle').hidden=false;ui.nick=(ui.nick||defNick()).trim().slice(0,6);MP.join(c);return;}showMulti('invite');};
+$('#tMulti').onclick=e=>{e.stopPropagation();if(ui.invite){const c=ui.invite;ui.invite=null;ui.nick=(ui.nick||defNick()).trim().slice(0,6);
+    // keep the menu out of sight while joining; bring the full menu back only once the lobby (or an error) is on screen
+    const mn=$('#tMenu'),tp=$('#tTap');mn.hidden=true;tp.textContent='초대받은 방에 들어가는 중…';tp.hidden=false;
+    const iv=setInterval(()=>{if(ui.modal||ui.dialog){clearInterval(iv);$('#tSingle').hidden=false;tp.hidden=true;tp.textContent='화면을 탭 하여 게임 시작';mn.hidden=false;}},120);
+    MP.join(c);return;}showMulti('invite');};
 $('#tTut').onclick=e=>{e.stopPropagation();showRules(0,()=>{closeModal();showTitle(true);});};
 function showStart(){closeModal();if(window.MP&&window.NET&&!NET.on)MP.offline();showTitle(ui.titleMenu);}
 const DIFFN={easy:'쉬움',normal:'보통',hard:'어려움'};
