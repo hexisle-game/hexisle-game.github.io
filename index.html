@@ -1317,7 +1317,7 @@ html body .tpick .tcell:disabled{box-shadow:none!important}
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
 .title video{pointer-events:none;mix-blend-mode:screen;background:transparent;object-fit:cover}
-.title .tbeams{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;opacity:.85}
+.title .tbeams{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;opacity:.42;filter:blur(3px)}
 .title .tmotes{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .title .ttwk{position:absolute;inset:0;width:100%;height:100%;opacity:.38;-webkit-mask-image:linear-gradient(180deg,#000 0,#000 26%,rgba(0,0,0,.35) 40%,transparent 50%);mask-image:linear-gradient(180deg,#000 0,#000 26%,rgba(0,0,0,.35) 40%,transparent 50%)}
 .title .tshine{position:absolute;pointer-events:none;mix-blend-mode:screen;visibility:hidden;-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
@@ -1472,8 +1472,8 @@ html.phone body .dlg-snd .sndrow{grid-template-columns:auto 150px 60px;gap:12px}
 
 <div id="tip" hidden></div><div id="pop" hidden></div>
 <div id="leftcol"></div>
-<div id="rotate" hidden><div class="rot-ic"></div><b>가로로 돌려 주세요</b><span>HexIsle은 휴대폰에서 가로 화면으로 플레이해요.</span></div>
-<div id="splash"><img id="spLogo" alt="HEXISLE"><p class="spnote">이 게임은 수익 창출을 하지 않으며,<br>개인 목적으로 제작되었습니다.</p><p class="sptap">화면을 탭 하여 시작</p></div><div id="title" class="title" hidden><div class="tbg"></div><div class="tsun"></div><div class="tdim"></div><canvas class="tbeams" id="tBeams" width="320" height="180"></canvas><video class="ttwk" muted playsinline loop autoplay preload="auto" disablepictureinpicture aria-hidden="true" src="assets/fx/twinkle.mp4"></video><canvas class="tmotes" id="tMotes"></canvas><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 육각섬 개척기"><div class="tshine" id="tShine"></div><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
+<div id="rotate" hidden><div class="rot-ic"></div><b>가로로 돌려 주세요</b><span>HexIsle은 휴대폰에서<br>가로 화면으로 플레이해요.</span></div>
+<div id="splash"><img id="spLogo" alt="HEXISLE"><p class="spnote">이 게임은 수익을 창출하지 않으며,<br>개인 목적으로만 제작되었습니다.</p><p class="sptap">화면을 탭 하여 시작</p></div><div id="title" class="title" hidden><div class="tbg"></div><div class="tsun"></div><div class="tdim"></div><canvas class="tbeams" id="tBeams" width="640" height="360"></canvas><video class="ttwk" muted playsinline loop autoplay preload="auto" disablepictureinpicture aria-hidden="true" src="assets/fx/twinkle.mp4"></video><canvas class="tmotes" id="tMotes"></canvas><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 육각섬 개척기"><div class="tshine" id="tShine"></div><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
 <div id="tut" hidden><div class="tblock" id="tBlock"></div><div class="tring" id="tRing" hidden></div><div class="tx" id="tX" hidden>✕</div><div class="tbub" id="tBub"></div><div class="tgest" id="tGest" hidden><i class="f1"></i><i class="f2"></i></div></div>
 <div id="dialog" class="overlay dlgov" hidden><div class="sheet sheet-dialog" id="dsheet"></div></div>
 <div id="modal" class="overlay" hidden><div class="sheet" id="sheet"></div><i class="mcrest" id="mcrest" aria-hidden="true"></i></div>
@@ -2664,8 +2664,8 @@ function titleFx(){const lg=$('#tLogo'),sh=$('#tShine');const place=()=>{if(!lg.
 function beams(s){const cv=$('#tBeams');if(!cv)return;const c=cv.getContext('2d'),W=cv.width,H=cv.height;
   if(!beams.B){const R=Math.random;beams.B=Array.from({length:18},(_,i)=>({a:-26+56*(i+R()*.8)/18,w:1.2+R()*2.8,f1:.07+R()*.12,f2:.17+R()*.25,p1:R()*6.3,p2:R()*6.3,k:.5+R()*.5,col:R()<.35?[255,214,160]:R()<.5?[255,236,205]:[236,226,255]}));}
   const ox=-W*.10,oy=H*.30,L=Math.hypot(W*1.15,H*1.1);c.clearRect(0,0,W,H);c.globalCompositeOperation='lighter';
-  const g0=c.createRadialGradient(ox,oy,0,ox,oy,W*.55);g0.addColorStop(0,'rgba(255,214,160,.16)');g0.addColorStop(1,'rgba(255,200,140,0)');c.fillStyle=g0;c.fillRect(0,0,W,H);
-  for(const b of beams.B){const v=.5+.32*Math.sin(s*b.f1*6.283+b.p1)+.18*Math.sin(s*b.f2*6.283+b.p2);const a=Math.max(0,v)*b.k*.34;if(a<.004)continue;
+  const g0=c.createRadialGradient(ox,oy,0,ox,oy,W*.55);g0.addColorStop(0,'rgba(255,214,160,.32)');g0.addColorStop(1,'rgba(255,200,140,0)');c.fillStyle=g0;c.fillRect(0,0,W,H);
+  for(const b of beams.B){const v=.5+.32*Math.sin(s*b.f1*6.283+b.p1)+.18*Math.sin(s*b.f2*6.283+b.p2);const a=Math.max(0,v)*b.k*.68;if(a<.004)continue;
     const ang=(b.a+.9*Math.sin(s*.05+b.p2))*Math.PI/180,hw=(b.w*(.75+.35*Math.sin(s*b.f2*3+b.p1)))*Math.PI/360;
     const gr=c.createRadialGradient(ox,oy,0,ox,oy,L);const[r,g,bb]=b.col;gr.addColorStop(0,`rgba(${r},${g},${bb},${a})`);gr.addColorStop(.45,`rgba(${r},${g},${bb},${a*.55})`);gr.addColorStop(1,`rgba(${r},${g},${bb},0)`);
     c.fillStyle=gr;c.beginPath();c.moveTo(ox,oy);c.lineTo(ox+Math.cos(ang-hw)*L,oy+Math.sin(ang-hw)*L);c.lineTo(ox+Math.cos(ang+hw)*L,oy+Math.sin(ang+hw)*L);c.closePath();c.fill();}
@@ -3132,9 +3132,9 @@ $('#tTut').onclick=e=>{e.stopPropagation();try{const el=document.documentElement
 </script>
 <script id="snd">
 // ================= AUDIO v3 (procedural piano-centric) =================
-const SND={ctx:null,playing:null,next:0,timer:null,vol:{bgm:.3,sfx:.55},on:{bgm:true,sfx:true},
-  load(){try{const v=JSON.parse(localStorage.getItem('hexisle-audio')||'{}');Object.assign(this.vol,v.vol||{});Object.assign(this.on,v.on||{});}catch(e){}},
-  save(){try{localStorage.setItem('hexisle-audio',JSON.stringify({vol:this.vol,on:this.on}));}catch(e){}},
+const SND={ctx:null,playing:null,next:0,timer:null,vol:{bgm:.5,sfx:.5},on:{bgm:true,sfx:true},
+  load(){try{const v=JSON.parse(localStorage.getItem('hexisle-audio2')||'{}');Object.assign(this.vol,v.vol||{});Object.assign(this.on,v.on||{});}catch(e){}},
+  save(){try{localStorage.setItem('hexisle-audio2',JSON.stringify({vol:this.vol,on:this.on}));}catch(e){}},
   init(){if(this.ctx)return true;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;
     const c=this.ctx=new AC();const master=c.createDynamicsCompressor();master.threshold.value=-16;master.ratio.value=3;master.connect(c.destination);
     this.bgmBus=c.createGain();this.bgmG=c.createGain();this.sfxBus=c.createGain();this.sfxG=c.createGain();this.bgmBus.connect(this.bgmG);this.sfxBus.connect(this.sfxG);this.bgmG.connect(master);this.sfxG.connect(master);
@@ -3142,7 +3142,7 @@ const SND={ctx:null,playing:null,next:0,timer:null,vol:{bgm:.3,sfx:.55},on:{bgm:
     this.rev=c.createConvolver();this.rev.buffer=mk(3.2,2.2);const rg=c.createGain();rg.gain.value=.42;this.rev.connect(rg);rg.connect(this.bgmG);
     this.revS=c.createConvolver();this.revS.buffer=mk(1.8,2.6);const rs=c.createGain();rs.gain.value=.22;this.revS.connect(rs);rs.connect(this.sfxG);
     this.apply();return true;},
-  apply(){if(!this.ctx)return;const t=this.ctx.currentTime;this.bgmG.gain.setTargetAtTime(this.on.bgm?this.vol.bgm:0,t,.15);this.sfxG.gain.setTargetAtTime(this.on.sfx?this.vol.sfx:0,t,.05);},
+  apply(){if(!this.ctx)return;const t=this.ctx.currentTime;this.bgmG.gain.setTargetAtTime(this.on.bgm?this.vol.bgm*.5:0,t,.15);this.sfxG.gain.setTargetAtTime(this.on.sfx?this.vol.sfx*1.1:0,t,.05);},
   unlock(){if(!this.init())return;if(this.ctx.state==='suspended')this.ctx.resume();this.apply();},
   hz(n){return 440*Math.pow(2,(n-69)/12);},
   nbuf:null,noiseBuf(){if(this.nbuf)return this.nbuf;const c=this.ctx,b=c.createBuffer(1,c.sampleRate*2,c.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;return this.nbuf=b;},
@@ -3209,7 +3209,7 @@ Object.assign(SND,{cur:null,want:null,lastGame:-1,nextGame:-1,FADE:2.5,pre:{},
     const prev=this.cur;const c=this.ctx,a=this.el(src);a.loop=mode==='title'||plays>1;
     const g=c.createGain();g.gain.value=0;let n;try{n=c.createMediaElementSource(a);n.connect(g);g.connect(this.bgmBus);}catch(e){a.volume=.4;}
     const cur=this.cur={mode,src,a,g,n,plays,loopN:0,lastT:0};const fin=mode==='title'&&!prev?.35:this.FADE;
-    const go=()=>{if(this.cur!==cur)return;const t=c.currentTime;g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(1,t+fin);this.fadeOut(prev);if(mode==='game')this.preload(MUSIC.game[this.nextGame].src);};
+    const go=()=>{if(this.cur!==cur)return;const t=c.currentTime;g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(mode==='title'?1:.68,t+fin);this.fadeOut(prev);if(mode==='game')this.preload(MUSIC.game[this.nextGame].src);};
     if(prev)prev.ending=true;a.addEventListener('playing',go,{once:true});
     if(mode==='game')a.addEventListener('timeupdate',()=>{if(this.cur!==cur||cur.ending)return;const ct=a.currentTime;if(ct+1<cur.lastT){cur.loopN++;if(cur.loopN>=cur.plays-1)a.loop=false;}cur.lastT=ct;
       if(cur.loopN>=cur.plays-1&&a.duration&&a.duration-ct<this.FADE+.3){this.startMusic('game');}});
@@ -3220,13 +3220,13 @@ Object.assign(SND,{cur:null,want:null,lastGame:-1,nextGame:-1,FADE:2.5,pre:{},
   stopMusic(){if(!this.cur)return;const o=this.cur;this.cur=null;this.fadeOut(o,1);}});
 
 // ---------- recorded SFX (assets/sfx, volumes tuned on sound-test.html) ----------
-const SFXG={"ui": 1.5, "btn1": 0.56, "btn2": 0.38, "click": 0.58, "toggle": 0.17, "page": 0.23, "join": 0.42, "start": 0.22, "card": 0.2, "gain": 0.22, "dice": 0.33, "turn": 0.25, "tick": 0.17, "dev": 0.26, "trade": 0.32, "robber": 0.35, "robber2": 0.34, "steal": 0.12, "error": 0.23, "place_other": 0.3, "road": 0.48, "build": 0.54, "city": 0.57, "win": 0.22, "lose": 0.19};
-const SFXALIAS={roll:'dice'};
+const SFXG={"ui": 1.5, "btn1": 0.56, "btn2": 0.38, "click": 0.58, "toggle": 0.17, "page": 0.23, "join": 0.42, "start": 0.22, "card": 0.2, "gain": 0.22, "dice": 0.33, "turn": 0.25, "tick": 0.17, "dev": 0.26, "trade": 0.32, "robber": 0.35, "robber2": 0.34, "steal": 0.12, "error": 0.23, "place_other": 0.29, "road": 0.33, "build": 0.39, "city": 0.42, "win": 0.22, "lose": 0.19};
+const SFXALIAS={roll:'dice'};const SFXFILE={place_other:'robber2'};
 Object.assign(SND,{fx:{},fxLoading:false,lastUi:0,
   loadSfx(){if(this.fxLoading||!this.ctx)return;this.fxLoading=true;const c=this.ctx;
-    Object.keys(SFXG).forEach((k,i)=>setTimeout(()=>fetch('assets/sfx/'+k+'.mp3').then(r=>r.arrayBuffer()).then(ab=>new Promise((res,rej)=>c.decodeAudioData(ab,res,rej))).then(b=>{this.fx[k]=b;}).catch(e=>console.warn('sfx',k,e)),i*40));},
+    Object.keys(SFXG).forEach((k,i)=>setTimeout(()=>fetch('assets/sfx/'+(SFXFILE[k]||k)+'.mp3').then(r=>r.arrayBuffer()).then(ab=>new Promise((res,rej)=>c.decodeAudioData(ab,res,rej))).then(b=>{this.fx[k]=b;}).catch(e=>console.warn('sfx',k,e)),i*40));},
   sfx(k,delay){if(!this.ctx||!this.on.sfx||this.vol.sfx<=0)return;k=SFXALIAS[k]||k;if(this.ctx.state==='suspended')this.ctx.resume();this.loadSfx();
-    if(k==='ui')this.lastUi=performance.now();const b=this.fx[k];if(!b)return;const c=this.ctx,src=c.createBufferSource(),g=c.createGain();g.gain.value=SFXG[k]??.5;src.buffer=b;src.connect(g);g.connect(this.sfxBus);src.start(c.currentTime+(delay||0));},
+    if(k==='ui'){const n=performance.now();if(n-(this.lastBtn||0)<350)return;this.lastUi=n;}const b=this.fx[k];if(!b)return;const c=this.ctx,src=c.createBufferSource(),g=c.createGain();g.gain.value=SFXG[k]??.5;src.buffer=b;src.connect(g);g.connect(this.sfxBus);src.start(c.currentTime+(delay||0));},
   sfxN(k,n,gap){n=Math.max(1,Math.min(10,n|0));for(let i=0;i<n;i++)this.sfx(k,i*(gap||.09));}});
 {const ul=SND.unlock.bind(SND);SND.unlock=function(){ul();this.loadSfx();};}
 {const ap=SND.apply.bind(SND);SND.apply=function(){ap();if(!this.ctx)return;if(!this.on.bgm||this.vol.bgm<=0)this.stopMusic();else if(this.cur&&this.cur.blocked){this.cur.blocked=false;const p=this.cur.a.play();if(p&&p.catch)p.catch(()=>{this.cur&&(this.cur.blocked=true);});}else if(this.want&&!this.cur)this.music(this.want);};}
@@ -3239,10 +3239,12 @@ document.addEventListener('visibilitychange',()=>{if(!SND.ctx)return;const a=SND
 SND.preload(MUSIC.title);
 // global click sound for buttons
 document.addEventListener('click',e=>{if(e.target.closest('#splash'))return;
-  if(e.target.closest('.aitg,.sndt,[role="switch"]')){SND.sfx('toggle');return;}
+  if(e.target.closest('.aitg,.sndt,.mi.tg,[role="switch"]')){SND.sfx('toggle');SND.lastBtn=performance.now();return;}
   if(e.target.closest('.dzone [data-r],.tcell,.tpick [data-r],img.card,.dvc,[data-dev]')){SND.sfx('card');return;}
   const b=e.target.closest('button,.tm,.mi,.mtab,[data-act],[data-v],[data-c]');if(!b||b.disabled)return;if(b.matches('[data-act="roll"],#rp,#rn'))return;
-  const k=b.matches('.btn.primary,.tm,[data-act],#fGo')?'btn1':b.matches('.btn,.mtab,.pbtn,.seg button')?'btn2':'click';const t0=performance.now();
+  const k=b.matches('.cnt .btn,.swatches .sw,[data-sp]')?'click':b.matches('.btn.primary,.tm,[data-act],#fGo')?'btn1':b.matches('.btn,.mtab,.pbtn,.seg button')?'btn2':'click';const t0=performance.now();
+  // inside a popup/dialog the button keeps its own sound (and mutes the open/close sound it triggers)
+  if(b.closest('#modal,#dialog,.setmenu')){SND.lastBtn=t0;SND.sfx(k);return;}
   setTimeout(()=>{if(SND.lastUi<t0-5)SND.sfx(k);},0);},true);
 // sound settings dialog
 function showSound(){const row=(k,label)=>`<div class="sndrow"><span class="sndl">${label}</span><input type="range" min="0" max="100" value="${Math.round(SND.vol[k]*100)}" data-k="${k}" class="sndr"><button class="sndt" data-t="${k}" aria-checked="${SND.on[k]}"></button></div>`;
@@ -3260,8 +3262,8 @@ function sndWatch(){if(typeof SND==='undefined'||!S||!S.players||!S.players[ME])
   if(cur.id!==p.id)SND.sfx('roll');
   if(cur.c>p.c)SND.sfx('city');else if(cur.s>p.s)SND.sfx('build');else if(cur.r>p.r)SND.sfx('road');else if(cur.dev>p.dev)SND.sfx('dev');
   else if(cur.ob>p.ob)SND.sfx('place_other');
-  if(cur.st!==p.st&&cur.st){const L=S.lastSteal;if(L.q===ME||L.p===ME)setTimeout(()=>SND.sfx('steal'),200);}
-  else if(cur.rob!==p.rob){const mine=G.hexes[cur.rob]&&G.hexes[cur.rob].v.some(v=>S.vb[v]&&S.vb[v].o===ME);SND.sfx(mine?'robber':'robber2');}
+  if(cur.rob!==p.rob){const mine=G.hexes[cur.rob]&&G.hexes[cur.rob].v.some(v=>S.vb[v]&&S.vb[v].o===ME);SND.sfx(mine?'robber':'robber2');}
+  if(cur.st!==p.st&&cur.st){const L=S.lastSteal;if(L.q===ME||L.p===ME)setTimeout(()=>SND.sfx('steal'),cur.rob!==p.rob?650:200);}
   if(cur.res>p.res){const n=cur.res-p.res;if(cur.id!==p.id)setTimeout(()=>SND.sfxN('gain',n),1100);else if(cur.s===p.s&&cur.r===p.r&&cur.c===p.c){if(cur.dev===p.dev&&!(S.pend&&S.pend.k))SND.sfx('trade');else SND.sfxN('gain',n);}}
   if(cur.ph==='main'&&cur.cur===ME&&(p.cur!==ME||p.ph!=='main'))setTimeout(()=>SND.sfx('turn'),150);
   if(cur.ph==='over'&&p.ph!=='over')SND.sfx(S.winner===ME?'win':'lose');}
