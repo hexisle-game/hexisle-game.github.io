@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="robots" content="noindex">
+<title>결과 화면 시안</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@300..900&display=swap">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#000;font-family:Hahmlet,serif;overflow:hidden;color:#efe2c4}
+.scene{position:fixed;inset:0;overflow:hidden}
+.art{position:absolute;inset:0;background:center/cover no-repeat;animation:artIn 2.4s ease-out both}
+.win .art{background-image:url(../assets/result/win.webp)}
+.lose .art{background-image:url(../assets/result/lose.webp);filter:saturate(.8)}
+@keyframes artIn{from{opacity:0;transform:scale(1.1)}to{opacity:1;transform:scale(1.02)}}
+.shade{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 55%,rgba(10,7,4,.25),rgba(10,7,4,.78) 100%),linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.55))}
+.lose .shade{background:radial-gradient(ellipse 70% 60% at 50% 55%,rgba(8,10,14,.35),rgba(8,10,14,.85) 100%),linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.6))}
+canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.box{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4vh 16px}
+.kick{font-size:clamp(12px,1.4vw,16px);letter-spacing:.3em;color:#e9c47a;opacity:0;animation:up .8s ease-out .9s both}
+h1{margin:.15em 0 .1em;font-size:clamp(48px,8vw,104px);font-weight:900;line-height:1;opacity:0;
+  background:linear-gradient(180deg,#fff4cf 0%,#f3cf72 45%,#b9822e 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 4px 0 #3a1c06) drop-shadow(0 0 26px rgba(255,200,90,.5));animation:title 1.1s cubic-bezier(.2,.9,.25,1.2) 1.1s both}
+.lose h1{background:linear-gradient(180deg,#f2eee6 0%,#c9c2b4 50%,#8c8476 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 3px 0 #1a1612) drop-shadow(0 0 18px rgba(200,210,230,.25))}
+@keyframes title{from{opacity:0;transform:scale(1.6);letter-spacing:.2em}to{opacity:1;transform:none;letter-spacing:0}}
+.sub{font-size:clamp(14px,1.6vw,19px);color:#e6dccb;opacity:0;animation:up .8s ease-out 1.7s both;text-shadow:0 2px 6px #000}
+.sub b{color:var(--wc,#f3d58e)}
+.tbl{margin-top:clamp(14px,3vh,28px);width:min(460px,90vw);display:flex;flex-direction:column;gap:7px}
+.tbl>div{display:flex;align-items:center;gap:12px;padding:10px 16px;background:rgba(14,10,6,.62);border:1px solid rgba(233,196,122,.18);border-radius:3px;font-size:clamp(14px,1.5vw,18px);opacity:0;animation:up .6s ease-out both;backdrop-filter:blur(2px)}
+.tbl>div:first-child{background:linear-gradient(90deg,rgba(120,86,30,.55),rgba(60,40,14,.6));border-color:rgba(243,213,142,.55);box-shadow:0 0 20px rgba(243,213,142,.18)}
+.tbl .rk{width:22px;color:#c9b48a;font-weight:700}.tbl>div:first-child .rk{color:#f3d58e}
+.tbl .dot{width:12px;height:12px;border-radius:50%;filter:saturate(.8) brightness(.84)}
+.tbl .nm{flex:1}.tbl b{color:#f3d58e;font-size:1.15em}
+.btns{display:flex;gap:14px;margin-top:clamp(16px,3.2vh,30px);opacity:0;animation:up .7s ease-out 3.1s both}
+.gb{font:inherit;font-weight:700;font-size:clamp(13px,1.3vw,16px);color:#f3e2bd;background:none;cursor:pointer;border-style:solid;border-width:10px 12px;padding:4px 22px;min-width:9em;text-shadow:0 1px 0 #1d1006;border-image:url(../assets/ui/28241176.webp) 34 36 fill / 10px 12px stretch}
+.gb.next{border-image:url(../assets/ui/0188c1d8.webp) 34 36 fill / 10px 12px stretch;color:#fff0d2}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.var{position:fixed;left:10px;top:10px;z-index:9;display:flex;gap:6px}
+.var button{font:600 12px system-ui;padding:6px 10px;border-radius:6px;border:1px solid #777;background:#222;color:#ddd}
+.var button.on{background:#c9a35a;color:#111;border-color:#c9a35a}
+@media (max-height:520px){.tbl{gap:4px}.tbl>div{padding:5px 14px}h1{font-size:clamp(40px,13vh,64px)}.box{padding:2vh 16px}}
+</style></head><body>
+<div class="var"><button data-v="win" class="on">승리</button><button data-v="lose">패배</button><button id="rp">다시 재생</button></div>
+<div class="scene" id="sc"></div>
+<script>
+const P=[['나','#ff2a1a',10,'(승점 카드 1장)'],['꼼꼼한 수달','#3a8cff',8,''],['자유로운 해달','#e046e0',6,'']];
+let mode='win',raf;
+function play(){cancelAnimationFrame(raf);const win=mode==='win';const order=win?P:[P[1],P[0],P[2]];const W2=order[0];
+ document.getElementById('sc').className='scene '+mode;
+ document.getElementById('sc').innerHTML=`<div class="art"></div><div class="shade"></div><canvas id="cv"></canvas>
+ <div class="box"><div class="kick">${win?'VICTORY':'GAME OVER'}</div><h1>${win?'승리!':'패배'}</h1>
+ <div class="sub" style="--wc:${W2[1]}">${win?'12바퀴 만에 섬의 영주가 되었어요.':`<b style="filter:saturate(.8) brightness(1.2)">${W2[0]}</b>이(가) 12바퀴 만에 섬의 영주가 되었어요.`}</div>
+ <div class="tbl">${order.map((p,i)=>`<div style="animation-delay:${2.1+i*.22}s"><span class="rk">${i+1}</span><span class="dot" style="background:${p[1]}"></span><span class="nm">${p[0]} <small style="color:#a8977a">${p[3]}</small></span><b>${win||i?p[2]:10}점</b></div>`).join('')}</div>
+ <div class="btns"><button class="gb">보드 보기</button><button class="gb next">새 게임</button></div></div>`;
+ const cv=document.getElementById('cv'),c=cv.getContext('2d');const fit=()=>{cv.width=innerWidth*Math.min(2,devicePixelRatio||1);cv.height=innerHeight*Math.min(2,devicePixelRatio||1);};fit();
+ const R=Math.random,k=cv.width/innerWidth;const N=win?110:45;const ps=Array.from({length:N},()=>({x:R()*cv.width,y:-R()*cv.height,vy:(win?1.2:.5)+R()*(win?1.8:.6),vx:(R()-.5)*.6,r:(win?3:1.6)+R()*(win?4:2),a:R()*6.3,va:(R()-.5)*.15,c:win?['#f3d27a','#fff1c4','#e9b44e','#ffffff'][R()*4|0]:'#cfd8e6'}));
+ const t0=performance.now();const f=t=>{c.clearRect(0,0,cv.width,cv.height);const on=Math.min(1,Math.max(0,(t-t0-900)/800));
+  for(const p of ps){p.y+=p.vy*k;p.x+=p.vx*k+Math.sin((t/700)+p.a)*.4*k;p.a+=p.va;if(p.y>cv.height+20){p.y=-20;p.x=R()*cv.width;}
+   c.save();c.globalAlpha=on*(win?.9:.35);c.translate(p.x,p.y);if(win){c.rotate(p.a);c.fillStyle=p.c;c.shadowColor='rgba(255,210,120,.8)';c.shadowBlur=8*k;c.fillRect(-p.r*k/2,-p.r*k*.7,p.r*k,p.r*k*1.4);}
+   else{c.fillStyle=p.c;c.fillRect(0,0,1*k,p.r*6*k);}c.restore();}
+  raf=requestAnimationFrame(f);};raf=requestAnimationFrame(f);}
+document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{mode=b.dataset.v;document.querySelectorAll('[data-v]').forEach(x=>x.classList.toggle('on',x===b));play();});
+document.getElementById('rp').onclick=play;addEventListener('resize',play);play();
+</script>
+</body></html>
