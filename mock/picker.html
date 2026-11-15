@@ -69,8 +69,19 @@ html,body{margin:0;height:100%;background:#05070c;font-family:Hahmlet,serif;colo
 .strip2 .av{width:46px;height:46px;opacity:.8;box-shadow:0 0 0 2px rgba(233,196,122,.2),0 2px 6px rgba(0,0,0,.6)}
 .strip2 .av.on{opacity:1;box-shadow:0 0 0 5px var(--c),0 0 0 7px rgba(0,0,0,.55)}
 .sws{display:flex;gap:16px}.sws i{width:30px;height:30px;border-radius:50%;box-shadow:0 0 0 3px rgba(0,0,0,.55);filter:saturate(.8) brightness(.84)}.sws i.on{box-shadow:0 0 0 3px #f3dfae,0 0 0 6px rgba(0,0,0,.5)}
+
+/* C: one row: [toggle] + one strip that shows portraits or colours */
+.crow{display:flex;align-items:center;gap:14px}
+.ctg{display:flex;align-items:center;gap:7px;flex:none;cursor:pointer}
+.ctg img{width:62px;height:auto;display:block}
+.ctg span{font-size:13px;color:#8f7f63}.ctg span.on{color:#f3dfae;font-weight:700}
+.cstrip{display:flex;gap:16px;align-items:center;overflow:hidden;padding:9px 6px;width:470px;-webkit-mask-image:linear-gradient(90deg,#000 86%,transparent);mask-image:linear-gradient(90deg,#000 86%,transparent)}
+.cstrip .av{width:44px;height:44px;opacity:.8;box-shadow:0 0 0 2px rgba(233,196,122,.2),0 2px 6px rgba(0,0,0,.6)}
+.cstrip .av.on{opacity:1;box-shadow:0 0 0 5px var(--c),0 0 0 7px rgba(0,0,0,.55)}
+.cstrip i{width:32px;height:32px;border-radius:50%;flex:none;box-shadow:0 0 0 3px rgba(0,0,0,.55);filter:saturate(.8) brightness(.84)}.cstrip i.on{box-shadow:0 0 0 3px #f3dfae,0 0 0 6px rgba(0,0,0,.5)}
+.ctg .only img{width:62px}
 </style></head><body>
-<div class="var"><button data-v="A" class="on">A. 초상화 눌러 선택 창</button><button data-v="A2">A. 선택 창(목록)</button><button data-v="B">B. 한 줄 스와이프 + 색상 줄</button></div>
+<div class="var"><button data-v="A" class="on">A. 초상화 눌러 선택 창</button><button data-v="A2">A. 선택 창(목록)</button><button data-v="B">B. 한 줄 + 색상 줄</button><button data-v="C1">C. 글자 토글·캐릭터</button><button data-v="C2">C. 글자 토글·색상</button><button data-v="D1">D. 아이콘 토글·캐릭터</button><button data-v="D2">D. 아이콘 토글·색상</button></div>
 <div id="vp"></div>
 <script>
 const PT=['otter','owl','cat','mole'],NM={otter:'수달 상인',owl:'부엉이 학자',cat:'고양이 모험가',mole:'두더지 광부'};
@@ -90,7 +101,11 @@ const frame2=(rows)=>`<div class="bg"></div><div class="frame"><button class="x"
  <div class="row"><div class="lab">난이도</div><div class="seg"><span>쉬움</span><b>보통</b><span>어려움</span></div></div>
  <div class="row"><div class="lab">인원</div><div class="seg"><span>2인</span><span>3인</span><b>4인</b></div></div></div>
  <div class="foot"><button class="gb">시작</button></div></div>`;
+const strip=(mode)=>mode==='p'?`<div class="cstrip">${MANY.map((p,i)=>av(p,i==0?'on':'')).join('')}</div>`:`<div class="cstrip">${COL.map((c,i)=>`<i class="${i==0?'on':''}" style="background:${c}"></i>`).join('')}</div>`;
+const tgl=(mode,icon)=>icon?`<div class="ctg"><img src="pt/tg_icon${mode==='p'?'L':'R'}.webp"></div>`:`<div class="ctg"><span class="${mode==='p'?'on':''}">캐릭터</span><img src="pt/tg_plain${mode==='p'?'L':'R'}.webp"><span class="${mode==='c'?'on':''}">색상</span></div>`;
+const crow=(mode,icon)=>frame2(`<div class="row"><div class="lab">내 캐릭터</div><div class="crow">${tgl(mode,icon)}${strip(mode)}</div></div>`);
 const V={
+ C1:()=>crow('p',false),C2:()=>crow('c',false),D1:()=>crow('p',true),D2:()=>crow('c',true),
  A:()=>frame2(`<div class="row"><div class="lab">내 캐릭터</div>${meCard2}</div>`),
  A2:()=>frame2(`<div class="row"><div class="lab">내 캐릭터</div>${meCard2}</div>`)+`<div class="dim"></div><div class="dlg2"><h4>캐릭터 선택</h4>
    <div class="grid">${MANY.map((p,i)=>av(p,i==0?'on':(i==5?'tk':''))).join('')}</div>
