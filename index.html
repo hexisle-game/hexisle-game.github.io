@@ -1317,6 +1317,10 @@ html body .tpick .tcell:disabled{box-shadow:none!important}
 #splash.out{opacity:0;pointer-events:none}
 #splash:not(.ready)>*{opacity:0!important;transition:none}
 #splash>*{transition:opacity .8s ease}
+#splash.ready .spnote{transition-delay:.45s}
+#splash:not(.ready) .sptap{animation:none}
+#splash.ready .sptap{animation:sptapIn .7s ease .9s both,sptap 2.4s ease-in-out 1.6s infinite}
+@keyframes sptapIn{from{opacity:0}to{opacity:.55}}
 #splash.out img{transition:opacity .5s ease;opacity:0}
 
 /* ===== rules: open book ===== */
@@ -1368,9 +1372,9 @@ html.phone body .setpanel .mi,html.phone body .setmenu .setpanel .mi span{font-s
 html body .setpanel .seg button{font-size:13px!important}
 
 /* scene changes: title <-> game crossfade */
-#title.tout{opacity:0;transition:opacity .6s ease;pointer-events:none}
-#title.tin{animation:tScIn .6s ease both}
-#title.tpre{opacity:0!important}
+#title.tfadeout{opacity:0;transition:opacity .6s ease;pointer-events:none}
+#title.tfadein{animation:tScIn .6s ease both}
+#title.tfadepre{opacity:0!important}
 @keyframes tScIn{from{opacity:0}}
 #modal.mfade{opacity:0;transition:opacity .45s ease;pointer-events:none}
 /* title ambience: sun glow + rays, gold dust, logo shine */
@@ -2755,14 +2759,14 @@ function beams(s){const cv=$('#tBeams');if(!cv)return;const c=cv.getContext('2d'
 function titleIntro(t){t.classList.remove('shine-on');t.classList.add('intro');setTimeout(()=>{t.classList.remove('intro');shineOn();},4800);}
 function shineOn(){const t=$('#title'),lg=$('#tLogo');if(t.classList.contains('intro')||ui.splash)return;if(lg.complete&&lg.naturalWidth)t.classList.add('shine-on');else lg.addEventListener('load',()=>{if(!t.classList.contains('intro'))t.classList.add('shine-on');},{once:true});}
 function splashOff(){const sp=$('#splash');if(!sp||!ui.splash)return;ui.splash=0;setTimeout(()=>{try{preloadUI();}catch(e){}},1500);try{SND.unlock();SND.music('title');}catch(e){}sp.classList.add('out');const t=$('#title');document.querySelectorAll('#title video').forEach(v=>{const p=v.play();p&&p.catch&&p.catch(()=>{});});if(!t.hidden)titleIntro(t);setTimeout(()=>sp.remove(),1700);}
-function showTitle(menu){try{SND.music('title');}catch(e){}const t=$('#title');if(t.hidden&&!ui.titleIntro){ui.titleIntro=1;if(!ui.splash)titleIntro(t);}if(t.classList.contains('tout')){clearTimeout(ui.tfT);t.classList.remove('tout');ui.titleFading=false;}else if(t.hidden&&ui.titleIntro&&!t.classList.contains('intro')){t.classList.remove('tin');t.classList.add('tpre');clearTimeout(ui.tinT);requestAnimationFrame(()=>requestAnimationFrame(()=>{ui.tinT=setTimeout(()=>{t.classList.remove('tpre');void t.offsetWidth;t.classList.add('tin');ui.tinT=setTimeout(()=>t.classList.remove('tin'),700);},120);}));}t.hidden=false;document.documentElement.classList.add('on-title');
+function showTitle(menu){try{SND.music('title');}catch(e){}const t=$('#title');if(t.hidden&&!ui.titleIntro){ui.titleIntro=1;if(!ui.splash)titleIntro(t);}if(t.classList.contains('tfadeout')){clearTimeout(ui.tfT);t.classList.remove('tfadeout');ui.titleFading=false;}else if(t.hidden&&ui.titleIntro&&!t.classList.contains('intro')){t.classList.remove('tfadein');t.classList.add('tfadepre');clearTimeout(ui.tinT);requestAnimationFrame(()=>requestAnimationFrame(()=>{ui.tinT=setTimeout(()=>{t.classList.remove('tfadepre');void t.offsetWidth;t.classList.add('tfadein');ui.tinT=setTimeout(()=>t.classList.remove('tfadein'),700);},120);}));}t.hidden=false;document.documentElement.classList.add('on-title');
   const lg=$('#tLogo');if(!lg.src)lg.src=window.LOGO_URL;titleFx();shineOn();t.querySelector('.tbg').style.backgroundImage=`url(${(Math.max(innerWidth,innerHeight)*(devicePixelRatio||1)<1500)?TITLEIMG.titlebgS:TITLEIMG.titlebg})`;
   if(menu||ui.titleMenu){ui.titleMenu=true;$('#tTap').hidden=true;$('#tMenu').hidden=false;}else{$('#tTap').hidden=false;$('#tMenu').hidden=true;}}
 function hideTitle(){ui.camFresh=true;try{SND.music('game');}catch(e){}const t=$('#title');document.documentElement.classList.remove('on-title');
   if(t.hidden||ui.splash){t.hidden=true;return;}
   // fade the title (and whatever popup sits on it) away over the game instead of cutting
-  clearTimeout(ui.tfT);t.classList.remove('tin');t.classList.add('tout');ui.titleFading=true;
-  ui.tfT=setTimeout(()=>{t.hidden=true;t.classList.remove('tout');ui.titleFading=false;document.querySelectorAll('#title video').forEach(v=>v.pause());},650);}
+  clearTimeout(ui.tfT);t.classList.remove('tfadein');t.classList.add('tfadeout');ui.titleFading=true;
+  ui.tfT=setTimeout(()=>{t.hidden=true;t.classList.remove('tfadeout');ui.titleFading=false;document.querySelectorAll('#title video').forEach(v=>v.pause());},650);}
 $('#title').addEventListener('click',e=>{if(ui.modal)return;if($('#tMenu').hidden){ui.titleMenu=true;showTitle(true);}});
 $('#tSingle').onclick=e=>{e.stopPropagation();showSingle();};
 $('#tMulti').onclick=e=>{e.stopPropagation();if(ui.invite){const c=ui.invite;ui.invite=null;ui.nick=(ui.nick||defNick()).trim().slice(0,6);
