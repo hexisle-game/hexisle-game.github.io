@@ -15,19 +15,19 @@ html,body{margin:0;height:100%;background:#0b0c12;font-family:Hahmlet,serif;over
 .book{position:relative;width:min(1240px,98vw,calc((100vh - 16px)*var(--ar)));aspect-ratio:var(--ar);background:var(--img) center/100% 100% no-repeat;filter:drop-shadow(0 18px 34px rgba(0,0,0,.7))}
 .pg{position:absolute;top:var(--t);bottom:var(--b);display:flex;flex-direction:column}
 .pg.l{left:var(--l1);right:calc(100% - var(--r1));align-items:center;justify-content:center}
-.pg.r{left:var(--l2);right:calc(100% - var(--r2))}
+.pg.r{left:var(--l2);right:calc(100% - var(--r2));padding-top:5%}
 /* left page: picture only */
-.pg.l img{width:92%;max-height:94%;aspect-ratio:1;object-fit:cover;border-radius:3px;mix-blend-mode:multiply;filter:sepia(.12) contrast(1.03);-webkit-mask-image:radial-gradient(closest-side,#000 82%,transparent 100%);mask-image:radial-gradient(closest-side,#000 82%,transparent 100%)}
+.pg.l img{max-width:90%;max-height:90%;aspect-ratio:1;object-fit:contain;mix-blend-mode:multiply}
 /* right page: text + buttons */
-.lab{font-size:clamp(10px,1.1vw,14px);letter-spacing:.18em;color:var(--red);font-weight:600}
-.ttl{font-size:clamp(20px,2.8vw,38px);font-weight:800;color:var(--ink);margin:.3em 0 .1em;line-height:1.2}
+.lab{font-size:clamp(9px,.95vw,12px);letter-spacing:.18em;color:var(--red);font-weight:600}
+.ttl{font-size:clamp(18px,2.4vw,32px);font-weight:800;color:var(--ink);margin:.3em 0 .1em;line-height:1.2}
 .rule{height:10px;margin:.45em 0 1em;background:radial-gradient(circle,var(--ink2) 0 2px,transparent 3px) center/14px 10px no-repeat,linear-gradient(90deg,transparent,rgba(91,61,34,.55) 15%,rgba(91,61,34,.55) 85%,transparent) center/100% 1px no-repeat}
-.key{font-size:clamp(14px,1.7vw,22px);font-weight:700;color:var(--ink);line-height:1.45;margin:0 0 .7em}
-.txt{font-size:clamp(12px,1.32vw,17px);color:var(--ink2);line-height:1.75;margin:0}
+.key{font-size:clamp(13px,1.45vw,19px);font-weight:700;color:var(--ink);line-height:1.45;margin:0 0 .7em}
+.txt{font-size:clamp(11px,1.15vw,15px);color:var(--ink2);line-height:1.75;margin:0}
 .txt b{color:var(--red)}
 .foot{margin-top:auto;display:flex;align-items:center;justify-content:flex-end;gap:10px}
 /* the game's own button frames */
-.gb{font:inherit;font-weight:700;font-size:clamp(12px,1.25vw,16px);white-space:nowrap;cursor:pointer;background:none;color:#f3e2bd;text-shadow:0 1px 0 #1d1006,0 1px 4px rgba(0,0,0,.6);border-style:solid;border-width:10px 12px;padding:2px 14px;min-width:6.2em;border-image:url(../assets/ui/28241176.webp) 34 36 fill / 10px 12px stretch;filter:drop-shadow(0 3px 5px rgba(0,0,0,.35))}
+.gb{font:inherit;font-weight:700;font-size:clamp(11px,1.1vw,15px);white-space:nowrap;cursor:pointer;background:none;color:#f3e2bd;text-shadow:0 1px 0 #1d1006,0 1px 4px rgba(0,0,0,.6);border-style:solid;border-width:10px 12px;padding:2px 14px;min-width:6.2em;border-image:url(../assets/ui/28241176.webp) 34 36 fill / 10px 12px stretch;filter:drop-shadow(0 3px 5px rgba(0,0,0,.35))}
 .gb.next{border-image:url(../assets/ui/0188c1d8.webp) 34 36 fill / 10px 12px stretch;color:#fff0d2}
 .close{position:absolute;right:-1.2%;top:-2%;z-index:3;width:clamp(34px,3.6vw,48px);aspect-ratio:1;border:0;background:url(../assets/title/back.webp) center/contain no-repeat;cursor:pointer;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
 .var{position:fixed;left:10px;top:10px;z-index:9;display:flex;gap:6px}
@@ -36,13 +36,13 @@ html,body{margin:0;height:100%;background:#0b0c12;font-family:Hahmlet,serif;over
 @media (max-height:520px){
  .wrap{padding:4px}
  .book{width:min(99vw,calc((100vh - 8px)*var(--ar)))}
- .lab{font-size:10px}.ttl{font-size:clamp(17px,4.6vh,24px)}.rule{margin:.25em 0 .6em}
- .key{font-size:clamp(13px,3.6vh,16px);margin-bottom:.45em}.txt{font-size:clamp(11px,3vh,13.5px);line-height:1.6}
- .gb{font-size:12px;border-width:7px 9px;border-image-width:7px 9px;padding:0 8px;min-width:0}.foot{gap:5px}
+ .lab{font-size:9px}.ttl{font-size:clamp(15px,4vh,21px)}.rule{margin:.25em 0 .6em}
+ .key{font-size:clamp(12px,3.2vh,14.5px);margin-bottom:.45em}.txt{font-size:clamp(10px,2.7vh,12.5px);line-height:1.6}
+ .gb{font-size:11px;border-width:7px 9px;border-image-width:7px 9px;padding:0 8px;min-width:0}.foot{gap:5px}
 }
 </style></head><body>
 <div class="bg"></div>
-<div class="var"><button data-v="A" class="on">시안 A</button><button data-v="B">시안 B</button><button data-v="C">시안 C</button></div>
+<div class="var"><button data-v="C" class="on">시안 C</button><button data-v="A">시안 A</button><button data-v="B">시안 B</button></div>
 <div class="wrap"><div class="book" id="bk">
   <div class="pg l"><img id="im" src="../assets/rules/2.webp" alt=""></div>
   <div class="pg r">
@@ -59,12 +59,12 @@ html,body{margin:0;height:100%;background:#0b0c12;font-family:Hahmlet,serif;over
 // page boxes measured on each painted book (fractions of the image)
 const V={A:{img:'bookA.webp',ar:1525/966,l1:.095,r1:.465,l2:.535,r2:.905,t:.085,b:.12},
          B:{img:'bookB.webp',ar:1524/1008,l1:.10,r1:.47,l2:.53,r2:.89,t:.075,b:.10},
-         C:{img:'bookC.webp',ar:1486/978,l1:.10,r1:.47,l2:.535,r2:.885,t:.08,b:.08}};
+         C:{img:'bookCw.webp',ar:1907/978,l1:.085,r1:.47,l2:.535,r2:.90,t:.08,b:.08}};
 const setV=k=>{const v=V[k],b=document.getElementById('bk').style;b.setProperty('--img',`url(${v.img})`);b.setProperty('--ar',v.ar);
   ['l1','r1','l2','r2'].forEach(p=>b.setProperty('--'+p,(v[p]*100)+'%'));b.setProperty('--t',(v.t*100)+'%');b.setProperty('--b',(v.b*100)+'%');
   document.querySelectorAll('.var button').forEach(x=>x.classList.toggle('on',x.dataset.v===k));};
 document.querySelectorAll('.var button').forEach(x=>x.onclick=()=>setV(x.dataset.v));
-const q=new URLSearchParams(location.search).get('v');setV(V[q]?q:'A');
+const q=new URLSearchParams(location.search).get('v');setV(V[q]?q:'C');
 const R=[["어떤 게임인가요?","주사위를 굴려 자원을 받고,<br>마을을 넓혀 점수를 쌓아요.","무인도에 처음 정착한 개척자가 되어 마을을 넓혀 가는 게임이에요. 땅에서 나오는 자원으로 도로, 마을, 도시를 지으면 점수가 올라가요. <b>10점</b>을 가장 먼저 모으면 이겨요."],
 ["땅과 자원","땅마다 나오는<br>자원이 달라요.","숲은 <b>목재</b>, 언덕은 <b>벽돌</b>, 목초지는 <b>양모</b>, 밭은 <b>곡물</b>, 산은 <b>광석</b>을 줘요. 사막은 아무것도 주지 않아요."]];
 let i=1;const show=()=>{const p=R[i];tt.textContent=p[0];ky.innerHTML=p[1];tx.innerHTML=p[2];lb.textContent=`게임 방법 · ${i+1} / 7`;im.src=`../assets/rules/${i+1}.webp`;};
