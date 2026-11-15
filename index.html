@@ -1343,6 +1343,9 @@ html body .sheet.sheet-rules{background:none!important;border:0!important;border
 #sheet.fin .frows>*{animation:fRise .45s ease-out both}
 #sheet.fin .frows>*:nth-child(1){animation-delay:.24s}#sheet.fin .frows>*:nth-child(2){animation-delay:.32s}#sheet.fin .frows>*:nth-child(3){animation-delay:.40s}#sheet.fin .frows>*:nth-child(4){animation-delay:.48s}#sheet.fin .frows>*:nth-child(n+5){animation-delay:.56s}
 #sheet.fin .ffoot{animation:fRise .45s ease-out .62s both}
+#sheet.fin2 .frows>*{animation:fRise .4s ease-out both}
+#sheet.fin2 .frows>*:nth-child(2){animation-delay:.08s}#sheet.fin2 .frows>*:nth-child(3){animation-delay:.16s}#sheet.fin2 .frows>*:nth-child(n+4){animation-delay:.24s}
+#sheet.fin2 .ffoot{animation:fRise .4s ease-out .3s both}
 #sheet.fin>.rbook>*:not(.mclose){animation:fRise .45s ease-out both}
 #sheet.fin.sheet-rules>.rbook{animation:none}
 @keyframes fRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
@@ -1390,14 +1393,14 @@ html body .sheet-trade .frows{gap:0!important}
 html body .ihd b{font-size:30px!important}
 html body .ihd small{font-size:16.5px!important}
 html body .isum{font-size:16.5px!important}
-html body .icols.devc p{font-size:18.5px!important;line-height:1.6}
+html body .icols.devc p{font-size:16.5px!important;line-height:1.6}
 html body .icols.devc small{font-size:15.5px!important}
 html body .isub{font-size:17px!important}
 html body .icol .ic-card{width:52px}
 html.phone body .ihd b{font-size:23px!important}
 html.phone body .ihd small{font-size:14.5px!important}
 html.phone body .isum{font-size:14.5px!important}
-html.phone body .icols.devc p{font-size:15px!important;line-height:1.5}
+html.phone body .icols.devc p{font-size:13px!important;line-height:1.5}
 html.phone body .icols.devc small{font-size:13.5px!important}
 html.phone body .isub{font-size:14.5px!important}
 html.phone body .icol .ic-card{width:36px}
@@ -2780,7 +2783,7 @@ function showMulti(tab,code){tab=tab||'invite';ui.mtab=tab;const tabs=[['invite'
     foot=`<p class="fhint" id="fMsg">${(code||ui.pendCode)?'초대받은 방 코드를 자동으로 입력했어요.':'초대받은 방 코드를 입력하세요.'}</p><button class="btn primary" id="fGo" data-mp="1">참가하기</button>`;}
   else{right=nickRow();foot=`<p class="fhint" id="fMsg">4인 · 보통 난이도로 진행돼요. 1분 안에 다 모이지 않으면 빈자리는 AI가 채워요.</p><button class="btn primary" id="fGo" data-mp="1">참가하기</button>`;}
   frame('multi','멀티 플레이','<p class="onl"></p>',left,right,foot);
-  document.querySelectorAll('.mtab').forEach(b=>b.onclick=()=>{const v=$('#nick')&&$('#nick').value.trim();if(v){ui.nick=v.slice(0,6);}const c=$('#mCode')&&$('#mCode').value;if(c)ui.pendCode=c;showMulti(b.dataset.t);});
+  document.querySelectorAll('.mtab').forEach(b=>b.onclick=()=>{const v=$('#nick')&&$('#nick').value.trim();if(v){ui.nick=v.slice(0,6);}const c=$('#mCode')&&$('#mCode').value;if(c)ui.pendCode=c;showMulti(b.dataset.t);const sh=$('#sheet');sh.classList.remove('fin','fin2');void sh.offsetWidth;sh.classList.add('fin2');clearTimeout(ui.fin2T);ui.fin2T=setTimeout(()=>sh.classList.remove('fin2'),900);});
   segBind('fdif',v=>{ui.diff=v;saveUi();});segBind('fcnt',v=>{ui.n=+v;saveUi();});
   $('#fx').onclick=()=>{closeModal();MP.offline();showTitle(true);};
   $('#fGo').onclick=()=>{if(!readNick())return;
