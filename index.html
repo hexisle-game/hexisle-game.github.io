@@ -1377,6 +1377,12 @@ html body .setpanel .seg button{font-size:13px!important}
 #title.tfadepre{opacity:0!important}
 @keyframes tScIn{from{opacity:0}}
 #modal.mfade{opacity:0;transition:opacity .45s ease;pointer-events:none}
+
+/* motion: flying resource cards + producing land glow */
+.flycard{position:fixed;left:0;top:0;z-index:60;pointer-events:none;border-radius:6px;box-shadow:0 10px 24px rgba(0,0,0,.55),0 0 18px rgba(255,214,140,.45);will-change:transform,opacity;transform-origin:50% 50%}
+.hexglow{position:fixed;z-index:5;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,230,160,.85) 0,rgba(255,200,110,.35) 35%,transparent 70%);animation:hexGlow 1.2s ease-out both}
+@keyframes hexGlow{0%{opacity:0;transform:scale(.5)}25%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.25)}}
+html.phone .hexglow{width:110px;height:110px;margin:-55px 0 0 -55px}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
@@ -2471,6 +2477,30 @@ function fan(items,cw,maxW,extra){const n=items.length;if(!n)return '';const ch=
   const mm=(n-1)/2,maxY=mm*mm*.7*spread/3;
   return `<div class="fan ${extra||''}" style="--cw:${cw}px;--fh:${ch+30+maxY}px">${items.map((it,i)=>{const m=i-(n-1)/2;const a=m*spread,y=m*m*.7*spread/3;
     return `<div class="cw" style="transform:translateX(calc(-50% + ${m*step}px)) translateY(${y}px) rotate(${a}deg);z-index:${i}">${it}</div>`;}).join('')}</div>`;}
+
+// ---- motion: resource cards fly from the producing land into their slot in the hand ----
+function flyCards(){const box=$('#hand');const news=[...box.querySelectorAll('.cw.new')];if(!news.length||typeof W==='undefined'||!W.ok||!S.dice)return false;
+  if(PH.on&&ui.handTab==='dev')return false;
+  const n=S.dice[0]+S.dice[1],src={};
+  S.board.hexes.forEach((t,hi)=>{if(t.num!==n||hi===S.board.robber)return;for(const v of G.hexes[hi].v){const b=S.vb[v];if(b&&b.o===ME)(src[t.res]=src[t.res]||[]).push(...Array(b.c?2:1).fill(hi));}});
+  const k=PH.on?PH.k:1,cr=W.r.domElement.getBoundingClientRect();
+  const scr=hi=>{const p=hc(hi);const v=new THREE.Vector3(p.x,heightAt(p.x,p.z)+.25,p.z).project(W.cam);return {x:(cr.left+(v.x+1)/2*cr.width)/k,y:(cr.top+(1-v.y)/2*cr.height)/k};};
+  let flew=0,lost=0;const glowed=new Set();
+  news.forEach((cw,i)=>{const img=cw.querySelector('img[data-res]');const r=img&&img.dataset.res;const hi=r&&src[r]&&src[r].shift();
+    if(hi===undefined||hi===null){lost++;return;}
+    const s=scr(hi);const t=cw.getBoundingClientRect();const w=t.width/k,h=t.height/k,tx=t.left/k,ty=t.top/k;
+    if(!glowed.has(hi)){glowed.add(hi);const g=document.createElement('div');g.className='hexglow';g.style.left=s.x+'px';g.style.top=s.y+'px';document.body.appendChild(g);setTimeout(()=>g.remove(),1300);}
+    cw.classList.remove('new');cw.style.visibility='hidden';
+    const f=img.cloneNode();f.className='flycard';f.removeAttribute('data-res');f.style.width=w+'px';f.style.height=h+'px';document.body.appendChild(f);
+    const sx=s.x-w/2,sy=s.y-h/2,mx=(sx+tx)/2,my=Math.min(sy,ty)-60;
+    const a=f.animate([
+      {transform:`translate(${sx}px,${sy}px) scale(.2) rotate(-12deg)`,opacity:0},
+      {offset:.18,transform:`translate(${sx}px,${sy-24}px) scale(.5) rotate(-8deg)`,opacity:1},
+      {offset:.55,transform:`translate(${mx}px,${my}px) scale(.85) rotate(6deg)`,opacity:1},
+      {transform:`translate(${tx}px,${ty}px) scale(1) rotate(0deg)`,opacity:1}],{duration:720,delay:160+i*130,easing:'cubic-bezier(.35,.1,.3,1)',fill:'both'});
+    flew++;a.onfinish=()=>{cw.style.visibility='';f.remove();cw.animate([{transform:'translateY(-6px) scale(1.06)'},{transform:'none'}],{duration:220,easing:'ease-out'});try{SND.sfx('gain');}catch(e){}};});
+  if(lost)setTimeout(()=>{news.forEach(cw=>{if(cw.style.visibility!=='hidden')cw.style.visibility='';});try{SND.sfxN('gain',lost,.07);}catch(e){}},160);
+  return flew>0||lost>0;}
 function renderHand(me,groups){const box=$('#hand');
   // after a roll, keep showing the old hand until the dice result is revealed; then the new cards slide in (with their sound)
   {const wait=(ui.diceRevealAt||0)-performance.now();if(wait>0&&ui.prevRes){const shown={};RES.forEach(r=>shown[r]=Math.min(me.res[r],ui.prevRes[r]||0));if(RES.some(r=>shown[r]!==me.res[r])){me={...me,res:shown};clearTimeout(ui.handT);ui.handT=setTimeout(()=>{try{render();}catch(e){}},wait+10);
@@ -2480,9 +2510,10 @@ function renderHand(me,groups){const box=$('#hand');
   const hh=$('#handHead');if(PH.on){if(!ui.handTab)ui.handTab='res';hh.innerHTML=`<button class="htab${ui.handTab==='res'?' on':''}" data-htab="res">내 자원카드 · ${list.length}장</button><button class="htab${ui.handTab==='dev'?' on':''}" data-htab="dev">내 발전카드 · ${me.dev.length}장</button><button class="qi" data-pop="all" aria-label="발전 카드 종류 보기">?</button>`;}
   else hh.innerHTML=`내 자원카드 <span id="handCount">· ${list.length}장${list.length>7?' (8장 이상: 7이 나오면 절반을 버려요)':''}</span>`;
   if(PH.on&&ui.handTab==='dev'){box.innerHTML=me.dev.length?row(me.dev.map(d=>`<div style="position:relative"><img class="card" src="${CARDIMG[d.t]}" alt="${DEVN[d.t]}" data-pop="${d.t}">${d.fresh&&d.t!=='vp'?'<span class="newtag">다음 차례</span>':''}</div>`),cw,W0,'devrow2'):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">발전 카드가 없어요.</div>`;return;}
-  let h=list.length?row(list.map(r=>`<img class="card" src="${CARDIMG[r]}" alt="${RN[r]}" data-tip="${RN[r]}: ${TN[r]}에서 나와요. ${RUSE[r]}에 써요.">`),cw,W0,'',flags):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">자원 카드가 없어요.</div>`;
+  let h=list.length?row(list.map(r=>`<img class="card" data-res="${r}" src="${CARDIMG[r]}" alt="${RN[r]}" data-tip="${RN[r]}: ${TN[r]}에서 나와요. ${RUSE[r]}에 써요.">`),cw,W0,'',flags):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">자원 카드가 없어요.</div>`;
   h+=`<div class="tally">${RES.map(r=>`<span class="${me.res[r]?'':'z'}">${RN[r]} ${me.res[r]}</span>`).join('')}</div>`;
   box.innerHTML=h;
+  if(ui.flyRoll&&ui.flyRoll===S.rollId&&!box.dataset.hold){ui.flyRoll=null;requestAnimationFrame(()=>{let ok=false;try{ok=flyCards();}catch(e){console.warn(e);}if(!ok&&ui.gainN){SND.sfxN('gain',ui.gainN,.07);}ui.gainN=0;});}
   {const dc=$('#devCount');if(dc)dc.textContent='· '+me.dev.length+'장';}
   const db=$('#devs');const dw=Math.max(150,Math.min(300,db.clientWidth||220));
   db.innerHTML=me.dev.length?row(me.dev.map(d=>`<div style="position:relative"><img class="card" src="${CARDIMG[d.t]}" alt="${DEVN[d.t]}" data-pop="${d.t}" data-tip="${DEVN[d.t]}: 눌러서 설명 보기">${d.fresh&&d.t!=='vp'?'<span class="newtag">다음 차례</span>':''}</div>`),innerHeight<900&&innerWidth>1100?50:62,dw,'devrow2'):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">발전 카드가 없어요.</div>`;}
@@ -2503,7 +2534,7 @@ function render(){
   if(ui.lastCur!==S.cur+':'+S.phase){ui.lastCur=S.cur+':'+S.phase;const tb=$('#turnbar');tb.classList.remove('swap');void tb.offsetWidth;tb.classList.add('swap');}
   {const rl=$('#roundline');if(rl)rl.textContent=S.phase==='setup'?`초기 배치 ${S.si+1}/${2*S.n}`:S.phase==='over'?'게임 종료':`${S.turn}번째 바퀴`;}
   $('#gameinfo').textContent=`${S.n}인 게임, 난이도 ${({easy:'쉬움',normal:'보통',hard:'어려움'})[S.diff||'normal']}`;
-  if(rolledNow&&S.dice){ui.diceRevealAt=performance.now()+1350;renderDiceBox();slotSpin();if(typeof throwDice==='function')throwDice(S.dice);clearTimeout(ui.diceT);ui.diceT=setTimeout(renderDiceBox,1450);}
+  if(rolledNow&&S.dice){ui.diceRevealAt=performance.now()+1350;ui.flyRoll=S.rollId;renderDiceBox();slotSpin();if(typeof throwDice==='function')throwDice(S.dice);clearTimeout(ui.diceT);ui.diceT=setTimeout(renderDiceBox,1450);}
   else if(!(S.dice&&performance.now()<(ui.diceRevealAt||0)))renderDiceBox();
   const myS=S.phase==='main'&&S.cur===ME&&!S.pend;
   $('#stagebtns').innerHTML=`<button class="tbtn primary" data-act="roll" data-tip="${BTIP.roll}" ${myS&&!S.rolled?'':'disabled'}>주사위 굴리기</button><button class="tbtn" data-act="trade" data-tip="${BTIP.trade}" ${myS&&S.rolled?'':'disabled'}>교환</button><button class="tbtn" data-act="end" data-tip="${BTIP.end}" ${myS&&S.rolled?'':'disabled'}>턴 종료</button>`;
@@ -3372,7 +3403,7 @@ function sndWatch(){if(typeof SND==='undefined'||!S||!S.players||!S.players[ME])
   else if(cur.ob>p.ob)SND.sfx('place_other');
   if(cur.rob!==p.rob){const mine=G.hexes[cur.rob]&&G.hexes[cur.rob].v.some(v=>S.vb[v]&&S.vb[v].o===ME);SND.sfx(mine?'robber':'robber2');}
   if(cur.st!==p.st&&cur.st){const L=S.lastSteal;if(L.q===ME||L.p===ME)setTimeout(()=>SND.sfx('steal'),cur.rob!==p.rob?650:200);}
-  if(cur.res>p.res){const n=cur.res-p.res;if(cur.id!==p.id)setTimeout(()=>SND.sfxN('gain',n,.07),1360);else if(cur.s===p.s&&cur.r===p.r&&cur.c===p.c){if(cur.dev===p.dev&&!(S.pend&&S.pend.k))SND.sfx('trade');else SND.sfxN('gain',n);}}
+  if(cur.res>p.res){const n=cur.res-p.res;if(cur.id!==p.id)ui.gainN=n;else if(cur.s===p.s&&cur.r===p.r&&cur.c===p.c){if(cur.dev===p.dev&&!(S.pend&&S.pend.k))SND.sfx('trade');else SND.sfxN('gain',n);}}
   if(cur.ph==='main'&&cur.cur===ME&&(p.cur!==ME||p.ph!=='main'))setTimeout(()=>SND.sfx('turn'),150);
   if(cur.ph==='over'&&p.ph!=='over'){SND.sfx(S.winner===ME?'win':'lose');SND.endMusic();}}
 // last 9 seconds of my own time limit: one tick per second
