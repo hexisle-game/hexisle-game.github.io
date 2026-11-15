@@ -113,7 +113,7 @@ const frame2=(rows)=>`<div class="bg"></div><div class="frame"><button class="x"
 const strip=(mode)=>mode==='p'?`<div class="cstrip">${MANY.map((p,i)=>av(p,i==0?'on':'')).join('')}</div>`:`<div class="cstrip">${COL.map((c,i)=>`<i class="${i==0?'on':''}" style="background:${c}"></i>`).join('')}</div>`;
 const tgl=(mode,icon)=>icon?`<div class="ctg"><img src="pt/tg_icon${mode==='p'?'L':'R'}.webp"></div>`:`<div class="ctg"><span class="${mode==='p'?'on':''}">캐릭터</span><img src="pt/tg_plain${mode==='p'?'L':'R'}.webp"><span class="${mode==='c'?'on':''}">색상</span></div>`;
 const crow=(mode,icon)=>frame2(`<div class="row"><div class="lab">내 캐릭터</div><div class="crow">${tgl(mode,icon)}${strip(mode)}</div></div>`);
-const PAL={a:['#ff5424','#3a8cff','#e046e0','#ff8fc4','#f5c400','#2fb36b'],b:['#ff5424','#3a8cff','#e046e0','#ff8fc4','#f5c400','#2fb36b','#efe6cf']};let COL6=PAL.a;
+const PAL={a:['#c9391e','#3a8cff','#7f17dd','#e331c5','#f5c400','#2fb36b'],b:['#c9391e','#3a8cff','#7f17dd','#e331c5','#f5c400','#2fb36b','#efe6cf']};let COL6=PAL.a;
 const estrip=(mode)=>`<div class="cstrip">${mode==='p'?MANY.map((p,i)=>av(p,i==0?'on':'')).join(''):COL6.map((c,i)=>av('otter',i==0?'on sel':'cc',c)).join('')}</div>`;
 const erow=(mode,pal)=>{COL6=PAL[pal||'a'];return frame2(`<div class="row"><div class="lab">내 캐릭터</div><div class="erow"><img class="etg" src="pt/tg_plain${mode==='p'?'L':'R'}.webp"><span class="elab">${mode==='p'?'캐릭터':'색상'}</span><span class="vdiv"></span>${estrip(mode)}</div></div>`);};
 const V={
