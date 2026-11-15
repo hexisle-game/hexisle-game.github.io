@@ -2666,7 +2666,7 @@ function showTitle(menu){try{SND.music('title');}catch(e){}const t=$('#title');i
 function hideTitle(){try{SND.music('game');}catch(e){}document.querySelectorAll('#title video').forEach(v=>v.pause());$('#title').hidden=true;document.documentElement.classList.remove('on-title');}
 $('#title').addEventListener('click',e=>{if(ui.modal)return;if($('#tMenu').hidden){ui.titleMenu=true;showTitle(true);}});
 $('#tSingle').onclick=e=>{e.stopPropagation();showSingle();};
-$('#tMulti').onclick=e=>{e.stopPropagation();showMulti('invite');};
+$('#tMulti').onclick=e=>{e.stopPropagation();if(ui.invite){const c=ui.invite;ui.invite=null;$('#tSingle').hidden=false;ui.nick=(ui.nick||defNick()).trim().slice(0,6);MP.join(c);return;}showMulti('invite');};
 $('#tTut').onclick=e=>{e.stopPropagation();showRules(0,()=>{closeModal();showTitle(true);});};
 function showStart(){closeModal();if(window.MP&&window.NET&&!NET.on)MP.offline();showTitle(ui.titleMenu);}
 const DIFFN={easy:'쉬움',normal:'보통',hard:'어려움'};
@@ -2966,7 +2966,7 @@ const MP={db:null,subs:[],offSince:{},
     $('#leaveBtn').hidden=true;$('#newBtn').hidden=false;try{history.replaceState(null,'',location.pathname);}catch(e){}}};
 setInterval(()=>{if(!NET.on)return;try{MP.hostTick();MP.pubTick();if(ui.modal==='lobby'&&NET.meta&&NET.meta.autoAt)MP.drawLobby();}catch(e){}},1000);
 $('#leaveBtn').onclick=()=>{if(NET.on)MP.confirmLeave();};
-{const q=new URLSearchParams(location.search).get('room');if(q&&MP_ENABLED)setTimeout(()=>MP.openEntry(q.toUpperCase().slice(0,5)),600);}
+{const q=new URLSearchParams(location.search).get('room');if(q&&MP_ENABLED){ui.invite=q.toUpperCase().slice(0,5);$('#tSingle').hidden=true;}}
 
 </script>
 <script id="tut-js">
