@@ -2410,9 +2410,12 @@ function fan(items,cw,maxW,extra){const n=items.length;if(!n)return '';const ch=
   const mm=(n-1)/2,maxY=mm*mm*.7*spread/3;
   return `<div class="fan ${extra||''}" style="--cw:${cw}px;--fh:${ch+30+maxY}px">${items.map((it,i)=>{const m=i-(n-1)/2;const a=m*spread,y=m*m*.7*spread/3;
     return `<div class="cw" style="transform:translateX(calc(-50% + ${m*step}px)) translateY(${y}px) rotate(${a}deg);z-index:${i}">${it}</div>`;}).join('')}</div>`;}
-function renderHand(me,groups){const box=$('#hand');const W0=Math.max(220,box.clientWidth||520);const cw=Math.round((W0<360?66:innerHeight<900&&innerWidth>1100?66:86)*(PH.on?.67:1));
+function renderHand(me,groups){const box=$('#hand');
+  // after a roll, keep showing the old hand until the dice result is revealed; then the new cards slide in (with their sound)
+  {const wait=(ui.diceRevealAt||0)-performance.now();if(wait>0&&ui.prevRes){const shown={};RES.forEach(r=>shown[r]=Math.min(me.res[r],ui.prevRes[r]||0));if(RES.some(r=>shown[r]!==me.res[r])){me={...me,res:shown};clearTimeout(ui.handT);ui.handT=setTimeout(()=>{try{render();}catch(e){}},wait+10);
+    box.dataset.hold='1';}}else delete box.dataset.hold;}const W0=Math.max(220,box.clientWidth||520);const cw=Math.round((W0<360?66:innerHeight<900&&innerWidth>1100?66:86)*(PH.on?.67:1));
   const list=RES.flatMap(r=>Array(me.res[r]).fill(r));
-  const prev=ui.prevRes||me.res;let nn=0;const flags=list.map((r,i)=>{const idx=i-list.indexOf(r);return idx>=(prev[r]||0)&&ui.prevRes?++nn:0;});ui.prevRes={...me.res};
+  const prev=ui.prevRes||me.res;let nn=0;const flags=list.map((r,i)=>{const idx=i-list.indexOf(r);return idx>=(prev[r]||0)&&ui.prevRes?++nn:0;});if(!box.dataset.hold)ui.prevRes={...me.res};
   const hh=$('#handHead');if(PH.on){if(!ui.handTab)ui.handTab='res';hh.innerHTML=`<button class="htab${ui.handTab==='res'?' on':''}" data-htab="res">내 자원카드 · ${list.length}장</button><button class="htab${ui.handTab==='dev'?' on':''}" data-htab="dev">내 발전카드 · ${me.dev.length}장</button><button class="qi" data-pop="all" aria-label="발전 카드 종류 보기">?</button>`;}
   else hh.innerHTML=`내 자원카드 <span id="handCount">· ${list.length}장${list.length>7?' (8장 이상: 7이 나오면 절반을 버려요)':''}</span>`;
   if(PH.on&&ui.handTab==='dev'){box.innerHTML=me.dev.length?row(me.dev.map(d=>`<div style="position:relative"><img class="card" src="${CARDIMG[d.t]}" alt="${DEVN[d.t]}" data-pop="${d.t}">${d.fresh&&d.t!=='vp'?'<span class="newtag">다음 차례</span>':''}</div>`),cw,W0,'devrow2'):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">발전 카드가 없어요.</div>`;return;}
@@ -3280,7 +3283,7 @@ function sndWatch(){if(typeof SND==='undefined'||!S||!S.players||!S.players[ME])
   else if(cur.ob>p.ob)SND.sfx('place_other');
   if(cur.rob!==p.rob){const mine=G.hexes[cur.rob]&&G.hexes[cur.rob].v.some(v=>S.vb[v]&&S.vb[v].o===ME);SND.sfx(mine?'robber':'robber2');}
   if(cur.st!==p.st&&cur.st){const L=S.lastSteal;if(L.q===ME||L.p===ME)setTimeout(()=>SND.sfx('steal'),cur.rob!==p.rob?650:200);}
-  if(cur.res>p.res){const n=cur.res-p.res;if(cur.id!==p.id)setTimeout(()=>SND.sfxN('gain',n),1100);else if(cur.s===p.s&&cur.r===p.r&&cur.c===p.c){if(cur.dev===p.dev&&!(S.pend&&S.pend.k))SND.sfx('trade');else SND.sfxN('gain',n);}}
+  if(cur.res>p.res){const n=cur.res-p.res;if(cur.id!==p.id)setTimeout(()=>SND.sfxN('gain',n,.07),1360);else if(cur.s===p.s&&cur.r===p.r&&cur.c===p.c){if(cur.dev===p.dev&&!(S.pend&&S.pend.k))SND.sfx('trade');else SND.sfxN('gain',n);}}
   if(cur.ph==='main'&&cur.cur===ME&&(p.cur!==ME||p.ph!=='main'))setTimeout(()=>SND.sfx('turn'),150);
   if(cur.ph==='over'&&p.ph!=='over')SND.sfx(S.winner===ME?'win':'lose');}
 // last 9 seconds of my own time limit: one tick per second
