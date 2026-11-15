@@ -310,6 +310,8 @@ header.top .sub{display:none}
 .sheet p{line-height:1.75}
 :root{--acc:#d9a441;--acc-ink:#1c1306;--ink:#f2ece2;--muted:#a69b8b;--r:12px;--trayh:210px;--display:"Hahmlet",system-ui,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Hahmlet",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
 html,body{background:#0d0b09;color:var(--ink)}
+/* never let anything widen the page: a wider page makes mobile browsers zoom, and that zoom sticks across rotations */
+@media (orientation:portrait) and (max-width:900px){html,body{max-width:100vw;overflow:hidden;overflow:clip}}
 body{background:#0d0b09;font-family:var(--body);font-size:14px;letter-spacing:-.005em}
 .panel,.coach,.sheet,.dicebox,.toast,#tip,#pop,.turnplaque{background:var(--hud-bg)!important;border:1px solid var(--hud-line);border-radius:var(--r);box-shadow:0 12px 32px rgba(0,0,0,.32)}
 #tip,#pop,.toast{background:var(--hud-bg2)!important}
