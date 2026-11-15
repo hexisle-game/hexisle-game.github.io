@@ -126,10 +126,10 @@ const SLOTS=[
  {id:'robber2',sec:'game',name:'도둑 · 다른 사람 자리로',desc:'도둑을 다른 사람 땅으로 옮길 때',gain:0.34,cur:['robber'],isnew:1},
  {id:'steal',sec:'game',name:'훔치기',desc:'다른 플레이어 카드를 훔칠 때',gain:0.12,cur:['steal']},
  {id:'error',sec:'game',name:'오류 / 불가',desc:'할 수 없는 행동을 눌렀을 때',gain:0.23,cur:['error']},
- {id:'place_other',sec:'build',name:'다른 플레이어 건설',desc:'다른 사람이 도로·마을·도시를 놓을 때 (낮고 짧은 쿵)',gain:0.3,cur:[],isnew:1},
- {id:'road',sec:'build',name:'도로 건설',desc:'내가 놓을 때 · 큰 쿵 + 작은 망치질 2번',gain:0.48,cur:['road'],isnew:1},
- {id:'build',sec:'build',name:'마을 건설',desc:'내가 놓을 때 · 큰 쿵과 함께 웅성임 + 짠 (망치 없음)',gain:0.54,cur:['build'],isnew:1},
- {id:'city',sec:'build',name:'도시 업그레이드',desc:'내가 놓을 때 · 큰 쿵과 함께 환호 + 웅장한 짠 (망치 없음)',gain:0.57,cur:['city'],isnew:1},
+ {id:'place_other',sec:'build',name:'다른 플레이어 건설',desc:'다른 사람이 도로·마을·도시를 놓을 때 (도둑 · 다른 사람 자리로와 같은 소리)',gain:0.29,cur:[],isnew:1},
+ {id:'road',sec:'build',name:'도로 건설',desc:'내가 놓을 때 · 큰 쿵 + 작은 망치질 2번',gain:0.33,cur:['road'],isnew:1},
+ {id:'build',sec:'build',name:'마을 건설',desc:'내가 놓을 때 · 큰 쿵과 함께 웅성임 + 짠 (망치 없음)',gain:0.39,cur:['build'],isnew:1},
+ {id:'city',sec:'build',name:'도시 업그레이드',desc:'내가 놓을 때 · 큰 쿵과 함께 환호 + 웅장한 짠 (망치 없음)',gain:0.42,cur:['city'],isnew:1},
  {id:'win',sec:'end',name:'승리',desc:'게임에서 이겼을 때',gain:0.22,cur:['win']},
  {id:'lose',sec:'end',name:'패배',desc:'게임에서 졌을 때',gain:0.19,cur:['lose']},
 ];
@@ -139,7 +139,7 @@ SLOTS.forEach(s=>{s.cg=1;s.def={gain:s.gain,file:s.file,fname:s.fname};});
 const DB={db:null,open(){return this.db||(this.db=new Promise((r,j)=>{const q=indexedDB.open('hexisle-sfx2',1);q.onupgradeneeded=()=>q.result.createObjectStore('f');q.onsuccess=()=>r(q.result);q.onerror=()=>j(q.error);}));},
   async put(k,v){const d=await this.open();return new Promise(r=>{const t=d.transaction('f','readwrite');v==null?t.objectStore('f').delete(k):t.objectStore('f').put(v,k);t.oncomplete=r;t.onerror=r;});},
   async all(){const d=await this.open();return new Promise(r=>{const o={},t=d.transaction('f'),st=t.objectStore('f'),q=st.openCursor();q.onsuccess=()=>{const c=q.result;if(c){o[c.key]=c.value;c.continue();}else r(o);};q.onerror=()=>r(o);});}};
-const LS='hexisle-sfx-test2';const saveVol=()=>{try{localStorage.setItem(LS,JSON.stringify({master:SND.vol.sfx,g:Object.fromEntries(SLOTS.map(s=>[s.id,[s.gain,s.cg]]))}));}catch(e){}};
+const LS='hexisle-sfx-test3';const saveVol=()=>{try{localStorage.setItem(LS,JSON.stringify({master:SND.vol.sfx,g:Object.fromEntries(SLOTS.map(s=>[s.id,[s.gain,s.cg]]))}));}catch(e){}};
 const bufs={},user={};
 async function decode(ab){SND.unlock();return new Promise((r,j)=>SND.ctx.decodeAudioData(ab.slice(0),r,j));}
 async function getBuf(s){if(bufs[s.id])return bufs[s.id];let ab;if(user[s.id])ab=await user[s.id].blob.arrayBuffer();else if(s.file)ab=await (await fetch(s.file)).arrayBuffer();else return null;return bufs[s.id]=await decode(ab);}
