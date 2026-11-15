@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#0d0b09">
 <meta name="description" content="육각형 섬에서 자원을 모으고 교환하며 10점을 먼저 모으는 2~4인 개척 게임. AI와 함께 플레이해요.">
 <meta property="og:type" content="website">
@@ -1302,6 +1302,7 @@ html body .tpick .tcell:disabled{box-shadow:none!important}
 @keyframes tbgIn{from{transform:scale(.86) translateY(-9%)}to{transform:none}}
 @keyframes tlogoIn{from{opacity:0;transform:translate(-50%,-14px)}to{opacity:1;transform:translate(-50%,0)}}
 .title.intro .tbot{animation-name:tbotIn}
+.title.intro .tbot,.title.intro .tbot *{pointer-events:none}
 @keyframes tbotIn{from{opacity:0}to{opacity:1}}
 
 /* splash: black screen + small logo; tap brightens into the title intro (music starts on the same tap) */
@@ -3077,11 +3078,16 @@ const TUT={on:false,i:0,P:null,traded:false,force7:false,aiDiceIx:0,
     bub.style.left=x+'px';bub.style.top=y+'px';}};
 const me0=()=>S.players[0];
 const nameOf=p=>`<b style="color:${S.players[p].color}">${S.players[p].name}</b>`;
+// camera lessons: a step only starts counting once every finger/button from the previous gesture is lifted
+TUT.ptrs=new Set();['pointerdown','pointerup','pointercancel'].forEach(ev=>addEventListener(ev,e=>{if(ev==='pointerdown')TUT.ptrs.add(e.pointerId);else TUT.ptrs.delete(e.pointerId);},true));
+addEventListener('touchend',e=>{if(!e.touches.length)TUT.ptrs.clear();},true);
+TUT.armCam=function(){this.c0=this.camSnap();this.camArmed=!this.ptrs.size;};
+TUT.camReady=function(){if(!this.camArmed){if(this.ptrs.size)return false;this.camArmed=true;this.c0=this.camSnap();return false;}return true;};
 TUT.steps=[
  {t:'헥스아일에 오신 걸 환영해요!',b:'직접 한 판을 따라 하면서 게임 방법을 익혀 볼게요. 상대는 AI 두 명이에요. 빛나는 곳만 누르면 돼요.',next:true},
  {t:'섬 돌려 보기',b:()=>PH.on?'한 손가락으로 화면을 끌어 섬을 <b>돌려</b> 보세요.':'마우스로 화면을 끌어 섬을 <b>돌려</b> 보세요.',at:{sel:'#stage',pad:0},pass:true,spot:'left',small:true,gest:'rot',enter(){this.c0=this.camSnap();},done(){const c=this.camSnap();return Math.abs(c.az-this.c0.az)>.35||Math.abs(c.po-this.c0.po)>.2;}},
- {t:'확대·축소',b:()=>PH.on?'두 손가락을 벌리거나 모아서 <b>확대·축소</b>해 보세요.':'마우스 휠을 굴려 <b>확대·축소</b>해 보세요.',at:{sel:'#stage',pad:0},pass:true,spot:'left',small:true,gest:'zoom',enter(){this.c0=this.camSnap();},done(){return Math.abs(this.camSnap().d-this.c0.d)>1.2;}},
- {t:'화면 옮기기',b:()=>PH.on?'두 손가락으로 함께 끌어 화면을 <b>옮겨</b> 보세요.':'마우스 오른쪽 버튼으로 끌어 화면을 <b>옮겨</b> 보세요.',at:{sel:'#stage',pad:0},pass:true,spot:'left',small:true,gest:'pan',enter(){this.c0=this.camSnap();},done(){return this.camSnap().t.distanceTo(this.c0.t)>.5;},leave(){}},
+ {t:'확대·축소',b:()=>PH.on?'두 손가락을 벌리거나 모아서 <b>확대·축소</b>해 보세요.':'마우스 휠을 굴려 <b>확대·축소</b>해 보세요.',at:{sel:'#stage',pad:0},pass:true,spot:'left',small:true,gest:'zoom',enter(){this.armCam();},done(){return this.camReady()&&Math.abs(this.camSnap().d-this.c0.d)>1.2;}},
+ {t:'화면 옮기기',b:()=>PH.on?'두 손가락으로 함께 끌어 화면을 <b>옮겨</b> 보세요.':'마우스 오른쪽 버튼으로 끌어 화면을 <b>옮겨</b> 보세요.',at:{sel:'#stage',pad:0},pass:true,spot:'left',small:true,gest:'pan',enter(){this.armCam();},done(){return this.camReady()&&this.camSnap().t.distanceTo(this.c0.t)>.5;},leave(){}},
  {t:'좋아요!',b:'시점이 헷갈리면 오른쪽 위 <b>시점 초기화</b>를 누르면 돼요. 이제 게임을 시작해 볼게요.',at:{sel:'#camReset',pad:6},next:true,leave(){this.zoomOut();}},
  {t:'첫 정착지 놓기',b:'정착지는 <b>땅의 꼭짓점</b>에만 지을 수 있어요. 꼭짓점에 닿은 땅들에서 자원이 나와요. 빛나는 꼭짓점을 누르세요.',at(){return {v:this.P.v1};},only:{},enter(){this.steps[this.i].only={v:this.P.v1};this.focus({v:this.P.v1});},done(){return !!S.vb[this.P.v1];}},
  {t:'도로 놓기',b:'도로는 <b>땅과 땅 사이의 변</b>에 놓아요. 방금 지은 정착지에 이어서 빛나는 곳을 누르세요.',at(){return {e:this.P.e1};},enter(){this.steps[this.i].only={e:this.P.e1};this.focus({e:this.P.e1});},done(){return S.eo[this.P.e1]===0;}},
@@ -3142,7 +3148,7 @@ const SND={ctx:null,playing:null,next:0,timer:null,vol:{bgm:.5,sfx:.5},on:{bgm:t
     this.rev=c.createConvolver();this.rev.buffer=mk(3.2,2.2);const rg=c.createGain();rg.gain.value=.42;this.rev.connect(rg);rg.connect(this.bgmG);
     this.revS=c.createConvolver();this.revS.buffer=mk(1.8,2.6);const rs=c.createGain();rs.gain.value=.22;this.revS.connect(rs);rs.connect(this.sfxG);
     this.apply();return true;},
-  apply(){if(!this.ctx)return;const t=this.ctx.currentTime;this.bgmG.gain.setTargetAtTime(this.on.bgm?this.vol.bgm*.5:0,t,.15);this.sfxG.gain.setTargetAtTime(this.on.sfx?this.vol.sfx*1.1:0,t,.05);},
+  apply(){if(!this.ctx)return;const t=this.ctx.currentTime;this.bgmG.gain.setTargetAtTime(this.on.bgm?this.vol.bgm*.5:0,t,.15);this.sfxG.gain.setTargetAtTime(this.on.sfx?this.vol.sfx*1.045:0,t,.05);},
   unlock(){if(!this.init())return;if(this.ctx.state==='suspended')this.ctx.resume();this.apply();},
   hz(n){return 440*Math.pow(2,(n-69)/12);},
   nbuf:null,noiseBuf(){if(this.nbuf)return this.nbuf;const c=this.ctx,b=c.createBuffer(1,c.sampleRate*2,c.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;return this.nbuf=b;},
@@ -3209,7 +3215,7 @@ Object.assign(SND,{cur:null,want:null,lastGame:-1,nextGame:-1,FADE:2.5,pre:{},
     const prev=this.cur;const c=this.ctx,a=this.el(src);a.loop=mode==='title'||plays>1;
     const g=c.createGain();g.gain.value=0;let n;try{n=c.createMediaElementSource(a);n.connect(g);g.connect(this.bgmBus);}catch(e){a.volume=.4;}
     const cur=this.cur={mode,src,a,g,n,plays,loopN:0,lastT:0};const fin=mode==='title'&&!prev?.35:this.FADE;
-    const go=()=>{if(this.cur!==cur)return;const t=c.currentTime;g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(mode==='title'?1:.68,t+fin);this.fadeOut(prev);if(mode==='game')this.preload(MUSIC.game[this.nextGame].src);};
+    const go=()=>{if(this.cur!==cur)return;const t=c.currentTime;g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(mode==='title'?1:.54,t+fin);this.fadeOut(prev);if(mode==='game')this.preload(MUSIC.game[this.nextGame].src);};
     if(prev)prev.ending=true;a.addEventListener('playing',go,{once:true});
     if(mode==='game')a.addEventListener('timeupdate',()=>{if(this.cur!==cur||cur.ending)return;const ct=a.currentTime;if(ct+1<cur.lastT){cur.loopN++;if(cur.loopN>=cur.plays-1)a.loop=false;}cur.lastT=ct;
       if(cur.loopN>=cur.plays-1&&a.duration&&a.duration-ct<this.FADE+.3){this.startMusic('game');}});
@@ -3233,6 +3239,14 @@ Object.assign(SND,{fx:{},fxLoading:false,lastUi:0,
 
 
 SND.load();
+
+// keep the page at 100%: some mobile browsers keep a stray zoom after rotating or leaving fullscreen
+(function(){const VP='width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
+  const meta=()=>{let m=document.querySelector('meta[name=viewport]');if(!m){m=document.createElement('meta');m.name='viewport';document.head.appendChild(m);}return m;};
+  const fix=()=>{const vv=window.visualViewport;if(vv&&Math.abs(vv.scale-1)<.01)return;const m=meta();m.content=VP.replace('initial-scale=1','initial-scale=1.0001');requestAnimationFrame(()=>{m.content=VP;});};
+  let t;const later=()=>{clearTimeout(t);t=setTimeout(fix,250);};
+  ['orientationchange','resize','pageshow','fullscreenchange','webkitfullscreenchange'].forEach(ev=>addEventListener(ev,later));document.addEventListener('fullscreenchange',later);
+  if(window.visualViewport)visualViewport.addEventListener('resize',later);fix();})();
 ['pointerdown','pointerup','touchend','click','keydown'].forEach(ev=>addEventListener(ev,()=>SND.unlock(),{capture:true,passive:true}));
 document.addEventListener('visibilitychange',()=>{if(!SND.ctx)return;const a=SND.cur&&SND.cur.a;if(document.hidden){SND.ctx.suspend();a&&a.pause();}else{SND.ctx.resume();a&&!SND.cur.dead&&a.play().catch(()=>{});}});
 // buffer the title track right away; it starts on the splash tap together with the intro
@@ -3256,7 +3270,7 @@ function showSound(){const row=(k,label)=>`<div class="sndrow"><span class="sndl
   $('#sndOk').onclick=closeDialog;}
 
 function sndWatch(){if(typeof SND==='undefined'||!S||!S.players||!S.players[ME])return;const me=S.players[ME];const k=count(ME);
-  let ob=0;S.players.forEach((q,i)=>{if(i!==ME){const c=count(i);ob+=c.s+c.c+c.r;}});
+  let ob=0;S.players.forEach((q,i)=>{if(i!==ME){const c=count(i);ob+=c.s+2*c.c+c.r;}});
   const cur={id:S.rollId,res:sumRes(me.res),s:k.s,c:k.c,r:k.r,ob,dev:me.dev.length,cur:S.cur,ph:S.phase,rob:S.board.robber,st:S.lastSteal?JSON.stringify(S.lastSteal):'',g:S.board.hexes.map(h=>h.num).join('')+S.board.ports.map(p=>p.e).join('')};
   const p=ui.sndPrev;ui.sndPrev=cur;if(!p||p.g!==cur.g)return;
   if(cur.id!==p.id)SND.sfx('roll');
