@@ -21,8 +21,8 @@ html,body{margin:0;height:100%;background:#05070c;font-family:Hahmlet,serif;colo
 .gb{font:inherit;font-weight:700;font-size:15px;color:#fff0d2;background:none;border-style:solid;border-width:12px 14px;padding:2px 26px;border-image:url(../assets/ui/0188c1d8.webp) 34 36 fill / 12px 14px stretch;cursor:pointer}
 .gb.dk{border-image:url(../assets/ui/28241176.webp) 34 36 fill / 12px 14px stretch;color:#f3e2bd}
 .av{--c:#888;border-radius:50%;background:center/cover;box-shadow:0 0 0 5px var(--c),0 0 0 7px rgba(0,0,0,.55),0 3px 8px rgba(0,0,0,.6);flex:none}
-.var{position:fixed;left:8px;bottom:8px;z-index:9;display:flex;gap:6px}
-.var button{font:600 12px system-ui;padding:6px 10px;border-radius:6px;border:1px solid #777;background:#222;color:#ddd}.var button.on{background:#c9a35a;color:#111}
+.var{position:fixed;right:60px;top:6px;z-index:9;display:flex;gap:6px}
+.var button{font:600 10px system-ui;padding:4px 7px;border-radius:6px;border:1px solid #777;background:#222;color:#ddd}.var button.on{background:#c9a35a;color:#111}
 /* ---------- A: me-card + picker dialog ---------- */
 .me{display:flex;align-items:center;gap:18px}
 .me .av{width:58px;height:58px}
@@ -50,8 +50,27 @@ html,body{margin:0;height:100%;background:#05070c;font-family:Hahmlet,serif;colo
 .strip .av.on{box-shadow:0 0 0 5px var(--c),0 0 0 7px rgba(0,0,0,.55)}
 .strip i{width:38px;height:38px;border-radius:50%;flex:none;box-shadow:0 0 0 3px rgba(0,0,0,.55);filter:saturate(.8) brightness(.84)}
 .strip i.on{box-shadow:0 0 0 3px #f3dfae,0 0 0 6px rgba(0,0,0,.5)}
+
+/* A v2: tap the portrait itself; grid picker */
+.me2{display:flex;align-items:center;gap:16px;cursor:pointer}
+.me2 .av{width:58px;height:58px;position:relative}
+.me2 .av::after{content:"";position:absolute;right:-4px;bottom:-4px;width:20px;height:20px;border-radius:50%;background:#2a1d12 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e9c47a' stroke-width='2.4' stroke-linecap='round'><path d='M4 20h4L19 9l-4-4L4 16z'/></svg>") center/12px no-repeat;box-shadow:0 0 0 2px #e9c47a}
+.me2 .t{font-size:13px;color:#a8977a}.me2 .t b{display:block;font-size:16px;color:#f3dfae;margin-bottom:2px}
+.dlg2{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:720px;height:410px;background:#2a1d12 radial-gradient(ellipse at 50% 20%,#3d2a19,#1f150c);border:2px solid #b98d45;outline:1px solid rgba(233,196,122,.35);outline-offset:-6px;box-shadow:0 14px 40px rgba(0,0,0,.7);padding:12px 22px;display:flex;flex-direction:column;align-items:center}
+.dlg2 h4{margin:2px 0 8px;font-size:19px;color:#f3dfae}
+.grid{flex:1;width:100%;overflow-y:auto;display:grid;grid-template-columns:repeat(8,1fr);gap:16px 10px;padding:8px 10px;justify-items:center;-webkit-mask-image:linear-gradient(180deg,#000 85%,transparent);mask-image:linear-gradient(180deg,#000 85%,transparent)}
+.grid .av{width:58px;height:58px;opacity:.85;box-shadow:0 0 0 2px rgba(233,196,122,.2),0 2px 6px rgba(0,0,0,.6)}
+.grid .av.on{opacity:1;box-shadow:0 0 0 5px var(--c),0 0 0 7px rgba(0,0,0,.55)}
+.grid .av.tk{opacity:.25}
+.dlg2 .chips{margin:8px 0 6px}
+.dlg2 .ft2{margin-top:4px}
+/* B v2: one-row portrait strip + existing colour row */
+.strip2{display:flex;gap:18px;align-items:center;overflow:hidden;padding:9px 6px;width:600px;-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);mask-image:linear-gradient(90deg,#000 88%,transparent)}
+.strip2 .av{width:46px;height:46px;opacity:.8;box-shadow:0 0 0 2px rgba(233,196,122,.2),0 2px 6px rgba(0,0,0,.6)}
+.strip2 .av.on{opacity:1;box-shadow:0 0 0 5px var(--c),0 0 0 7px rgba(0,0,0,.55)}
+.sws{display:flex;gap:16px}.sws i{width:30px;height:30px;border-radius:50%;box-shadow:0 0 0 3px rgba(0,0,0,.55);filter:saturate(.8) brightness(.84)}.sws i.on{box-shadow:0 0 0 3px #f3dfae,0 0 0 6px rgba(0,0,0,.5)}
 </style></head><body>
-<div class="var"><button data-v="A" class="on">A. 미리보기 + 선택 창</button><button data-v="A2">A. 선택 창 열림</button><button data-v="B">B. 토글 + 한 줄 스와이프</button></div>
+<div class="var"><button data-v="A" class="on">A. 초상화 눌러 선택 창</button><button data-v="A2">A. 선택 창(목록)</button><button data-v="B">B. 한 줄 스와이프 + 색상 줄</button></div>
 <div id="vp"></div>
 <script>
 const PT=['otter','owl','cat','mole'],NM={otter:'수달 상인',owl:'부엉이 학자',cat:'고양이 모험가',mole:'두더지 광부'};
@@ -64,15 +83,21 @@ const frame=(meRow)=>`<div class="bg"></div><div class="frame"><button class="x"
  <div class="row"><div class="lab">인원</div><div class="seg"><span>2인</span><span>3인</span><b>4인</b></div></div></div>
  <div class="foot"><button class="gb">시작</button></div></div>`;
 const meCard=`<div class="me">${av('otter')}<div class="t"><b>수달 상인</b>빨강</div><button class="chg">바꾸기</button></div>`;
+const meCard2=`<div class="me2">${av('otter')}<div class="t"><b>수달 상인</b>눌러서 캐릭터·색상 바꾸기</div></div>`;
+const MANY=Array.from({length:24},(_,i)=>PT[i%4]);
+const frame2=(rows)=>`<div class="bg"></div><div class="frame"><button class="x"></button><div class="fh"><h3>싱글 플레이</h3></div>
+ <div class="rows" style="gap:18px">${rows}
+ <div class="row"><div class="lab">난이도</div><div class="seg"><span>쉬움</span><b>보통</b><span>어려움</span></div></div>
+ <div class="row"><div class="lab">인원</div><div class="seg"><span>2인</span><span>3인</span><b>4인</b></div></div></div>
+ <div class="foot"><button class="gb">시작</button></div></div>`;
 const V={
- A:()=>frame(meCard),
- A2:()=>frame(meCard)+`<div class="dim"></div><div class="dlg"><h4>캐릭터 선택</h4>
-   <div class="car"><span class="ar l">◀</span>${av('mole','')}${av('cat','n1')}${av('otter','c')}${av('owl','n1')}${av('mole','')}<span class="ar r">▶</span></div>
-   <div class="cname">수달 상인</div>
+ A:()=>frame2(`<div class="row"><div class="lab">내 캐릭터</div>${meCard2}</div>`),
+ A2:()=>frame2(`<div class="row"><div class="lab">내 캐릭터</div>${meCard2}</div>`)+`<div class="dim"></div><div class="dlg2"><h4>캐릭터 선택</h4>
+   <div class="grid">${MANY.map((p,i)=>av(p,i==0?'on':(i==5?'tk':''))).join('')}</div>
    <div class="chips">${COL.map((c,i)=>`<i class="${i==0?'on':''}${i==3?' tk':''}" style="background:${c}"></i>`).join('')}</div>
-   <div class="ft"><button class="gb">확인</button></div></div>`,
- B:()=>frame(`<div><div class="tg"><span class="on">초상화</span><span>색상</span></div>
-   <div class="strip">${[...PT,...PT,...PT].map((p,i)=>av(p,i==0?'on':'')).join('')}</div></div>`)
+   <div class="ft2"><button class="gb">확인</button></div></div>`,
+ B:()=>frame2(`<div class="row"><div class="lab">내 캐릭터</div><div class="strip2">${MANY.map((p,i)=>av(p,i==0?'on':'')).join('')}</div></div>
+   <div class="row"><div class="lab">내 말 색상</div><div class="sws">${COL.map((c,i)=>`<i class="${i==0?'on':''}" style="background:${c}"></i>`).join('')}</div></div>`)
 };
 let cur='A';const vp=document.getElementById('vp');
 const fit=()=>{const k=Math.min(innerWidth/905,innerHeight/440);vp.style.transform=`translate(${(innerWidth-905*k)/2}px,${(innerHeight-440*k)/2}px) scale(${k})`;};
