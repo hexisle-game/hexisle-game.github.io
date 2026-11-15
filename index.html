@@ -1317,19 +1317,14 @@ html body .tpick .tcell:disabled{box-shadow:none!important}
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
 .title video{pointer-events:none;mix-blend-mode:screen;background:transparent;object-fit:cover}
-.title .tgods{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen}
-.title .tgod{position:absolute;inset:0;pointer-events:none;background:center top/100% 100% no-repeat;transform-origin:50% 0;will-change:opacity,transform}
-.title .trA{background-image:url(assets/fx/rays_a.webp);opacity:.3}
-.title .trB{background-image:url(assets/fx/rays_b.webp);opacity:.2}
-@keyframes trayA{from{opacity:.5;transform:scaleY(1.04)}to{opacity:.04;transform:scaleY(.94)}}
-@keyframes trayB{from{opacity:.04;transform:scaleY(.94)}to{opacity:.46;transform:scaleY(1.04)}}
+.title .tbeams{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;opacity:.85}
 .title .tmotes{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .title .ttwk{position:absolute;inset:0;width:100%;height:100%;opacity:.38;-webkit-mask-image:linear-gradient(180deg,#000 0,#000 26%,rgba(0,0,0,.35) 40%,transparent 50%);mask-image:linear-gradient(180deg,#000 0,#000 26%,rgba(0,0,0,.35) 40%,transparent 50%)}
 .title .tshine{position:absolute;pointer-events:none;mix-blend-mode:screen;visibility:hidden;-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
   background:linear-gradient(105deg,transparent 42%,rgba(255,244,214,.75) 50%,transparent 58%) no-repeat;background-size:300% 100%;background-position:130% 0}
 .title.shine-on .tshine{visibility:visible;animation:tshine 8s ease-in-out 1.5s infinite}
 @keyframes tshine{0%{background-position:130% 0}18%,100%{background-position:-30% 0}}
-.title.intro .tsun{animation:tfxIn 3s ease 1.5s both}.title.intro .tgods{animation:tfxIn 3s ease 1.2s both}.title.intro .ttwk{animation:tfxIn 3s ease 2.6s both}.title.intro .tmotes{animation:tfxIn 3s ease 2.2s both}
+.title.intro .tsun{animation:tfxIn 3s ease 1.5s both}.title.intro .tbeams{animation:tfxIn 3.5s ease 1.2s both}.title.intro .ttwk{animation:tfxIn 3s ease 2.6s both}.title.intro .tmotes{animation:tfxIn 3s ease 2.2s both}
 @keyframes tfxIn{from{opacity:0}}
 @media (prefers-reduced-motion:reduce){.title .tsun,.title .tshine{animation:none}.title video{display:none}}
 
@@ -1478,7 +1473,7 @@ html.phone body .dlg-snd .sndrow{grid-template-columns:auto 150px 60px;gap:12px}
 <div id="tip" hidden></div><div id="pop" hidden></div>
 <div id="leftcol"></div>
 <div id="rotate" hidden><div class="rot-ic"></div><b>가로로 돌려 주세요</b><span>HexIsle은 휴대폰에서 가로 화면으로 플레이해요.</span></div>
-<div id="splash"><img id="spLogo" alt="HEXISLE"><p class="spnote">이 게임은 수익 창출을 하지 않으며,<br>개인 목적으로 제작되었습니다.</p><p class="sptap">화면을 탭 하여 시작</p></div><div id="title" class="title" hidden><div class="tbg"></div><div class="tsun"></div><div class="tdim"></div><div class="tgods"><div class="tgod trA"></div><div class="tgod trB"></div></div><video class="ttwk" muted playsinline loop autoplay preload="auto" disablepictureinpicture aria-hidden="true" src="assets/fx/twinkle.mp4"></video><canvas class="tmotes" id="tMotes"></canvas><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 육각섬 개척기"><div class="tshine" id="tShine"></div><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
+<div id="splash"><img id="spLogo" alt="HEXISLE"><p class="spnote">이 게임은 수익 창출을 하지 않으며,<br>개인 목적으로 제작되었습니다.</p><p class="sptap">화면을 탭 하여 시작</p></div><div id="title" class="title" hidden><div class="tbg"></div><div class="tsun"></div><div class="tdim"></div><canvas class="tbeams" id="tBeams" width="320" height="180"></canvas><video class="ttwk" muted playsinline loop autoplay preload="auto" disablepictureinpicture aria-hidden="true" src="assets/fx/twinkle.mp4"></video><canvas class="tmotes" id="tMotes"></canvas><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 육각섬 개척기"><div class="tshine" id="tShine"></div><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
 <div id="tut" hidden><div class="tblock" id="tBlock"></div><div class="tring" id="tRing" hidden></div><div class="tx" id="tX" hidden>✕</div><div class="tbub" id="tBub"></div><div class="tgest" id="tGest" hidden><i class="f1"></i><i class="f2"></i></div></div>
 <div id="dialog" class="overlay dlgov" hidden><div class="sheet sheet-dialog" id="dsheet"></div></div>
 <div id="modal" class="overlay" hidden><div class="sheet" id="sheet"></div><i class="mcrest" id="mcrest" aria-hidden="true"></i></div>
@@ -2661,10 +2656,20 @@ function titleFx(){const lg=$('#tLogo'),sh=$('#tShine');const place=()=>{if(!lg.
     if(!P.length){const n=Math.round(Math.min(60,W*H/20000));for(let i=0;i<n;i++)P.push(mk({},1));for(let i=0;i<7;i++){const g=mkG({});g.t=R()*g.d;G.push(g);}}
     cx.clearRect(0,0,W,H);cx.globalCompositeOperation='lighter';const s=ts/1000;
     for(const p of P){p.x+=p.vx+Math.sin(s*.5+p.ph)*.08;p.y+=p.vy;if(p.y<-10||p.x>W+10)mk(p);const tw=.55+.45*Math.sin(s*p.sp+p.ph);cx.globalAlpha=p.a*tw;const z=p.r*8;cx.drawImage(SP,0,0,64,64,p.x-z/2,p.y-z/2,z,z);}
-    {const ph=(Math.sin(s*Math.PI/3.2)+1)/2,e=ph*ph*(3-2*ph);if(!titleFx.ra)titleFx.ra=[$('.trA'),$('.trB')];const[ra,rb]=titleFx.ra;ra.style.opacity=(.34*e).toFixed(3);rb.style.opacity=(.34*(1-e)).toFixed(3);ra.style.transform=`scale(${(.92+.1*e).toFixed(3)},${(.78+.3*e).toFixed(3)})`;rb.style.transform=`scale(${(1.02-.1*e).toFixed(3)},${(1.08-.3*e).toFixed(3)})`;}
+    beams(s);
     for(const g of G){g.t++;if(g.t>g.d)mkG(g);const k=Math.sin(Math.PI*g.t/g.d);cx.globalAlpha=k*k*.75;const z=g.s*(.6+.4*k);cx.drawImage(SP,g.k*64,0,64,64,g.x-z/2,g.y-z/2,z,z);}
     cx.globalAlpha=1;cx.globalCompositeOperation='source-over';};
   requestAnimationFrame(loop);}
+// ---- light beams from the sunset side: ~18 independent beams, drawn small and upscaled for softness ----
+function beams(s){const cv=$('#tBeams');if(!cv)return;const c=cv.getContext('2d'),W=cv.width,H=cv.height;
+  if(!beams.B){const R=Math.random;beams.B=Array.from({length:18},(_,i)=>({a:-26+56*(i+R()*.8)/18,w:1.2+R()*2.8,f1:.07+R()*.12,f2:.17+R()*.25,p1:R()*6.3,p2:R()*6.3,k:.5+R()*.5,col:R()<.35?[255,214,160]:R()<.5?[255,236,205]:[236,226,255]}));}
+  const ox=-W*.10,oy=H*.30,L=Math.hypot(W*1.15,H*1.1);c.clearRect(0,0,W,H);c.globalCompositeOperation='lighter';
+  const g0=c.createRadialGradient(ox,oy,0,ox,oy,W*.55);g0.addColorStop(0,'rgba(255,214,160,.16)');g0.addColorStop(1,'rgba(255,200,140,0)');c.fillStyle=g0;c.fillRect(0,0,W,H);
+  for(const b of beams.B){const v=.5+.32*Math.sin(s*b.f1*6.283+b.p1)+.18*Math.sin(s*b.f2*6.283+b.p2);const a=Math.max(0,v)*b.k*.34;if(a<.004)continue;
+    const ang=(b.a+.9*Math.sin(s*.05+b.p2))*Math.PI/180,hw=(b.w*(.75+.35*Math.sin(s*b.f2*3+b.p1)))*Math.PI/360;
+    const gr=c.createRadialGradient(ox,oy,0,ox,oy,L);const[r,g,bb]=b.col;gr.addColorStop(0,`rgba(${r},${g},${bb},${a})`);gr.addColorStop(.45,`rgba(${r},${g},${bb},${a*.55})`);gr.addColorStop(1,`rgba(${r},${g},${bb},0)`);
+    c.fillStyle=gr;c.beginPath();c.moveTo(ox,oy);c.lineTo(ox+Math.cos(ang-hw)*L,oy+Math.sin(ang-hw)*L);c.lineTo(ox+Math.cos(ang+hw)*L,oy+Math.sin(ang+hw)*L);c.closePath();c.fill();}
+  c.globalCompositeOperation='source-over';}
 function titleIntro(t){t.classList.remove('shine-on');t.classList.add('intro');setTimeout(()=>{t.classList.remove('intro');shineOn();},4800);}
 function shineOn(){const t=$('#title'),lg=$('#tLogo');if(t.classList.contains('intro')||ui.splash)return;if(lg.complete&&lg.naturalWidth)t.classList.add('shine-on');else lg.addEventListener('load',()=>{if(!t.classList.contains('intro'))t.classList.add('shine-on');},{once:true});}
 function splashOff(){const sp=$('#splash');if(!sp||!ui.splash)return;ui.splash=0;try{SND.unlock();SND.music('title');}catch(e){}sp.classList.add('out');const t=$('#title');document.querySelectorAll('#title video').forEach(v=>{const p=v.play();p&&p.catch&&p.catch(()=>{});});if(!t.hidden)titleIntro(t);setTimeout(()=>sp.remove(),1700);}
