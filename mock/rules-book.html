@@ -12,19 +12,20 @@ html,body{margin:0;height:100%;background:#0b0c12;font-family:Hahmlet,serif;over
 .bg{position:fixed;inset:0;background:url(../assets/title/titlebgS.webp) center/cover;filter:blur(3px) brightness(.32)}
 .wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:10px}
 /* the book is the painted image; content boxes sit on its pages */
-.book{position:relative;width:min(1240px,98vw,calc((100vh - 16px)*var(--ar)));aspect-ratio:var(--ar);background:var(--img) center/100% 100% no-repeat;filter:drop-shadow(0 18px 34px rgba(0,0,0,.7))}
+.book{position:relative;width:min(1240px,98vw,calc((100vh - 16px)*var(--ar)));width:min(1240px,98vw,calc((100dvh - 16px)*var(--ar)));aspect-ratio:var(--ar);background:var(--img) center/100% 100% no-repeat;filter:drop-shadow(0 18px 34px rgba(0,0,0,.7))}
 .pg{position:absolute;top:var(--t);bottom:var(--b);display:flex;flex-direction:column}
 .pg.l{left:var(--l1);right:calc(100% - var(--r1));align-items:center;justify-content:center}
-.pg.r{left:var(--l2);right:calc(100% - var(--r2));padding-top:5%}
+.pg.r{left:var(--l2);right:calc(100% - var(--r2));padding:7% 0 2.5%}
 /* left page: picture only */
 .pg.l img{max-width:90%;max-height:90%;aspect-ratio:1;object-fit:contain;mix-blend-mode:multiply}
 /* right page: text + buttons */
 .lab{font-size:clamp(9px,.95vw,12px);letter-spacing:.18em;color:var(--red);font-weight:600}
 .ttl{font-size:clamp(18px,2.4vw,32px);font-weight:800;color:var(--ink);margin:.3em 0 .1em;line-height:1.2}
-.rule{height:10px;margin:.45em 0 1em;background:radial-gradient(circle,var(--ink2) 0 2px,transparent 3px) center/14px 10px no-repeat,linear-gradient(90deg,transparent,rgba(91,61,34,.55) 15%,rgba(91,61,34,.55) 85%,transparent) center/100% 1px no-repeat}
+.rule{height:1px;margin:.7em 0 1.1em;background:linear-gradient(90deg,transparent,rgba(91,61,34,.28) 12%,rgba(91,61,34,.28) 88%,transparent)}
 .key{font-size:clamp(13px,1.45vw,19px);font-weight:700;color:var(--ink);line-height:1.45;margin:0 0 .7em}
 .txt{font-size:clamp(11px,1.15vw,15px);color:var(--ink2);line-height:1.75;margin:0}
 .txt b{color:var(--red)}
+.key,.txt{max-width:66%;word-break:keep-all;overflow-wrap:break-word}
 .foot{margin-top:auto;display:flex;align-items:center;justify-content:flex-end;gap:10px}
 /* the game's own button frames */
 .gb{font:inherit;font-weight:700;font-size:clamp(11px,1.1vw,15px);white-space:nowrap;cursor:pointer;background:none;color:#f3e2bd;text-shadow:0 1px 0 #1d1006,0 1px 4px rgba(0,0,0,.6);border-style:solid;border-width:10px 12px;padding:2px 14px;min-width:6.2em;border-image:url(../assets/ui/28241176.webp) 34 36 fill / 10px 12px stretch;filter:drop-shadow(0 3px 5px rgba(0,0,0,.35))}
@@ -35,8 +36,8 @@ html,body{margin:0;height:100%;background:#0b0c12;font-family:Hahmlet,serif;over
 .var button.on{background:#c9a35a;color:#111;border-color:#c9a35a}
 @media (max-height:520px){
  .wrap{padding:4px}
- .book{width:min(99vw,calc((100vh - 8px)*var(--ar)))}
- .lab{font-size:9px}.ttl{font-size:clamp(15px,4vh,21px)}.rule{margin:.25em 0 .6em}
+ .book{width:min(99vw,calc((100vh - 8px)*var(--ar)));width:min(99vw,calc((100dvh - 8px)*var(--ar)))}
+ .lab{font-size:9px}.ttl{font-size:clamp(15px,4vh,21px)}.rule{margin:.45em 0 .7em}
  .key{font-size:clamp(12px,3.2vh,14.5px);margin-bottom:.45em}.txt{font-size:clamp(10px,2.7vh,12.5px);line-height:1.6}
  .gb{font-size:11px;border-width:7px 9px;border-image-width:7px 9px;padding:0 8px;min-width:0}.foot{gap:5px}
 }

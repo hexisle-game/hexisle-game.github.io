@@ -959,7 +959,7 @@ html.phone body .sheet.sheet-start #cnt.cnt{margin-bottom:12px!important}
 html.phone body .sheet.sheet-start #dif.cnt{margin-bottom:16px!important}
 html body .sheet-mp .row .btn,html body .sheet-mp #mJoin{width:100%;min-height:56px!important;font-size:17px!important}
 html body .sheet-mp{width:min(560px,100%)!important}
-html body .pl .bdgs{grid-column:2;display:flex;flex-wrap:wrap;gap:4px;margin:2px 0}
+html body .pl .bdgs{grid-column:2;display:flex;flex-wrap:wrap;gap:4px;margin:-5px 0 1px}
 html body .pl .vp{grid-row:1/4}
 html body .pl .meta{grid-row:3}
 html body .pl .bdgs .badge{font-size:10.5px;padding:1px 6px}
@@ -3153,7 +3153,7 @@ const SND={ctx:null,playing:null,next:0,timer:null,vol:{bgm:.5,sfx:.5},on:{bgm:t
     this.rev=c.createConvolver();this.rev.buffer=mk(3.2,2.2);const rg=c.createGain();rg.gain.value=.42;this.rev.connect(rg);rg.connect(this.bgmG);
     this.revS=c.createConvolver();this.revS.buffer=mk(1.8,2.6);const rs=c.createGain();rs.gain.value=.22;this.revS.connect(rs);rs.connect(this.sfxG);
     this.apply();return true;},
-  apply(){if(!this.ctx)return;const t=this.ctx.currentTime;this.bgmG.gain.setTargetAtTime(this.on.bgm?this.vol.bgm*.5:0,t,.15);this.sfxG.gain.setTargetAtTime(this.on.sfx?this.vol.sfx*1.045:0,t,.05);},
+  apply(){if(!this.ctx)return;const t=this.ctx.currentTime;this.bgmG.gain.setTargetAtTime(this.on.bgm?this.vol.bgm*.4:0,t,.15);this.sfxG.gain.setTargetAtTime(this.on.sfx?this.vol.sfx*1.045:0,t,.05);},
   unlock(){if(!this.init())return;if(this.ctx.state==='suspended')this.ctx.resume();this.apply();},
   hz(n){return 440*Math.pow(2,(n-69)/12);},
   nbuf:null,noiseBuf(){if(this.nbuf)return this.nbuf;const c=this.ctx,b=c.createBuffer(1,c.sampleRate*2,c.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;return this.nbuf=b;},
@@ -3213,7 +3213,7 @@ Object.assign(SND,{cur:null,want:null,lastGame:-1,nextGame:-1,FADE:2.5,pre:{},
   el(src){let a=this.pre[src];if(a){delete this.pre[src];return a;}a=new Audio();a.preload='auto';a.src=src;return a;},
   preload(src){if(this.pre[src]||(this.cur&&this.cur.src===src))return;for(const k in this.pre)if(k!==MUSIC.title){this.pre[k].removeAttribute('src');delete this.pre[k];}const a=new Audio();a.preload='auto';a.src=src;try{a.load();}catch(e){}this.pre[src]=a;},
   pickGame(){let i;do{i=Math.floor(Math.random()*MUSIC.game.length);}while(i===this.lastGame&&MUSIC.game.length>1);return i;},
-  music(mode){this.want=mode;if(!this.ctx||!this.on.bgm||this.vol.bgm<=0)return;if(this.cur&&this.cur.mode===mode&&!this.cur.ending)return;this.startMusic(mode);},
+  music(mode){this.want=mode;if(!mode||!this.ctx||!this.on.bgm||this.vol.bgm<=0)return;if(this.cur&&this.cur.mode===mode&&!this.cur.ending)return;this.startMusic(mode);},
   startMusic(mode){let src,plays=1;
     if(mode==='title')src=MUSIC.title;else{const i=this.nextGame>=0&&this.nextGame!==this.lastGame?this.nextGame:this.pickGame();this.lastGame=i;const tr=MUSIC.game[i];src=tr.src;plays=tr.plays[0]+Math.floor(Math.random()*(tr.plays[1]-tr.plays[0]+1));
       this.nextGame=this.pickGame();}
@@ -3228,10 +3228,11 @@ Object.assign(SND,{cur:null,want:null,lastGame:-1,nextGame:-1,FADE:2.5,pre:{},
     const p=a.play();if(p&&p.catch)p.catch(()=>{cur.blocked=true;});},
   fadeOut(o,d){if(!o||o.dead)return;o.dead=true;const t=this.ctx.currentTime;d=d||this.FADE;o.ending=true;o.g.gain.cancelScheduledValues(t);o.g.gain.setValueAtTime(o.g.gain.value,t);o.g.gain.linearRampToValueAtTime(0,t+d);
     setTimeout(()=>{try{o.a.pause();o.n&&o.n.disconnect();o.a.removeAttribute('src');o.a.load();}catch(e){}},d*1000+150);},
-  stopMusic(){if(!this.cur)return;const o=this.cur;this.cur=null;this.fadeOut(o,1);}});
+  stopMusic(){if(!this.cur)return;const o=this.cur;this.cur=null;this.fadeOut(o,1);},
+  endMusic(){this.want=null;if(!this.cur)return;const o=this.cur;this.cur=null;this.fadeOut(o,2.5);}});
 
 // ---------- recorded SFX (assets/sfx, volumes tuned on sound-test.html) ----------
-const SFXG={"ui": 1.5, "btn1": 0.56, "btn2": 0.38, "click": 0.58, "toggle": 0.17, "page": 0.23, "join": 0.42, "start": 0.22, "card": 0.2, "gain": 0.22, "dice": 0.33, "turn": 0.25, "tick": 0.17, "dev": 0.26, "trade": 0.32, "robber": 0.35, "robber2": 0.34, "steal": 0.12, "error": 0.23, "place_other": 0.29, "road": 0.33, "build": 0.39, "city": 0.42, "win": 0.22, "lose": 0.19};
+const SFXG={"ui": 1.5, "btn1": 0.56, "btn2": 0.38, "click": 0.58, "toggle": 0.17, "page": 0.23, "join": 0.42, "start": 0.22, "card": 0.2, "gain": 0.22, "dice": 0.33, "turn": 0.25, "tick": 0.17, "dev": 0.26, "trade": 0.32, "robber": 0.35, "robber2": 0.34, "steal": 0.12, "error": 0.23, "place_other": 0.29, "road": 0.33, "build": 0.46, "city": 0.49, "win": 0.22, "lose": 0.19};
 const SFXALIAS={roll:'dice'};const SFXFILE={place_other:'robber2'};
 Object.assign(SND,{fx:{},fxLoading:false,lastUi:0,
   loadSfx(){if(this.fxLoading||!this.ctx)return;this.fxLoading=true;const c=this.ctx;
@@ -3285,7 +3286,7 @@ function sndWatch(){if(typeof SND==='undefined'||!S||!S.players||!S.players[ME])
   if(cur.st!==p.st&&cur.st){const L=S.lastSteal;if(L.q===ME||L.p===ME)setTimeout(()=>SND.sfx('steal'),cur.rob!==p.rob?650:200);}
   if(cur.res>p.res){const n=cur.res-p.res;if(cur.id!==p.id)setTimeout(()=>SND.sfxN('gain',n,.07),1360);else if(cur.s===p.s&&cur.r===p.r&&cur.c===p.c){if(cur.dev===p.dev&&!(S.pend&&S.pend.k))SND.sfx('trade');else SND.sfxN('gain',n);}}
   if(cur.ph==='main'&&cur.cur===ME&&(p.cur!==ME||p.ph!=='main'))setTimeout(()=>SND.sfx('turn'),150);
-  if(cur.ph==='over'&&p.ph!=='over')SND.sfx(S.winner===ME?'win':'lose');}
+  if(cur.ph==='over'&&p.ph!=='over'){SND.sfx(S.winner===ME?'win':'lose');SND.endMusic();}}
 // last 9 seconds of my own time limit: one tick per second
 setInterval(()=>{try{if(typeof SND==='undefined'||!S||!S.mp||!S.deadline||S.phase==='over'||actor()!==ME){ui.lastTick=null;return;}
   const r=Math.ceil((S.deadline-Date.now())/1000);if(r>=1&&r<=9&&r!==ui.lastTick){ui.lastTick=r;SND.sfx('tick');}else if(r>9)ui.lastTick=null;}catch(e){}},200);
