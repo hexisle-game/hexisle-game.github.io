@@ -1,0 +1,27 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>플레이어 초상화 시안</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@300..900&display=swap">
+<style>
+body{margin:0;min-height:100vh;background:#0d1a33 url(../assets/title/titlebgS.webp) center/cover;font-family:Hahmlet,serif;color:#efe2c4;display:flex;gap:40px;align-items:flex-start;justify-content:center;padding:40px 16px;box-sizing:border-box;flex-wrap:wrap}
+body::before{content:"";position:fixed;inset:0;background:rgba(6,10,20,.72);z-index:-1}
+.col{width:340px}.h{font-size:13px;color:#a8977a;margin:0 0 12px;letter-spacing:.04em}
+.pl{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:4px}
+.pl.cur{background:linear-gradient(90deg,rgba(255,255,255,.1),transparent)}
+.av{--c:#888;position:relative;width:46px;height:46px;flex:none;border-radius:50%;background:center/cover;box-shadow:0 0 0 2px var(--c),0 0 0 4px rgba(0,0,0,.55),0 3px 8px rgba(0,0,0,.6)}
+.av::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--c);mix-blend-mode:color;opacity:.0}
+.v2 .av{border-radius:8px;box-shadow:0 0 0 2px rgba(0,0,0,.6),0 3px 8px rgba(0,0,0,.6)}
+.v2 .av::before{content:"";position:absolute;left:0;right:0;bottom:-6px;height:5px;border-radius:3px;background:var(--c)}
+.v3 .av{box-shadow:0 0 0 3px var(--c),0 0 14px var(--c),0 3px 8px rgba(0,0,0,.6)}
+.nm{flex:1;font-size:15px}.nm small{display:block;color:#a8977a;font-size:11px;margin-top:2px}
+.sc{font-size:24px;font-weight:800;color:#f3d58e}
+.cur .av{transform:scale(1.08)}
+.lob{margin-top:28px}.lob .row{display:flex;gap:18px}
+.lob .av{width:70px;height:70px}
+.lob figure{margin:0;text-align:center;font-size:12px;color:#d9ccb1}.lob figure .av{margin:0 auto 8px}
+</style></head><body>
+<script>
+const P=[['나','#ff2a1a','otter',4],['꼼꼼한 부엉이 · AI','#3a8cff','owl',3],['날쌘 고양이 · AI','#e046e0','cat',2],['느긋한 두더지 · AI','#f5c400','mole',2]];
+const mute=c=>{const n=parseInt(c.slice(1),16);let r=n>>16&255,g=n>>8&255,b=n&255;const m=(r+g+b)/3;const f=x=>Math.round((x*.75+m*.25)*.85);return `rgb(${f(r)},${f(g)},${f(b)})`;};
+const list=(cls,title)=>`<div class="col ${cls}"><p class="h">${title}</p>${P.map((p,i)=>`<div class="pl${i?'':' cur'}"><div class="av" style="--c:${mute(p[1])};background-image:url(pt/${p[2]}.webp)"></div><div class="nm">${p[0]}<small>자원 4 · 발전 0 · 기사 0 · 도로 0</small></div><div class="sc">${p[3]}</div></div>`).join('')}
+<div class="lob"><p class="h">대기실 / 결과 화면</p><div class="row">${P.map(p=>`<figure><div class="av" style="--c:${mute(p[1])};background-image:url(pt/${p[2]}.webp)"></div>${p[0].split(' · ')[0]}</figure>`).join('')}</div></div></div>`;
+document.body.innerHTML=list('v1','A. 원형 + 색 테두리')+list('v2','B. 사각 + 아래 색 띠')+list('v3','C. 원형 + 색 테두리와 은은한 빛');
+</script></body></html>
