@@ -1325,9 +1325,9 @@ html body .sheet.sheet-rules{background:none!important;border:0!important;border
 .rbook .rpl{left:8.5%;right:53%;align-items:center;justify-content:center}
 .rbook .rpl img{max-width:90%;max-height:90%;aspect-ratio:1;object-fit:contain;mix-blend-mode:multiply}
 .rbook .rpr{left:53.5%;right:10%;padding:2% 0 2.5%}
-.rbook .rlab{font-size:.75em;letter-spacing:.18em;color:#8a2a14;font-weight:600}
-.rbook .rh{font-size:2em!important;font-weight:800;color:#3a2210!important;margin:.25em 0 0!important;line-height:1.2;text-shadow:none!important;text-align:left!important}
-.rbook .rdiv{height:1px;margin:calc(.5em - 8px) 0 .9em;background:linear-gradient(90deg,transparent,rgba(91,61,34,.28) 12%,rgba(91,61,34,.28) 88%,transparent)}
+.rbook .rlab{font-size:.75em;letter-spacing:-.02em;color:#8a2a14;font-weight:600}
+.rbook .rh{font-size:2em!important;font-weight:800;color:#3a2210!important;margin:0!important;line-height:1.2;text-shadow:none!important;text-align:left!important}
+.rbook .rdiv{height:1px;margin:calc(.35em - 8px) 0 .8em;background:linear-gradient(90deg,transparent,rgba(91,61,34,.28) 12%,rgba(91,61,34,.28) 88%,transparent)}
 .rbook .rkey{font-size:1.2em!important;font-weight:700;color:#3a2210!important;line-height:1.45;margin:0 0 .7em!important;text-shadow:none!important}
 .rbook .rtx{font-size:.95em!important;color:#5b3d22!important;line-height:1.75;margin:0!important;text-shadow:none!important}
 .rbook .rtx b{color:#8a2a14!important}
@@ -1338,14 +1338,19 @@ html body .sheet.sheet-rules{background:none!important;border:0!important;border
 
 /* popups: wait for the frame artwork, then let the contents rise in (like the title buttons) */
 #sheet.fwait{visibility:hidden}
-#sheet.fin>*:not(.mclose){animation:fRise .45s ease-out both}
+#sheet.fin>*:not(.mclose):not(.fbody){animation:fRise .45s ease-out both}
+#sheet.fin .fleft{animation:fRise .45s ease-out .12s both}
+#sheet.fin .frows>*{animation:fRise .45s ease-out both}
+#sheet.fin .frows>*:nth-child(1){animation-delay:.24s}#sheet.fin .frows>*:nth-child(2){animation-delay:.32s}#sheet.fin .frows>*:nth-child(3){animation-delay:.40s}#sheet.fin .frows>*:nth-child(4){animation-delay:.48s}#sheet.fin .frows>*:nth-child(n+5){animation-delay:.56s}
+#sheet.fin .ffoot{animation:fRise .45s ease-out .62s both}
 #sheet.fin>.rbook>*:not(.mclose){animation:fRise .45s ease-out both}
 #sheet.fin.sheet-rules>.rbook{animation:none}
 @keyframes fRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 /* tooltips: dev cards 90%, cost: settlement + dev card art 110% (centre kept), whole tooltip popup 85% */
 .icols.devc .idev{transform:scale(.9);transform-origin:50% 50%}
-.icols:not(.devc) .icol:nth-child(3) .ibld{transform:scale(1.15);transform-origin:50% 50%;position:relative;z-index:1}
-.icols:not(.devc) .icol:nth-child(2) .ibld,.icols:not(.devc) .icol:nth-child(4) .ibld{transform:scale(1.265);transform-origin:50% 50%;position:relative;z-index:1}
+.icols:not(.devc) .icol:nth-child(3) .ibld{transform:scale(1.32);transform-origin:50% 50%;position:relative;z-index:1}
+.icols:not(.devc) .icol:nth-child(4) .ibld{transform:scale(1.265);transform-origin:50% 50%;position:relative;z-index:1}
+.icols:not(.devc) .icol:nth-child(2) .ibld{transform:scale(1.455);transform-origin:50% 50%;position:relative;z-index:1}
 html body .sheet.sheet-info{transform:scale(.85)!important;transform-origin:50% 50%!important}
 /* rules book: always centred; text block 20px further right */
 html body .sheet.sheet-rules{position:absolute!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;margin:0!important;transform:translate(-50%,-50%)!important}
@@ -2555,7 +2560,7 @@ function sheetReady(){const sh=$('#sheet');if(!sh)return;sh.classList.remove('fi
   const urls=new Set();const grab=el=>{if(!el)return;const cs=getComputedStyle(el);[cs.backgroundImage,cs.borderImageSource].forEach(v=>{(v||'').replace(/url\(["']?([^"')]+)["']?\)/g,(m,u)=>{urls.add(u);});});};
   grab(sh);sh.querySelectorAll('.rbook,.fhead,.ffoot,.btn,.mclose,img').forEach(el=>{grab(el);if(el.tagName==='IMG'&&el.src)urls.add(el.src);});
   const load=u=>new Promise(r=>{const im=new Image();im.onload=im.onerror=()=>r();im.src=u;if(im.complete)r();});
-  let done=false;const go=()=>{if(done)return;done=true;sh.classList.remove('fwait');void sh.offsetWidth;sh.classList.add('fin');};
+  let done=false;const go=()=>{if(done)return;done=true;sh.classList.remove('fwait');void sh.offsetWidth;sh.classList.add('fin');clearTimeout(ui.finT);ui.finT=setTimeout(()=>sh.classList.remove('fin'),1300);};
   Promise.all([...urls].slice(0,40).map(load)).then(go);setTimeout(go,1800);}
 // warm the cache for popup artwork right after the first tap
 function preloadUI(){if(preloadUI.done)return;preloadUI.done=1;const set=new Set();for(const sh of document.styleSheets){let rs;try{rs=sh.cssRules;}catch(e){continue;}for(const r of rs){const t=r.cssText||'';t.replace(/url\(["']?(assets\/[^"')]+)["']?\)/g,(m,u)=>{set.add(u);});}}
