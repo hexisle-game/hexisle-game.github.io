@@ -1383,6 +1383,16 @@ html body .setpanel .seg button{font-size:13px!important}
 .hexglow{position:fixed;z-index:5;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,230,160,.85) 0,rgba(255,200,110,.35) 35%,transparent 70%);animation:hexGlow 1.2s ease-out both}
 @keyframes hexGlow{0%{opacity:0;transform:scale(.5)}25%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.25)}}
 html.phone .hexglow{width:110px;height:110px;margin:-55px 0 0 -55px}
+
+/* motion: turn ribbon */
+#turnBan{position:fixed;left:50%;top:34%;z-index:40;pointer-events:none;display:flex;align-items:center;gap:12px;padding:12px 44px;white-space:nowrap;opacity:0;
+  background:linear-gradient(90deg,transparent,rgba(12,9,6,.82) 18%,rgba(12,9,6,.82) 82%,transparent);color:#f3dfae;font-family:var(--display);font-size:26px;letter-spacing:.02em;text-shadow:0 2px 6px #000}
+#turnBan.mine{color:#ffe7a6}#turnBan.mine b{text-shadow:0 0 14px rgba(255,200,90,.6),0 2px 6px #000}
+#turnBan .tbpip{width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 2px rgba(0,0,0,.4)}
+#turnBan.go{animation:turnBan 1.5s cubic-bezier(.2,.8,.2,1) both}
+@keyframes turnBan{0%{opacity:0;transform:translate(-62%,0)}18%{opacity:1;transform:translate(-50%,0)}75%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-38%,0)}}
+html.phone #turnBan{font-size:20px;padding:9px 34px;top:30%}
+@media (prefers-reduced-motion:reduce){#turnBan.go{animation-duration:.01s}}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
@@ -2317,6 +2327,16 @@ function decal(kind,col,op,sx,sz,y){const m=new THREE.Mesh(DPLANE,decalMat(kind,
 const GLOW=new Map();function glow(c,op){const k=c+':'+op;if(!GLOW.has(k))GLOW.set(k,new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:op,depthWrite:false}));return GLOW.get(k);}
 const HIT=new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false});
 
+
+// ---- motion: dust ring when a building lands ----
+function dustTex(){if(dustTex.t)return dustTex.t;const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d');const gr=g.createRadialGradient(32,32,0,32,32,32);gr.addColorStop(0,'rgba(235,215,180,1)');gr.addColorStop(.5,'rgba(200,175,140,.55)');gr.addColorStop(1,'rgba(180,150,110,0)');g.fillStyle=gr;g.fillRect(0,0,64,64);return dustTex.t=new THREE.CanvasTexture(c);}
+function spawnDust(x,z,t0){if(!W.ok)return;const y=heightAt(x,z)+.04;for(let i=0;i<9;i++){const a=i/9*Math.PI*2+Math.random()*.4;const m=new THREE.SpriteMaterial({map:dustTex(),transparent:true,depthWrite:false,opacity:0});const sp=new THREE.Sprite(m);
+  const r=.32+Math.random()*.12;sp.userData.puff={t0:t0+Math.random()*60,x,y,z,dx:Math.cos(a)*r,dz:Math.sin(a)*r,s:.16+Math.random()*.08};sp.visible=false;sp.renderOrder=7;W.dynG.add(sp);W.anim.add(sp);}}
+
+// ---- motion: short "whose turn" ribbon across the board ----
+function turnBanner(p){if(typeof TUT!=='undefined'&&TUT.on)return;let el=$('#turnBan');if(!el){el=document.createElement('div');el.id='turnBan';document.body.appendChild(el);}
+  const pl=S.players[p];el.innerHTML=`<span class="tbpip" style="background:${pl.color}"></span><b>${p===ME?'내 차례':pl.name+'의 차례'}</b>`;el.classList.toggle('mine',p===ME);
+  el.classList.remove('go');void el.offsetWidth;el.classList.add('go');}
 function sync3D(){
   if(!W.ok)return;invalidate(true);buildStatic();
   const lastSum=S.dice&&S.phase==='main'&&S.rolled?S.dice[0]+S.dice[1]:0;
@@ -2327,7 +2347,7 @@ function sync3D(){
   S.vb.forEach((b,v)=>{if(b)want.set('v'+v+':'+b.o+S.players[b.o].color+':'+(b.c?1:0),()=>{const V=vc(v);const ry=Math.atan2(V.x,V.z)+Math.PI;
     const inner=b.c?cityMesh(b.o,ry):settlementMesh(b.o,ry);inner.scale.setScalar(b.c?1.9:2.08);const k=new THREE.Group();k.add(inner);mergeStatic(k,true);k.position.set(V.x,0,V.z);k.userData.info={t:'bld',v};return k;});});
   for(const [key,obj] of W.pieces){if(!want.has(key)){W.dynG.remove(obj);W.pieces.delete(key);W.anim.delete(obj);}}
-  for(const [key,mk] of want){if(W.pieces.has(key))continue;const k=mk();if(!first){k.userData.born=now;W.anim.add(k);}W.pieces.set(key,k);W.dynG.add(k);}
+  for(const [key,mk] of want){if(W.pieces.has(key))continue;const k=mk();if(!first){k.userData.born=now;k.userData.kind=key[0]==='e'?'road':'bld';W.anim.add(k);if(k.userData.kind==='bld')spawnDust(k.position.x,k.position.z,now+200);}W.pieces.set(key,k);W.dynG.add(k);}
   W.prev=true;
   {const {x,z}=hc(S.board.robber);const to=new THREE.Vector3(x-.42,heightAt(x-.42,z+.12),z+.12);let rb=W.robber;if(!rb||rb.parent!==W.dynG){rb=W.robber=robberMesh();rb.scale.setScalar(1.75);rb.traverse(o=>{if(o.isMesh){o.material=o.material.clone();o.material.transparent=true;o.renderOrder=6;}});rb.userData.info={t:'robber'};rb.position.copy(to);W.dynG.add(rb);}
     {const hh=G.hexes[S.board.robber];W.robU.value.set(hh.q,hh.r);}
@@ -2394,8 +2414,15 @@ function loop(t){requestAnimationFrame(loop);if(!W.ok||document.hidden)return;co
   {const tg=W.ctl.target,cx=Math.max(-3,Math.min(3,tg.x)),cz=Math.max(-2.6,Math.min(3.2,tg.z));if(cx!==tg.x||cz!==tg.z){const dx=cx-tg.x,dz=cz-tg.z;tg.x=cx;tg.z=cz;W.cam.position.x+=dx;W.cam.position.z+=dz;}}
   W.mills.forEach(m=>m.rotation.z=s*1.0);
   const now=performance.now();stepDice(now);
-  for(const o of W.anim){if(o.userData.born){const p=(now-o.userData.born)/500;const sc=Math.max(.001,ease(p));o.scale.set(sc,sc,sc);if(p>=1)delete o.userData.born;}
-    if(o.userData.move){const m=o.userData.move,p=Math.min(1,(now-m.t0)/600);o.position.lerpVectors(m.from,m.to,p);o.position.y=m.to.y+Math.sin(p*Math.PI)*.6;if(p>=1)delete o.userData.move;}
+  for(const o of W.anim){if(o.userData.puff){const u=o.userData.puff,p=(now-u.t0)/750;if(p<0){o.visible=false;continue;}o.visible=true;if(p>=1){W.dynG.remove(o);W.anim.delete(o);continue;}
+      const e=1-Math.pow(1-p,2);o.position.set(u.x+u.dx*e,u.y+.18*e,u.z+u.dz*e);const sc=u.s*(1+1.6*e);o.scale.set(sc,sc,sc);o.material.opacity=.5*(1-p);continue;}
+    if(o.userData.born){if(o.userData.kind==='road'){const p=Math.min(1,(now-o.userData.born)/420);const e=1-Math.pow(1-p,3);o.scale.set(1,1,Math.max(.001,e));o.position.y=.12*(1-e);if(p>=1){delete o.userData.born;o.position.y=0;}}
+      else if(o.userData.kind==='bld'){const p=Math.min(1,(now-o.userData.born)/620);
+        // drop in (0-.35), land, small bounce
+        let y,sc;if(p<.35){const q=p/.35;y=1.1*(1-q*q);sc=.75+.25*q;}else{const q=(p-.35)/.65;y=.12*Math.sin(q*Math.PI)*Math.pow(1-q,1.4);sc=1+.06*Math.sin(q*Math.PI*2)*(1-q);}
+        o.position.y=y;o.scale.set(sc,sc,sc);if(p>=1){delete o.userData.born;o.position.y=0;o.scale.set(1,1,1);}}
+      else{const p=(now-o.userData.born)/500;const sc=Math.max(.001,ease(p));o.scale.set(sc,sc,sc);if(p>=1)delete o.userData.born;}}
+    if(o.userData.move){const m=o.userData.move,p=Math.min(1,(now-m.t0)/600);o.position.lerpVectors(m.from,m.to,p);o.position.y=m.to.y+Math.sin(p*Math.PI)*.6;if(p>=1){delete o.userData.move;try{spawnDust(m.to.x,m.to.z,now);}catch(e){}}}
     if(!o.userData.born&&!o.userData.move)W.anim.delete(o);}
   if(robP)[W.robber].forEach(o=>{if(o.userData.robPulse){const k=.5+.5*Math.sin(s*5);o.traverse(m=>{if(m.isMesh&&m.material.emissive)m.material.emissiveIntensity=.06+.16*k;if(m.userData.robRing){m.scale.set(.3*(1+.3*k),.6,.3*(1+.3*k));m.material.opacity=.4+.5*k;}if(m.isPointLight)m.intensity=.8+1.6*k;});}
     if(o.userData.pulseR){const k=.55+Math.sin(s*3)*.12;o.children[0].material.opacity=k;}});
@@ -2531,7 +2558,7 @@ function render(){
   const cp=S.players[S.cur];
   const rolledNow=S.rollId!==ui.shownRoll;ui.shownRoll=S.rollId;
   $('#turnbar').innerHTML=`<span class="tp-pip" style="background:${cp.color}"></span><span class="tp-txt"><span class="tp-name">${S.phase==='over'?'게임 종료':S.cur===ME?'나 (내 차례)':cp.name+'의 차례'}</span><span class="tp-sub">${S.phase==='setup'?`초기 배치 ${S.si+1}/${2*S.n}`:`${S.turn}번째 바퀴`}</span></span>`;
-  if(ui.lastCur!==S.cur+':'+S.phase){ui.lastCur=S.cur+':'+S.phase;const tb=$('#turnbar');tb.classList.remove('swap');void tb.offsetWidth;tb.classList.add('swap');}
+  if(ui.lastCur!==S.cur+':'+S.phase){const prevTurn=ui.lastCur;ui.lastCur=S.cur+':'+S.phase;if(prevTurn&&S.phase==='main')turnBanner(S.cur);const tb=$('#turnbar');tb.classList.remove('swap');void tb.offsetWidth;tb.classList.add('swap');}
   {const rl=$('#roundline');if(rl)rl.textContent=S.phase==='setup'?`초기 배치 ${S.si+1}/${2*S.n}`:S.phase==='over'?'게임 종료':`${S.turn}번째 바퀴`;}
   $('#gameinfo').textContent=`${S.n}인 게임, 난이도 ${({easy:'쉬움',normal:'보통',hard:'어려움'})[S.diff||'normal']}`;
   if(rolledNow&&S.dice){ui.diceRevealAt=performance.now()+1350;ui.flyRoll=S.rollId;renderDiceBox();slotSpin();if(typeof throwDice==='function')throwDice(S.dice);clearTimeout(ui.diceT);ui.diceT=setTimeout(renderDiceBox,1450);}
@@ -3399,8 +3426,8 @@ function sndWatch(){if(typeof SND==='undefined'||!S||!S.players||!S.players[ME])
   const cur={id:S.rollId,res:sumRes(me.res),s:k.s,c:k.c,r:k.r,ob,dev:me.dev.length,cur:S.cur,ph:S.phase,rob:S.board.robber,st:S.lastSteal?JSON.stringify(S.lastSteal):'',g:S.board.hexes.map(h=>h.num).join('')+S.board.ports.map(p=>p.e).join('')};
   const p=ui.sndPrev;ui.sndPrev=cur;if(!p||p.g!==cur.g)return;
   if(cur.id!==p.id)SND.sfx('roll');
-  if(cur.c>p.c)SND.sfx('city');else if(cur.s>p.s)SND.sfx('build');else if(cur.r>p.r)SND.sfx('road');else if(cur.dev>p.dev)SND.sfx('dev');
-  else if(cur.ob>p.ob)SND.sfx('place_other');
+  if(cur.c>p.c)SND.sfx('city',.2);else if(cur.s>p.s)SND.sfx('build',.2);else if(cur.r>p.r)SND.sfx('road',.05);else if(cur.dev>p.dev)SND.sfx('dev');
+  else if(cur.ob>p.ob)SND.sfx('place_other',.15);
   if(cur.rob!==p.rob){const mine=G.hexes[cur.rob]&&G.hexes[cur.rob].v.some(v=>S.vb[v]&&S.vb[v].o===ME);SND.sfx(mine?'robber':'robber2');}
   if(cur.st!==p.st&&cur.st){const L=S.lastSteal;if(L.q===ME||L.p===ME)setTimeout(()=>SND.sfx('steal'),cur.rob!==p.rob?650:200);}
   if(cur.res>p.res){const n=cur.res-p.res;if(cur.id!==p.id)ui.gainN=n;else if(cur.s===p.s&&cur.r===p.r&&cur.c===p.c){if(cur.dev===p.dev&&!(S.pend&&S.pend.k))SND.sfx('trade');else SND.sfxN('gain',n);}}
