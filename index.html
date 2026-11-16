@@ -1575,6 +1575,20 @@ html.phone .setpanel .credit-link{display:none}
 .credits{text-align:left;font-size:14px;line-height:1.7;color:#e6dccb;margin:6px 4px 0}
 .credits a{color:#e9c47a}.credits b{color:#f3dfae}
 .credits .cmuted{color:#a8977a;font-size:12.5px;margin-top:12px!important}
+
+/* ===== table dressing around the board ===== */
+#deco{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+#deco .dk{position:absolute;background:center/contain no-repeat;filter:brightness(.42) saturate(.85);display:block}
+#deco .top{left:0;right:0;top:-1.5vh;height:13vh;background:url(assets/deco/top.webp) center top/auto 100% repeat-x}
+#deco .cur{top:0;height:62vh;aspect-ratio:900/1034;background-image:url(assets/deco/curtain.webp);background-position:left top}
+#deco .cur.l{left:-3vh}
+#deco .cur.r{right:-3vh;transform:scaleX(-1)}
+#deco .bl{left:-2vh;bottom:-3vh;height:40vh;aspect-ratio:1000/821;background-image:url(assets/deco/bl.webp);background-position:left bottom}
+#deco .br{right:-2vh;bottom:-3vh;height:34vh;aspect-ratio:1000/582;background-image:url(assets/deco/br.webp);background-position:right bottom}
+#deco .dvig{position:absolute;inset:0;background:radial-gradient(ellipse 62% 58% at 50% 50%,transparent 55%,rgba(5,6,12,.55) 100%)}
+html.phone #deco .top{height:11vh}
+html.phone #deco .cur{height:56vh}
+html.phone #deco .bl{height:36vh}html.phone #deco .br{height:30vh}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
@@ -2531,7 +2545,7 @@ function robberGLB(){const k=new THREE.Group();k.userData.glb=1;
     if(g.animations&&g.animations[0]){const mx=new THREE.AnimationMixer(m);mx.clipAction(g.animations[0]).play();k.userData.mixer=mx;}k.add(m);try{invalidate(true);}catch(e){}};
   if(ROBGLB.g)put(ROBGLB.g);else{ROBGLB.cbs.push(put);if(ROBGLB.cbs.length===1&&THREE.GLTFLoader)new THREE.GLTFLoader().load('assets/robber.glb',g=>{ROBGLB.g=g;ROBGLB.cbs.splice(0).forEach(f=>f(g));},undefined,e=>console.warn('robber glb',e));}
   return k;}
-const REAPCOL={cloak:0x16171d,black:0x101116,material:0x1f0b24};
+const REAPCOL={cloak:0x0f1015,black:0x0b0b0f,material:0x170819};
 // generic loader for downloaded figures: auto-scale to a target height, optional pedestal strip
 const RGLB={};
 function robberFig(file,H,o){o=o||{};const k=new THREE.Group();k.userData.glb=1;
@@ -3037,6 +3051,7 @@ function showRules(i,after){i=i||0;const P=RULES[i],last=i===RULES.length-1;
 function fitRules(){const bk=$('#rbook');if(!bk)return;const m=$('#modal'),W=m.clientWidth,H=m.clientHeight,AR=1907/978;
   const w=Math.min(1240,W*.98,(H-8)*AR);bk.style.width=w+'px';bk.style.height=(w/AR)+'px';bk.style.fontSize=(w/(PH.on?64:78))+'px';$('#mcrest')&&($('#mcrest').style.visibility='hidden');}
 addEventListener('resize',()=>setTimeout(fitRules,80));
+setInterval(()=>{try{if(typeof W!=='undefined'&&W.ok)addDeco();}catch(e){}},500);
 {const b=document.getElementById('creditBtn');if(b)b.onclick=e=>{e.stopPropagation();showCredits();};}
 setTimeout(()=>{try{addSetIcons();}catch(e){}},0);
 
@@ -3097,6 +3112,11 @@ function noiseTile(){if(noiseTile.d)return;noiseTile.d=1;const c=document.create
 function showCredits(){openDialog(`<h3>Credits &amp; Licenses</h3><div class="credits">
   <p><b>Cartoon Style Grim Reaper</b> (도적 3D 모델)<br>by <a href="http://sketchfab.com/utudesign" target="_blank" rel="noopener">Utu Design</a> · <a href="https://skfb.ly/pGp8q" target="_blank" rel="noopener">Sketchfab</a><br>Licensed under <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 색상 변경 및 경량화</p>
   <p class="cmuted">배경음악·효과음·영상: Pixabay (Pixabay Content License)<br>첫 화면 반짝임 입자: Kenney Particle Pack (CC0)</p></div><div class="row"><button class="btn sub" id="crOk">확인</button></div>`);$('#crOk').onclick=closeDialog;}
+
+// table dressing around the sea: curtains, valance and corner props, darkened behind the UI (pointer-transparent)
+function addDeco(){if(!/[?&]deco=1/.test(location.search)||document.getElementById('deco'))return;const st=document.getElementById('stage');if(!st)return;const d=document.createElement('div');d.id='deco';
+  d.innerHTML='<i class="dk top"></i><i class="dk cur l"></i><i class="dk cur r"></i><i class="dk bl"></i><i class="dk br"></i><i class="dvig"></i>';
+  const cv=st.querySelector('canvas');if(cv&&cv.nextSibling)st.insertBefore(d,cv.nextSibling);else st.appendChild(d);}
 function titleIntro(t){ui.introT0=performance.now();t.classList.remove('shine-on');t.classList.add('intro');setTimeout(()=>{t.classList.remove('intro');shineOn();},4800);}
 function shineOn(){const t=$('#title'),lg=$('#tLogo');if(t.classList.contains('intro')||ui.splash)return;if(lg.complete&&lg.naturalWidth)t.classList.add('shine-on');else lg.addEventListener('load',()=>{if(!t.classList.contains('intro'))t.classList.add('shine-on');},{once:true});}
 function splashOff(){const sp=$('#splash');if(!sp||!ui.splash||sp.classList.contains('loading'))return;ui.splash=0;setTimeout(()=>{try{preloadUI();}catch(e){}},1500);try{SND.unlock();SND.music('title');}catch(e){}sp.classList.add('out');const t=$('#title');document.querySelectorAll('#title video').forEach(v=>{const p=v.play();p&&p.catch&&p.catch(()=>{});});if(!t.hidden)titleIntro(t);setTimeout(()=>sp.remove(),1700);}
