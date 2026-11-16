@@ -2217,9 +2217,9 @@ function init3D(){
 }
 // game entry: start low, close and from the side, then swing round into the reset (top-down) view
 function camIntro(){if(!W.ok)return;const tp=W.ctl.target.clone(),off=W.cam.position.clone().sub(tp);const sp=new THREE.Spherical().setFromVector3(off);
-  const from={r:Math.max(W.ctl.minDistance+.5,sp.radius*.55),phi:W.ctl.maxPolarAngle,theta:sp.theta-1.9};
+  const from={r:Math.max(W.ctl.minDistance+.3,sp.radius*.4),phi:W.ctl.maxPolarAngle,theta:sp.theta-3.0};
   W.cam.position.setFromSpherical(new THREE.Spherical(from.r,from.phi,from.theta)).add(tp);W.cam.lookAt(tp);W.ctl.update();
-  W.camAnim={sph:true,t0:performance.now()+350,dur:2600,tp,from,to:{r:sp.radius,phi:sp.phi,theta:sp.theta}};}
+  W.camAnim={sph:true,t0:performance.now()+350,dur:3000,tp,from,to:{r:sp.radius,phi:sp.phi,theta:sp.theta}};}
 function hudBox(w,h){if(!(typeof HUDQ!=='undefined'&&HUDQ.matches))return{dx:0,dy:0,vw:w,vh:h};const tr=$('#tray');const th=tr?tr.offsetHeight*(PH.on?1.15:.95):200;
   const lc=$('#leftcol'),sd=document.querySelector('.side');const L=(lc&&lc.offsetWidth?lc.offsetWidth+24:300),Rr=(sd&&sd.offsetWidth?sd.offsetWidth+24:300);const top=PH.on?44:64;
   const vw=w-(L+Rr)*.7,vh=h-th-top;return{dx:(Rr-L)/2,dy:(th-top)/2,vw,vh};}
