@@ -1452,6 +1452,15 @@ html.phone #turnBan .av.avb{width:40px;height:40px;box-shadow:0 0 0 7px var(--c)
 html.phone .chrow .cstrip .av{width:40px;height:40px}
 html.phone .chrow .etg img{width:54px}
 html.phone .chrow .elab{font-size:13px}
+
+.chrow .cstrip{-webkit-mask-image:linear-gradient(90deg,transparent,#000 14px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,transparent,#000 14px,#000 calc(100% - 28px),transparent)}
+.chrow .cstrip.at-start{-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 28px),transparent)}
+.chrow .cstrip.at-end{-webkit-mask-image:linear-gradient(90deg,transparent,#000 14px,#000 100%);mask-image:linear-gradient(90deg,transparent,#000 14px,#000 100%)}
+.chrow .cstrip.at-start.at-end{-webkit-mask-image:none;mask-image:none}
+.chrow .cstrip:has(.av[data-c]){gap:9px}
+.chrow .cstrip .av[data-c]:not(.on){width:34px;height:34px}
+html.phone .chrow .cstrip .av[data-c]:not(.on){width:30px;height:30px}
+.chrow .cstrip .av{transition:width .18s ease,height .18s ease,opacity .18s}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
@@ -2895,7 +2904,11 @@ function charRowIn(ch,col,takenCh,takenCol){const m=ui.chMode||'p';takenCh=taken
   return `<button class="etg" role="switch" aria-checked="${m==='c'}" aria-label="캐릭터/색상 전환"><img src="assets/pt/tg_plain${m==='p'?'L':'R'}.webp" alt=""></button><span class="elab">${m==='p'?'캐릭터':'색상'}</span><span class="vdiv"></span><div class="cstrip">${items}</div>`;}
 const charBind=(id,onCh,onCol)=>{const el=$('#'+id);if(!el)return;
   const draw=keep=>{const sl=keep&&el.querySelector('.cstrip')?el.querySelector('.cstrip').scrollLeft:null;el.innerHTML=charRowIn(el.dataset.ch,el.dataset.col,(el.dataset.tch||'').split(',').filter(Boolean),(el.dataset.tcol||'').split(',').filter(Boolean));
-    const st=el.querySelector('.cstrip');if(sl!==null)st.scrollLeft=sl;else{const on=st.querySelector('.on');if(on)st.scrollLeft=Math.max(0,on.offsetLeft-st.clientWidth/2+on.offsetWidth/2);}
+    const st=el.querySelector('.cstrip');
+    const edges=()=>{const mx=st.scrollWidth-st.clientWidth;st.classList.toggle('at-start',st.scrollLeft<=2);st.classList.toggle('at-end',st.scrollLeft>=mx-2);};
+    const center=()=>{const on=st.querySelector('.on');if(!on||!st.clientWidth)return false;const k=st.getBoundingClientRect().width/st.offsetWidth||1;const x=(on.getBoundingClientRect().left-st.getBoundingClientRect().left)/k+st.scrollLeft;st.scrollLeft=Math.max(0,Math.min(st.scrollWidth-st.clientWidth,x-st.clientWidth/2+on.offsetWidth/2));edges();return true;};
+    if(sl!==null){st.scrollLeft=sl;edges();}else{center();requestAnimationFrame(()=>{center();setTimeout(center,120);setTimeout(center,500);});}
+    st.addEventListener('scroll',edges,{passive:true});
     st.addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){st.scrollLeft+=e.deltaY;e.preventDefault();}},{passive:false});
     let dn=null;st.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'){dn={x:e.clientX,l:st.scrollLeft,m:false};}});
     st.addEventListener('pointermove',e=>{if(dn){const dx=e.clientX-dn.x;if(Math.abs(dx)>4)dn.m=true;st.scrollLeft=dn.l-dx;}});
