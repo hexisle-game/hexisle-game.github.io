@@ -2629,7 +2629,7 @@ function sync3D(){
   W.prev=true;
   {const {x,z}=hc(S.board.robber);const to=new THREE.Vector3(x-.42,heightAt(x-.42,z+.12),z+.12);let rb=W.robber;if(!rb||rb.parent!==W.dynG){rb=W.robber=robberMesh();rb.scale.setScalar(1.75);rb.traverse(o=>{if(o.isMesh){o.material=o.material.clone();o.material.transparent=true;o.renderOrder=6;}});rb.userData.info={t:'robber'};rb.position.copy(to);W.dynG.add(rb);}
     {const hh=G.hexes[S.board.robber];W.robU.value.set(hh.q,hh.r);}
-    if(W.robberFrom&&W.robberFrom.distanceTo(to)>.01){rb.userData.move={from:rb.position.clone(),to:to.clone(),t0:now};W.anim.add(rb);}else if(!rb.userData.move)rb.position.copy(to);W.robberFrom=to;
+    if(W.robberFrom&&W.robberFrom.distanceTo(to)>.01){rb.userData.move={from:rb.position.clone(),to:to.clone(),t0:now};W.anim.add(rb);try{camVisit(to);}catch(e){}}else if(!rb.userData.move)rb.position.copy(to);W.robberFrom=to;
     const rmode=targets().kind==='robber';W.robLbl=W.robLbl||addMapLabel('','#e0402e',new THREE.Vector3(),'rob',true);W.robLbl.anchor=rb;W.robLbl.off=new THREE.Vector3(0,rb.userData.sprite?.72:rb.userData.glb?.6:.5,0);W.robLbl.el.classList.toggle('hot',rmode);W.robLbl.el.querySelector('span').textContent=rmode?'도적을 옮길 땅을 누르세요':'도적: 생산 정지';$('#stage').classList.toggle('robmode',rmode);
     if(rmode&&!rb.userData.robPulse){rb.traverse(o=>{if(o.isMesh&&o.material.emissive){o.material.emissive.setHex(0xff3a0a);o.material.emissiveIntensity=.12;}});
       const fx=new THREE.Group();fx.name='robfx';const pl=new THREE.PointLight(0xff7a2a,2.2,1.6);pl.position.set(.25,.35,.35);fx.add(pl);
@@ -2808,8 +2808,30 @@ function scorePops(){const now=S.players.map((_,i)=>vp(i,i===ME));const prev=ui.
   const rows=document.querySelectorAll('#players .pl');now.forEach((v,i)=>{if(v>prev[i]&&rows[i]){const el=rows[i].querySelector('.vp');if(!el)return;el.classList.add('vpop');live(()=>document.querySelectorAll('#players .pl')[i]&&document.querySelectorAll('#players .pl')[i].querySelector('.vp'),'vpop',550);
     const t=document.createElement('span');t.className='vpup';t.textContent='+'+(v-prev[i]);el.appendChild(t);setTimeout(()=>t.remove(),2400);}});}
 // 5. bonus badges
+// robber moved: glide the camera over to the tile, hold, then return to where the player was looking
+function camVisit(p){if(!W.ok||(W.camAnim&&W.camAnim.sph))return;const c=W.ctl;if(!W.visitBack)W.visitBack={cp:W.cam.position.clone(),tp:c.target.clone()};
+  const dir=W.cam.position.clone().sub(c.target).normalize();const d=Math.max(c.minDistance+1.5,Math.min(9,W.cam.position.distanceTo(c.target)*.7));
+  const tp=new THREE.Vector3(p.x,0,p.z),cp=tp.clone().add(dir.multiplyScalar(d));W.camAnim={t0:performance.now(),fp:W.cam.position.clone(),ft:c.target.clone(),tp,cp};
+  clearTimeout(W.visitT);W.visitT=setTimeout(()=>{const b=W.visitBack;W.visitBack=null;if(!b||(W.camAnim&&W.camAnim.sph))return;W.camAnim={t0:performance.now(),fp:W.cam.position.clone(),ft:W.ctl.target.clone(),tp:b.tp,cp:b.cp};},2300);}
+// longest road: the actual chain of edges, then a light that runs along it
+function roadPath(p){let best=[];const used=new Set(),path=[];
+  const dfs=v=>{if(path.length>best.length)best=path.slice();const b=S.vb[v];if(path.length>0&&b&&b.o!==p)return;
+    for(const e of G.verts[v].e){if(S.eo[e]!==p||used.has(e))continue;used.add(e);const E=G.edges[e];const n=E.a===v?E.b:E.a;path.push([v,n]);dfs(n);path.pop();used.delete(e);}};
+  for(const v of VIDX){if(G.verts[v].e.some(e=>S.eo[e]===p))dfs(v);}return best;}
+function roadGlow(seg,slow){if(!W.ok||!seg||!seg.length)return;const P=v=>{const q=vc(v);return new THREE.Vector3(q.x,heightAt(q.x,q.z)+.1,q.z);};
+  const pts=[P(seg[0][0]),...seg.map(x=>P(x[1]))];const g=new THREE.Group();W.scene.add(g);
+  const add=c=>new THREE.MeshBasicMaterial({color:c,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false});
+  const orb=new THREE.Mesh(new THREE.SphereGeometry(.07,16,12),add(0xfff1c0));const halo=new THREE.Mesh(new THREE.SphereGeometry(.18,16,12),add(0xffb640));halo.material.opacity=.45;orb.add(halo);g.add(orb);
+  const bars=[];const per=170*(slow||1),fade=1500*(slow||1),n=seg.length,t0=performance.now();
+  const step=()=>{const t=performance.now()-t0;const k=Math.min(n,t/per);const i=Math.min(n-1,Math.floor(k));
+    while(bars.length<Math.min(n,Math.ceil(k))){const j=bars.length,a=pts[j],b=pts[j+1];const len=a.distanceTo(b);const m=new THREE.Mesh(new THREE.BoxGeometry(.07,.05,len),add(0xffcf6a));m.position.copy(a).lerp(b,.5);m.lookAt(b);m.userData.t=performance.now();g.add(m);bars.push(m);}
+    if(t<n*per){orb.position.copy(pts[i]).lerp(pts[i+1],k-i);orb.visible=true;}else{orb.visible=t<n*per+250;halo.material.opacity=Math.max(0,.45*(1-(t-n*per)/250));}
+    bars.forEach(m=>{const a=(performance.now()-m.userData.t)/fade;m.material.opacity=Math.max(0,.95*(1-a*a));});
+    try{PERF.dirty=true;}catch(e){}
+    if(t<n*per+fade+100)requestAnimationFrame(step);else{W.scene.remove(g);g.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material)o.material.dispose();});}};
+  requestAnimationFrame(step);}
 function badgeFX(){const k=S.lr.o+','+S.la.o;const p=ui.prevBdg;ui.prevBdg=k;if(p===undefined||p===k)return;const [lr,la]=p.split(',').map(Number);const rows=document.querySelectorAll('#players .pl');
-  [[S.lr.o,lr,0],[S.la.o,la,1]].forEach(([o,po,w])=>{if(o>=0&&o!==po&&rows[o]){const b=rows[o].querySelectorAll('.bdgs .badge')[S.lr.o===o&&w===1?1:0];const bi=S.lr.o===o&&w===1?1:0;if(b)b.classList.add('bnew');rows[o].classList.add('plglow');live(()=>{const r=document.querySelectorAll('#players .pl')[o];return r&&r.querySelectorAll('.bdgs .badge')[bi];},'bnew',1400);live(()=>document.querySelectorAll('#players .pl')[o],'plglow',1600);}});}
+  [[S.lr.o,lr,0],[S.la.o,la,1]].forEach(([o,po,w])=>{if(o>=0&&o!==po&&rows[o]){if(w===0)setTimeout(()=>{try{roadGlow(roadPath(o));}catch(e){}},400);const b=rows[o].querySelectorAll('.bdgs .badge')[S.lr.o===o&&w===1?1:0];const bi=S.lr.o===o&&w===1?1:0;if(b)b.classList.add('bnew');rows[o].classList.add('plglow');live(()=>{const r=document.querySelectorAll('#players .pl')[o];return r&&r.querySelectorAll('.bdgs .badge')[bi];},'bnew',1400);live(()=>document.querySelectorAll('#players .pl')[o],'plglow',1600);}});}
 // 7. nudge the roll button when my turn starts
 function rollNudge(){if(S.phase!=='main'||S.cur!==ME||S.rolled||S.pend){return;}const key=S.turn+':'+S.cur+':'+(S.rollId||0);if(ui.nudged===key)return;ui.nudged=key;live('.stagebtns [data-act="roll"]:not(:disabled)','nudge',3200);}
 // 2. matching number tokens bounce and their land glows when the dice settle
