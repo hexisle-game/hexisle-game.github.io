@@ -2028,6 +2028,7 @@ if(sumRes(get)&&d!=='easy'&&lead0&&vp(from)>=(d==='hard'?6:8))return{ok:false,wh
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/utils/BufferGeometryUtils.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/geometries/RoundedBoxGeometry.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/shaders/CopyShader.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/postprocessing/EffectComposer.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/postprocessing/RenderPass.js"></script>
@@ -2501,7 +2502,14 @@ function robberMesh2(){const k=new THREE.Group();const cloak=0x1c1f2b,cloak2=0x1
 function robberSprite(file){const k=new THREE.Group();const tex=new THREE.TextureLoader().load(file,t=>{try{const a=t.image.width/t.image.height;sp.scale.set(.62*a,.62,1);invalidate(true);}catch(e){}});tex.encoding=THREE.sRGBEncoding;tex.anisotropy=4;
   const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthWrite:true,alphaTest:.25,toneMapped:false}));k.userData.sprite=1;sp.center.set(.5,0);sp.position.y=.0;sp.scale.set(.42,.62,1);sp.renderOrder=6;sp.userData.noOutline=1;k.add(sp);
   k.add(part('sph',glow(0x000000,.35),[.16,.01,.12],[0,.012,0],{noShadow:true}));return k;}
-function robberMesh(){const q=location.search;if(/[?&]robber=3/.test(q))return robberSprite('assets/rob_a.webp');if(/[?&]robber=4/.test(q))return robberSprite('assets/rob_b.webp');if(/[?&]robber=2/.test(q))return robberMesh2();const k=new THREE.Group();
+// KayKit "Skeleton Rogue" (CC0, Kay Lousberg) recoloured navy, idle pose, blade in hand (preview: ?robber=5)
+const ROBGLB={g:null,cbs:[]};
+function robberGLB(){const k=new THREE.Group();k.userData.glb=1;
+  const put=g=>{const m=THREE.SkeletonUtils?THREE.SkeletonUtils.clone(g.scene):g.scene;m.scale.setScalar(.19);m.rotation.x=-.42;m.position.z=.04;m.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;o.material=o.material.clone();if(/Eyes/.test(o.name)){o.material.emissive=new THREE.Color(0x7ff0ff);o.material.emissiveIntensity=2.2;}if(/Head|Jaw/.test(o.name)){o.material.emissive=new THREE.Color(0x4a4030);o.material.emissiveIntensity=.55;}if(o.material.transparent===undefined)o.material.transparent=false;}});
+    if(g.animations&&g.animations[0]){const mx=new THREE.AnimationMixer(m);mx.clipAction(g.animations[0]).play();k.userData.mixer=mx;}k.add(m);try{invalidate(true);}catch(e){}};
+  if(ROBGLB.g)put(ROBGLB.g);else{ROBGLB.cbs.push(put);if(ROBGLB.cbs.length===1&&THREE.GLTFLoader)new THREE.GLTFLoader().load('assets/robber.glb',g=>{ROBGLB.g=g;ROBGLB.cbs.splice(0).forEach(f=>f(g));},undefined,e=>console.warn('robber glb',e));}
+  return k;}
+function robberMesh(){const q=location.search;if(/[?&]robber=5/.test(q))return robberGLB();if(/[?&]robber=3/.test(q))return robberSprite('assets/rob_a.webp');if(/[?&]robber=4/.test(q))return robberSprite('assets/rob_b.webp');if(/[?&]robber=2/.test(q))return robberMesh2();const k=new THREE.Group();
   k.add(part('cone8',0x2a2530,[.135,.4,.135],[0,.2,0]));k.add(part('sph',0x35303c,[.08,.08,.08],[0,.42,0]));
   k.add(part('cone8',0x2a2530,[.1,.135,.1],[0,.5,-.007]));
   const eye=new THREE.MeshBasicMaterial({color:0xff5a3c});k.add(part('sph',eye,[.012,.012,.012],[-.027,.425,.074],{noShadow:true}));k.add(part('sph',eye,[.012,.012,.012],[.027,.425,.074],{noShadow:true}));
@@ -2546,7 +2554,7 @@ function sync3D(){
   {const {x,z}=hc(S.board.robber);const to=new THREE.Vector3(x-.42,heightAt(x-.42,z+.12),z+.12);let rb=W.robber;if(!rb||rb.parent!==W.dynG){rb=W.robber=robberMesh();rb.scale.setScalar(1.75);rb.traverse(o=>{if(o.isMesh){o.material=o.material.clone();o.material.transparent=true;o.renderOrder=6;}});rb.userData.info={t:'robber'};rb.position.copy(to);W.dynG.add(rb);}
     {const hh=G.hexes[S.board.robber];W.robU.value.set(hh.q,hh.r);}
     if(W.robberFrom&&W.robberFrom.distanceTo(to)>.01){rb.userData.move={from:rb.position.clone(),to:to.clone(),t0:now};W.anim.add(rb);}else if(!rb.userData.move)rb.position.copy(to);W.robberFrom=to;
-    const rmode=targets().kind==='robber';W.robLbl=W.robLbl||addMapLabel('','#e0402e',new THREE.Vector3(),'rob',true);W.robLbl.anchor=rb;W.robLbl.off=new THREE.Vector3(0,rb.userData.sprite?.72:.5,0);W.robLbl.el.classList.toggle('hot',rmode);W.robLbl.el.querySelector('span').textContent=rmode?'도적을 옮길 땅을 누르세요':'도적: 생산 정지';$('#stage').classList.toggle('robmode',rmode);
+    const rmode=targets().kind==='robber';W.robLbl=W.robLbl||addMapLabel('','#e0402e',new THREE.Vector3(),'rob',true);W.robLbl.anchor=rb;W.robLbl.off=new THREE.Vector3(0,rb.userData.sprite?.72:rb.userData.glb?.6:.5,0);W.robLbl.el.classList.toggle('hot',rmode);W.robLbl.el.querySelector('span').textContent=rmode?'도적을 옮길 땅을 누르세요':'도적: 생산 정지';$('#stage').classList.toggle('robmode',rmode);
     if(rmode&&!rb.userData.robPulse){rb.traverse(o=>{if(o.isMesh&&o.material.emissive){o.material.emissive.setHex(0xff3a0a);o.material.emissiveIntensity=.12;}});
       const fx=new THREE.Group();fx.name='robfx';const pl=new THREE.PointLight(0xff7a2a,2.2,1.6);pl.position.set(.25,.35,.35);fx.add(pl);
       const ring=part('torus',glow(0xff6a2a,.9),[.3,.6,.3],[0,.03,0],{noShadow:true});const ring2=part('torus',glow(0xffb060,.5),[.42,.4,.42],[0,.02,0],{noShadow:true});fx.add(ring2);ring.userData.robRing=1;fx.add(ring);rb.add(fx);
@@ -2598,7 +2606,7 @@ const PERF={born:performance.now(),dpr:Math.min(window.devicePixelRatio||1,2),ma
 function invalidate(shadow){PERF.dirty=true;PERF.act=performance.now();if(shadow)PERF.shadow=true;}
 function setDPR(v){PERF.dpr=v;W.r.setPixelRatio(v);if(W.comp)W.comp.setPixelRatio(v);fitCam(false);PERF.shadow=true;PERF.dirty=true;}
 function loop(t){requestAnimationFrame(loop);if(!W.ok||document.hidden)return;const s=t/1000;const moved=W.ctl.update();
-  const now0=performance.now();const robP=W.robber&&W.robber.userData.robPulse;const anim=moved||W.camAnim||DICE.list.length||W.tgtG.children.length||W.anim.size||robP;
+  const now0=performance.now();if(W.robber&&W.robber.userData.mixer){const t=now0/1000;W.robber.userData.mixer.update(Math.min(.05,t-(W.robber.userData.mt||t)));W.robber.userData.mt=t;}const robP=(W.robber&&W.robber.userData.robPulse)||(W.robber&&W.robber.userData.mixer);const anim=moved||W.camAnim||DICE.list.length||W.tgtG.children.length||W.anim.size||robP;
   const ambientDue=now0-PERF.ambient>(now0-PERF.act>45000?600:PERF.dpr<PERF.max?140:80);
   if(!anim&&!PERF.dirty&&!ambientDue)return;
   if(!anim&&!PERF.dirty)PERF.ambient=now0;
