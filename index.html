@@ -1485,8 +1485,8 @@ html.phone .devshow img{width:92px}html.phone .devshow span{font-size:16px}
 .btn,.tbtn,.tm,.mtab,.pbtn{transition:transform .08s ease,filter .08s ease}
 @media (prefers-reduced-motion:reduce){.pl .vp.vpop,.vpup,.pl .badge.bnew,.pl.plglow,.stagebtns .tbtn.nudge,.devshow{animation-duration:.01s}}
 /* stage buttons: tighter rows; narrower trade, wider end turn, total = roll width */
-html body .stagebtns{grid-template-columns:.82fr 1.18fr!important;row-gap:4px!important;column-gap:8px!important}
-html.phone body .stagebtns{row-gap:2px!important;column-gap:7px!important}
+html body .stagebtns{grid-template-columns:.82fr 1.18fr!important;row-gap:4px!important;column-gap:2px!important}
+html.phone body .stagebtns{row-gap:2px!important;column-gap:1px!important}
 /* bonus badges as images */
 html body .pl .bdgs .badge.bimg{background:none!important;border:0!important;padding:0!important;box-shadow:none!important;line-height:0}
 html body .pl .bdgs .badge.bimg img{height:20px;width:auto;display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
@@ -2497,7 +2497,11 @@ function robberMesh2(){const k=new THREE.Group();const cloak=0x1c1f2b,cloak2=0x1
   d.add(part('box',leather,[.016,.05,.016],[0,-.01,0]));d.add(part('box',0x8a6a3a,[.055,.012,.016],[0,.018,0]));d.add(part('cone8',steel,[.018,.13,.006],[0,.09,0]));
   k.add(d);
   return k;}
-function robberMesh(){if(/[?&]robber=2/.test(location.search))return robberMesh2();const k=new THREE.Group();
+// painted figurine on a camera-facing billboard (preview: ?robber=3 / ?robber=4)
+function robberSprite(file){const k=new THREE.Group();const tex=new THREE.TextureLoader().load(file,t=>{try{const a=t.image.width/t.image.height;sp.scale.set(.62*a,.62,1);invalidate(true);}catch(e){}});tex.encoding=THREE.sRGBEncoding;tex.anisotropy=4;
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthWrite:true,alphaTest:.25,toneMapped:false}));k.userData.sprite=1;sp.center.set(.5,0);sp.position.y=.0;sp.scale.set(.42,.62,1);sp.renderOrder=6;sp.userData.noOutline=1;k.add(sp);
+  k.add(part('sph',glow(0x000000,.35),[.16,.01,.12],[0,.012,0],{noShadow:true}));return k;}
+function robberMesh(){const q=location.search;if(/[?&]robber=3/.test(q))return robberSprite('assets/rob_a.webp');if(/[?&]robber=4/.test(q))return robberSprite('assets/rob_b.webp');if(/[?&]robber=2/.test(q))return robberMesh2();const k=new THREE.Group();
   k.add(part('cone8',0x2a2530,[.135,.4,.135],[0,.2,0]));k.add(part('sph',0x35303c,[.08,.08,.08],[0,.42,0]));
   k.add(part('cone8',0x2a2530,[.1,.135,.1],[0,.5,-.007]));
   const eye=new THREE.MeshBasicMaterial({color:0xff5a3c});k.add(part('sph',eye,[.012,.012,.012],[-.027,.425,.074],{noShadow:true}));k.add(part('sph',eye,[.012,.012,.012],[.027,.425,.074],{noShadow:true}));
@@ -2542,7 +2546,7 @@ function sync3D(){
   {const {x,z}=hc(S.board.robber);const to=new THREE.Vector3(x-.42,heightAt(x-.42,z+.12),z+.12);let rb=W.robber;if(!rb||rb.parent!==W.dynG){rb=W.robber=robberMesh();rb.scale.setScalar(1.75);rb.traverse(o=>{if(o.isMesh){o.material=o.material.clone();o.material.transparent=true;o.renderOrder=6;}});rb.userData.info={t:'robber'};rb.position.copy(to);W.dynG.add(rb);}
     {const hh=G.hexes[S.board.robber];W.robU.value.set(hh.q,hh.r);}
     if(W.robberFrom&&W.robberFrom.distanceTo(to)>.01){rb.userData.move={from:rb.position.clone(),to:to.clone(),t0:now};W.anim.add(rb);}else if(!rb.userData.move)rb.position.copy(to);W.robberFrom=to;
-    const rmode=targets().kind==='robber';W.robLbl=W.robLbl||addMapLabel('','#e0402e',new THREE.Vector3(),'rob',true);W.robLbl.anchor=rb;W.robLbl.off=new THREE.Vector3(0,.5,0);W.robLbl.el.classList.toggle('hot',rmode);W.robLbl.el.querySelector('span').textContent=rmode?'도적을 옮길 땅을 누르세요':'도적: 생산 정지';$('#stage').classList.toggle('robmode',rmode);
+    const rmode=targets().kind==='robber';W.robLbl=W.robLbl||addMapLabel('','#e0402e',new THREE.Vector3(),'rob',true);W.robLbl.anchor=rb;W.robLbl.off=new THREE.Vector3(0,rb.userData.sprite?.72:.5,0);W.robLbl.el.classList.toggle('hot',rmode);W.robLbl.el.querySelector('span').textContent=rmode?'도적을 옮길 땅을 누르세요':'도적: 생산 정지';$('#stage').classList.toggle('robmode',rmode);
     if(rmode&&!rb.userData.robPulse){rb.traverse(o=>{if(o.isMesh&&o.material.emissive){o.material.emissive.setHex(0xff3a0a);o.material.emissiveIntensity=.12;}});
       const fx=new THREE.Group();fx.name='robfx';const pl=new THREE.PointLight(0xff7a2a,2.2,1.6);pl.position.set(.25,.35,.35);fx.add(pl);
       const ring=part('torus',glow(0xff6a2a,.9),[.3,.6,.3],[0,.03,0],{noShadow:true});const ring2=part('torus',glow(0xffb060,.5),[.42,.4,.42],[0,.02,0],{noShadow:true});fx.add(ring2);ring.userData.robRing=1;fx.add(ring);rb.add(fx);
