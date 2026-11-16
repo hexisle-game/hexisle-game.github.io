@@ -1457,9 +1457,9 @@ html.phone .chrow .elab{font-size:13px}
 .chrow .cstrip.at-start{-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 28px),transparent)}
 .chrow .cstrip.at-end{-webkit-mask-image:linear-gradient(90deg,transparent,#000 14px,#000 100%);mask-image:linear-gradient(90deg,transparent,#000 14px,#000 100%)}
 .chrow .cstrip.at-start.at-end{-webkit-mask-image:none;mask-image:none}
-.chrow .cstrip:has(.av[data-c]){gap:15px}
+.chrow .cstrip:has(.av[data-c]){gap:15px;padding-left:7px;padding-right:7px}
 .chrow .cstrip .av[data-c]:not(.on){width:34px;height:34px}
-html.phone .chrow .cstrip .av[data-c]:not(.on){width:30px;height:30px}
+html.phone .chrow .cstrip .av[data-c]:not(.on){width:28px;height:28px}
 .chrow .cstrip .av{transition:width .18s ease,height .18s ease,opacity .18s}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
@@ -2909,6 +2909,10 @@ const charBind=(id,onCh,onCol)=>{const el=$('#'+id);if(!el)return;
     const center=()=>{const on=st.querySelector('.on');if(!on||!st.clientWidth)return false;const k=st.getBoundingClientRect().width/st.offsetWidth||1;const x=(on.getBoundingClientRect().left-st.getBoundingClientRect().left)/k+st.scrollLeft;st.scrollLeft=Math.max(0,Math.min(st.scrollWidth-st.clientWidth,x-st.clientWidth/2+on.offsetWidth/2));edges();return true;};
     if(sl!==null){st.scrollLeft=sl;edges();}else{center();requestAnimationFrame(()=>{center();setTimeout(center,120);setTimeout(center,500);});}
     st.addEventListener('scroll',edges,{passive:true});
+    // colour mode: spread the six rings as wide as fits (max 24px) so no swipe is needed
+    const fitGap=()=>{if(!st.querySelector('.av[data-c]'))return;const its=[...st.children];const sum=its.reduce((a,e)=>a+e.offsetWidth,0);const cs=getComputedStyle(st);const pad=parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight);
+      const g=Math.max(6,Math.min(24,Math.floor((st.clientWidth-pad-sum-2)/(its.length-1))));st.style.gap=g+'px';edges();};
+    fitGap();requestAnimationFrame(fitGap);
     st.addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){st.scrollLeft+=e.deltaY;e.preventDefault();}},{passive:false});
     let dn=null;st.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'){dn={x:e.clientX,l:st.scrollLeft,m:false};}});
     st.addEventListener('pointermove',e=>{if(dn){const dx=e.clientX-dn.x;if(Math.abs(dx)>4)dn.m=true;st.scrollLeft=dn.l-dx;}});
