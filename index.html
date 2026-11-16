@@ -1492,6 +1492,18 @@ html body .pl .bdgs .badge.bimg{background:none!important;border:0!important;pad
 html body .pl .bdgs .badge.bimg img{height:20px;width:auto;display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
 html.phone body .pl .bdgs{flex-wrap:nowrap!important;gap:3px!important}
 html.phone body .pl .bdgs .badge.bimg img{height:13px}
+
+/* turn banner end ornaments */
+#turnBan .tbo{width:28px;height:28px;flex:none;background:url(assets/ui_orn_small.webp) center/contain no-repeat;opacity:.9;margin:0 18px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))}
+html.phone #turnBan .tbo{width:22px;height:22px;margin:0 12px}
+/* stronger, longer land highlight for the rolled number */
+.hexglow.hl{width:170px;height:170px;margin:-85px 0 0 -85px;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,240,180,.95) 0,rgba(255,214,120,.55) 32%,rgba(255,190,90,.18) 55%,transparent 72%);animation:hexHl 2.6s ease-out both}
+@keyframes hexHl{0%{opacity:0;transform:scale(.55)}14%{opacity:1;transform:scale(1.05)}22%{transform:scale(.95)}65%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.15)}}
+html.phone .hexglow.hl{width:120px;height:120px;margin:-60px 0 0 -60px}
+/* cost tooltip: overlap stacked cards so long recipes stay on one row */
+.icols:not(.devc) .ccards{flex-wrap:nowrap!important}
+.icols:not(.devc) .ccards .ic-card[alt="목재"]+.ic-card[alt="목재"],.icols:not(.devc) .ccards .ic-card[alt="벽돌"]+.ic-card[alt="벽돌"],.icols:not(.devc) .ccards .ic-card[alt="양모"]+.ic-card[alt="양모"],.icols:not(.devc) .ccards .ic-card[alt="곡물"]+.ic-card[alt="곡물"],.icols:not(.devc) .ccards .ic-card[alt="광석"]+.ic-card[alt="광석"]{margin-left:-22px!important;box-shadow:-3px 0 5px rgba(0,0,0,.45)}
+html.phone .icols:not(.devc) .ccards .ic-card[alt="목재"]+.ic-card[alt="목재"],html.phone .icols:not(.devc) .ccards .ic-card[alt="벽돌"]+.ic-card[alt="벽돌"],html.phone .icols:not(.devc) .ccards .ic-card[alt="양모"]+.ic-card[alt="양모"],html.phone .icols:not(.devc) .ccards .ic-card[alt="곡물"]+.ic-card[alt="곡물"],html.phone .icols:not(.devc) .ccards .ic-card[alt="광석"]+.ic-card[alt="광석"]{margin-left:-15px!important}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
@@ -2443,7 +2455,7 @@ function spawnDust(x,z,t0,small){if(!W.ok)return;const y=heightAt(x,z)+.04;const
 // ---- motion: short "whose turn" ribbon across the board ----
 function uiCol(c){if(!c)return c;const n=parseInt(c.slice(1),16);let r=(n>>16)&255,g=(n>>8)&255,b=n&255;const m=(r+g+b)/3;r=Math.round((r*.62+m*.38)*.82);g=Math.round((g*.62+m*.38)*.82);b=Math.round((b*.62+m*.38)*.82);return `rgb(${r},${g},${b})`;}
 function turnBanner(p){if(typeof TUT!=='undefined'&&TUT.on)return;let el=$('#turnBan');if(!el){el=document.createElement('div');el.id='turnBan';document.body.appendChild(el);}
-  const pl=S.players[p];el.innerHTML=avHTML(pl,'avb')+(p===ME?`<b>내 차례</b>`:`<b><span style="color:${uiCol(pl.color)}">${pl.name}</span>의 차례</b>`);el.classList.toggle('mine',p===ME);
+  const pl=S.players[p];el.innerHTML='<i class="tbo l"></i>'+avHTML(pl,'avb')+(p===ME?`<b>내 차례</b>`:`<b><span style="color:${uiCol(pl.color)}">${pl.name}</span>의 차례</b>`)+'<i class="tbo r"></i>';el.classList.toggle('mine',p===ME);
   el.classList.remove('go');void el.offsetWidth;el.classList.add('go');}
 function sync3D(){
   if(!W.ok)return;invalidate(true);buildStatic();
@@ -2643,14 +2655,10 @@ function rollNudge(){if(S.phase!=='main'||S.cur!==ME||S.rolled||S.pend){return;}
 // 2. matching number tokens bounce and their land glows when the dice settle
 function diceFX(){if(!S.dice||typeof W==='undefined'||!W.ok)return;const n=S.dice[0]+S.dice[1];if(n===7)return;const now=performance.now();const k=MX.k(),cr=W.r.domElement.getBoundingClientRect();
   S.board.hexes.forEach((t,hi)=>{if(t.num!==n)return;const sp=W.tokens[hi];if(sp){sp.userData.base=sp.userData.base||sp.scale.clone();sp.userData.bounce=now;W.anim.add(sp);}
-    if(hi===S.board.robber)return;const p=hc(hi);const v=new THREE.Vector3(p.x,heightAt(p.x,p.z),p.z).project(W.cam);const g=document.createElement('div');g.className='hexglow soft';g.style.left=((cr.left+(v.x+1)/2*cr.width)/k)+'px';g.style.top=((cr.top+(1-v.y)/2*cr.height)/k)+'px';document.body.appendChild(g);setTimeout(()=>g.remove(),1300);});
+    if(hi===S.board.robber)return;const p=hc(hi);const v=new THREE.Vector3(p.x,heightAt(p.x,p.z),p.z).project(W.cam);const g=document.createElement('div');g.className='hexglow hl';g.style.left=((cr.left+(v.x+1)/2*cr.width)/k)+'px';g.style.top=((cr.top+(1-v.y)/2*cr.height)/k)+'px';document.body.appendChild(g);setTimeout(()=>g.remove(),2700);});
   try{invalidate(true);}catch(e){}}
-// 4. stolen card flies between the two players
-function stealFX(){const L=S.lastSteal;const key=L?L.k+':'+L.p+':'+L.q+':'+L.r:'';const p=ui.prevSteal;ui.prevSteal=key;if(p===undefined||!L||key===p||(L.p!==ME&&L.q!==ME))return;
-  const k=MX.k();const rows=document.querySelectorAll('#players .pl');const other=L.p===ME?L.q:L.p;const ro=rows[other],hand=$('#hand');if(!ro||!hand)return;
-  const a=ro.getBoundingClientRect(),h=hand.getBoundingClientRect();const from=L.p===ME?{x:a.left/k+20,y:a.top/k}:{x:(h.left+h.width/2)/k,y:h.top/k};const to=L.p===ME?{x:(h.left+h.width/2)/k,y:h.top/k}:{x:a.left/k+20,y:a.top/k};
-  const f=document.createElement('img');f.src=CARDIMG[L.r]||CARDIMG.wood;f.className='flycard';const w=PH.on?40:58;Object.assign(f.style,{width:w+'px',height:w*1.525+'px'});document.body.appendChild(f);
-  const an=f.animate([{transform:`translate(${from.x-w/2}px,${from.y}px) scale(.6)`,opacity:0},{offset:.15,opacity:1},{transform:`translate(${(from.x+to.x)/2-w/2}px,${Math.min(from.y,to.y)-80}px) scale(1) rotate(10deg)`,opacity:1},{transform:`translate(${to.x-w/2}px,${to.y}px) scale(.7) rotate(0)`,opacity:0}],{duration:900,delay:500,easing:'cubic-bezier(.4,.1,.3,1)',fill:'both'});an.onfinish=()=>f.remove();}
+// 4. steals: my lost card rises out of the hand (spent-card motion); a stolen card drops into my hand from above
+function stealFX(){const L=S.lastSteal;const key=L?L.k+':'+L.p+':'+L.q+':'+L.r:'';const p=ui.prevSteal;ui.prevSteal=key;if(p===undefined||!L||key===p||L.p!==ME)return;ui.stealGot={r:L.r,t:performance.now()};}
 // 8. played development card rises in the middle of the screen
 function devFX(){const L=S.lastDev;const key=L?L.id+':'+L.p+':'+L.t:'';const p=ui.prevDevFX;ui.prevDevFX=key;if(p===undefined||!L||key===p)return;
   const el=document.createElement('div');el.className='devshow';el.innerHTML=`<img src="${CARDIMG[L.t]}" alt=""><span>${L.p===ME?'':`<b style="color:${uiCol(S.players[L.p].color)}">${S.players[L.p].name}</b> · `}${DEVN[L.t]}</span>`;document.body.appendChild(el);setTimeout(()=>el.remove(),1900);}
@@ -2669,6 +2677,7 @@ function renderHand(me,groups){const box=$('#hand');const prev0=ui.prevRes?{...u
   const gone=box.dataset.hold?[]:handLeaving(box,me,prev0);
   box.innerHTML=h;
   handLeft(gone);
+  if(ui.stealGot&&performance.now()-ui.stealGot.t<1500){const r=ui.stealGot.r;ui.stealGot=null;const el=[...box.querySelectorAll(`img[data-res="${r}"]`)].pop();const cw=el&&el.closest('.cw');if(cw){cw.classList.remove('new');cw.animate([{transform:'translateY(-90px) scale(.9) rotate(-4deg)',opacity:0},{offset:.7,transform:'translateY(6px)',opacity:1},{transform:'none',opacity:1}],{duration:560,delay:250,easing:'cubic-bezier(.3,.8,.3,1)',fill:'backwards'});}}
   if(ui.flyRoll&&ui.flyRoll===S.rollId&&!box.dataset.hold){ui.flyRoll=null;requestAnimationFrame(()=>{let ok=false;try{ok=flyCards();}catch(e){console.warn(e);}if(!ok&&ui.gainN){SND.sfxN('gain',ui.gainN,.07);}ui.gainN=0;});}
   {const dc=$('#devCount');if(dc)dc.textContent='· '+me.dev.length+'장';}
   const db=$('#devs');const dw=Math.max(150,Math.min(300,db.clientWidth||220));
@@ -2949,7 +2958,7 @@ function titleIntro(t){t.classList.remove('shine-on');t.classList.add('intro');s
 function shineOn(){const t=$('#title'),lg=$('#tLogo');if(t.classList.contains('intro')||ui.splash)return;if(lg.complete&&lg.naturalWidth)t.classList.add('shine-on');else lg.addEventListener('load',()=>{if(!t.classList.contains('intro'))t.classList.add('shine-on');},{once:true});}
 function splashOff(){const sp=$('#splash');if(!sp||!ui.splash)return;ui.splash=0;setTimeout(()=>{try{preloadUI();}catch(e){}},1500);try{SND.unlock();SND.music('title');}catch(e){}sp.classList.add('out');const t=$('#title');document.querySelectorAll('#title video').forEach(v=>{const p=v.play();p&&p.catch&&p.catch(()=>{});});if(!t.hidden)titleIntro(t);setTimeout(()=>sp.remove(),1700);}
 function showTitle(menu){try{SND.music('title');}catch(e){}const t=$('#title');if(t.hidden&&!ui.titleIntro){ui.titleIntro=1;if(!ui.splash)titleIntro(t);}if(t.classList.contains('tfadeout')){clearTimeout(ui.tfT);t.classList.remove('tfadeout');ui.titleFading=false;}else if(t.hidden&&ui.titleIntro&&!t.classList.contains('intro')){t.classList.remove('tfadein');t.classList.add('tfadepre');clearTimeout(ui.tinT);requestAnimationFrame(()=>requestAnimationFrame(()=>{ui.tinT=setTimeout(()=>{t.classList.remove('tfadepre');void t.offsetWidth;t.classList.add('tfadein');ui.tinT=setTimeout(()=>t.classList.remove('tfadein'),700);},120);}));}t.hidden=false;document.documentElement.classList.add('on-title');
-  const lg=$('#tLogo');if(!lg.src)lg.src=window.LOGO_URL;titleFx();shineOn();t.querySelector('.tbg').style.backgroundImage=`url(${(Math.max(innerWidth,innerHeight)*(devicePixelRatio||1)<1500)?TITLEIMG.titlebgS:TITLEIMG.titlebg})`;
+  const lg=$('#tLogo');if(!lg.src)lg.src=window.LOGO_URL;titleFx();shineOn();t.querySelector('.tbg').style.backgroundImage=`url(${(Math.max(innerWidth,innerHeight)*(devicePixelRatio||1)<1400)?TITLEIMG.titlebgS:TITLEIMG.titlebg})`;
   if(menu||ui.titleMenu){ui.titleMenu=true;$('#tTap').hidden=true;$('#tMenu').hidden=false;}else{$('#tTap').hidden=false;$('#tMenu').hidden=true;}}
 function hideTitle(){ui.camFresh=true;try{SND.music('game');}catch(e){}const t=$('#title');document.documentElement.classList.remove('on-title');
   if(t.hidden||ui.splash){t.hidden=true;return;}
