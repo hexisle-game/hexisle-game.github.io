@@ -1736,7 +1736,7 @@ html.phone body .dlg-snd .sndrow{grid-template-columns:auto 150px 60px;gap:12px}
 <div id="tip" hidden></div><div id="pop" hidden></div>
 <div id="leftcol"></div>
 <div id="rotate" hidden><div class="rot-ic"></div><b>가로로 돌려 주세요</b><span>HexIsle은 휴대폰에서<br>가로 화면으로 플레이해요.</span></div>
-<div id="splash"><img id="spLogo" alt="HEXISLE"><p class="spnote">이 게임은 수익을 창출하지 않으며,<br>개인 목적으로만 제작되었습니다.</p><p class="sptap">화면을 탭 하여 시작</p><div class="spload"><i></i></div></div><div id="title" class="title" hidden><div class="tbg"></div><div class="tsun"></div><div class="tdim"></div><canvas class="tbeams" id="tBeams" width="384" height="216"></canvas><video class="ttwk" muted playsinline loop autoplay preload="auto" disablepictureinpicture aria-hidden="true" src="assets/fx/twinkle.mp4"></video><canvas class="tmotes" id="tMotes"></canvas><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 헥스아일 - 개척의 시대"><div class="tshine" id="tShine"></div><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
+<div id="splash"><img id="spLogo" alt="HEXISLE"><p class="spnote">이 게임은 수익을 창출하지 않으며,<br>개인 목적으로만 제작되었습니다.</p><p class="sptap">화면을 탭 하여 시작</p><div class="spload"><i></i></div></div><div id="title" class="title" hidden><div class="tbg"></div><div class="tsun"></div><div class="tdim"></div><canvas class="tbeams" id="tBeams" width="640" height="360"></canvas><video class="ttwk" muted playsinline loop autoplay preload="auto" disablepictureinpicture aria-hidden="true" src="assets/fx/twinkle.mp4"></video><canvas class="tmotes" id="tMotes"></canvas><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 헥스아일 - 개척의 시대"><div class="tshine" id="tShine"></div><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
 <div id="tut" hidden><div class="tblock" id="tBlock"></div><div class="tring" id="tRing" hidden></div><div class="tx" id="tX" hidden>✕</div><div class="tbub" id="tBub"></div><div class="tgest" id="tGest" hidden><i class="f1"></i><i class="f2"></i></div></div>
 <div id="dialog" class="overlay dlgov" hidden><div class="sheet sheet-dialog" id="dsheet"></div></div>
 <div id="modal" class="overlay" hidden><div class="sheet" id="sheet"></div><i class="mcrest" id="mcrest" aria-hidden="true"></i></div>
@@ -2531,7 +2531,7 @@ function robberGLB(){const k=new THREE.Group();k.userData.glb=1;
     if(g.animations&&g.animations[0]){const mx=new THREE.AnimationMixer(m);mx.clipAction(g.animations[0]).play();k.userData.mixer=mx;}k.add(m);try{invalidate(true);}catch(e){}};
   if(ROBGLB.g)put(ROBGLB.g);else{ROBGLB.cbs.push(put);if(ROBGLB.cbs.length===1&&THREE.GLTFLoader)new THREE.GLTFLoader().load('assets/robber.glb',g=>{ROBGLB.g=g;ROBGLB.cbs.splice(0).forEach(f=>f(g));},undefined,e=>console.warn('robber glb',e));}
   return k;}
-const REAPCOL={cloak:0x262833,black:0x1c1d25,material:0x3a1a3f};
+const REAPCOL={cloak:0x16171d,black:0x101116,material:0x1f0b24};
 // generic loader for downloaded figures: auto-scale to a target height, optional pedestal strip
 const RGLB={};
 function robberFig(file,H,o){o=o||{};const k=new THREE.Group();k.userData.glb=1;
@@ -2540,11 +2540,11 @@ function robberFig(file,H,o){o=o||{};const k=new THREE.Group();k.userData.glb=1;
     const bb=new THREE.Box3().setFromObject(m),sz=bb.getSize(new THREE.Vector3()),sc=H/sz.y;m.scale.setScalar(sc);
     const b2=new THREE.Box3().setFromObject(m),c=b2.getCenter(new THREE.Vector3());m.position.set(-c.x,-b2.min.y,-c.z);
     const w=new THREE.Group();w.add(m);w.rotation.x=o.tilt||0;
-    m.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;c.material=c.material.clone();if(o.recol&&o.recol[c.material.name]!==undefined){c.material.color.setHex(o.recol[c.material.name]);if(c.material.emissive)c.material.emissive.setHex(c.material.name==='material'?0x12081a:0x000000);}if(o.lift){c.material.emissive=(c.material.emissive||new THREE.Color()).clone().add(new THREE.Color(o.lift));c.material.emissiveIntensity=1;}}});
+    m.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;c.material=c.material.clone();if(o.recol&&o.recol[c.material.name]!==undefined){c.material.color.setHex(o.recol[c.material.name]);if(c.material.emissive)c.material.emissive.setHex(c.material.name==='material'?0x0a0310:0x000000);if(c.material.name==='material'){c.material.emissiveIntensity=.3;c.material.metalness=.2;c.material.roughness=.5;}}if(o.lift){c.material.emissive=(c.material.emissive||new THREE.Color()).clone().add(new THREE.Color(o.lift));c.material.emissiveIntensity=1;}}});
     k.add(w);try{invalidate(true);}catch(e){}};
   const R=RGLB[file]=RGLB[file]||{g:null,cbs:[]};if(R.g)put(R.g);else{R.cbs.push(put);if(R.cbs.length===1)new THREE.GLTFLoader().load(file,g=>{R.g=g;R.cbs.splice(0).forEach(f=>f(g));},undefined,e=>console.warn('fig',e));}
   return k;}
-function robberMesh(){const q=location.search;if(!/[?&]robber=old/.test(q)&&THREE.GLTFLoader)return robberFig('assets/rob_reaper2.glb',.4,{tilt:-.3,recol:REAPCOL});const k=new THREE.Group();
+function robberMesh(){const q=location.search;if(!/[?&]robber=old/.test(q)&&THREE.GLTFLoader)return robberFig('assets/rob_reaper2.glb',.5,{tilt:-.3,recol:REAPCOL});const k=new THREE.Group();
   k.add(part('cone8',0x2a2530,[.135,.4,.135],[0,.2,0]));k.add(part('sph',0x35303c,[.08,.08,.08],[0,.42,0]));
   k.add(part('cone8',0x2a2530,[.1,.135,.1],[0,.5,-.007]));
   const eye=new THREE.MeshBasicMaterial({color:0xff5a3c});k.add(part('sph',eye,[.012,.012,.012],[-.027,.425,.074],{noShadow:true}));k.add(part('sph',eye,[.012,.012,.012],[.027,.425,.074],{noShadow:true}));
@@ -2631,11 +2631,11 @@ function throwDice(vals){if(!W.ok)return;
     const start=end.clone().add(camDir.clone().multiplyScalar(6.5)).add(right.clone().multiplyScalar(side*1.2+(Math.random()-.5)));start.y=.6;
     const qt=new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(...DNORM[v]),new THREE.Vector3(0,1,0));qt.premultiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),Math.random()*6.28));
     const axis=new THREE.Vector3(Math.random()-.5,Math.random()*.4,Math.random()-.5).normalize();
-    m.scale.setScalar(1.2);end.y=.56;m.position.copy(start);W.scene.add(m);DICE.list.push({m,start,end,qt,axis,spin:15+Math.random()*7,t0:now+i*80,dur:1250});});}
+    const DS=PH.on?1.26:1.08;m.scale.setScalar(DS);end.y=.47*DS;m.position.copy(start);W.scene.add(m);DICE.list.push({m,start,end,qt,axis,spin:15+Math.random()*7,t0:now+i*80,dur:1250});});}
 function stepDice(now){DICE.list=DICE.list.filter(d=>{const p=Math.min(1,Math.max(0,(now-d.t0)/d.dur));const e=1-Math.pow(1-p,3);
   d.m.position.lerpVectors(d.start,d.end,e);d.m.position.y=d.end.y+2.6*Math.pow(1-p,2.2)*Math.abs(Math.cos(p*Math.PI*2.6));
   const res=new THREE.Quaternion().setFromAxisAngle(d.axis,d.spin*Math.pow(1-p,2));d.m.quaternion.copy(d.qt).premultiply(res);
-  const after=now-(d.t0+d.dur);if(after>650){const k=Math.max(0,1-(after-650)/180);d.m.scale.setScalar(1.2*k);if(k<=0){W.scene.remove(d.m);return false;}}return true;});}
+  const after=now-(d.t0+d.dur);if(after>650){const k=Math.max(0,1-(after-650)/180);d.m.scale.setScalar((PH.on?1.26:1.08)*k);if(k<=0){W.scene.remove(d.m);return false;}}return true;});}
 const PERF={born:performance.now(),dpr:Math.min(window.devicePixelRatio||1,2),max:Math.min(window.devicePixelRatio||1,2),last:0,ambient:0,samples:[],dirty:true,shadow:true,lastLow:0,act:performance.now()};
 ['pointerdown','pointermove','wheel','keydown','touchstart'].forEach(e=>addEventListener(e,()=>{PERF.act=performance.now();},{passive:true,capture:true}));
 function invalidate(shadow){PERF.dirty=true;PERF.act=performance.now();if(shadow)PERF.shadow=true;}
@@ -3060,14 +3060,13 @@ function titleFx(){const lg=$('#tLogo'),sh=$('#tShine');const place=()=>{if(!lg.
   const loop=ts=>{const t=$('#title');if(t.hidden){titleFx.run=0;return;}requestAnimationFrame(loop);if(ts-last<33||!SP.complete)return;if(t.classList.contains('intro')&&performance.now()-(ui.introT0||0)<2600)return;last=ts;
     if(cv.clientWidth!==W||cv.clientHeight!==H){fit();P.length=0;G.length=0;}
     if(!P.length){const n=Math.round(Math.min(60,W*H/20000));for(let i=0;i<n;i++)P.push(mk({},1));for(let i=0;i<7;i++){const g=mkG({});g.t=R()*g.d;G.push(g);}}
-    cx.clearRect(0,0,W,H);cx.globalCompositeOperation='lighter';const s=ts/1000;
+    cx.clearRect(0,0,W,H);const s=ts/1000;beams(s);if(window.FXOFF&&FXOFF.includes('dust'))return;cx.globalCompositeOperation='lighter';
     for(const p of P){p.x+=p.vx+Math.sin(s*.5+p.ph)*.08;p.y+=p.vy;if(p.y<-10||p.x>W+10)mk(p);const tw=.55+.45*Math.sin(s*p.sp+p.ph);cx.globalAlpha=p.a*tw;const z=p.r*8;cx.drawImage(SP,0,0,64,64,p.x-z/2,p.y-z/2,z,z);}
-    beams(s);
     for(const g of G){g.t++;if(g.t>g.d)mkG(g);const k=Math.sin(Math.PI*g.t/g.d);cx.globalAlpha=k*k*.75;const z=g.s*(.6+.4*k);cx.drawImage(SP,g.k*64,0,64,64,g.x-z/2,g.y-z/2,z,z);}
     cx.globalAlpha=1;cx.globalCompositeOperation='source-over';};
   requestAnimationFrame(loop);}
 // ---- light beams from the sunset side: ~18 independent beams, drawn small and upscaled for softness ----
-function beams(s){const cv=$('#tBeams');if(!cv)return;const c=cv.getContext('2d'),W=cv.width,H=cv.height;
+function beams(s){if(window.FXOFF&&FXOFF.includes('beams'))return;const cv=$('#tBeams');if(!cv)return;const c=cv.getContext('2d'),W=cv.width,H=cv.height;
   if(!beams.B){const R=Math.random;beams.B=Array.from({length:18},(_,i)=>({a:-26+56*(i+R()*.8)/18,w:1.2+R()*2.8,f1:.07+R()*.12,f2:.17+R()*.25,p1:R()*6.3,p2:R()*6.3,k:.5+R()*.5,col:R()<.35?[255,214,160]:R()<.5?[255,236,205]:[236,226,255]}));}
   const ox=-W*.10,oy=H*.30,L=Math.hypot(W*1.15,H*1.1);c.clearRect(0,0,W,H);c.globalCompositeOperation='lighter';
   const g0=c.createRadialGradient(ox,oy,0,ox,oy,W*.55);g0.addColorStop(0,'rgba(255,214,160,.32)');g0.addColorStop(1,'rgba(255,200,140,0)');c.fillStyle=g0;c.fillRect(0,0,W,H);
@@ -3091,10 +3090,13 @@ const SICO={
 function sicoSVG(k){const p=SICO[k];return `<svg class="sico" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g stroke="#3a2412" stroke-width="3.2" transform="translate(.7 .9)" opacity=".85">${p}</g><g stroke="url(#ggs)" stroke-width="2.2">${p}</g></svg>`;}
 function addSetIcons(){['newBtn','rulesBtn','sndBtn','leaveBtn','tipBtn','hintBtn','gfxBtn'].forEach(id=>{const b=document.getElementById(id);if(b&&!b.querySelector('.sico'))b.insertAdjacentHTML('afterbegin',sicoSVG(id));});
   const sp=document.querySelector('#setMenu .mrow');if(sp&&!sp.querySelector('.sico'))sp.insertAdjacentHTML('afterbegin',sicoSVG('aiSpeed'));document.documentElement.classList.add('sico-on');}
+(function(){const q=new URLSearchParams(location.search).get('fx');if(!q)return;const off=q==='none'?['beams','dust','twinkle','noise','sun','shine']:q.split(',').filter(x=>x[0]==='-').map(x=>x.slice(1));
+  const sel={beams:'.title .tbeams',dust:'.title .tmotes',twinkle:'.title .ttwk',noise:'.title .tnoise',sun:'.title .tsun',shine:'.title .tshine'};
+  const st=document.createElement('style');st.textContent=off.map(k=>sel[k]).filter(Boolean).join(',')+'{display:none!important}';document.head.appendChild(st);window.FXOFF=off;})();
 function noiseTile(){if(noiseTile.d)return;noiseTile.d=1;const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),im=x.createImageData(128,128);for(let i=0;i<im.data.length;i+=4){const v=Math.random()*255|0;im.data[i]=im.data[i+1]=im.data[i+2]=v;im.data[i+3]=255;}x.putImageData(im,0,0);document.documentElement.style.setProperty('--noise',`url(${c.toDataURL()})`);}
 function showCredits(){openDialog(`<h3>Credits &amp; Licenses</h3><div class="credits">
   <p><b>Cartoon Style Grim Reaper</b> (도적 3D 모델)<br>by <a href="http://sketchfab.com/utudesign" target="_blank" rel="noopener">Utu Design</a> · <a href="https://skfb.ly/pGp8q" target="_blank" rel="noopener">Sketchfab</a><br>Licensed under <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 색상 변경 및 경량화</p>
-  <p class="cmuted">배경음악·효과음·영상: Pixabay (Pixabay Content License)<br>파티클 이미지: Kenney (CC0)</p></div><div class="row"><button class="btn sub" id="crOk">확인</button></div>`);$('#crOk').onclick=closeDialog;}
+  <p class="cmuted">배경음악·효과음·영상: Pixabay (Pixabay Content License)<br>첫 화면 반짝임 입자: Kenney Particle Pack (CC0)</p></div><div class="row"><button class="btn sub" id="crOk">확인</button></div>`);$('#crOk').onclick=closeDialog;}
 function titleIntro(t){ui.introT0=performance.now();t.classList.remove('shine-on');t.classList.add('intro');setTimeout(()=>{t.classList.remove('intro');shineOn();},4800);}
 function shineOn(){const t=$('#title'),lg=$('#tLogo');if(t.classList.contains('intro')||ui.splash)return;if(lg.complete&&lg.naturalWidth)t.classList.add('shine-on');else lg.addEventListener('load',()=>{if(!t.classList.contains('intro'))t.classList.add('shine-on');},{once:true});}
 function splashOff(){const sp=$('#splash');if(!sp||!ui.splash||sp.classList.contains('loading'))return;ui.splash=0;setTimeout(()=>{try{preloadUI();}catch(e){}},1500);try{SND.unlock();SND.music('title');}catch(e){}sp.classList.add('out');const t=$('#title');document.querySelectorAll('#title video').forEach(v=>{const p=v.play();p&&p.catch&&p.catch(()=>{});});if(!t.hidden)titleIntro(t);setTimeout(()=>sp.remove(),1700);}
