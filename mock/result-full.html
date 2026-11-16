@@ -11,14 +11,14 @@ html,body{margin:0;height:100%;background:#000;font-family:Hahmlet,serif;overflo
 .scene{position:fixed;inset:0;overflow:hidden}
 .art{position:absolute;inset:0;background:center/cover no-repeat;animation:artIn 2.4s ease-out both}
 .win .art{background-image:url(../assets/result/win.webp)}
-.lose .art{background-image:url(../assets/result/lose.webp);filter:saturate(.8)}
+.lose .art{background-image:url(../assets/result/lose.webp?v=2);filter:saturate(.8)}
 @keyframes artIn{from{opacity:0;transform:scale(1.1)}to{opacity:1;transform:scale(1.02)}}
 .shade{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 55%,rgba(10,7,4,.25),rgba(10,7,4,.78) 100%),linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.55))}
 .lose .shade{background:radial-gradient(ellipse 70% 60% at 50% 55%,rgba(8,10,14,.35),rgba(8,10,14,.85) 100%),linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.6))}
 canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;display:none}
 .fx{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;mix-blend-mode:screen;pointer-events:none;opacity:0;animation:fxIn 1.2s ease .9s forwards}
 .lose .fx{animation-name:fxInL}
-@keyframes fxIn{to{opacity:1}}@keyframes fxInL{to{opacity:.55}}
+@keyframes fxIn{to{opacity:.72}}@keyframes fxInL{to{opacity:.55}}
 h1{background:none!important;filter:none!important;line-height:0}
 h1 img{display:block;width:min(560px,70vw);height:auto;filter:drop-shadow(0 4px 10px rgba(0,0,0,.55)) drop-shadow(0 0 24px rgba(255,210,120,.18))}
 .lose h1 img{filter:drop-shadow(0 4px 10px rgba(0,0,0,.6))}
@@ -51,14 +51,26 @@ h1{margin:0 0 .25em;font-family:'Hahmlet',serif;font-size:clamp(48px,8vw,104px);
 .var button{font:600 12px system-ui;padding:6px 10px;border-radius:6px;border:1px solid #777;background:#222;color:#ddd}
 .var button.on{background:#c9a35a;color:#111;border-color:#c9a35a}
 @media (max-height:520px){.tbl>div{padding:5px 14px}h1{font-size:clamp(40px,13vh,64px)}.box{padding:2vh 16px}}
+
+/* subtitle sits right under the title */
+h1{margin-bottom:0!important}
+.sub{margin-top:-2px;letter-spacing:.02em}
+.tbl{margin-top:clamp(14px,3vh,26px)}
+@media (max-height:520px){
+ h1 img{width:min(288px,45vw)!important}
+ .sub{font-size:10px}
+ .tbl>div{font-size:11px}
+ .gb{font-size:12px;border-width:9.5px 11.4px;border-image-width:9.5px 11.4px;padding:3px 20px;min-width:8.5em}
+}
+.loseb .art{background-image:url(../assets/result/lose_b.webp)!important}
 </style></head><body>
-<div class="var"><button data-v="win" class="on">승리</button><button data-v="lose">패배</button><button id="rp">다시 재생</button></div>
+<div class="var"><button data-v="win" class="on">승리</button><button data-v="lose">패배</button><button data-v="loseb">패배 B</button><button id="rp">다시 재생</button></div>
 <div class="scene" id="sc"></div>
 <script>
 const P=[['나','#ff2a1a',10,'(승점 카드 1장)'],['꼼꼼한 수달','#3a8cff',8,''],['자유로운 해달','#e046e0',6,'']];
 let mode='win',raf;
-function play(){cancelAnimationFrame(raf);const win=mode==='win';const order=win?P:[P[1],P[0],P[2]];const W2=order[0];
- document.getElementById('sc').className='scene '+mode;
+function play(){cancelAnimationFrame(raf);const win=mode==='win';const LB=mode==='loseb';const order=win?P:[P[1],P[0],P[2]];const W2=order[0];
+ document.getElementById('sc').className='scene '+(LB?'lose loseb':mode);
  document.getElementById('sc').innerHTML=`<div class="art"></div><div class="shade"></div><canvas id="cv"></canvas>
  <video class="fx" muted playsinline loop autoplay src="../assets/result/${win?'confetti':'snow'}.mp4"></video><div class="box"><h1><img src="../assets/result/${win?'victory':'gameover'}.webp" alt="${win?'VICTORY':'GAME OVER'}"></h1>
  <div class="sub" style="--wc:${W2[1]}">${win?'12바퀴 만에 섬의 영주가 되었어요.':`<b style="filter:saturate(.8) brightness(1.2)">${W2[0]}</b>이(가) 12바퀴 만에 섬의 영주가 되었어요.`}</div>
