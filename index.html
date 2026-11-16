@@ -1579,16 +1579,18 @@ html.phone .setpanel .credit-link{display:none}
 /* ===== table dressing around the board ===== */
 #deco{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 #deco .dk{position:absolute;background:center/contain no-repeat;display:block}
-#deco .top{left:0;right:0;top:-1.5vh;height:13vh;background:url(assets/deco/top.webp) center top/auto 100% repeat-x}
-#deco .cur{top:0;height:84vh;aspect-ratio:900/1034;background-image:url(assets/deco/curtain.webp);background-position:left top}
-#deco .cur.l{left:-5vh}
-#deco .cur.r{right:-5vh;transform:scaleX(-1)}
-#deco .bl{left:-2vh;bottom:-3vh;height:50vh;aspect-ratio:1000/821;background-image:url(assets/deco/bl.webp);background-position:left bottom}
-#deco .br{right:-2vh;bottom:-3vh;height:44vh;aspect-ratio:1000/582;background-image:url(assets/deco/br.webp);background-position:right bottom}
-#deco .dvig{position:absolute;inset:0;background:radial-gradient(ellipse 78% 74% at 50% 48%,#fff 32%,#7f8fb0 60%,#2a3556 82%,#0b1022 100%);mix-blend-mode:multiply}
-html.phone #deco .top{height:11vh}
-html.phone #deco .cur{height:80vh}
-html.phone #deco .bl{height:46vh}html.phone #deco .br{height:40vh}
+#deco .cur{top:-1vh;height:50vh;aspect-ratio:700/1023;background-image:url(assets/deco/curtain.webp);background-position:left top}
+#deco .cur.l{left:-1vh}
+#deco .cur.r{right:-1vh;transform:scaleX(-1)}
+#deco .ml{left:-3vh;bottom:30vh;height:42vh;aspect-ratio:700/1120;background-image:url(assets/deco/ml.webp)}
+#deco .mr{right:-1vh;bottom:26vh;height:48vh;aspect-ratio:600/1037;background-image:url(assets/deco/mr.webp)}
+#deco .bl{left:-3vh;bottom:-4vh;height:60vh;aspect-ratio:1000/821;background-image:url(assets/deco/bl.webp);background-position:left bottom}
+#deco .br{right:-3vh;bottom:-4vh;height:54vh;aspect-ratio:1000/582;background-image:url(assets/deco/br.webp);background-position:right bottom}
+#deco .dvig{position:absolute;inset:0;background:radial-gradient(ellipse 78% 92% at 50% 26%,#fff 34%,#7f8fb0 60%,#2a3556 82%,#0b1022 100%);mix-blend-mode:multiply}
+html.phone #deco .cur{height:46vh}
+html.phone #deco .ml{height:38vh}html.phone #deco .mr{height:44vh}
+html.phone #deco .bl{height:56vh}html.phone #deco .br{height:50vh}
+
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
@@ -3115,7 +3117,7 @@ function showCredits(){openDialog(`<h3>Credits &amp; Licenses</h3><div class="cr
 
 // table dressing around the sea: curtains, valance and corner props, darkened behind the UI (pointer-transparent)
 function addDeco(){if(!/[?&]deco=1/.test(location.search)||document.getElementById('deco'))return;const st=document.getElementById('stage');if(!st)return;const d=document.createElement('div');d.id='deco';
-  d.innerHTML='<i class="dk cur l"></i><i class="dk cur r"></i><i class="dk bl"></i><i class="dk br"></i><i class="dvig"></i>';
+  d.innerHTML='<i class="dk cur l"></i><i class="dk cur r"></i><i class="dk ml"></i><i class="dk mr"></i><i class="dk bl"></i><i class="dk br"></i><i class="dvig"></i>';
   const cv=st.querySelector('canvas');if(cv&&cv.nextSibling)st.insertBefore(d,cv.nextSibling);else st.appendChild(d);}
 function titleIntro(t){ui.introT0=performance.now();t.classList.remove('shine-on');t.classList.add('intro');setTimeout(()=>{t.classList.remove('intro');shineOn();},4800);}
 function shineOn(){const t=$('#title'),lg=$('#tLogo');if(t.classList.contains('intro')||ui.splash)return;if(lg.complete&&lg.naturalWidth)t.classList.add('shine-on');else lg.addEventListener('load',()=>{if(!t.classList.contains('intro'))t.classList.add('shine-on');},{once:true});}
