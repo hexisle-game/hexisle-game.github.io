@@ -15,7 +15,14 @@ html,body{margin:0;height:100%;background:#000;font-family:Hahmlet,serif;overflo
 @keyframes artIn{from{opacity:0;transform:scale(1.1)}to{opacity:1;transform:scale(1.02)}}
 .shade{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 55%,rgba(10,7,4,.25),rgba(10,7,4,.78) 100%),linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.55))}
 .lose .shade{background:radial-gradient(ellipse 70% 60% at 50% 55%,rgba(8,10,14,.35),rgba(8,10,14,.85) 100%),linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.6))}
-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;display:none}
+.fx{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;mix-blend-mode:screen;pointer-events:none;opacity:0;animation:fxIn 1.2s ease .9s forwards}
+.lose .fx{animation-name:fxInL}
+@keyframes fxIn{to{opacity:1}}@keyframes fxInL{to{opacity:.55}}
+h1{background:none!important;filter:none!important;line-height:0}
+h1 img{display:block;width:min(560px,70vw);height:auto;filter:drop-shadow(0 4px 10px rgba(0,0,0,.55)) drop-shadow(0 0 24px rgba(255,210,120,.18))}
+.lose h1 img{filter:drop-shadow(0 4px 10px rgba(0,0,0,.6))}
+@media (max-height:520px){h1 img{width:min(320px,50vw)}}
 .box{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4vh 16px}
 .kick{font-size:clamp(12px,1.4vw,16px);letter-spacing:.3em;color:#e9c47a;opacity:0;animation:up .8s ease-out .9s both}
 h1{margin:0 0 .25em;font-family:'Hahmlet',serif;font-size:clamp(48px,8vw,104px);font-weight:900;line-height:1;letter-spacing:.04em;opacity:0;white-space:nowrap;
@@ -53,7 +60,7 @@ let mode='win',raf;
 function play(){cancelAnimationFrame(raf);const win=mode==='win';const order=win?P:[P[1],P[0],P[2]];const W2=order[0];
  document.getElementById('sc').className='scene '+mode;
  document.getElementById('sc').innerHTML=`<div class="art"></div><div class="shade"></div><canvas id="cv"></canvas>
- <div class="box"><h1>${win?'VICTORY':'GAME OVER'}</h1>
+ <video class="fx" muted playsinline loop autoplay src="../assets/result/${win?'confetti':'snow'}.mp4"></video><div class="box"><h1><img src="../assets/result/${win?'victory':'gameover'}.webp" alt="${win?'VICTORY':'GAME OVER'}"></h1>
  <div class="sub" style="--wc:${W2[1]}">${win?'12바퀴 만에 섬의 영주가 되었어요.':`<b style="filter:saturate(.8) brightness(1.2)">${W2[0]}</b>이(가) 12바퀴 만에 섬의 영주가 되었어요.`}</div>
  <div class="tbl">${order.map((p,i)=>`<div style="animation-delay:${2.1+i*.22}s"><span class="rk">${i+1}</span><span class="dot" style="background:${p[1]}"></span><span class="nm">${p[0]} <small style="color:#a8977a">${p[3]}</small></span><b>${win||i?p[2]:10}점</b></div>`).join('')}</div>
  <div class="btns"><button class="gb">보드 보기</button><button class="gb next">새 게임</button></div></div>`;
