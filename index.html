@@ -1544,6 +1544,11 @@ html.phone #result .tbl .av.avr2{width:14px;height:14px;box-shadow:0 0 0 3.5px v
 html.phone #result .btns{position:absolute;left:0;right:0;bottom:18px;justify-content:center;margin:0}
 html.phone #result .btns .btn{font-size:12px!important;min-width:8.5em}
 @media (prefers-reduced-motion:reduce){#result *{animation-duration:.01s!important;animation-delay:0s!important}}
+/* settings icons (preview) */
+html.sico-on .setpanel .mi{justify-content:flex-start!important;gap:14px!important}
+html.sico-on .setpanel .mi .sico{width:22px;height:22px;flex:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
+html.sico-on .setpanel .mi.tg::after,html.sico-on .setpanel .mi .tgl,html.sico-on .setpanel .mi .seg{margin-left:auto}
+html.phone.sico-on .setpanel .mi .sico{width:18px;height:18px}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
@@ -2467,7 +2472,27 @@ function cityMesh(o,ry){const k=new THREE.Group();basePlate(k,o,.25);const c=new
   c.add(part('box',0x2a1e16,[.06,.075,.004],[0,.04,S2+.022],{noShadow:true}));
   c.add(part('cyl',tmat('plank',0x8a6a48,.2,1),[.005,.16,.005],[0,.41,0]));c.add(part('box',PM(o),[.09,.05,.004],[.045,.46,0],{noShadow:true}));
   return k;}
-function robberMesh(){const k=new THREE.Group();
+// hooded skull rogue with glowing eyes and a dagger (preview: ?robber=2)
+function robberMesh2(){const k=new THREE.Group();const cloak=0x1c1f2b,cloak2=0x15171f,bone=0xe8e0cc,leather=0x5a3b22,steel=0xb9c0c8;
+  k.add(part('cone8',cloak,[.16,.36,.16],[0,.18,0]));                          // cloak body
+  for(let i=0;i<8;i++){const a=i/8*Math.PI*2+.2;k.add(part('cone',cloak2,[.045,.07,.03],[Math.sin(a)*.14,.03,Math.cos(a)*.14],{rx:Math.PI,ry:a}));} // ragged hem
+  k.add(part('torus',leather,[.115,.115,.05],[0,.27,0],{rx:Math.PI/2}));          // belt
+  k.add(part('box',0x8a6a3a,[.03,.03,.012],[0,.27,.112]));                        // buckle
+  k.add(part('sph',cloak,[.125,.125,.12],[0,.44,-.005]));                         // hood
+  k.add(part('cone8',cloak,[.075,.13,.075],[0,.55,-.06],{rx:-.55}));              // hood tip
+  k.add(part('sph',0x0b0c12,[.09,.095,.05],[0,.425,.07],{noShadow:true}));        // hood opening (shadow)
+  k.add(part('sph',bone,[.068,.074,.055],[0,.43,.085]));                          // skull
+  k.add(part('box',bone,[.05,.022,.035],[0,.378,.1]));                            // jaw
+  for(const x of [-.012,0,.012])k.add(part('box',0x2a2a2a,[.003,.014,.004],[x,.38,.118],{noShadow:true})); // teeth gaps
+  const sock=0x111111;k.add(part('sph',sock,[.02,.022,.012],[-.026,.44,.132],{noShadow:true}));k.add(part('sph',sock,[.02,.022,.012],[.026,.44,.132],{noShadow:true}));
+  const eye=new THREE.MeshBasicMaterial({color:0xbff8ff});k.add(part('sph',eye,[.011,.011,.008],[-.026,.44,.142],{noShadow:true}));k.add(part('sph',eye,[.011,.011,.008],[.026,.44,.142],{noShadow:true}));
+  k.add(part('sph',glow(0x6fe6ff,.45),[.03,.03,.012],[-.026,.44,.145],{noShadow:true}));k.add(part('sph',glow(0x6fe6ff,.45),[.03,.03,.012],[.026,.44,.145],{noShadow:true}));
+  k.add(part('sph',bone,[.022,.022,.022],[.13,.27,.06]));                         // hand
+  const d=new THREE.Group();d.position.set(.13,.27,.06);d.rotation.z=-.35;d.rotation.x=.25;
+  d.add(part('box',leather,[.016,.05,.016],[0,-.01,0]));d.add(part('box',0x8a6a3a,[.055,.012,.016],[0,.018,0]));d.add(part('cone8',steel,[.018,.13,.006],[0,.09,0]));
+  k.add(d);
+  return k;}
+function robberMesh(){if(/[?&]robber=2/.test(location.search))return robberMesh2();const k=new THREE.Group();
   k.add(part('cone8',0x2a2530,[.135,.4,.135],[0,.2,0]));k.add(part('sph',0x35303c,[.08,.08,.08],[0,.42,0]));
   k.add(part('cone8',0x2a2530,[.1,.135,.1],[0,.5,-.007]));
   const eye=new THREE.MeshBasicMaterial({color:0xff5a3c});k.add(part('sph',eye,[.012,.012,.012],[-.027,.425,.074],{noShadow:true}));k.add(part('sph',eye,[.012,.012,.012],[.027,.425,.074],{noShadow:true}));
@@ -2960,6 +2985,7 @@ function showRules(i,after){i=i||0;const P=RULES[i],last=i===RULES.length-1;
 function fitRules(){const bk=$('#rbook');if(!bk)return;const m=$('#modal'),W=m.clientWidth,H=m.clientHeight,AR=1907/978;
   const w=Math.min(1240,W*.98,(H-8)*AR);bk.style.width=w+'px';bk.style.height=(w/AR)+'px';bk.style.fontSize=(w/(PH.on?64:78))+'px';$('#mcrest')&&($('#mcrest').style.visibility='hidden');}
 addEventListener('resize',()=>setTimeout(fitRules,80));
+setTimeout(()=>{try{addSetIcons();}catch(e){}},0);
 
 const DIFF=[['easy','쉬움','AI가 자주 쉬고 거래에 너그러워요'],['normal','보통','기본 전략으로 플레이해요'],['hard','어려움','선두를 견제하고 자원 보너스를 받아요']];
 function countPick(){return `<div class="label" style="margin-top:8px">인원 (최소 2 · 최대 4)</div><div class="cnt" id="cnt">${[2,3,4].map(n=>`<button class="btn${ui.n===n?' active':''}" data-n="${n}">${n}인</button>`).join('')}</div>
@@ -2998,6 +3024,20 @@ function beams(s){const cv=$('#tBeams');if(!cv)return;const c=cv.getContext('2d'
     c.fillStyle=gr;c.beginPath();c.moveTo(ox,oy);c.lineTo(ox+Math.cos(ang-hw)*L,oy+Math.sin(ang-hw)*L);c.lineTo(ox+Math.cos(ang+hw)*L,oy+Math.sin(ang+hw)*L);c.closePath();c.fill();}
   c.globalCompositeOperation='destination-in';const fd=c.createLinearGradient(0,0,W,0);fd.addColorStop(0,'rgba(0,0,0,1)');fd.addColorStop(.45,'rgba(0,0,0,.7)');fd.addColorStop(1,'rgba(0,0,0,.08)');c.fillStyle=fd;c.fillRect(0,0,W,H);
   c.globalCompositeOperation='source-over';}
+
+// settings menu icons in the header icon style (gold gradient stroke over a dark offset outline); preview: ?icons=2
+const SICO={
+ newBtn:'<path d="M12 2.8 L19.8 7.3 L19.8 16.7 L12 21.2 L4.2 16.7 L4.2 7.3 Z"/><path d="M12 8.5 V15.5 M8.5 12 H15.5"/>',
+ rulesBtn:'<path d="M12 6.5 C9.5 4.8 6.5 4.6 3.5 5.2 V18.4 C6.5 17.8 9.5 18 12 19.7 C14.5 18 17.5 17.8 20.5 18.4 V5.2 C17.5 4.6 14.5 4.8 12 6.5 Z"/><path d="M12 6.5 V19.7"/>',
+ sndBtn:'<path d="M4 9.5 H7.5 L12 5.5 V18.5 L7.5 14.5 H4 Z"/><path d="M15.5 9 C16.8 10.6 16.8 13.4 15.5 15 M18.2 6.6 C21 9.6 21 14.4 18.2 17.4"/>',
+ leaveBtn:'<path d="M13.5 4 H6 V20 H13.5"/><path d="M10.5 12 H20.5 M17 8.5 L20.5 12 L17 15.5"/>',
+ tipBtn:'<path d="M4 5.5 H20 V15.5 H11 L7 19.5 V15.5 H4 Z"/><path d="M12 9.6 V12.8 M12 7.2 V7.4"/>',
+ hintBtn:'<path d="M9 17 H15 M10 20 H14"/><path d="M8.6 14 C6.4 12.4 5.8 9.4 7.2 7.1 C8.4 5.1 10.3 4.2 12 4.2 C13.7 4.2 15.6 5.1 16.8 7.1 C18.2 9.4 17.6 12.4 15.4 14 L15 17 H9 Z"/>',
+ gfxBtn:'<path d="M6.5 4.5 H17.5 L21 9 L12 20.5 L3 9 Z"/><path d="M3 9 H21 M9.5 4.5 L8 9 L12 20.5 L16 9 L14.5 4.5"/>',
+ aiSpeed:'<path d="M6.5 3.5 H17.5 M6.5 20.5 H17.5"/><path d="M7.5 3.5 C7.5 8.5 12 9.5 12 12 C12 14.5 7.5 15.5 7.5 20.5 M16.5 3.5 C16.5 8.5 12 9.5 12 12 C12 14.5 16.5 15.5 16.5 20.5"/>'};
+function sicoSVG(k){const p=SICO[k];return `<svg class="sico" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g stroke="#3a2412" stroke-width="3.2" transform="translate(.7 .9)" opacity=".85">${p}</g><g stroke="url(#ggs)" stroke-width="2.2">${p}</g></svg>`;}
+function addSetIcons(){if(!/[?&]icons=2/.test(location.search))return;['newBtn','rulesBtn','sndBtn','leaveBtn','tipBtn','hintBtn','gfxBtn'].forEach(id=>{const b=document.getElementById(id);if(b&&!b.querySelector('.sico'))b.insertAdjacentHTML('afterbegin',sicoSVG(id));});
+  const sp=document.querySelector('#setMenu .mrow');if(sp&&!sp.querySelector('.sico'))sp.insertAdjacentHTML('afterbegin',sicoSVG('aiSpeed'));document.documentElement.classList.add('sico-on');}
 function titleIntro(t){t.classList.remove('shine-on');t.classList.add('intro');setTimeout(()=>{t.classList.remove('intro');shineOn();},4800);}
 function shineOn(){const t=$('#title'),lg=$('#tLogo');if(t.classList.contains('intro')||ui.splash)return;if(lg.complete&&lg.naturalWidth)t.classList.add('shine-on');else lg.addEventListener('load',()=>{if(!t.classList.contains('intro'))t.classList.add('shine-on');},{once:true});}
 function splashOff(){const sp=$('#splash');if(!sp||!ui.splash)return;ui.splash=0;setTimeout(()=>{try{preloadUI();}catch(e){}},1500);try{SND.unlock();SND.music('title');}catch(e){}sp.classList.add('out');const t=$('#title');document.querySelectorAll('#title video').forEach(v=>{const p=v.play();p&&p.catch&&p.catch(()=>{});});if(!t.hidden)titleIntro(t);setTimeout(()=>sp.remove(),1700);}
