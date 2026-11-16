@@ -41,8 +41,8 @@ h1{margin:0 0 .25em;font-family:'Hahmlet',serif;font-size:clamp(48px,8vw,104px);
 .tbl>div+div{border-top:1px solid;border-image:linear-gradient(90deg,transparent,rgba(233,196,122,.22),transparent) 1}
 .tbl>div:first-child{color:#f6e3b4}
 .tbl .rk{width:22px;color:#c9b48a;font-weight:700}.tbl>div:first-child .rk{color:#f3d58e}
-.tbl .av{width:34px;height:34px;flex:none;border-radius:50%;background:#e8d6ac center/cover no-repeat;box-shadow:0 0 0 3.5px var(--c),0 0 0 5px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.5);margin:0 6px 0 4px}
-@media (max-height:520px){.tbl .av{width:26px;height:26px;box-shadow:0 0 0 5px var(--c),0 0 0 7px rgba(0,0,0,.55)}}
+.tbl .av{width:24px;height:24px;flex:none;border-radius:50%;background:#e8d6ac center/cover no-repeat;box-shadow:0 0 0 3.5px var(--c),0 0 0 5px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.5);margin:0 6px 0 4px}
+@media (max-height:520px){.tbl .av{width:18px;height:18px;margin:0 5px 0 4px;box-shadow:0 0 0 3.5px var(--c),0 0 0 5px rgba(0,0,0,.55)}.tbl>div{padding:3px 14px!important}}
 .tbl .nm{flex:1}.tbl b{color:#f3d58e;font-size:1.08em}
 .btns{display:flex;gap:14px;margin-top:clamp(16px,3.2vh,30px);opacity:0;animation:up .7s ease-out 3.1s both}
 .gb{font:inherit;font-weight:700;font-size:clamp(13px,1.3vw,16px);color:#f3e2bd;background:none;cursor:pointer;border-style:solid;border-width:10px 12px;padding:4px 22px;min-width:9em;text-shadow:0 1px 0 #1d1006;border-image:url(../assets/ui/28241176.webp) 34 36 fill / 10px 12px stretch}
@@ -74,10 +74,10 @@ h1{margin-bottom:0!important}
 <div class="var"><button data-v="win" class="on">승리</button><button data-v="lose">패배</button><button id="rp">다시 재생</button></div>
 <div class="scene" id="sc"></div>
 <script>
-const P=[['나','#ff2a1a',10,'(승점 카드 1장)','rabbit'],['꼼꼼한 수달','#3a8cff',8,'','otter'],['자유로운 판다','#2fb36b',6,'','panda']];
+const P=[['나','#ff2a1a',10,'(승점 카드 1장)','rabbit'],['꼼꼼한 수달','#3a8cff',8,'','otter'],['자유로운 판다','#2fb36b',6,'','panda'],['느긋한 늑대','#f5c400',4,'','wolf']];
 const mute=c=>{const n=parseInt(c.slice(1),16);let r=n>>16&255,g=n>>8&255,b=n&255;const m=(r+g+b)/3;const f=x=>Math.round((x*.75+m*.25)*.85);return `rgb(${f(r)},${f(g)},${f(b)})`;};
 let mode='win',raf;
-function play(){cancelAnimationFrame(raf);const win=mode==='win';const LB=mode==='loseb';const order=win?P:[P[1],P[0],P[2]];const W2=order[0];
+function play(){cancelAnimationFrame(raf);const win=mode==='win';const LB=mode==='loseb';const order=win?P:[P[1],P[0],P[2],P[3]];const W2=order[0];
  document.getElementById('sc').className='scene '+(LB?'lose loseb':mode);
  document.getElementById('sc').innerHTML=`<div class="art"></div><div class="shade"></div><canvas id="cv"></canvas>
  <video class="fx" muted playsinline loop autoplay src="../assets/result/${win?'confetti':'snow'}.mp4"></video><div class="box"><h1><img src="../assets/result/${win?'victory':'gameover'}.webp" alt="${win?'VICTORY':'GAME OVER'}"></h1>
