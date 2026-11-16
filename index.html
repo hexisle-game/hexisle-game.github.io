@@ -1998,28 +1998,39 @@ function mpTick(now){if(!S||!S.mp||S.phase==='over')return false;let ch=false;
 
 // ---------- AI ----------
 const DF=()=>S.diff||'normal';
+// AI personalities, fixed per character: exp=expander (roads/settlements), dev=builder (cities),
+// trd=merchant (trades, ports), kn=bully (knights, robber on the leader), bal=balanced
+const CHPERS={};[['exp','rabbit squirrel deer sheep alpaca chick quokka mouse'],['dev','mole bear panda capybara hedgehog potato pumpkin mushroom'],['trd','fox raccoon cat otter hamster redpanda pig dog'],['kn','wolf lion tiger owl seagull penguin']].forEach(([k,l])=>l.split(' ').forEach(c=>CHPERS[c]=k));
+const PERS={bal:{s:0,c:0,r:0,d:0,res:{},port:1,tr:0},
+  exp:{s:-.25,c:-.05,r:0,d:0,res:{wood:.05,brick:.05},port:1,tr:0},
+  dev:{s:.05,c:-.25,r:.3,d:.1,res:{ore:.3,grain:.25},port:1,tr:0},
+  trd:{s:0,c:-.05,r:0,d:.1,res:{},port:1.8,tr:1.2},
+  kn:{s:.1,c:.1,r:.2,d:-.12,res:{ore:.15,grain:.1,wool:.15},port:1,tr:-.5}};
+const persOf=p=>{const pl=S&&S.players[p];return pl&&pl.ai?(pl.pers||CHPERS[pl.ch]||'bal'):'bal';};
+const PB=p=>PERS[persOf(p)]||PERS.bal;
+
 function prodOf(p){const pr=emptyRes();S.vb.forEach((b,v)=>{if(b&&b.o===p)for(const hi of G.verts[v].h){const t=S.board.hexes[hi];if(t.res!=='desert')pr[t.res]+=pips(t.num)*(b.c?2:1);}});return pr;}
 function spotValue(v,p,pr){pr=pr||prodOf(p);let s=0;const kinds=new Set();
-  for(const hi of G.verts[v].h){const t=S.board.hexes[hi];if(t.res==='desert')continue;let w=1;if(pr[t.res]===0)w+=0.35;if(t.res==='brick'||t.res==='wood')w+=0.1;
+  const B=PB(p);for(const hi of G.verts[v].h){const t=S.board.hexes[hi];if(t.res==='desert')continue;let w=1+(B.res[t.res]||0);if(pr[t.res]===0)w+=0.35;if(t.res==='brick'||t.res==='wood')w+=0.1;
     s+=pips(t.num)*w*(hi===S.board.robber?0.6:1);kinds.add(t.res);}
-  s+=kinds.size*0.5;const pt=portOf(v);if(pt==='any')s+=1;else if(pt)s+=pr[pt]>=4?2:0.4;return s;}
+  s+=kinds.size*0.5;const pt=portOf(v);if(pt==='any')s+=1*B.port;else if(pt)s+=(pr[pt]>=4?2:0.4)*B.port;return s;}
 function roadScore(p,e,pr){pr=pr||prodOf(p);const E=G.edges[e];let best=0;
   for(const [near,far] of [[E.a,E.b],[E.b,E.a]]){if(S.vb[far]&&S.vb[far].o!==p)continue;
     if(spotFree(far))best=Math.max(best,spotValue(far,p,pr));
     else for(const a of G.verts[far].adj){if(a!==near&&spotFree(a))best=Math.max(best,spotValue(a,p,pr)*0.7);}}
   return best;}
 function missing(p,c){const r=S.players[p].res;return RES.reduce((s,k)=>s+Math.max(0,(c[k]||0)-r[k]),0);}
-function aiGoal(p){const k=count(p);const c=[];
+function aiGoal(p){const k=count(p);const c=[];const B=PB(p);
   const spots=k.s<5&&settleSpots(p).length>0;
-  if(spots)c.push(['settlement',0]);
-  if(k.c<4&&k.s>0)c.push(['city',0.2]);
-  if(!spots&&k.r<15&&k.s<5){const pr=prodOf(p);if(roadSpots(p).some(e=>roadScore(p,e,pr)>0))c.push(['road',0.3]);}
-  if(S.deck.length)c.push(['dev',1.1]);
+  if(spots)c.push(['settlement',0+B.s]);
+  if(k.c<4&&k.s>0)c.push(['city',0.2+B.c]);
+  if(!spots&&k.r<15&&k.s<5){const pr=prodOf(p);if(roadSpots(p).some(e=>roadScore(p,e,pr)>0))c.push(['road',0.3+B.r]);}
+  if(S.deck.length)c.push(['dev',1.1+B.d]);
   if(!c.length)return null;
   c.sort((a,b)=>(missing(p,COST[a[0]])+a[1])-(missing(p,COST[b[0]])+b[1]));return c[0][0];}
 function robberHurts(p){const hi=S.board.robber;return pips(S.board.hexes[hi].num)>=3&&G.hexes[hi].v.some(v=>S.vb[v]&&S.vb[v].o===p);}
 function aiRobberHex(p){const d=DF();return argmax(HIDX.filter(i=>i!==S.board.robber),hi=>{const t=S.board.hexes[hi];let s=t.res==='desert'?-1:0;if(d==='easy')s+=Math.random()*12;
-  for(const v of G.hexes[hi].v){const b=S.vb[v];if(!b)continue;if(b.o===p)s-=12;else s+=(b.c?2:1)*pips(t.num)*(1+vp(b.o)/(d==='hard'?4:8))*(d==='easy'&&!S.players[b.o].ai?.15:d==='hard'&&!S.players[b.o].ai&&vp(b.o)>=Math.max(...S.players.map((_,i)=>vp(i)))?1.6:1)+(sumRes(S.players[b.o].res)?0.5:0);}
+  for(const v of G.hexes[hi].v){const b=S.vb[v];if(!b)continue;if(b.o===p)s-=12;else s+=(b.c?2:1)*pips(t.num)*(1+vp(b.o)/(d==='hard'?4:8))*(d==='easy'&&!S.players[b.o].ai?.15:d==='hard'&&!S.players[b.o].ai&&vp(b.o)>=Math.max(...S.players.map((_,i)=>vp(i)))?1.6:1)*(persOf(p)==='kn'&&vp(b.o)>=Math.max(...S.players.map((_,i)=>vp(i)))?1.5:1)+(sumRes(S.players[b.o].res)?0.5:0);}
   return s+Math.random()*0.2;});}
 function aiDiscard(p,k){const r=S.players[p].res;if(DF()==='easy'){const out=emptyRes();for(let i=0;i<k;i++){const pick=RES.filter(x=>r[x]-out[x]>0);out[pick[rnd(pick.length)]]++;}discard(p,out);return;}const g=aiGoal(p);const c=g?COST[g]:{};const out=emptyRes();
   for(let i=0;i<k;i++){const pick=argmax(RES.filter(x=>r[x]-out[x]>0),x=>(r[x]-out[x])-(c[x]||0)*1.5);out[pick]++;}
@@ -2036,7 +2047,7 @@ function aiStep(p){
   S.acts++;if(S.acts>40){endTurn();return;}
   const pl=S.players[p],res=pl.res;const d=DF();
   if(d==='easy'&&S.acts===1&&Math.random()<.35){endTurn();return;}
-  if(d==='hard'&&!S.devPlayed&&canPlayDev(p,'knight')&&S.board.robber!==undefined){const lead=argmax(S.players.map((_,i)=>i).filter(i=>i!==p),i=>vp(i));if(vp(lead)>=5&&vp(lead)>=vp(p)&&!G.hexes[S.board.robber].v.some(v=>S.vb[v]&&S.vb[v].o===lead)){useKnight(p);return;}}
+  if((d==='hard'||(persOf(p)==='kn'&&Math.random()<.5))&&!S.devPlayed&&canPlayDev(p,'knight')&&S.board.robber!==undefined){const lead=argmax(S.players.map((_,i)=>i).filter(i=>i!==p),i=>vp(i));if(vp(lead)>=5&&vp(lead)>=vp(p)&&!G.hexes[S.board.robber].v.some(v=>S.vb[v]&&S.vb[v].o===lead)){useKnight(p);return;}}
   if(!S.devPlayed&&(d!=='easy'||Math.random()<.4)){
     if(canPlayDev(p,'knight')&&(robberHurts(p)||(pl.knights+1>=3&&S.la.o!==p&&pl.knights+1>(S.la.o===-1?0:S.la.n)))){useKnight(p);return;}
     if(canPlayDev(p,'roads')&&count(p).r<15&&roadSpots(p).length){useRoads(p);const pr=prodOf(p);
@@ -2066,7 +2077,7 @@ const lead0=S.players.every((_,i)=>i===from||vp(from)>=vp(i));
 if(sumRes(get)&&d!=='easy'&&lead0&&vp(from)>=(d==='hard'?6:8))return{ok:false,why:d==='hard'?'거절할게요':'선두와는 거래 안 해요'};
   const g=aiGoal(q)||'dev';const c=COST[g];let gain=0,loss=0;
   RES.forEach(k=>{gain+=(give[k]||0)*(1+((c[k]||0)>r[k]?1.2:0));const n=get[k]||0;if(n){const after=r[k]-n;loss+=n*(1+(after<(c[k]||0)?1.5:0));}});
-  const ok=(d==='easy'?gain>=loss-2.5:d==='hard'?gain>=loss+1:gain>=loss)&&sumRes(give)>0||!sumRes(get);
+  const tr=PB(q).tr;const ok=(d==='easy'?gain>=loss-2.5-tr:d==='hard'?gain>=loss+1-tr:gain>=loss-tr)&&sumRes(give)>0||!sumRes(get);
   return{ok,why:ok?'좋아요, 거래해요':(d==='hard'?'거절할게요':'저한테 손해예요')};
 }
 </script>
