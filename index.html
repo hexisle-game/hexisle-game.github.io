@@ -2509,7 +2509,19 @@ function robberGLB(){const k=new THREE.Group();k.userData.glb=1;
     if(g.animations&&g.animations[0]){const mx=new THREE.AnimationMixer(m);mx.clipAction(g.animations[0]).play();k.userData.mixer=mx;}k.add(m);try{invalidate(true);}catch(e){}};
   if(ROBGLB.g)put(ROBGLB.g);else{ROBGLB.cbs.push(put);if(ROBGLB.cbs.length===1&&THREE.GLTFLoader)new THREE.GLTFLoader().load('assets/robber.glb',g=>{ROBGLB.g=g;ROBGLB.cbs.splice(0).forEach(f=>f(g));},undefined,e=>console.warn('robber glb',e));}
   return k;}
-function robberMesh(){const q=location.search;if(/[?&]robber=5/.test(q))return robberGLB();if(/[?&]robber=3/.test(q))return robberSprite('assets/rob_a.webp');if(/[?&]robber=4/.test(q))return robberSprite('assets/rob_b.webp');if(/[?&]robber=2/.test(q))return robberMesh2();const k=new THREE.Group();
+// generic loader for downloaded figures: auto-scale to a target height, optional pedestal strip
+const RGLB={};
+function robberFig(file,H,o){o=o||{};const k=new THREE.Group();k.userData.glb=1;
+  const put=g=>{const m=g.scene.clone(true);
+    if(o.strip){const bb=new THREE.Box3().setFromObject(m),h=bb.max.y-bb.min.y,cut=bb.min.y+h*o.strip;m.updateMatrixWorld(true);const kill=[];m.traverse(c=>{if(c.isMesh){const b=new THREE.Box3().setFromObject(c);if(b.max.y<=cut)kill.push(c);}});kill.forEach(c=>c.parent.remove(c));}
+    const bb=new THREE.Box3().setFromObject(m),sz=bb.getSize(new THREE.Vector3()),sc=H/sz.y;m.scale.setScalar(sc);
+    const b2=new THREE.Box3().setFromObject(m),c=b2.getCenter(new THREE.Vector3());m.position.set(-c.x,-b2.min.y,-c.z);
+    const w=new THREE.Group();w.add(m);w.rotation.x=o.tilt||0;
+    m.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;c.material=c.material.clone();if(o.lift){c.material.emissive=(c.material.emissive||new THREE.Color()).clone().add(new THREE.Color(o.lift));c.material.emissiveIntensity=1;}}});
+    k.add(w);try{invalidate(true);}catch(e){}};
+  const R=RGLB[file]=RGLB[file]||{g:null,cbs:[]};if(R.g)put(R.g);else{R.cbs.push(put);if(R.cbs.length===1)new THREE.GLTFLoader().load(file,g=>{R.g=g;R.cbs.splice(0).forEach(f=>f(g));},undefined,e=>console.warn('fig',e));}
+  return k;}
+function robberMesh(){const q=location.search;if(/[?&]robber=6/.test(q))return robberFig('assets/rob_reaper.glb',.36,{strip:.24,tilt:-.35});if(/[?&]robber=7/.test(q))return robberFig('assets/rob_goblin.glb',.36,{tilt:-.35,lift:0x1a1a14});if(/[?&]robber=5/.test(q))return robberGLB();if(/[?&]robber=3/.test(q))return robberSprite('assets/rob_a.webp');if(/[?&]robber=4/.test(q))return robberSprite('assets/rob_b.webp');if(/[?&]robber=2/.test(q))return robberMesh2();const k=new THREE.Group();
   k.add(part('cone8',0x2a2530,[.135,.4,.135],[0,.2,0]));k.add(part('sph',0x35303c,[.08,.08,.08],[0,.42,0]));
   k.add(part('cone8',0x2a2530,[.1,.135,.1],[0,.5,-.007]));
   const eye=new THREE.MeshBasicMaterial({color:0xff5a3c});k.add(part('sph',eye,[.012,.012,.012],[-.027,.425,.074],{noShadow:true}));k.add(part('sph',eye,[.012,.012,.012],[.027,.425,.074],{noShadow:true}));
