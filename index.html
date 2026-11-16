@@ -1811,7 +1811,7 @@ const G=(function(){
   const coast=edges.map((_,i)=>i).filter(i=>edges[i].h.length===1).sort((i,j)=>ang(i)-ang(j));
   return {hexes,verts,edges,coast};
 })();
-let TOKGEO=null,SCLEAR=0;
+let TOKGEO=null,TOKBODY=null,SCLEAR=0;
 const VIDX=G.verts.map((_,i)=>i), EIDX=G.edges.map((_,i)=>i), HIDX=G.hexes.map((_,i)=>i);
 
 let S=null;
@@ -2169,7 +2169,7 @@ function house(g,x,z,w,d,h,roofCol,ry,wall){const k=new THREE.Group();k.position
 
 
 // number-token face art preview (?tok=A|B|C): painted disc under the number
-const TOKS=(/[?&]tok=([ABC])/.exec(location.search)||[])[1];let TOKI=null;
+const TOKS=(/[?&]tok=([ABC0])/.exec(location.search)||[0,'A'])[1].replace('0','');let TOKI=null;
 const TOKSIDE={A:[0x6e5222,0xb8913e],B:[0x3a2416,0x5a3b25],C:[0x6e5222,0xb8913e]}[TOKS]||[0x5e4428,0xcbb488];
 if(TOKS){TOKI=new Image();TOKI.onload=()=>{for(const k in TEX)if(/^\d+:/.test(k))delete TEX[k];try{W.tokens.forEach((sp,i)=>{if(!sp)return;sp.material.map=tokenTex(S.board.hexes[i].num,false);sp.material.needsUpdate=true;});}catch(e){}};TOKI.src=`assets/tok/${TOKS}.webp`;}
 function tokenTex(n,hit){const k=n+':'+hit;if(TEX[k])return TEX[k];const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');x.scale(2,2);
@@ -2215,6 +2215,11 @@ function init3D(){
   requestAnimationFrame(loop);
   return true;
 }
+// game entry: start low, close and from the side, then swing round into the reset (top-down) view
+function camIntro(){if(!W.ok)return;const tp=W.ctl.target.clone(),off=W.cam.position.clone().sub(tp);const sp=new THREE.Spherical().setFromVector3(off);
+  const from={r:Math.max(W.ctl.minDistance+.5,sp.radius*.55),phi:W.ctl.maxPolarAngle,theta:sp.theta-1.9};
+  W.cam.position.setFromSpherical(new THREE.Spherical(from.r,from.phi,from.theta)).add(tp);W.cam.lookAt(tp);W.ctl.update();
+  W.camAnim={sph:true,t0:performance.now()+350,dur:2600,tp,from,to:{r:sp.radius,phi:sp.phi,theta:sp.theta}};}
 function hudBox(w,h){if(!(typeof HUDQ!=='undefined'&&HUDQ.matches))return{dx:0,dy:0,vw:w,vh:h};const tr=$('#tray');const th=tr?tr.offsetHeight*(PH.on?1.15:.95):200;
   const lc=$('#leftcol'),sd=document.querySelector('.side');const L=(lc&&lc.offsetWidth?lc.offsetWidth+24:300),Rr=(sd&&sd.offsetWidth?sd.offsetWidth+24:300);const top=PH.on?44:64;
   const vw=w-(L+Rr)*.7,vh=h-th-top;return{dx:(Rr-L)/2,dy:(th-top)/2,vw,vh};}
@@ -2224,6 +2229,7 @@ function fitCam(reset){const el=$('#stage');const w=el.clientWidth||600,h=el.cli
   if(changed||!reset){try{PERF.dirty=true;PERF.shadow=true;W.r.shadowMap.needsUpdate=true;}catch(e){}if(W.started){if(W.comp&&ui.gfx!=='low')W.comp.render();else W.r.render(W.scene,W.cam);}}
   if(reset){const a=hb.vw/hb.vh;const d=13.6*Math.pow(Math.max(1,1.32/a),1.05)*Math.max(1,h/Math.max(300,hb.vh))**.9*(PH.on?1.1:1);const ph=.66;
     const tp=new THREE.Vector3(0,0,.35),cp=new THREE.Vector3(0,d*Math.cos(ph),.35+d*Math.sin(ph));
+    if(W.camAnim&&W.camAnim.sph){const sp=new THREE.Spherical().setFromVector3(cp.clone().sub(tp));W.camAnim.tp=tp;W.camAnim.to={r:sp.radius,phi:sp.phi,theta:sp.theta};return;}
     if(reset==='now'||!W.started){W.ctl.target.copy(tp);W.cam.position.copy(cp);W.ctl.update();W.camAnim=null;}
     else W.camAnim={t0:performance.now(),fp:W.cam.position.clone(),ft:W.ctl.target.clone(),tp,cp};}}
 function info3D(e){const rc=W.r.domElement.getBoundingClientRect();W.ptr.set(((e.clientX-rc.left)/rc.width)*2-1,-((e.clientY-rc.top)/rc.height)*2+1);
@@ -2468,7 +2474,9 @@ function buildStatic(){
     if(t.res==='wool'){for(let k=0;k<30;k++){const a=r2()*6.28,rr=.5+r2()*.25;const hx=x+Math.cos(a)*rr,hz=z+Math.sin(a)*rr;if(heightAt(hx,hz)<-.02)continue;
       const hs=house(deco,hx,hz,.07,.05,.045,0x5b4a3e,r2()*3,0xd9d0bd);hs.position.y=heightAt(hx,hz);break;}}
     if(t.num){const tk=new THREE.Group();tk.position.set(x,heightAt(x,z),z);if(TOKS)tk.scale.setScalar(1.12);
-      tk.add(part('cyl16',TOKSIDE[0],[.31,.05,.31],[0,.025,0]));tk.add(part('cyl16',TOKSIDE[1],[.3,.07,.3],[0,.055,0]));
+      if(TOKS){if(!TOKBODY){const pts=[],rr=.31,hh=.09,f1=.028,f0=.008;pts.push(new THREE.Vector2(0,0),new THREE.Vector2(rr-f0,0));for(let k=1;k<=4;k++){const a=-Math.PI/2+k/4*Math.PI/2;pts.push(new THREE.Vector2(rr-f0+Math.cos(a)*f0,f0+Math.sin(a)*f0));}for(let k=0;k<=8;k++){const a=k/8*Math.PI/2;pts.push(new THREE.Vector2(rr-f1+Math.cos(a)*f1,hh-f1+Math.sin(a)*f1));}pts.push(new THREE.Vector2(0,hh));TOKBODY=new THREE.LatheGeometry(pts,64);}
+        const bm=new THREE.Mesh(TOKBODY,new THREE.MeshStandardMaterial({color:TOKSIDE[1],roughness:.42,metalness:.55,envMapIntensity:.8}));bm.castShadow=true;bm.receiveShadow=true;tk.add(bm);}
+      else{tk.add(part('cyl16',TOKSIDE[0],[.31,.05,.31],[0,.025,0]));tk.add(part('cyl16',TOKSIDE[1],[.3,.07,.3],[0,.055,0]));}
       const top=new THREE.Mesh(TOKGEO||(TOKGEO=new THREE.CircleGeometry(.29,40).rotateX(-Math.PI/2)),new THREE.MeshStandardMaterial({map:tokenTex(t.num,false),roughness:.75,transparent:true,envMapIntensity:.4}));
       top.position.y=.0915;top.receiveShadow=true;tk.add(top);tk.traverse(o=>o.userData.keep=1);g.add(tk);W.tokens[i]=top;}});
   S.board.ports.forEach(pt=>{const E=G.edges[pt.e],A=vc(E.a),B=vc(E.b);const mx=(A.x+B.x)/2,mz=(A.z+B.z)/2,L=Math.hypot(mx,mz),ox=mx/L,oz=mz/L,ang=Math.atan2(ox,oz),th=Math.atan2(mz,mx);
@@ -2698,7 +2706,9 @@ function loop(t){requestAnimationFrame(loop);if(!W.ok||document.hidden)return;co
   if(robP)[W.robber].forEach(o=>{if(o.userData.robPulse){const k=.5+.5*Math.sin(s*5);o.traverse(m=>{if(m.isMesh&&m.material.emissive)m.material.emissiveIntensity=.06+.16*k;if(m.userData.robRing){m.scale.set(.3*(1+.3*k),.6,.3*(1+.3*k));m.material.opacity=.4+.5*k;}if(m.isPointLight)m.intensity=.8+1.6*k;});}
     if(o.userData.pulseR){const k=.55+Math.sin(s*3)*.12;o.children[0].material.opacity=k;}});
   if(GHOSTM.m)GHOSTM.m.opacity=.38+Math.sin(s*3.2)*.22;W.tgtG.children.forEach(o=>{if(o.userData.pulse===1){const k=.78+Math.sin(s*2.4)*.18;o.children[0].material.opacity=k;}else if(o.userData.pulse===2){o.children[0].material.opacity=.18+Math.sin(s*4)*.12;}});
-  if(W.camAnim){const a=W.camAnim,p=Math.min(1,(now-a.t0)/700),e=1-Math.pow(1-p,3);W.ctl.enableDamping=false;W.cam.position.lerpVectors(a.fp,a.cp,e);W.ctl.target.lerpVectors(a.ft,a.tp,e);W.cam.lookAt(W.ctl.target);W.ctl.update();if(p>=1){W.camAnim=null;W.ctl.enableDamping=true;}}
+  if(W.camAnim&&W.camAnim.sph){const a=W.camAnim,p=Math.max(0,Math.min(1,(now-a.t0)/a.dur)),e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;W.ctl.enableDamping=false;
+    const L=(u,v)=>u+(v-u)*e;W.cam.position.setFromSpherical(new THREE.Spherical(L(a.from.r,a.to.r),L(a.from.phi,a.to.phi),L(a.from.theta,a.to.theta))).add(a.tp);W.ctl.target.copy(a.tp);W.cam.lookAt(a.tp);W.ctl.update();try{PERF.dirty=true;}catch(_){}if(p>=1){W.camAnim=null;W.ctl.enableDamping=true;}}
+  else if(W.camAnim){const a=W.camAnim,p=Math.min(1,(now-a.t0)/700),e=1-Math.pow(1-p,3);W.ctl.enableDamping=false;W.cam.position.lerpVectors(a.fp,a.cp,e);W.ctl.target.lerpVectors(a.ft,a.tp,e);W.cam.lookAt(W.ctl.target);W.ctl.update();if(p>=1){W.camAnim=null;W.ctl.enableDamping=true;}}
   const f0=performance.now();if(W.comp&&ui.gfx!=='low')W.comp.render();else W.r.render(W.scene,W.cam);placeLabels();$('#maplbls').style.opacity=DICE.list.length?'.25':'';
   if(anim){const dt=now0-(PERF.last||now0);PERF.last=now0;if(dt>0&&dt<500){PERF.samples.push(dt);if(PERF.samples.length>40){const avg=PERF.samples.reduce((a,b)=>a+b,0)/PERF.samples.length;PERF.samples=[];
       const floor=Math.min(PERF.max,1);if(now0-PERF.born<6000){}else if(avg>34&&PERF.dpr>floor){setDPR(Math.max(floor,+(PERF.dpr-.25).toFixed(2)));PERF.lastLow=now0;}
@@ -2841,7 +2851,7 @@ function devPop(t){
 function render(){{const r=document.getElementById('result');if(r&&(!S||S.phase!=='over'))r.remove();}
   try{sndWatch();}catch(e){}
   renderBoard();
-  if(ui.camFresh&&typeof W!=='undefined'&&W.ok){ui.camFresh=false;try{fitCam('now');syncTilt();}catch(e){}}
+  if(ui.camFresh&&typeof W!=='undefined'&&W.ok){ui.camFresh=false;try{fitCam('now');camIntro();}catch(e){}}
   $('#coach').innerHTML=coachText()+(S.mp&&S.phase!=='over'&&actor()!==null&&!S.players[actor()].ai?` <span class="cdwrap">· <i data-cd="dl"></i></span>`:'');
   const cp=S.players[S.cur];
   const rolledNow=S.rollId!==ui.shownRoll;ui.shownRoll=S.rollId;
