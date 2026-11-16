@@ -2812,7 +2812,7 @@ function scorePops(){const now=S.players.map((_,i)=>vp(i,i===ME));const prev=ui.
 function camVisit(p){if(!W.ok||(W.camAnim&&W.camAnim.sph))return;const c=W.ctl;if(!W.visitBack)W.visitBack={cp:W.cam.position.clone(),tp:c.target.clone()};
   const dir=W.cam.position.clone().sub(c.target).normalize();const d=Math.max(c.minDistance+1.5,Math.min(9,W.cam.position.distanceTo(c.target)*.7));
   const tp=new THREE.Vector3(p.x,0,p.z),cp=tp.clone().add(dir.multiplyScalar(d));W.camAnim={t0:performance.now(),fp:W.cam.position.clone(),ft:c.target.clone(),tp,cp};
-  clearTimeout(W.visitT);W.visitT=setTimeout(()=>{const b=W.visitBack;W.visitBack=null;if(!b||(W.camAnim&&W.camAnim.sph))return;W.camAnim={t0:performance.now(),fp:W.cam.position.clone(),ft:W.ctl.target.clone(),tp:b.tp,cp:b.cp};},2300);}
+  clearTimeout(W.visitT);W.visitT=setTimeout(()=>{const b=W.visitBack;W.visitBack=null;if(!b||(W.camAnim&&W.camAnim.sph))return;W.camAnim={t0:performance.now(),fp:W.cam.position.clone(),ft:W.ctl.target.clone(),tp:b.tp,cp:b.cp};},1500);}
 // longest road: the actual chain of edges, then a light that runs along it
 function roadPath(p){let best=[];const used=new Set(),path=[];
   const dfs=v=>{if(path.length>best.length)best=path.slice();const b=S.vb[v];if(path.length>0&&b&&b.o!==p)return;
@@ -2820,13 +2820,13 @@ function roadPath(p){let best=[];const used=new Set(),path=[];
   for(const v of VIDX){if(G.verts[v].e.some(e=>S.eo[e]===p))dfs(v);}return best;}
 function roadGlow(seg,slow){if(!W.ok||!seg||!seg.length)return;const P=v=>{const q=vc(v);return new THREE.Vector3(q.x,heightAt(q.x,q.z)+.1,q.z);};
   const pts=[P(seg[0][0]),...seg.map(x=>P(x[1]))];const g=new THREE.Group();W.scene.add(g);
-  const add=c=>new THREE.MeshBasicMaterial({color:c,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false});
-  const orb=new THREE.Mesh(new THREE.SphereGeometry(.07,16,12),add(0xfff1c0));const halo=new THREE.Mesh(new THREE.SphereGeometry(.18,16,12),add(0xffb640));halo.material.opacity=.45;orb.add(halo);g.add(orb);
+  const add=(c,soft)=>new THREE.MeshBasicMaterial({color:c,transparent:true,blending:soft?THREE.NormalBlending:THREE.AdditiveBlending,depthWrite:false});
+  const orb=new THREE.Mesh(new THREE.SphereGeometry(.045,16,12),add(0xffd9a0));orb.material.opacity=.8;const halo=new THREE.Mesh(new THREE.SphereGeometry(.13,16,12),add(0xff9a3c));halo.material.opacity=.22;orb.add(halo);g.add(orb);
   const bars=[];const per=170*(slow||1),fade=1500*(slow||1),n=seg.length,t0=performance.now();
   const step=()=>{const t=performance.now()-t0;const k=Math.min(n,t/per);const i=Math.min(n-1,Math.floor(k));
-    while(bars.length<Math.min(n,Math.ceil(k))){const j=bars.length,a=pts[j],b=pts[j+1];const len=a.distanceTo(b);const m=new THREE.Mesh(new THREE.BoxGeometry(.07,.05,len),add(0xffcf6a));m.position.copy(a).lerp(b,.5);m.lookAt(b);m.userData.t=performance.now();g.add(m);bars.push(m);}
-    if(t<n*per){orb.position.copy(pts[i]).lerp(pts[i+1],k-i);orb.visible=true;}else{orb.visible=t<n*per+250;halo.material.opacity=Math.max(0,.45*(1-(t-n*per)/250));}
-    bars.forEach(m=>{const a=(performance.now()-m.userData.t)/fade;m.material.opacity=Math.max(0,.95*(1-a*a));});
+    while(bars.length<Math.min(n,Math.ceil(k))){const j=bars.length,a=pts[j],b=pts[j+1];const len=a.distanceTo(b);const m=new THREE.Mesh(new THREE.BoxGeometry(.055,.03,len),add(0xb8691f));m.position.copy(a).lerp(b,.5);m.lookAt(b);m.userData.t=performance.now();g.add(m);bars.push(m);}
+    if(t<n*per){orb.position.copy(pts[i]).lerp(pts[i+1],k-i);orb.visible=true;}else{orb.visible=t<n*per+250;halo.material.opacity=Math.max(0,.22*(1-(t-n*per)/250));}
+    bars.forEach(m=>{const a=(performance.now()-m.userData.t)/fade;m.material.opacity=Math.max(0,.9*Math.min(1,a*6)*(1-a*a));});
     try{PERF.dirty=true;}catch(e){}
     if(t<n*per+fade+100)requestAnimationFrame(step);else{W.scene.remove(g);g.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material)o.material.dispose();});}};
   requestAnimationFrame(step);}
