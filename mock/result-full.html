@@ -41,7 +41,8 @@ h1{margin:0 0 .25em;font-family:'Hahmlet',serif;font-size:clamp(48px,8vw,104px);
 .tbl>div+div{border-top:1px solid;border-image:linear-gradient(90deg,transparent,rgba(233,196,122,.22),transparent) 1}
 .tbl>div:first-child{color:#f6e3b4}
 .tbl .rk{width:22px;color:#c9b48a;font-weight:700}.tbl>div:first-child .rk{color:#f3d58e}
-.tbl .dot{width:10px;height:10px;border-radius:50%;filter:saturate(.8) brightness(.84)}
+.tbl .av{width:34px;height:34px;flex:none;border-radius:50%;background:#e8d6ac center/cover no-repeat;box-shadow:0 0 0 3.5px var(--c),0 0 0 5px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.5);margin:0 6px 0 4px}
+@media (max-height:520px){.tbl .av{width:26px;height:26px;box-shadow:0 0 0 5px var(--c),0 0 0 7px rgba(0,0,0,.55)}}
 .tbl .nm{flex:1}.tbl b{color:#f3d58e;font-size:1.08em}
 .btns{display:flex;gap:14px;margin-top:clamp(16px,3.2vh,30px);opacity:0;animation:up .7s ease-out 3.1s both}
 .gb{font:inherit;font-weight:700;font-size:clamp(13px,1.3vw,16px);color:#f3e2bd;background:none;cursor:pointer;border-style:solid;border-width:10px 12px;padding:4px 22px;min-width:9em;text-shadow:0 1px 0 #1d1006;border-image:url(../assets/ui/28241176.webp) 34 36 fill / 10px 12px stretch}
@@ -73,14 +74,15 @@ h1{margin-bottom:0!important}
 <div class="var"><button data-v="win" class="on">승리</button><button data-v="lose">패배</button><button id="rp">다시 재생</button></div>
 <div class="scene" id="sc"></div>
 <script>
-const P=[['나','#ff2a1a',10,'(승점 카드 1장)'],['꼼꼼한 수달','#3a8cff',8,''],['자유로운 해달','#e046e0',6,'']];
+const P=[['나','#ff2a1a',10,'(승점 카드 1장)','rabbit'],['꼼꼼한 수달','#3a8cff',8,'','otter'],['자유로운 판다','#2fb36b',6,'','panda']];
+const mute=c=>{const n=parseInt(c.slice(1),16);let r=n>>16&255,g=n>>8&255,b=n&255;const m=(r+g+b)/3;const f=x=>Math.round((x*.75+m*.25)*.85);return `rgb(${f(r)},${f(g)},${f(b)})`;};
 let mode='win',raf;
 function play(){cancelAnimationFrame(raf);const win=mode==='win';const LB=mode==='loseb';const order=win?P:[P[1],P[0],P[2]];const W2=order[0];
  document.getElementById('sc').className='scene '+(LB?'lose loseb':mode);
  document.getElementById('sc').innerHTML=`<div class="art"></div><div class="shade"></div><canvas id="cv"></canvas>
  <video class="fx" muted playsinline loop autoplay src="../assets/result/${win?'confetti':'snow'}.mp4"></video><div class="box"><h1><img src="../assets/result/${win?'victory':'gameover'}.webp" alt="${win?'VICTORY':'GAME OVER'}"></h1>
- <div class="sub" style="--wc:${W2[1]}">${win?'12바퀴 만에 섬의 영주가 되었어요.':`<b style="filter:saturate(.8) brightness(1.2)">${W2[0]}</b>이(가) 12바퀴 만에 섬의 영주가 되었어요.`}</div>
- <div class="tbl">${order.map((p,i)=>`<div style="animation-delay:${2.1+i*.22}s"><span class="rk">${i+1}</span><span class="dot" style="background:${p[1]}"></span><span class="nm">${p[0]} <small style="color:#a8977a">${p[3]}</small></span><b>${win||i?p[2]:10}점</b></div>`).join('')}</div>
+ <div class="sub" style="--wc:${W2[1]}">${win?'12바퀴 만에 섬의 영주가 되었어요.':`<b style="color:${mute(W2[1])};filter:brightness(1.35)">${W2[0]}</b>이(가) 12바퀴 만에 섬의 영주가 되었어요.`}</div>
+ <div class="tbl">${order.map((p,i)=>`<div style="animation-delay:${2.1+i*.22}s"><span class="rk">${i+1}</span><span class="av" style="--c:${mute(p[1])};background-image:url(../assets/pt/${p[4]}.webp)"></span><span class="nm">${p[0]} <small style="color:#a8977a">${p[3]}</small></span><b>${win||i?p[2]:10}점</b></div>`).join('')}</div>
  <div class="btns"><button class="gb">보드 보기</button><button class="gb next">새 게임</button></div></div>`;
  const cv=document.getElementById('cv'),c=cv.getContext('2d');const fit=()=>{cv.width=innerWidth*Math.min(2,devicePixelRatio||1);cv.height=innerHeight*Math.min(2,devicePixelRatio||1);};fit();
  const R=Math.random,k=cv.width/innerWidth;const N=win?110:45;const ps=Array.from({length:N},()=>({x:R()*cv.width,y:-R()*cv.height,vy:(win?1.2:.5)+R()*(win?1.8:.6),vx:(R()-.5)*.6,r:(win?3:1.6)+R()*(win?4:2),a:R()*6.3,va:(R()-.5)*.15,c:win?['#f3d27a','#fff1c4','#e9b44e','#ffffff'][R()*4|0]:'#cfd8e6'}));
