@@ -1592,10 +1592,11 @@ html.phone #deco .ml{height:54vh}html.phone #deco .mr{height:60vh}
 html.phone #deco .bl{height:56vh}html.phone #deco .br{height:50vh}
 
 
-/* setup / lobby: faint illustration under the leather (preview ?fbg=A|B|C) */
-html[data-fbg] .sheet-frame::before{content:'';position:absolute;inset:0;background:var(--fbgi) left center/cover no-repeat;mix-blend-mode:screen;opacity:.85;pointer-events:none;z-index:0}
-html[data-fbg="A"]{--fbgi:url(assets/fbg/A.webp)}html[data-fbg="B"]{--fbgi:url(assets/fbg/B.webp)}html[data-fbg="C"]{--fbgi:url(assets/fbg/C.webp)}
-html[data-fbg] .sheet-frame>.fhead,html[data-fbg] .sheet-frame>.fbody{position:relative;z-index:1}
+/* setup / lobby: faint illustration under the leather — single: harbour painting, multi: galleon engraving, lobby: sea chart */
+.sheet-frame.sheet-single,.sheet-frame.sheet-multi,.sheet-frame.sheet-lobby{--fbgi:url(assets/fbg/C.webp)}
+.sheet-frame.sheet-multi{--fbgi:url(assets/fbg/B.webp)}.sheet-frame.sheet-lobby{--fbgi:url(assets/fbg/A.webp)}
+.sheet-frame.sheet-single::before,.sheet-frame.sheet-multi::before,.sheet-frame.sheet-lobby::before{content:'';position:absolute;inset:0;background:var(--fbgi) left center/cover no-repeat;mix-blend-mode:screen;opacity:.85;pointer-events:none;z-index:0}
+.sheet-frame>.fhead,.sheet-frame>.fbody{position:relative;z-index:1}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
@@ -3121,7 +3122,6 @@ function showCredits(){openDialog(`<h3>Credits &amp; Licenses</h3><div class="cr
   <p class="cmuted">배경음악·효과음·영상: Pixabay (Pixabay Content License)<br>첫 화면 반짝임 입자: Kenney Particle Pack (CC0)</p></div><div class="row"><button class="btn sub" id="crOk">확인</button></div>`);$('#crOk').onclick=closeDialog;}
 
 // table dressing around the sea: curtains, valance and corner props, darkened behind the UI (pointer-transparent)
-{const m=/[?&]fbg=([ABC])/.exec(location.search);if(m)document.documentElement.dataset.fbg=m[1];}
 function addDeco(){if(!/[?&]deco=1/.test(location.search)||document.getElementById('deco'))return;const st=document.getElementById('stage');if(!st)return;const d=document.createElement('div');d.id='deco';
   d.innerHTML='<i class="dk cur l"></i><i class="dk cur r"></i><i class="dk ml"></i><i class="dk mr"></i><i class="dk bl"></i><i class="dk br"></i><i class="dvig"></i>';
   const cv=st.querySelector('canvas');if(cv&&cv.nextSibling)st.insertBefore(d,cv.nextSibling);else st.appendChild(d);}
