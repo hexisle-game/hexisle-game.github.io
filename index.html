@@ -1059,7 +1059,7 @@ html body .mclose.mback:hover{transform:scale(1.28)}
 .title,.title *{-webkit-tap-highlight-color:transparent;outline:none}
 .title{background:#0b1428!important}
 .title .tbg{left:-14%!important;right:-14%!important;top:9%!important;bottom:-36%!important;background-position:center top!important;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 14%);mask-image:linear-gradient(180deg,transparent 0,#000 14%)}
-.title .tnoise{position:absolute;inset:0;pointer-events:none;opacity:.10;mix-blend-mode:overlay;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>") 0 0/180px 180px repeat}
+.title .tnoise{position:absolute;inset:0;pointer-events:none;opacity:.10;mix-blend-mode:overlay;background:var(--noise) repeat 0 0/180px 180px repeat}
 html.phone .title .tbg{top:12%!important;bottom:-40%!important}
 .mtab.on{background:radial-gradient(ellipse 60% 120% at 40% 50%,rgba(233,185,92,.30),rgba(233,185,92,.10) 60%,rgba(233,185,92,0) 100%)!important;box-shadow:none!important}
 .mtab.on::before,.mtab.on::after{content:"";position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,rgba(243,208,138,0),rgba(243,208,138,.85) 25%,rgba(243,208,138,.85) 65%,rgba(243,208,138,0))}
@@ -1549,16 +1549,37 @@ html.sico-on .setpanel .mi{justify-content:flex-start!important;gap:14px!importa
 html.sico-on .setpanel .mi .sico{width:22px;height:22px;flex:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
 html.sico-on .setpanel .mi.tg::after,html.sico-on .setpanel .mi .tgl,html.sico-on .setpanel .mi .seg{margin-left:auto}
 html.phone.sico-on .setpanel .mi .sico{width:18px;height:18px}
+html.phone.sico-on .setpanel .mi{gap:6px!important}
+html:not(.phone).sico-on .setpanel .mi{gap:10px!important}
 /* player list: name, then resources 2px below; bonus badges go under the resources */
 html:not(.phone) body .pl{row-gap:2px!important;align-content:center}
 html:not(.phone) body .pl .meta{grid-row:2!important}
 html:not(.phone) body .pl .bdgs{grid-row:3!important;margin:4px 0 1px!important}
 html:not(.phone) body .pl .bdgs:empty{display:none}
+
+/* stage buttons: trade = green, end turn = orange (same art as the title menu) */
+html body .stagebtns .tbtn[data-act="trade"]{border-image:url(assets/ui/bd56379b.webp) 34 36 fill / 10px 12px stretch!important;color:#f3ffe8!important;text-shadow:0 1px 0 #0d2a08,0 1px 4px rgba(0,0,0,.6)!important}
+html body .stagebtns .tbtn[data-act="end"]{border-image:url(assets/ui/0188c1d8.webp) 34 36 fill / 10px 12px stretch!important;color:#fff3dc!important;text-shadow:0 1px 0 #2a0e04,0 1px 4px rgba(0,0,0,.6)!important}
+html body .stagebtns .tbtn[data-act="trade"]:disabled,html body .stagebtns .tbtn[data-act="end"]:disabled{filter:saturate(.35) brightness(.7)!important}
+/* perf: keep the zooming background on its own GPU layer */
+.title .tbg{will-change:transform;backface-visibility:hidden;transform:translateZ(0)}
+#splash.loading .sptap{animation:none!important;opacity:0!important}
+#splash .spload{position:absolute;bottom:9%;left:50%;width:120px;height:2px;margin-left:-60px;background:rgba(233,196,122,.15);overflow:hidden;opacity:0;transition:opacity .4s}
+#splash.loading.ready .spload{opacity:1}
+#splash .spload i{position:absolute;inset:0;width:40%;background:linear-gradient(90deg,transparent,#e9c47a,transparent);animation:spload 1.1s ease-in-out infinite}
+@keyframes spload{from{transform:translateX(-100%)}to{transform:translateX(250%)}}
+/* credits link: PC only, pinned to the bottom of the settings panel */
+.setpanel .credit-link{margin-top:auto;align-self:flex-start;margin-left:36px;padding:14px 0 0;background:none;border:0;font:inherit;font-size:12px;letter-spacing:.04em;color:#8f7f63;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.setpanel .credit-link:hover{color:#e9c47a}
+html.phone .setpanel .credit-link{display:none}
+.credits{text-align:left;font-size:14px;line-height:1.7;color:#e6dccb;margin:6px 4px 0}
+.credits a{color:#e9c47a}.credits b{color:#f3dfae}
+.credits .cmuted{color:#a8977a;font-size:12.5px;margin-top:12px!important}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
 .title video{pointer-events:none;mix-blend-mode:screen;background:transparent;object-fit:cover}
-.title .tbeams{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;opacity:.42;filter:blur(3px)}
+.title .tbeams{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;opacity:.42}
 .title .tmotes{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .title .ttwk{position:absolute;inset:0;width:100%;height:100%;opacity:.38;-webkit-mask-image:linear-gradient(180deg,#000 0,#000 26%,rgba(0,0,0,.35) 40%,transparent 50%);mask-image:linear-gradient(180deg,#000 0,#000 26%,rgba(0,0,0,.35) 40%,transparent 50%)}
 .title .tshine{position:absolute;pointer-events:none;mix-blend-mode:screen;visibility:hidden;-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
@@ -1681,6 +1702,7 @@ html.phone body .dlg-snd .sndrow{grid-template-columns:auto 150px 60px;gap:12px}
         <div class="msep"></div>
         <button id="gfxBtn" class="mi tg" role="menuitemcheckbox">고화질 그래픽</button>
         <div class="mi mrow"><span>AI 속도</span><span class="seg" id="speedSeg"><button data-sp="느림">느림</button><button data-sp="보통">보통</button><button data-sp="빠름">빠름</button></span></div>
+        <button id="creditBtn" class="credit-link">Credits &amp; Licenses</button>
       </div>
     </div>
   </div>
@@ -1714,7 +1736,7 @@ html.phone body .dlg-snd .sndrow{grid-template-columns:auto 150px 60px;gap:12px}
 <div id="tip" hidden></div><div id="pop" hidden></div>
 <div id="leftcol"></div>
 <div id="rotate" hidden><div class="rot-ic"></div><b>가로로 돌려 주세요</b><span>HexIsle은 휴대폰에서<br>가로 화면으로 플레이해요.</span></div>
-<div id="splash"><img id="spLogo" alt="HEXISLE"><p class="spnote">이 게임은 수익을 창출하지 않으며,<br>개인 목적으로만 제작되었습니다.</p><p class="sptap">화면을 탭 하여 시작</p></div><div id="title" class="title" hidden><div class="tbg"></div><div class="tsun"></div><div class="tdim"></div><canvas class="tbeams" id="tBeams" width="640" height="360"></canvas><video class="ttwk" muted playsinline loop autoplay preload="auto" disablepictureinpicture aria-hidden="true" src="assets/fx/twinkle.mp4"></video><canvas class="tmotes" id="tMotes"></canvas><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 헥스아일 - 개척의 시대"><div class="tshine" id="tShine"></div><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
+<div id="splash"><img id="spLogo" alt="HEXISLE"><p class="spnote">이 게임은 수익을 창출하지 않으며,<br>개인 목적으로만 제작되었습니다.</p><p class="sptap">화면을 탭 하여 시작</p><div class="spload"><i></i></div></div><div id="title" class="title" hidden><div class="tbg"></div><div class="tsun"></div><div class="tdim"></div><canvas class="tbeams" id="tBeams" width="384" height="216"></canvas><video class="ttwk" muted playsinline loop autoplay preload="auto" disablepictureinpicture aria-hidden="true" src="assets/fx/twinkle.mp4"></video><canvas class="tmotes" id="tMotes"></canvas><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 헥스아일 - 개척의 시대"><div class="tshine" id="tShine"></div><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
 <div id="tut" hidden><div class="tblock" id="tBlock"></div><div class="tring" id="tRing" hidden></div><div class="tx" id="tX" hidden>✕</div><div class="tbub" id="tBub"></div><div class="tgest" id="tGest" hidden><i class="f1"></i><i class="f2"></i></div></div>
 <div id="dialog" class="overlay dlgov" hidden><div class="sheet sheet-dialog" id="dsheet"></div></div>
 <div id="modal" class="overlay" hidden><div class="sheet" id="sheet"></div><i class="mcrest" id="mcrest" aria-hidden="true"></i></div>
@@ -2509,6 +2531,7 @@ function robberGLB(){const k=new THREE.Group();k.userData.glb=1;
     if(g.animations&&g.animations[0]){const mx=new THREE.AnimationMixer(m);mx.clipAction(g.animations[0]).play();k.userData.mixer=mx;}k.add(m);try{invalidate(true);}catch(e){}};
   if(ROBGLB.g)put(ROBGLB.g);else{ROBGLB.cbs.push(put);if(ROBGLB.cbs.length===1&&THREE.GLTFLoader)new THREE.GLTFLoader().load('assets/robber.glb',g=>{ROBGLB.g=g;ROBGLB.cbs.splice(0).forEach(f=>f(g));},undefined,e=>console.warn('robber glb',e));}
   return k;}
+const REAPCOL={cloak:0x262833,black:0x1c1d25,material:0x3a1a3f};
 // generic loader for downloaded figures: auto-scale to a target height, optional pedestal strip
 const RGLB={};
 function robberFig(file,H,o){o=o||{};const k=new THREE.Group();k.userData.glb=1;
@@ -2517,11 +2540,11 @@ function robberFig(file,H,o){o=o||{};const k=new THREE.Group();k.userData.glb=1;
     const bb=new THREE.Box3().setFromObject(m),sz=bb.getSize(new THREE.Vector3()),sc=H/sz.y;m.scale.setScalar(sc);
     const b2=new THREE.Box3().setFromObject(m),c=b2.getCenter(new THREE.Vector3());m.position.set(-c.x,-b2.min.y,-c.z);
     const w=new THREE.Group();w.add(m);w.rotation.x=o.tilt||0;
-    m.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;c.material=c.material.clone();if(o.lift){c.material.emissive=(c.material.emissive||new THREE.Color()).clone().add(new THREE.Color(o.lift));c.material.emissiveIntensity=1;}}});
+    m.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;c.material=c.material.clone();if(o.recol&&o.recol[c.material.name]!==undefined){c.material.color.setHex(o.recol[c.material.name]);if(c.material.emissive)c.material.emissive.setHex(c.material.name==='material'?0x12081a:0x000000);}if(o.lift){c.material.emissive=(c.material.emissive||new THREE.Color()).clone().add(new THREE.Color(o.lift));c.material.emissiveIntensity=1;}}});
     k.add(w);try{invalidate(true);}catch(e){}};
   const R=RGLB[file]=RGLB[file]||{g:null,cbs:[]};if(R.g)put(R.g);else{R.cbs.push(put);if(R.cbs.length===1)new THREE.GLTFLoader().load(file,g=>{R.g=g;R.cbs.splice(0).forEach(f=>f(g));},undefined,e=>console.warn('fig',e));}
   return k;}
-function robberMesh(){const q=location.search;if(/[?&]robber=8/.test(q))return robberFig('assets/rob_reaper2.glb',.4,{tilt:-.3});if(/[?&]robber=6/.test(q))return robberFig('assets/rob_reaper.glb',.36,{strip:.24,tilt:-.35});if(/[?&]robber=7/.test(q))return robberFig('assets/rob_goblin.glb',.36,{tilt:-.35,lift:0x1a1a14});if(/[?&]robber=5/.test(q))return robberGLB();if(/[?&]robber=3/.test(q))return robberSprite('assets/rob_a.webp');if(/[?&]robber=4/.test(q))return robberSprite('assets/rob_b.webp');if(/[?&]robber=2/.test(q))return robberMesh2();const k=new THREE.Group();
+function robberMesh(){const q=location.search;if(!/[?&]robber=old/.test(q)&&THREE.GLTFLoader)return robberFig('assets/rob_reaper2.glb',.4,{tilt:-.3,recol:REAPCOL});const k=new THREE.Group();
   k.add(part('cone8',0x2a2530,[.135,.4,.135],[0,.2,0]));k.add(part('sph',0x35303c,[.08,.08,.08],[0,.42,0]));
   k.add(part('cone8',0x2a2530,[.1,.135,.1],[0,.5,-.007]));
   const eye=new THREE.MeshBasicMaterial({color:0xff5a3c});k.add(part('sph',eye,[.012,.012,.012],[-.027,.425,.074],{noShadow:true}));k.add(part('sph',eye,[.012,.012,.012],[.027,.425,.074],{noShadow:true}));
@@ -3014,6 +3037,7 @@ function showRules(i,after){i=i||0;const P=RULES[i],last=i===RULES.length-1;
 function fitRules(){const bk=$('#rbook');if(!bk)return;const m=$('#modal'),W=m.clientWidth,H=m.clientHeight,AR=1907/978;
   const w=Math.min(1240,W*.98,(H-8)*AR);bk.style.width=w+'px';bk.style.height=(w/AR)+'px';bk.style.fontSize=(w/(PH.on?64:78))+'px';$('#mcrest')&&($('#mcrest').style.visibility='hidden');}
 addEventListener('resize',()=>setTimeout(fitRules,80));
+{const b=document.getElementById('creditBtn');if(b)b.onclick=e=>{e.stopPropagation();showCredits();};}
 setTimeout(()=>{try{addSetIcons();}catch(e){}},0);
 
 const DIFF=[['easy','쉬움','AI가 자주 쉬고 거래에 너그러워요'],['normal','보통','기본 전략으로 플레이해요'],['hard','어려움','선두를 견제하고 자원 보너스를 받아요']];
@@ -3033,7 +3057,7 @@ function titleFx(){const lg=$('#tLogo'),sh=$('#tShine');const place=()=>{if(!lg.
   const R=Math.random;const mk=(p,init)=>{p.x=R()*W;p.y=init?R()*H:H*(.55+R()*.5);p.r=.9+R()*2.1;p.vx=(R()-.3)*.12;p.vy=-(.08+R()*.22);p.ph=R()*6.3;p.sp=.6+R()*1.6;p.a=.4+R()*.45;return p;};
   const mkG=g=>{g.x=W*R();g.y=H*(.05+R()*.6);g.t=0;g.d=45+R()*80;g.s=10+R()*16;g.k=R()<.3?2:1;return g;};
   const fit=()=>{const d=Math.min(devicePixelRatio||1,2);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);};
-  const loop=ts=>{const t=$('#title');if(t.hidden){titleFx.run=0;return;}requestAnimationFrame(loop);if(ts-last<33||!SP.complete)return;last=ts;
+  const loop=ts=>{const t=$('#title');if(t.hidden){titleFx.run=0;return;}requestAnimationFrame(loop);if(ts-last<33||!SP.complete)return;if(t.classList.contains('intro')&&performance.now()-(ui.introT0||0)<2600)return;last=ts;
     if(cv.clientWidth!==W||cv.clientHeight!==H){fit();P.length=0;G.length=0;}
     if(!P.length){const n=Math.round(Math.min(60,W*H/20000));for(let i=0;i<n;i++)P.push(mk({},1));for(let i=0;i<7;i++){const g=mkG({});g.t=R()*g.d;G.push(g);}}
     cx.clearRect(0,0,W,H);cx.globalCompositeOperation='lighter';const s=ts/1000;
@@ -3065,11 +3089,15 @@ const SICO={
  gfxBtn:'<path d="M6.5 5 H17.5 L21 9.5 L12 20 L3 9.5 Z"/><path d="M3 9.5 H21"/>',
  aiSpeed:'<path d="M6.5 3.5 H17.5 M6.5 20.5 H17.5"/><path d="M7.5 3.5 C7.5 8.5 12 9.5 12 12 C12 14.5 7.5 15.5 7.5 20.5 M16.5 3.5 C16.5 8.5 12 9.5 12 12 C12 14.5 16.5 15.5 16.5 20.5"/>'};
 function sicoSVG(k){const p=SICO[k];return `<svg class="sico" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g stroke="#3a2412" stroke-width="3.2" transform="translate(.7 .9)" opacity=".85">${p}</g><g stroke="url(#ggs)" stroke-width="2.2">${p}</g></svg>`;}
-function addSetIcons(){if(!/[?&]icons=2/.test(location.search))return;['newBtn','rulesBtn','sndBtn','leaveBtn','tipBtn','hintBtn','gfxBtn'].forEach(id=>{const b=document.getElementById(id);if(b&&!b.querySelector('.sico'))b.insertAdjacentHTML('afterbegin',sicoSVG(id));});
+function addSetIcons(){['newBtn','rulesBtn','sndBtn','leaveBtn','tipBtn','hintBtn','gfxBtn'].forEach(id=>{const b=document.getElementById(id);if(b&&!b.querySelector('.sico'))b.insertAdjacentHTML('afterbegin',sicoSVG(id));});
   const sp=document.querySelector('#setMenu .mrow');if(sp&&!sp.querySelector('.sico'))sp.insertAdjacentHTML('afterbegin',sicoSVG('aiSpeed'));document.documentElement.classList.add('sico-on');}
-function titleIntro(t){t.classList.remove('shine-on');t.classList.add('intro');setTimeout(()=>{t.classList.remove('intro');shineOn();},4800);}
+function noiseTile(){if(noiseTile.d)return;noiseTile.d=1;const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),im=x.createImageData(128,128);for(let i=0;i<im.data.length;i+=4){const v=Math.random()*255|0;im.data[i]=im.data[i+1]=im.data[i+2]=v;im.data[i+3]=255;}x.putImageData(im,0,0);document.documentElement.style.setProperty('--noise',`url(${c.toDataURL()})`);}
+function showCredits(){openDialog(`<h3>Credits &amp; Licenses</h3><div class="credits">
+  <p><b>Cartoon Style Grim Reaper</b> (도적 3D 모델)<br>by <a href="http://sketchfab.com/utudesign" target="_blank" rel="noopener">Utu Design</a> · <a href="https://skfb.ly/pGp8q" target="_blank" rel="noopener">Sketchfab</a><br>Licensed under <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 색상 변경 및 경량화</p>
+  <p class="cmuted">배경음악·효과음·영상: Pixabay (Pixabay Content License)<br>파티클 이미지: Kenney (CC0)</p></div><div class="row"><button class="btn sub" id="crOk">확인</button></div>`);$('#crOk').onclick=closeDialog;}
+function titleIntro(t){ui.introT0=performance.now();t.classList.remove('shine-on');t.classList.add('intro');setTimeout(()=>{t.classList.remove('intro');shineOn();},4800);}
 function shineOn(){const t=$('#title'),lg=$('#tLogo');if(t.classList.contains('intro')||ui.splash)return;if(lg.complete&&lg.naturalWidth)t.classList.add('shine-on');else lg.addEventListener('load',()=>{if(!t.classList.contains('intro'))t.classList.add('shine-on');},{once:true});}
-function splashOff(){const sp=$('#splash');if(!sp||!ui.splash)return;ui.splash=0;setTimeout(()=>{try{preloadUI();}catch(e){}},1500);try{SND.unlock();SND.music('title');}catch(e){}sp.classList.add('out');const t=$('#title');document.querySelectorAll('#title video').forEach(v=>{const p=v.play();p&&p.catch&&p.catch(()=>{});});if(!t.hidden)titleIntro(t);setTimeout(()=>sp.remove(),1700);}
+function splashOff(){const sp=$('#splash');if(!sp||!ui.splash||sp.classList.contains('loading'))return;ui.splash=0;setTimeout(()=>{try{preloadUI();}catch(e){}},1500);try{SND.unlock();SND.music('title');}catch(e){}sp.classList.add('out');const t=$('#title');document.querySelectorAll('#title video').forEach(v=>{const p=v.play();p&&p.catch&&p.catch(()=>{});});if(!t.hidden)titleIntro(t);setTimeout(()=>sp.remove(),1700);}
 function showTitle(menu){try{SND.music('title');}catch(e){}const t=$('#title');if(t.hidden&&!ui.titleIntro){ui.titleIntro=1;if(!ui.splash)titleIntro(t);}if(t.classList.contains('tfadeout')){clearTimeout(ui.tfT);t.classList.remove('tfadeout');ui.titleFading=false;}else if(t.hidden&&ui.titleIntro&&!t.classList.contains('intro')){t.classList.remove('tfadein');t.classList.add('tfadepre');clearTimeout(ui.tinT);requestAnimationFrame(()=>requestAnimationFrame(()=>{ui.tinT=setTimeout(()=>{t.classList.remove('tfadepre');void t.offsetWidth;t.classList.add('tfadein');ui.tinT=setTimeout(()=>t.classList.remove('tfadein'),700);},120);}));}t.hidden=false;document.documentElement.classList.add('on-title');
   const lg=$('#tLogo');if(!lg.src)lg.src=window.LOGO_URL;titleFx();shineOn();t.querySelector('.tbg').style.backgroundImage=`url(${(Math.max(innerWidth,innerHeight)*(devicePixelRatio||1)<1400)?TITLEIMG.titlebgS:TITLEIMG.titlebg})`;
   if(menu||ui.titleMenu){ui.titleMenu=true;$('#tTap').hidden=true;$('#tMenu').hidden=false;}else{$('#tTap').hidden=false;$('#tMenu').hidden=true;}}
@@ -3251,7 +3279,10 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-htab]');if
 function boot(data){
   init3D();phoneDPR();fitChrome();
   if(data&&data.S){S=data.S;migrate();ui.shownRoll=S.rollId;ui.mode=null;closeModal();update();return;}
-  ui.splash=1;ui.titleMenu=true;{const sp=$('#splash'),im=$('#spLogo');const rdy=()=>{im.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(()=>sp.classList.add('ready'),60)));};im.onload=rdy;im.src=window.LOGO_URL;if(im.complete&&im.naturalWidth)rdy();setTimeout(()=>sp.classList.add('ready'),2500);sp.addEventListener('click',splashOff);}
+  ui.splash=1;ui.titleMenu=true;noiseTile();
+  {const big=(Math.max(innerWidth,innerHeight)*(devicePixelRatio||1)<1400)?TITLEIMG.titlebgS:TITLEIMG.titlebg;const pre=[big,window.LOGO_URL].map(u=>{const i=new Image();i.src=u;return i.decode?i.decode().catch(()=>{}):Promise.resolve();});
+   const sp0=$('#splash');sp0.classList.add('loading');Promise.race([Promise.all(pre),new Promise(r=>setTimeout(r,6000))]).then(()=>{sp0.classList.remove('loading');ui.artReady=1;});}
+  {const sp=$('#splash'),im=$('#spLogo');const rdy=()=>{im.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(()=>sp.classList.add('ready'),60)));};im.onload=rdy;im.src=window.LOGO_URL;if(im.complete&&im.naturalWidth)rdy();setTimeout(()=>sp.classList.add('ready'),2500);sp.addEventListener('click',splashOff);}
   newGame();render();showStart();
 }
 try{window.claude?.hot?.snapshot?.(()=>({S}));}catch(e){}
