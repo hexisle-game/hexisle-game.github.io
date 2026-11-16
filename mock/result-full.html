@@ -63,8 +63,14 @@ h1{margin-bottom:0!important}
  .gb{font-size:12px;border-width:9.5px 11.4px;border-image-width:9.5px 11.4px;padding:3px 20px;min-width:8.5em}
 }
 .loseb .art{background-image:url(../assets/result/lose_b.webp)!important}
+
+/* push the score list and buttons further down */
+.box{justify-content:flex-start!important;padding-top:17vh!important}
+.tbl{margin-top:clamp(36px,10vh,96px)!important}
+.btns{position:absolute;left:0;right:0;bottom:clamp(18px,6vh,48px);justify-content:center;margin-top:0!important}
+@media (max-height:520px){.box{padding-top:11vh!important}.tbl{margin-top:9vh!important}.btns{bottom:4vh}}
 </style></head><body>
-<div class="var"><button data-v="win" class="on">승리</button><button data-v="lose">패배</button><button data-v="loseb">패배 B</button><button id="rp">다시 재생</button></div>
+<div class="var"><button data-v="win" class="on">승리</button><button data-v="lose">패배</button><button id="rp">다시 재생</button></div>
 <div class="scene" id="sc"></div>
 <script>
 const P=[['나','#ff2a1a',10,'(승점 카드 1장)'],['꼼꼼한 수달','#3a8cff',8,''],['자유로운 해달','#e046e0',6,'']];
