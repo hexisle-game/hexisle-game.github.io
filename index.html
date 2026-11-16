@@ -3304,7 +3304,7 @@ function evalMQ(txt,w,h){if(/prefers|hover|pointer|orientation/.test(txt))return
 function applyPhone(){const coarse=matchMedia('(pointer:coarse)').matches;const small=Math.min(innerWidth,innerHeight)<700;const land=innerWidth>innerHeight;
   const portraitBlock=coarse&&small&&!land;document.documentElement.classList.toggle('portrait-block',portraitBlock);$('#rotate').hidden=!portraitBlock;
   // tablets / unfolded foldables that can't fit the desktop HUD get the phone layout in a centred letterbox
-  const lb=coarse&&!small&&!(innerWidth>=1101&&innerHeight>=640);
+  const lb=coarse&&!small&&(!(innerWidth>=1101&&innerHeight>=640)||innerWidth/innerHeight<1.6);
   const on=(coarse&&small&&land)||lb;const VH=440;const BH=lb?Math.min(innerHeight,Math.round(innerWidth/1.95)):innerHeight;const k=on?BH/VH:1;const vw=Math.round(innerWidth/k);const oy=lb?Math.round((innerHeight-BH)/2):0;
   if(on===PH.on&&(!on||(Math.abs(k-PH.k)<.001&&vw===PH.vw&&oy===PH.oy)))return;PH.on=on;PH.k=k;PH.vw=vw;PH.vh=VH;PH.ox=0;PH.oy=oy;
   const root=document.documentElement;root.classList.toggle('phone',on);root.classList.toggle('lbox',lb);root.style.setProperty('--oy',oy+'px');root.style.setProperty('--k',k);root.style.setProperty('--vw',vw+'px');root.style.setProperty('--vh',VH+'px');
