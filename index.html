@@ -1484,6 +1484,9 @@ html.phone .devshow img{width:92px}html.phone .devshow span{font-size:16px}
 .btn:not(:disabled):active,.tbtn:not(:disabled):active,.tm:active,.mtab:active,.pbtn:active{transform:translateY(1px) scale(.97);filter:brightness(.92)}
 .btn,.tbtn,.tm,.mtab,.pbtn{transition:transform .08s ease,filter .08s ease}
 @media (prefers-reduced-motion:reduce){.pl .vp.vpop,.vpup,.pl .badge.bnew,.pl.plglow,.stagebtns .tbtn.nudge,.devshow{animation-duration:.01s}}
+/* stage buttons: tighter rows; narrower trade, wider end turn, total = roll width */
+html body .stagebtns{grid-template-columns:.82fr 1.18fr!important;row-gap:4px!important;column-gap:8px!important}
+html.phone body .stagebtns{row-gap:2px!important;column-gap:7px!important}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
