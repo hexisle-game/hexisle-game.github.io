@@ -1593,8 +1593,8 @@ html.phone #deco .bl{height:56vh}html.phone #deco .br{height:50vh}
 
 
 /* setup / lobby: faint illustration under the leather — single: harbour painting, multi: galleon engraving, lobby: sea chart */
-.sheet-frame.sheet-single,.sheet-frame.sheet-multi,.sheet-frame.sheet-lobby{--fbgi:url(assets/fbg/C.webp)}
-.sheet-frame.sheet-multi{--fbgi:url(assets/fbg/B.webp)}.sheet-frame.sheet-lobby{--fbgi:url(assets/fbg/A.webp)}
+.sheet-frame.sheet-single,.sheet-frame.sheet-multi,.sheet-frame.sheet-lobby{--fbgi:var(--fbgC,url(assets/fbg/C.webp))}
+.sheet-frame.sheet-multi{--fbgi:url(assets/fbg/B.webp)}.sheet-frame.sheet-lobby{--fbgi:var(--fbgA,url(assets/fbg/A.webp))}
 .sheet-frame.sheet-single::before,.sheet-frame.sheet-multi::before,.sheet-frame.sheet-lobby::before{content:'';position:absolute;inset:0;background:var(--fbgi) left center/cover no-repeat;mix-blend-mode:screen;opacity:.8;pointer-events:none;z-index:0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent),linear-gradient(180deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent),linear-gradient(180deg,transparent,#000 8%,#000 92%,transparent);mask-composite:intersect}
 .sheet-frame>.fhead,.sheet-frame>.fbody{position:relative;z-index:1}
 html body .sheet.sheet-frame.sheet-single,html body .sheet.sheet-frame.sheet-multi,html body .sheet.sheet-frame.sheet-lobby{background:linear-gradient(rgba(14,12,10,.42),rgba(14,12,10,.42)),url(assets/ui/leather.jpg) 0 0/360px 360px repeat!important;background-clip:border-box!important}
@@ -3123,6 +3123,7 @@ function showCredits(){openDialog(`<h3>Credits &amp; Licenses</h3><div class="cr
   <p class="cmuted">배경음악·효과음·영상: Pixabay (Pixabay Content License)<br>첫 화면 반짝임 입자: Kenney Particle Pack (CC0)</p></div><div class="row"><button class="btn sub" id="crOk">확인</button></div>`);$('#crOk').onclick=closeDialog;}
 
 // table dressing around the sea: curtains, valance and corner props, darkened behind the UI (pointer-transparent)
+{const q=location.search,r=document.documentElement.style;let m=/[?&]fbs=([1-4])/.exec(q);if(m)r.setProperty('--fbgC',`url(assets/fbg/C${m[1]}.webp)`);if(/[?&]fbm=2/.test(q))r.setProperty('--fbgA','url(assets/fbg/A2.webp)');}
 function addDeco(){if(!/[?&]deco=1/.test(location.search)||document.getElementById('deco'))return;const st=document.getElementById('stage');if(!st)return;const d=document.createElement('div');d.id='deco';
   d.innerHTML='<i class="dk cur l"></i><i class="dk cur r"></i><i class="dk ml"></i><i class="dk mr"></i><i class="dk bl"></i><i class="dk br"></i><i class="dvig"></i>';
   const cv=st.querySelector('canvas');if(cv&&cv.nextSibling)st.insertBefore(d,cv.nextSibling);else st.appendChild(d);}
