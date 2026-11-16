@@ -1487,6 +1487,11 @@ html.phone .devshow img{width:92px}html.phone .devshow span{font-size:16px}
 /* stage buttons: tighter rows; narrower trade, wider end turn, total = roll width */
 html body .stagebtns{grid-template-columns:.82fr 1.18fr!important;row-gap:4px!important;column-gap:8px!important}
 html.phone body .stagebtns{row-gap:2px!important;column-gap:7px!important}
+/* bonus badges as images */
+html body .pl .bdgs .badge.bimg{background:none!important;border:0!important;padding:0!important;box-shadow:none!important;line-height:0}
+html body .pl .bdgs .badge.bimg img{height:20px;width:auto;display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
+html.phone body .pl .bdgs{flex-wrap:nowrap!important;gap:3px!important}
+html.phone body .pl .bdgs .badge.bimg img{height:13px}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
@@ -2702,7 +2707,7 @@ function render(){
     ${bb('dev','발전 카드',`덱 ${S.deck.length}장`,my&&S.rolled&&canBuild(ME,'dev'))}
     </div>`;
   $('#players').innerHTML=S.players.map((p,i)=>`<div class="pl${i===S.cur&&S.phase!=='over'?' cur':''}">${avHTML(p,'dot avp')}
-    <span class="nm">${p.name}${p.ai?(p.left?' · AI(나감)':' · AI'):''}${S.mp&&!p.ai&&window.NET&&NET.offline&&NET.offline(p.uid)?' <span class="badge off">연결 끊김</span>':''}</span>${S.lr.o===i||S.la.o===i?`<span class="bdgs">${S.lr.o===i?'<span class="badge" data-tip="최장 교역로 +2점: 끊기지 않은 도로가 5칸 이상이면서 가장 긴 사람">최장 교역로</span>':''}${S.la.o===i?'<span class="badge" data-tip="최강 기사단 +2점: 기사 카드를 3장 이상, 가장 많이 쓴 사람">최강 기사단</span>':''}</span>`:''}
+    <span class="nm">${p.name}${p.ai?(p.left?' · AI(나감)':' · AI'):''}${S.mp&&!p.ai&&window.NET&&NET.offline&&NET.offline(p.uid)?' <span class="badge off">연결 끊김</span>':''}</span>${S.lr.o===i||S.la.o===i?`<span class="bdgs">${S.lr.o===i?'<span class="badge bimg" data-tip="최장 교역로 +2점: 끊기지 않은 도로가 5칸 이상이면서 가장 긴 사람"><img src="assets/badge/lr.webp" alt="최장 교역로"></span>':''}${S.la.o===i?'<span class="badge bimg" data-tip="최강 기사단 +2점: 기사 카드를 3장 이상, 가장 많이 쓴 사람"><img src="assets/badge/la.webp" alt="최강 기사단"></span>':''}</span>`:''}
     <span class="vp" data-tip="${i===ME?'내 점수(승점 카드 포함). 10점이 되면 승리!':'공개된 점수예요. 숨겨진 승점 카드는 빠져 있어요.'}">${vp(i,i===ME)}</span>
     <span class="meta"><span data-tip="손에 든 자원 카드 수. 8장 이상이면 7이 나올 때 절반을 버려요.">자원 ${sumRes(p.res)}</span><span data-tip="가진 발전 카드 수. 종류는 본인만 알아요.">발전 ${p.dev.length}</span><span data-tip="지금까지 사용한 기사 카드 수. 3장 이상이며 가장 많으면 최강 기사단 2점.">기사 ${p.knights}</span><span data-tip="가장 길게 이어진 도로 길이. 5 이상이며 가장 길면 최장 교역로 2점.">도로 ${S.rl[i]||0}</span></span></div></nav>`).join('');
   $('#log').innerHTML=S.log.slice(PH.on?-4:0).reverse().map(e=>e.k==='turn'?`<div class="turn">${e.p>=0?pname(e.p):''}${e.p>=0&&e.t.startsWith('의')?'':' '}${e.t}</div>`:`<div class="${e.k}">${e.p>=0?pname(e.p)+' ':''}${e.t}</div>`).join('');
@@ -2938,6 +2943,7 @@ function beams(s){const cv=$('#tBeams');if(!cv)return;const c=cv.getContext('2d'
     const ang=(b.a+.9*Math.sin(s*.05+b.p2))*Math.PI/180,hw=(b.w*(.75+.35*Math.sin(s*b.f2*3+b.p1)))*Math.PI/360;
     const gr=c.createRadialGradient(ox,oy,0,ox,oy,L);const[r,g,bb]=b.col;gr.addColorStop(0,`rgba(${r},${g},${bb},${a})`);gr.addColorStop(.45,`rgba(${r},${g},${bb},${a*.55})`);gr.addColorStop(1,`rgba(${r},${g},${bb},0)`);
     c.fillStyle=gr;c.beginPath();c.moveTo(ox,oy);c.lineTo(ox+Math.cos(ang-hw)*L,oy+Math.sin(ang-hw)*L);c.lineTo(ox+Math.cos(ang+hw)*L,oy+Math.sin(ang+hw)*L);c.closePath();c.fill();}
+  c.globalCompositeOperation='destination-in';const fd=c.createLinearGradient(0,0,W,0);fd.addColorStop(0,'rgba(0,0,0,1)');fd.addColorStop(.45,'rgba(0,0,0,.7)');fd.addColorStop(1,'rgba(0,0,0,.08)');c.fillStyle=fd;c.fillRect(0,0,W,H);
   c.globalCompositeOperation='source-over';}
 function titleIntro(t){t.classList.remove('shine-on');t.classList.add('intro');setTimeout(()=>{t.classList.remove('intro');shineOn();},4800);}
 function shineOn(){const t=$('#title'),lg=$('#tLogo');if(t.classList.contains('intro')||ui.splash)return;if(lg.complete&&lg.naturalWidth)t.classList.add('shine-on');else lg.addEventListener('load',()=>{if(!t.classList.contains('intro'))t.classList.add('shine-on');},{once:true});}

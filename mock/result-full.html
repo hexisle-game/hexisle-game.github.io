@@ -33,7 +33,7 @@ h1{margin:0 0 .25em;font-family:'Hahmlet',serif;font-size:clamp(48px,8vw,104px);
 .sub{font-size:clamp(11px,1.05vw,13px);color:#e6dccb;opacity:0;animation:upSub .8s ease-out 1.7s both}
 @keyframes upSub{from{opacity:0;transform:translateY(14px)}to{opacity:.7;transform:none}}
 .sub b{color:var(--wc,#f3d58e)}
-.tbl{margin-top:clamp(12px,2.6vh,22px);width:min(640px,96vw);display:flex;flex-direction:column;padding:4px 120px;background:linear-gradient(90deg,transparent 0,rgba(12,8,4,.62) 22%,rgba(12,8,4,.68) 50%,rgba(12,8,4,.62) 78%,transparent 100%);opacity:0;animation:up .6s ease-out 1.95s both}
+.tbl{margin-top:clamp(12px,2.6vh,22px);width:min(760px,96vw);display:flex;flex-direction:column;padding:4px 120px;background:linear-gradient(90deg,transparent 0,rgba(12,8,4,.62) 22%,rgba(12,8,4,.68) 50%,rgba(12,8,4,.62) 78%,transparent 100%);opacity:0;animation:up .6s ease-out 1.95s both}
 @media (max-width:700px){.tbl{padding:4px 70px}}
 .win .tbl{background:linear-gradient(90deg,transparent 0,rgba(12,8,4,.5) 22%,rgba(12,8,4,.54) 50%,rgba(12,8,4,.5) 78%,transparent 100%)}
 .lose .tbl{background:linear-gradient(90deg,transparent 0,rgba(12,8,4,.56) 22%,rgba(12,8,4,.61) 50%,rgba(12,8,4,.56) 78%,transparent 100%)}
@@ -41,8 +41,8 @@ h1{margin:0 0 .25em;font-family:'Hahmlet',serif;font-size:clamp(48px,8vw,104px);
 .tbl>div+div{border-top:1px solid;border-image:linear-gradient(90deg,transparent,rgba(233,196,122,.22),transparent) 1}
 .tbl>div:first-child{color:#f6e3b4}
 .tbl .rk{width:22px;color:#c9b48a;font-weight:700}.tbl>div:first-child .rk{color:#f3d58e}
-.tbl .av{width:24px;height:24px;flex:none;border-radius:50%;background:#e8d6ac center/cover no-repeat;box-shadow:0 0 0 3.5px var(--c),0 0 0 5px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.5);margin:0 6px 0 4px}
-@media (max-height:520px){.tbl .av{width:18px;height:18px;margin:0 5px 0 4px;box-shadow:0 0 0 3.5px var(--c),0 0 0 5px rgba(0,0,0,.55)}.tbl>div{padding:3px 14px!important}}
+.tbl .av{width:18px;height:18px;flex:none;border-radius:50%;background:#e8d6ac center/cover no-repeat;box-shadow:0 0 0 3.5px var(--c),0 0 0 5px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.5);margin:0 6px 0 4px}
+@media (max-height:520px){.tbl .av{width:14px;height:14px;margin:0 5px 0 4px;box-shadow:0 0 0 3.5px var(--c),0 0 0 5px rgba(0,0,0,.55)}.tbl>div{padding:3px 14px!important}}
 .tbl .nm{flex:1}.tbl b{color:#f3d58e;font-size:1.08em}
 .btns{display:flex;gap:14px;margin-top:clamp(16px,3.2vh,30px);opacity:0;animation:up .7s ease-out 3.1s both}
 .gb{font:inherit;font-weight:700;font-size:clamp(13px,1.3vw,16px);color:#f3e2bd;background:none;cursor:pointer;border-style:solid;border-width:10px 12px;padding:4px 22px;min-width:9em;text-shadow:0 1px 0 #1d1006;border-image:url(../assets/ui/28241176.webp) 34 36 fill / 10px 12px stretch}
@@ -70,6 +70,10 @@ h1{margin-bottom:0!important}
 .tbl{margin-top:clamp(48px,11vh,110px)!important}
 .btns{margin-top:clamp(12px,2.4vh,22px)!important}
 @media (max-height:520px){.box{justify-content:flex-start!important;padding-top:11vh!important}.tbl{margin-top:9vh!important}.btns{position:absolute;left:0;right:0;bottom:4vh;justify-content:center;margin-top:0!important}}
+
+.tbl>div{font-size:clamp(11px,1vw,12.5px)!important;padding-top:7px!important;padding-bottom:7px!important}
+.tbl b{font-size:1em!important}
+@media (max-height:520px){.tbl>div{font-size:10px!important;padding-top:3px!important;padding-bottom:3px!important}}
 </style></head><body>
 <div class="var"><button data-v="win" class="on">승리</button><button data-v="lose">패배</button><button id="rp">다시 재생</button></div>
 <div class="scene" id="sc"></div>
