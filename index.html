@@ -2210,7 +2210,7 @@ function init3D(){
   el.prepend(r.domElement);
   const scene=new THREE.Scene();scene.background=new THREE.Color(0x0b2438);scene.fog=new THREE.Fog(0x0b2438,16,40);
   const cam=new THREE.PerspectiveCamera(36,1,.6,42);
-  const ctl=new THREE.OrbitControls(cam,r.domElement);ctl.enablePan=true;ctl.screenSpacePanning=false;ctl.panSpeed=.9;ctl.enableRotate=true;ctl.mouseButtons={LEFT:THREE.MOUSE.ROTATE,MIDDLE:THREE.MOUSE.PAN,RIGHT:THREE.MOUSE.PAN};ctl.touches={ONE:THREE.TOUCH.ROTATE,TWO:THREE.TOUCH.DOLLY_PAN};ctl.enableDamping=true;ctl.dampingFactor=.08;ctl.minDistance=4.5;ctl.maxDistance=17;ctl.minPolarAngle=.02;ctl.maxPolarAngle=.74;ctl.rotateSpeed=.6;
+  const ctl=new THREE.OrbitControls(cam,r.domElement);ctl.enablePan=true;ctl.screenSpacePanning=false;ctl.panSpeed=.9;ctl.enableRotate=true;ctl.mouseButtons={LEFT:THREE.MOUSE.ROTATE,MIDDLE:THREE.MOUSE.PAN,RIGHT:null};ctl.touches={ONE:THREE.TOUCH.ROTATE,TWO:THREE.TOUCH.DOLLY_PAN};ctl.enableDamping=true;ctl.dampingFactor=.08;ctl.minDistance=4.5;ctl.maxDistance=17;ctl.minPolarAngle=.02;ctl.maxPolarAngle=.74;ctl.rotateSpeed=.6;
   scene.add(new THREE.HemisphereLight(0xcfe0ee,0x3a3022,.38));
   const sun=new THREE.DirectionalLight(0xffe6c4,1.25);sun.position.set(-6,9,4);sun.shadow.normalBias=.02;sun.castShadow=true;sun.shadow.mapSize.set(1536,1536);sun.shadow.radius=5;
   Object.assign(sun.shadow.camera,{left:-6.4,right:6.4,top:6.4,bottom:-6.4,near:4,far:22});sun.shadow.bias=-.0008;scene.add(sun);
@@ -2628,8 +2628,8 @@ function decalTex(kind){if(DEC[kind])return DEC[kind];const c=document.createEle
     x.fillStyle=g;x.beginPath();x.roundRect?x.roundRect(4,8,W0-8,48,24):x.rect(4,8,W0-8,48);x.fill();}
   else{const r=W0/2;const ring=(rad,w,a)=>{const g=x.createRadialGradient(r,r,Math.max(0,rad-w),r,r,rad+w);g.addColorStop(0,`rgba(255,255,255,0)`);g.addColorStop(.5,`rgba(255,255,255,${a})`);g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,W0,W0);};
     if(kind==='dot'){ring(r*.62,r*.09,1);const g=x.createRadialGradient(r,r,0,r,r,r*.3);g.addColorStop(0,'rgba(255,255,255,.95)');g.addColorStop(.7,'rgba(255,255,255,.8)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,W0,W0);}
-    else if(kind==='spot'){{const h=x.createRadialGradient(r,r,0,r,r,r*.62);h.addColorStop(0,'rgba(255,255,255,.3)');h.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=h;x.fillRect(0,0,W0,W0);}ring(r*.6,r*.06,.27);const g=x.createRadialGradient(r,r,0,r,r,r*.3);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.6,'rgba(255,255,255,.76)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,W0,W0);}
-    else if(kind==='halo'){const h=x.createRadialGradient(r,r,0,r,r,r);h.addColorStop(0,'rgba(255,255,255,1)');h.addColorStop(.25,'rgba(255,255,255,.8)');h.addColorStop(.55,'rgba(255,255,255,.25)');h.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=h;x.fillRect(0,0,W0,W0);}
+    else if(kind==='spot'){{const h=x.createRadialGradient(r,r,0,r,r,r*.62);h.addColorStop(0,'rgba(255,255,255,.3)');h.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=h;x.fillRect(0,0,W0,W0);}ring(r*.6,r*.06,.27);const g=x.createRadialGradient(r,r,0,r,r,r*.33);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.65,'rgba(255,255,255,.88)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,W0,W0);}
+    else if(kind==='halo'){const h=x.createRadialGradient(r,r,0,r,r,r);h.addColorStop(0,'rgba(255,255,255,1)');h.addColorStop(.25,'rgba(255,255,255,.9)');h.addColorStop(.5,'rgba(255,255,255,.3)');h.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=h;x.fillRect(0,0,W0,W0);}
     else ring(r*.78,r*.12,1);}
   const t=new THREE.CanvasTexture(c);t.anisotropy=8;return DEC[kind]=t;}
 const DMAT={};function decalMat(kind,col,op){const k=kind+col+op;return DMAT[k]||(DMAT[k]=new THREE.MeshBasicMaterial({map:decalTex(kind),color:col,transparent:true,opacity:op,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-4}));}
@@ -2678,7 +2678,7 @@ function sync3D(){
     k.userData.pick={e};k.userData.pulse=1;W.tgtG.add(k);});
   T.v.forEach(v=>{const V=vc(v);const k=new THREE.Group();k.position.set(V.x,0,V.z);
     const hy=heightAt(V.x,V.z);if(T.kind==='city')k.add(decal('ring',0xffd36b,1,.9,.9,.08));
-    else if(HINT.has(v)){const z=PH.on?.72:.5;k.add(decal('halo',0xffcc58,.96,z*1.22,z*1.22,hy+.03));k.add(decal('spot',0xffe9a0,1,z,z,hy+.036));}
+    else if(HINT.has(v)){const z=PH.on?.72:.5;k.add(decal('halo',0xffd86a,1,z*1.02,z*1.02,hy+.03));k.add(decal('spot',0xfff3c4,1,z,z,hy+.036));}
     else{const z=PH.on?.6:.4;k.add(decal('spot',0xffcf55,1,z,z,hy+.035));}
     {const z=PH.on?.34:.24;k.add(part('sph',HIT,[z,z,z],[0,.1,0],{noShadow:true}));}if(typeof TUT!=='undefined'&&TUT.on){const ry=Math.atan2(V.x,V.z)+Math.PI;const gh=T.kind==='city'?cityMesh(ME,ry):settlementMesh(ME,ry);gh.scale.setScalar(T.kind==='city'?1.9:2.08);ghostify(gh);k.add(gh);}k.userData.pick={v};k.userData.pulse=1;W.tgtG.add(k);});
   T.h.forEach(h=>{const {x,z}=hc(h);const k=new THREE.Group();k.position.set(x,0,z);
@@ -3139,7 +3139,7 @@ function showRules(i,after){i=i||0;const P=RULES[i],last=i===RULES.length-1;
 function fitRules(){const bk=$('#rbook');if(!bk)return;const m=$('#modal'),W=m.clientWidth,H=m.clientHeight,AR=1907/978;
   const w=Math.min(1240,W*.98,(H-8)*AR);bk.style.width=w+'px';bk.style.height=(w/AR)+'px';bk.style.fontSize=(w/(PH.on?64:78))+'px';$('#mcrest')&&($('#mcrest').style.visibility='hidden');}
 addEventListener('resize',()=>setTimeout(fitRules,80));
-window.addEventListener('contextmenu',e=>{const t=e.target;if(!(t&&t.closest&&t.closest('input,textarea'))){e.preventDefault();e.stopPropagation();}},true);document.oncontextmenu=e=>{const t=e.target;return !!(t&&t.closest&&t.closest('input,textarea'));};document.addEventListener('dragstart',e=>e.preventDefault());
+window.addEventListener('contextmenu',e=>{const t=e.target;if(!(t&&t.closest&&t.closest('input,textarea'))){e.preventDefault();e.stopPropagation();}},true);window.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&e.button>2)e.preventDefault();if(e.pointerType==='mouse'&&e.button===2&&!(e.target&&e.target.closest&&e.target.closest('input,textarea'))){e.preventDefault();e.stopImmediatePropagation();}},true);window.addEventListener('auxclick',e=>e.preventDefault(),true);document.oncontextmenu=e=>{const t=e.target;return !!(t&&t.closest&&t.closest('input,textarea'));};document.addEventListener('dragstart',e=>e.preventDefault());
 setInterval(()=>{try{if(typeof W!=='undefined'&&W.ok)addDeco();}catch(e){}},500);
 {const b=document.getElementById('creditBtn');if(b)b.onclick=e=>{e.stopPropagation();showCredits();};}
 setTimeout(()=>{try{addSetIcons();}catch(e){}},0);
@@ -3665,7 +3665,7 @@ TUT.steps=[
  {t:'헥스아일에 오신 걸 환영해요!',b:'직접 한 판을 따라 하면서 게임 방법을 익혀 볼게요. 상대는 AI 두 명이에요. 빛나는 곳만 누르면 돼요.',next:true},
  {t:'섬 돌려 보기',b:()=>PH.on?'한 손가락으로 화면을 끌어 섬을 <b>돌려</b> 보세요.':'마우스로 화면을 끌어 섬을 <b>돌려</b> 보세요.',at:{sel:'#stage',pad:0},pass:true,spot:'left',small:true,gest:'rot',enter(){this.c0=this.camSnap();},done(){const c=this.camSnap();return Math.abs(c.az-this.c0.az)>.35||Math.abs(c.po-this.c0.po)>.2;}},
  {t:'확대·축소',b:()=>PH.on?'두 손가락을 벌리거나 모아서 <b>확대·축소</b>해 보세요.':'마우스 휠을 굴려 <b>확대·축소</b>해 보세요.',at:{sel:'#stage',pad:0},pass:true,spot:'left',small:true,gest:'zoom',enter(){this.armCam();},done(){return this.camReady()&&Math.abs(this.camSnap().d-this.c0.d)>1.2;}},
- {t:'화면 옮기기',b:()=>PH.on?'두 손가락으로 함께 끌어 화면을 <b>옮겨</b> 보세요.':'마우스 오른쪽 버튼(또는 가운데 버튼, Shift+왼쪽 버튼)으로 끌어 화면을 <b>옮겨</b> 보세요.',at:{sel:'#stage',pad:0},pass:true,spot:'left',small:true,gest:'pan',enter(){this.armCam();},done(){return this.camReady()&&this.camSnap().t.distanceTo(this.c0.t)>.5;},leave(){}},
+ {t:'화면 옮기기',b:()=>PH.on?'두 손가락으로 함께 끌어 화면을 <b>옮겨</b> 보세요.':'마우스 <b>휠 버튼을 누른 채</b> 끌어 화면을 <b>옮겨</b> 보세요.',at:{sel:'#stage',pad:0},pass:true,spot:'left',small:true,gest:'pan',enter(){this.armCam();},done(){return this.camReady()&&this.camSnap().t.distanceTo(this.c0.t)>.5;},leave(){}},
  {t:'좋아요!',b:'시점이 헷갈리면 오른쪽 위 <b>시점 초기화</b>를 누르면 돼요. 이제 게임을 시작해 볼게요.',at:{sel:'#camReset',pad:6},next:true,leave(){this.zoomOut();}},
  {t:'첫 정착지 놓기',b:'정착지는 <b>땅의 꼭짓점</b>에만 지을 수 있어요. 꼭짓점에 닿은 땅들에서 자원이 나와요. 빛나는 꼭짓점을 누르세요.',at(){return {v:this.P.v1};},only:{},enter(){this.steps[this.i].only={v:this.P.v1};this.focus({v:this.P.v1});},done(){return !!S.vb[this.P.v1];}},
  {t:'도로 놓기',b:'도로는 <b>땅과 땅 사이의 변</b>에 놓아요. 방금 지은 정착지에 이어서 빛나는 곳을 누르세요.',at(){return {e:this.P.e1};},enter(){this.steps[this.i].only={e:this.P.e1};this.focus({e:this.P.e1});},done(){return S.eo[this.P.e1]===0;}},
