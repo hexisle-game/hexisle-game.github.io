@@ -1587,7 +1587,9 @@ html.phone .setpanel .credit-link{display:none}
 #deco .mr{right:-2vh;bottom:22vh;height:64vh;aspect-ratio:600/1037;background-image:url(assets/deco/mr.webp);transform:scaleX(-1)}
 #deco .bl{left:-3vh;bottom:-4vh;height:60vh;aspect-ratio:1000/821;background-image:url(assets/deco/bl.webp);background-position:left bottom}
 #deco .br{right:-3vh;bottom:-4vh;height:54vh;aspect-ratio:1000/582;background-image:url(assets/deco/br.webp);background-position:right bottom}
-#deco .dvig{position:absolute;inset:0;background:radial-gradient(ellipse 78% 92% at 50% 26%,#fff 34%,#7f8fb0 60%,#2a3556 82%,#0b1022 100%);mix-blend-mode:multiply}
+#deco .dvig{position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 34%,#fff 26%,#6a7aa0 52%,#1c2644 74%,#05080f 100%);mix-blend-mode:multiply}
+#deco .plank{left:0;right:0;bottom:0;height:calc(var(--trayH,0px) + 3vh);min-height:22vh;background:url(assets/deco/plank.webp) left top/auto 200% repeat-x;box-shadow:0 -6px 18px rgba(0,0,0,.6);z-index:2}
+#deco .dvig{z-index:1}#deco .bl,#deco .br{z-index:3}
 html.phone #deco .cur{height:86vh}
 html.phone #deco .ml{height:54vh}html.phone #deco .mr{height:60vh}
 html.phone #deco .bl{height:56vh}html.phone #deco .br{height:50vh}
@@ -3273,7 +3275,7 @@ function showCredits(){openDialog(`<h3>Credits &amp; Licenses</h3><div class="cr
 // table dressing around the sea: curtains, valance and corner props, darkened behind the UI (pointer-transparent)
 {const q=location.search,r=document.documentElement.style;let m=/[?&]fbs=([1-4])/.exec(q);if(m)r.setProperty('--fbgC',`url(assets/fbg/C${m[1]}.webp)`);if(/[?&]fbm=2/.test(q))r.setProperty('--fbgA','url(assets/fbg/A2.webp)');}
 function addDeco(){if(!/[?&]deco=1/.test(location.search)||document.getElementById('deco'))return;const st=document.getElementById('stage');if(!st)return;const d=document.createElement('div');d.id='deco';
-  d.innerHTML='<i class="dk cur l"></i><i class="dk cur r"></i><i class="dk ml"></i><i class="dk mr"></i><i class="dk bl"></i><i class="dk br"></i><i class="dvig"></i>';
+  d.innerHTML='<i class="dk plank"></i><i class="dk cur l"></i><i class="dk cur r"></i><i class="dk ml"></i><i class="dk mr"></i><i class="dk bl"></i><i class="dk br"></i><i class="dvig"></i>';
   const cv=st.querySelector('canvas');if(cv&&cv.nextSibling)st.insertBefore(d,cv.nextSibling);else st.appendChild(d);}
 function titleIntro(t){ui.introT0=performance.now();t.classList.remove('shine-on');t.classList.add('intro');setTimeout(()=>{t.classList.remove('intro');shineOn();},4800);}
 function shineOn(){const t=$('#title'),lg=$('#tLogo');if(t.classList.contains('intro')||ui.splash)return;if(lg.complete&&lg.naturalWidth)t.classList.add('shine-on');else lg.addEventListener('load',()=>{if(!t.classList.contains('intro'))t.classList.add('shine-on');},{once:true});}
