@@ -2610,7 +2610,7 @@ function robberFig(file,H,o){o=o||{};const k=new THREE.Group();k.userData.glb=1;
     const b2=new THREE.Box3().setFromObject(m),c=b2.getCenter(new THREE.Vector3());m.position.set(-c.x,-b2.min.y,-c.z);
     const w=new THREE.Group();w.add(m);w.rotation.x=o.tilt||0;
     m.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;c.material=c.material.clone();if(o.recol&&o.recol[c.material.name]!==undefined){c.material.color.setHex(o.recol[c.material.name]);if(c.material.emissive)c.material.emissive.setHex(c.material.name==='material'?0x0a0310:0x000000);if(c.material.name==='material'){c.material.emissiveIntensity=.3;c.material.metalness=.2;c.material.roughness=.5;}}if(o.lift){c.material.emissive=(c.material.emissive||new THREE.Color()).clone().add(new THREE.Color(o.lift));c.material.emissiveIntensity=1;}}});
-    if(o.dagger){m.traverse(c=>{if(c.isMesh&&/^Material\.00[89]$/.test(c.material.name))c.visible=false;});const d=dagger();d.position.set(-.088,.192,.15);d.rotation.set(-.2,0,.38);w.add(d);}
+    if(o.dagger){m.traverse(c=>{if(c.isMesh&&/^Material\.00[89]$/.test(c.material.name))c.visible=false;});const d=dagger();d.position.set(-.056,.205,.104);d.rotation.set(0,0,.22);w.add(d);}
     k.add(w);k.userData.w=w;try{invalidate(true);}catch(e){}};
   const R=RGLB[file]=RGLB[file]||{g:null,cbs:[]};if(R.g)put(R.g);else{R.cbs.push(put);if(R.cbs.length===1)new THREE.GLTFLoader().load(file,g=>{R.g=g;R.cbs.splice(0).forEach(f=>f(g));},undefined,e=>console.warn('fig',e));}
   return k;}
