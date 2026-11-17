@@ -1603,7 +1603,7 @@ html.lbox,html.lbox body{background:#000}
 html.phone.lbox body{top:var(--oy,0px)!important}
 #maplbls{transition:opacity .7s ease}
 #stage.intro-hide #maplbls{opacity:0!important;transition:none}
-.sheet-frame.sheet-multi,.sheet-frame.sheet-lobby{--fbo:.35}
+.sheet-frame.sheet-multi,.sheet-frame.sheet-lobby{--fbo:.35}.sheet-frame.sheet-multi{--fbo:.39}
 html.phone .sheet-frame.sheet-single{--fbo:.35}html.phone .sheet-frame.sheet-multi,html.phone .sheet-frame.sheet-lobby{--fbo:.4}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
@@ -2628,7 +2628,7 @@ function decalTex(kind){if(DEC[kind])return DEC[kind];const c=document.createEle
     x.fillStyle=g;x.beginPath();x.roundRect?x.roundRect(4,8,W0-8,48,24):x.rect(4,8,W0-8,48);x.fill();}
   else{const r=W0/2;const ring=(rad,w,a)=>{const g=x.createRadialGradient(r,r,Math.max(0,rad-w),r,r,rad+w);g.addColorStop(0,`rgba(255,255,255,0)`);g.addColorStop(.5,`rgba(255,255,255,${a})`);g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,W0,W0);};
     if(kind==='dot'){ring(r*.62,r*.09,1);const g=x.createRadialGradient(r,r,0,r,r,r*.3);g.addColorStop(0,'rgba(255,255,255,.95)');g.addColorStop(.7,'rgba(255,255,255,.8)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,W0,W0);}
-    else if(kind==='spot'){ring(r*.6,r*.05,.42);const g=x.createRadialGradient(r,r,0,r,r,r*.2);g.addColorStop(0,'rgba(255,255,255,.95)');g.addColorStop(.6,'rgba(255,255,255,.7)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,W0,W0);}
+    else if(kind==='spot'){{const h=x.createRadialGradient(r,r,0,r,r,r*.62);h.addColorStop(0,'rgba(255,255,255,.45)');h.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=h;x.fillRect(0,0,W0,W0);}ring(r*.6,r*.07,.85);const g=x.createRadialGradient(r,r,0,r,r,r*.3);g.addColorStop(0,'rgba(255,255,255,.95)');g.addColorStop(.6,'rgba(255,255,255,.7)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,W0,W0);}
     else ring(r*.78,r*.12,1);}
   const t=new THREE.CanvasTexture(c);t.anisotropy=8;return DEC[kind]=t;}
 const DMAT={};function decalMat(kind,col,op){const k=kind+col+op;return DMAT[k]||(DMAT[k]=new THREE.MeshBasicMaterial({map:decalTex(kind),color:col,transparent:true,opacity:op,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-4}));}
@@ -2677,7 +2677,7 @@ function sync3D(){
     k.userData.pick={e};k.userData.pulse=1;W.tgtG.add(k);});
   T.v.forEach(v=>{const V=vc(v);const k=new THREE.Group();k.position.set(V.x,0,V.z);
     const hy=heightAt(V.x,V.z);if(T.kind==='city')k.add(decal('ring',0xffd36b,1,.9,.9,.08));
-    else{const z=PH.on?.5:.32;k.add(decal('spot',0xfff3d6,.85,z,z,hy+.035));}
+    else{const z=PH.on?.6:.4;k.add(decal('spot',0xffcf55,1,z,z,hy+.035));}
     {const z=PH.on?.34:.24;k.add(part('sph',HIT,[z,z,z],[0,.1,0],{noShadow:true}));}if(typeof TUT!=='undefined'&&TUT.on){const ry=Math.atan2(V.x,V.z)+Math.PI;const gh=T.kind==='city'?cityMesh(ME,ry):settlementMesh(ME,ry);gh.scale.setScalar(T.kind==='city'?1.9:2.08);ghostify(gh);k.add(gh);}k.userData.pick={v};k.userData.pulse=1;W.tgtG.add(k);});
   T.h.forEach(h=>{const {x,z}=hc(h);const k=new THREE.Group();k.position.set(x,0,z);
     k.add(part('cyl6',glow(0xffc94a,.28),[.9,.02,.9],[0,.02,0],{noShadow:true}));
@@ -3137,6 +3137,7 @@ function showRules(i,after){i=i||0;const P=RULES[i],last=i===RULES.length-1;
 function fitRules(){const bk=$('#rbook');if(!bk)return;const m=$('#modal'),W=m.clientWidth,H=m.clientHeight,AR=1907/978;
   const w=Math.min(1240,W*.98,(H-8)*AR);bk.style.width=w+'px';bk.style.height=(w/AR)+'px';bk.style.fontSize=(w/(PH.on?64:78))+'px';$('#mcrest')&&($('#mcrest').style.visibility='hidden');}
 addEventListener('resize',()=>setTimeout(fitRules,80));
+document.addEventListener('contextmenu',e=>{if(!e.target.closest('input,textarea'))e.preventDefault();});document.addEventListener('dragstart',e=>e.preventDefault());
 setInterval(()=>{try{if(typeof W!=='undefined'&&W.ok)addDeco();}catch(e){}},500);
 {const b=document.getElementById('creditBtn');if(b)b.onclick=e=>{e.stopPropagation();showCredits();};}
 setTimeout(()=>{try{addSetIcons();}catch(e){}},0);
@@ -3452,7 +3453,7 @@ const MP={db:null,subs:[],offSince:{},
     NET.on=true;clearTimeout(aiTimer);
     try{history.replaceState(null,'',location.pathname+'?room='+NET.room);}catch(e){}
     this.sub(this.ref('meta'),'value',sn=>{const ps=NET.meta&&NET.meta.status;NET.meta=sn.val();if(!NET.meta)return this.gone();if(ps==='lobby'&&NET.meta.status!=='lobby')SND.sfx('start');this.checkHost();if(NET.meta.status==='lobby')this.drawLobby();});
-    this.sub(this.ref('members'),'value',sn=>{const pc=NET.members?Object.keys(NET.members).length:-1;NET.members=sn.val()||{};{const nc=Object.keys(NET.members).length;if(pc>0&&nc>pc&&NET.meta&&NET.meta.status==='lobby')SND.sfx('join');}this.onMembers();if(NET.meta&&NET.meta.status==='lobby')this.drawLobby();});
+    this.sub(this.ref('members'),'value',sn=>{const pc=NET.members?Object.keys(NET.members).length:-1;const was=!!(NET.members&&NET.members[NET.uid]);NET.members=sn.val()||{};if(was&&!NET.members[NET.uid]&&!this.leaving&&NET.on){this.cleanup();closeModal();showStart();resetBehind();this.err('방장이 자리를 정리해서 대기실에서 나왔어요.');return;}{const nc=Object.keys(NET.members).length;if(pc>0&&nc>pc&&NET.meta&&NET.meta.status==='lobby')SND.sfx('join');}this.onMembers();if(NET.meta&&NET.meta.status==='lobby')this.drawLobby();});
     this.sub(this.ref('state'),'value',sn=>{const js=sn.val();if(!js)return;if(NET.isHost&&js===NET._last)return;this.applyState(js);});
     this.sub(this.ref('actions'),'child_added',sn=>{if(!NET.isHost)return;this.handleAction(sn.key,sn.val());});
     $('#leaveBtn').hidden=false;$('#newBtn').hidden=true;},
@@ -3478,7 +3479,7 @@ const MP={db:null,subs:[],offSince:{},
     if(NET.meta.status==='lobby'){if(cnt>=2&&!NET.meta.autoAt)this.ref('meta/autoAt').set(Date.now()+PUB_WAIT_MS);if(cnt<2&&NET.meta.autoAt)this.ref('meta/autoAt').remove();}},
   pubTick(){if(!NET.on||!NET.isHost||!NET.meta||!NET.meta.pub||NET.meta.status!=='lobby')return;this.pubSync();const cnt=Object.keys(NET.members).length;
     if(cnt>=NET.meta.n||(NET.meta.autoAt&&Date.now()>NET.meta.autoAt&&cnt>=2))this.start();},
-  gone(){if(!NET.on)return;this.cleanup();this.err('방이 닫혔어요.');},
+  gone(){if(!NET.on||this.leaving)return;this.cleanup();this.err('방이 닫혔어요.');},
   // ---------- lobby ----------
   order(){return Object.entries(NET.members).sort((a,b)=>(a[1].joined||0)-(b[1].joined||0));},
   aiSlots(m,ai){const pos=((NET.meta&&NET.meta.aiPos)||'').split('').map(x=>x==='1');const sl=Array(m).fill(false);let c=0;for(let i=0;i<m&&c<ai;i++)if(pos[i]){sl[i]=true;c++;}for(let i=0;i<m&&c<ai;i++)if(!sl[i]){sl[i]=true;c++;}return sl;},
@@ -3542,15 +3543,16 @@ const MP={db:null,subs:[],offSince:{},
     const gone=!h||h.online===false;if(!gone){this._hgone=0;return;}if(!this._hgone)this._hgone=now;if(now-this._hgone<HOST_GRACE_MS)return;
     const cand=this.order().find(([u,v])=>v.online!==false&&u!==m.host);if(!cand||cand[0]!==NET.uid)return;
     this.ref('meta/host').transaction(cur=>cur===m.host?NET.uid:undefined);},
-  confirmLeave(){openDialog(`<h3>방에서 나갈까요?</h3><p>${NET.meta&&NET.meta.status==='play'?'나가면 이 자리는 AI가 이어서 플레이해요.':'대기실에서 나가요.'}</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">나가기</button></div>`);
+  confirmLeave(){const lob=!(NET.meta&&NET.meta.status==='play');openDialog(`<h3>${lob&&NET.isHost?'방을 나갈까요?':'방에서 나갈까요?'}</h3><p>${!lob?'나가면 이 자리는 AI가 이어서 플레이해요.':NET.isHost?'방장은 다른 사람이 넘겨받아요.':'대기실에서 나가요.'}</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">나가기</button></div>`);
     $('#cNo').onclick=()=>closeDialog();
     $('#cYes').onclick=()=>{closeDialog();this.leave();};},
-  async leave(){try{const r=this.ref('members/'+NET.uid);await r.child('online').onDisconnect().cancel();
+  async leave(){this.leaving=true;const wasLobby=!(NET.meta&&NET.meta.status==='play');const others=this.order().some(([u,v])=>u!==NET.uid&&v.online!==false);try{const r=this.ref('members/'+NET.uid);await r.child('online').onDisconnect().cancel();
       if(NET.isHost&&S&&S.mp){const i=S.players.findIndex(p=>p.uid===NET.uid);if(i>=0){takeOverSeat(i);this.note(`${S.players[i].name}이(가) 나갔어요. AI가 이어서 플레이해요.`);NET.publish();}
         const next=this.order().find(([u,v])=>u!==NET.uid&&v.online!==false);await this.ref('meta/host').set(next?next[0]:null);}
       await r.remove();
       if(!this.order().some(([u])=>u!==NET.uid))await this.ref().remove();}catch(e){console.error(e);}
-    this.cleanup();closeModal();showStart();resetBehind();},
+    this.cleanup();this.leaving=false;closeModal();showStart();resetBehind();
+    if(wasLobby&&others){openDialog(`<h3>방을 나갔어요</h3><div class="row"><button class="btn sub" id="mOk">확인</button></div>`);$('#mOk').onclick=closeDialog;}},
   cleanup(){this.unsubAll();NET.on=false;NET.isHost=false;NET.room=null;NET.members={};NET.meta=null;NET._last=null;this.offSince={};
     $('#leaveBtn').hidden=true;$('#newBtn').hidden=false;try{history.replaceState(null,'',location.pathname);}catch(e){}}};
 setInterval(()=>{if(!NET.on)return;try{MP.hostTick();MP.pubTick();if(ui.modal==='lobby'&&NET.meta&&NET.meta.autoAt)MP.drawLobby();}catch(e){}},1000);
@@ -3632,7 +3634,7 @@ const TUT={on:false,i:0,P:null,traded:false,force7:false,aiDiceIx:0,
     if(!c)return null;return {l:c.x-rad,t:c.y-rad,r:c.x+rad,b:c.y+rad,round:true};},
   layout(){const st=this.cur();if(!st)return;const vw=PH.on?PH.vw:innerWidth,vh=PH.on?PH.vh:innerHeight;
     const at=typeof st.at==='function'?st.at.call(this):st.at;const R=this.rectOf(at);const blk=$('#tBlock'),ring=$('#tRing'),bub=$('#tBub'),xm=$('#tX');
-    blk.classList.toggle('light',!!st.ai);
+    blk.classList.toggle('light',!!st.ai);blk.style.pointerEvents=st.pass?'none':'';
     blk.style.webkitMaskImage=blk.style.maskImage='';
     if(R&&R.round&&!st.x){const cx=(R.l+R.r)/2,cy=(R.t+R.b)/2,r=(R.r-R.l)/2;const p=`path(evenodd,'M0 0H${vw}V${vh}H0Z M${cx-r} ${cy}a${r} ${r} 0 1 0 ${2*r} 0a${r} ${r} 0 1 0 ${-2*r} 0Z')`;blk.style.clipPath=p;blk.style.webkitClipPath=p;}
     else if(R&&!st.x){const p=`polygon(evenodd,0 0,${vw}px 0,${vw}px ${vh}px,0 ${vh}px,0 0,${R.l}px ${R.t}px,${R.r}px ${R.t}px,${R.r}px ${R.b}px,${R.l}px ${R.b}px,${R.l}px ${R.t}px)`;blk.style.clipPath=p;blk.style.webkitClipPath=p;}
