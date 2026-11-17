@@ -2234,13 +2234,13 @@ function camIntro(){if(!W.ok)return;const tp=W.ctl.target.clone(),off=W.cam.posi
   W.cam.position.setFromSpherical(new THREE.Spherical(from.r,from.phi,from.theta)).add(tp);W.cam.lookAt(tp);W.ctl.update();try{introFXStart(performance.now()+350);}catch(e){}
   W.camAnim={sph:true,t0:performance.now()+350,dur:3000,tp,from,to:{r:sp.radius,phi:sp.phi,theta:sp.theta}};}
 function introFXStart(t0){const tk=[];W.tokens.forEach((m,i)=>{if(!m||!m.parent)return;const g=m.parent;const h=hc(i);tk.push({g,y:g.position.y,d:Math.hypot(h.x,h.z-.35)});g.visible=false;});
-  tk.sort((a,b)=>a.d-b.d);W.robA.value=0;$('#stage').classList.add('intro-hide');W.introFX={t0,tk};}
-function introFXStep(now){const F=W.introFX;if(!F)return;const el=now-F.t0,T0=900,gap=95,dd=480;
+  tk.sort((a,b)=>a.d-b.d);W.robA.value=0;W.tgtG.visible=false;$('#stage').classList.add('intro-hide');W.introFX={t0,tk};}
+function introFXStep(now){const F=W.introFX;if(!F)return;const el=now-F.t0,T0=900,gap=40,dd=460;
   F.tk.forEach((o,k)=>{const t=(el-T0-k*gap)/dd;if(t<=0){o.g.visible=false;return;}o.g.visible=true;const u=Math.min(1,t);
     const e=u<1?1-Math.pow(1-u,3)+Math.sin(u*Math.PI)*.08:1;o.g.position.y=o.y+(1-e)*.9;o.g.scale.setScalar(.55+.45*Math.min(1,u*1.4));});
   const end=T0+F.tk.length*gap+dd;const f=Math.max(0,Math.min(1,(el-end)/700));W.robA.value=f;
-  if(el>end-150)$('#stage').classList.remove('intro-hide');
-  if(f>=1){F.tk.forEach(o=>{o.g.visible=true;o.g.position.y=o.y;o.g.scale.setScalar(1);});W.introFX=null;}
+  if(el>end-150)$('#stage').classList.remove('intro-hide');if(el>Math.max(end,3300))W.tgtG.visible=true;
+  if(f>=1&&el>3300){F.tk.forEach(o=>{o.g.visible=true;o.g.position.y=o.y;o.g.scale.setScalar(1);});W.tgtG.visible=true;W.introFX=null;}
   try{PERF.dirty=true;}catch(e){}}
 function hudBox(w,h){if(!(typeof HUDQ!=='undefined'&&HUDQ.matches))return{dx:0,dy:0,vw:w,vh:h};const tr=$('#tray');const th=tr?tr.offsetHeight*(PH.on?1.15:.95):200;
   const lc=$('#leftcol'),sd=document.querySelector('.side');const L=(lc&&lc.offsetWidth?lc.offsetWidth+24:300),Rr=(sd&&sd.offsetWidth?sd.offsetWidth+24:300);const top=PH.on?44:64;
@@ -2597,6 +2597,12 @@ function robberGLB(){const k=new THREE.Group();k.userData.glb=1;
 const REAPCOL={cloak:0x0f1015,black:0x0b0b0f,material:0x170819};
 // generic loader for downloaded figures: auto-scale to a target height, optional pedestal strip
 const RGLB={};
+function dagger(){const g=new THREE.Group();const steel=new THREE.MeshStandardMaterial({color:0xb8bcc4,metalness:.85,roughness:.28});const gold=new THREE.MeshStandardMaterial({color:0x8a6a2a,metalness:.7,roughness:.4});const grip=new THREE.MeshStandardMaterial({color:0x2a1a12,roughness:.8});
+  const bl=new THREE.Mesh(new THREE.ConeGeometry(.018,.15,4),steel);bl.scale.set(1,1,.32);bl.rotation.y=Math.PI/4;bl.position.y=.095;
+  const gd=new THREE.Mesh(new THREE.BoxGeometry(.06,.011,.014),gold);gd.position.y=.017;
+  const gp=new THREE.Mesh(new THREE.CylinderGeometry(.0075,.0085,.045,8),grip);gp.position.y=-.012;
+  const pm=new THREE.Mesh(new THREE.SphereGeometry(.011,10,8),gold);pm.position.y=-.038;
+  [bl,gd,gp,pm].forEach(m=>{m.castShadow=true;g.add(m);});return g;}
 function robberFig(file,H,o){o=o||{};const k=new THREE.Group();k.userData.glb=1;
   const put=g=>{const m=g.scene.clone(true);
     if(o.strip){const bb=new THREE.Box3().setFromObject(m),h=bb.max.y-bb.min.y,cut=bb.min.y+h*o.strip;m.updateMatrixWorld(true);const kill=[];m.traverse(c=>{if(c.isMesh){const b=new THREE.Box3().setFromObject(c);if(b.max.y<=cut)kill.push(c);}});kill.forEach(c=>c.parent.remove(c));}
@@ -2604,10 +2610,11 @@ function robberFig(file,H,o){o=o||{};const k=new THREE.Group();k.userData.glb=1;
     const b2=new THREE.Box3().setFromObject(m),c=b2.getCenter(new THREE.Vector3());m.position.set(-c.x,-b2.min.y,-c.z);
     const w=new THREE.Group();w.add(m);w.rotation.x=o.tilt||0;
     m.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;c.material=c.material.clone();if(o.recol&&o.recol[c.material.name]!==undefined){c.material.color.setHex(o.recol[c.material.name]);if(c.material.emissive)c.material.emissive.setHex(c.material.name==='material'?0x0a0310:0x000000);if(c.material.name==='material'){c.material.emissiveIntensity=.3;c.material.metalness=.2;c.material.roughness=.5;}}if(o.lift){c.material.emissive=(c.material.emissive||new THREE.Color()).clone().add(new THREE.Color(o.lift));c.material.emissiveIntensity=1;}}});
-    k.add(w);try{invalidate(true);}catch(e){}};
+    if(o.dagger){m.traverse(c=>{if(c.isMesh&&/^Material\.00[89]$/.test(c.material.name))c.visible=false;});const d=dagger();d.position.set(-.088,.192,.15);d.rotation.set(-.2,0,.38);w.add(d);}
+    k.add(w);k.userData.w=w;try{invalidate(true);}catch(e){}};
   const R=RGLB[file]=RGLB[file]||{g:null,cbs:[]};if(R.g)put(R.g);else{R.cbs.push(put);if(R.cbs.length===1)new THREE.GLTFLoader().load(file,g=>{R.g=g;R.cbs.splice(0).forEach(f=>f(g));},undefined,e=>console.warn('fig',e));}
   return k;}
-function robberMesh(){const q=location.search;if(!/[?&]robber=old/.test(q)&&THREE.GLTFLoader)return robberFig('assets/rob_reaper2.glb',.5,{tilt:-.3,recol:REAPCOL});const k=new THREE.Group();
+function robberMesh(){const q=location.search;if(!/[?&]robber=old/.test(q)&&THREE.GLTFLoader)return robberFig('assets/rob_reaper2.glb',.5,{tilt:-.3,recol:REAPCOL,dagger:true});const k=new THREE.Group();
   k.add(part('cone8',0x2a2530,[.135,.4,.135],[0,.2,0]));k.add(part('sph',0x35303c,[.08,.08,.08],[0,.42,0]));
   k.add(part('cone8',0x2a2530,[.1,.135,.1],[0,.5,-.007]));
   const eye=new THREE.MeshBasicMaterial({color:0xff5a3c});k.add(part('sph',eye,[.012,.012,.012],[-.027,.425,.074],{noShadow:true}));k.add(part('sph',eye,[.012,.012,.012],[.027,.425,.074],{noShadow:true}));
@@ -2704,7 +2711,7 @@ const PERF={born:performance.now(),dpr:Math.min(window.devicePixelRatio||1,2),ma
 function invalidate(shadow){PERF.dirty=true;PERF.act=performance.now();if(shadow)PERF.shadow=true;}
 function setDPR(v){PERF.dpr=v;W.r.setPixelRatio(v);if(W.comp)W.comp.setPixelRatio(v);fitCam(false);PERF.shadow=true;PERF.dirty=true;}
 function loop(t){requestAnimationFrame(loop);if(!W.ok||document.hidden)return;const s=t/1000;const moved=W.ctl.update();
-  const now0=performance.now();if(W.robber&&W.robber.userData.mixer){const t=now0/1000;W.robber.userData.mixer.update(Math.min(.05,t-(W.robber.userData.mt||t)));W.robber.userData.mt=t;}const robP=(W.robber&&W.robber.userData.robPulse)||(W.robber&&W.robber.userData.mixer);const anim=moved||W.camAnim||W.introFX||DICE.list.length||W.tgtG.children.length||W.anim.size||robP;
+  const now0=performance.now();if(W.robber&&W.robber.userData.mixer){const t=now0/1000;W.robber.userData.mixer.update(Math.min(.05,t-(W.robber.userData.mt||t)));W.robber.userData.mt=t;}const robP=(W.robber&&(W.robber.userData.robPulse||W.robber.userData.mixer||W.robber.userData.glb));const anim=moved||W.camAnim||W.introFX||DICE.list.length||W.tgtG.children.length||W.anim.size||robP;
   const ambientDue=now0-PERF.ambient>(now0-PERF.act>45000?600:PERF.dpr<PERF.max?140:80);
   if(!anim&&!PERF.dirty&&!ambientDue)return;
   if(!anim&&!PERF.dirty)PERF.ambient=now0;
@@ -2729,6 +2736,7 @@ function loop(t){requestAnimationFrame(loop);if(!W.ok||document.hidden)return;co
     if(o.userData.pulseR){const k=.55+Math.sin(s*3)*.12;o.children[0].material.opacity=k;}});
   if(GHOSTM.m)GHOSTM.m.opacity=.38+Math.sin(s*3.2)*.22;W.tgtG.children.forEach(o=>{if(o.userData.pulse===1){const k=.78+Math.sin(s*2.4)*.18;o.children[0].material.opacity=k;}else if(o.userData.pulse===2){o.children[0].material.opacity=.18+Math.sin(s*4)*.12;}});
   if(W.introFX)introFXStep(now);
+  if(W.robber&&W.robber.userData.w&&!W.robber.userData.move){const w=W.robber.userData.w,t=now/1000;w.position.y=.012*(1+Math.sin(t*1.7));w.rotation.z=Math.sin(t*1.15)*.045;w.rotation.y=Math.sin(t*.6)*.14;}
   if(W.camAnim&&W.camAnim.sph){const a=W.camAnim,p=Math.max(0,Math.min(1,(now-a.t0)/a.dur)),e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;W.ctl.enableDamping=false;
     const L=(u,v)=>u+(v-u)*e;W.cam.position.setFromSpherical(new THREE.Spherical(L(a.from.r,a.to.r),L(a.from.phi,a.to.phi),L(a.from.theta,a.to.theta))).add(a.tp);W.ctl.target.copy(a.tp);W.cam.lookAt(a.tp);W.ctl.update();try{PERF.dirty=true;}catch(_){}if(p>=1){W.camAnim=null;W.ctl.enableDamping=true;}}
   else if(W.camAnim){const a=W.camAnim,p=Math.min(1,(now-a.t0)/700),e=1-Math.pow(1-p,3);W.ctl.enableDamping=false;W.cam.position.lerpVectors(a.fp,a.cp,e);W.ctl.target.lerpVectors(a.ft,a.tp,e);W.cam.lookAt(W.ctl.target);W.ctl.update();if(p>=1){W.camAnim=null;W.ctl.enableDamping=true;}}
@@ -3276,6 +3284,7 @@ function startNew(withRules){clearTimeout(ui.rbT);ui.handTab='res';hideTitle();i
 
 // ---------- events ----------
 function onPick(pk){
+  if(W.introFX||(W.camAnim&&W.camAnim.sph))return;
   if(ui.modal&&ui.modal!=='closed-over')return;const T=targets();if(!T.kind)return;
   if(pk.v!==undefined){const v=pk.v;if(!T.v.includes(v))return;
     ui.mode=null;if(T.kind==='setupS'||T.kind==='settlement')act('settle',v);else if(T.kind==='city')act('city',v);return;}
