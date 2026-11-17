@@ -2555,13 +2555,16 @@ function basePlate(k,o,r){k.add(part('cyl16',pc3(o)===0xff2a1a?(basePlate.m0||(b
 function tintRoof(m,col){m.updateMatrixWorld(true);const bb=new THREE.Box3().setFromObject(m),y0=bb.min.y,hh=Math.max(1e-6,bb.max.y-y0);const v=new THREE.Vector3();
   m.traverse(c=>{if(!c.isMesh)return;const g=c.geometry;if(!g.userData.aH){const p=g.attributes.position,a=new Float32Array(p.count);for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i).applyMatrix4(c.matrixWorld);a[i]=(v.y-y0)/hh;}g.setAttribute('aH',new THREE.BufferAttribute(a,1));g.userData.aH=1;
       if(g.index){const I=g.index.array,keep=[];for(let t=0;t<I.length;t+=3){const A=a[I[t]],B=a[I[t+1]],C=a[I[t+2]];if(Math.max(A,B,C)<FLOORH)continue;keep.push(I[t],I[t+1],I[t+2]);}g.setIndex(keep);}}
+    {const nm={0xff2a1a:'red',0x3a8cff:'blue',0x2fa548:'green',0xf5c400:'yellow'}[new THREE.Color(col).getHex()];
+     if(TXM&&nm&&c.material.map){const mt=c.material;TXC[nm]=TXC[nm]||new Promise(res=>new THREE.ImageLoader().load(`assets/test/tex/${nm}.jpg`,res));
+       TXC[nm].then(img=>{const t=mt.map.clone();t.source=new THREE.Source(img);t.needsUpdate=true;mt.map=t;if(mt.emissiveMap)mt.emissiveMap=t;mt.needsUpdate=true;try{PERF.dirty=true;}catch(e){}});return;}}
     const mt=c.material;const tc=new THREE.Color(col);const TF={0xff2a1a:[0xff2a1a,.78,1],0x3a8cff:[0x18b4ff,1.75,1.12],0xf5c400:[0xffcf10,1.85,1.15],0x2fa548:[0x36c98c,1.25,1.05],0xe331c5:[0xe04ac0,.78,.92],0xefe6cf:[0xfffdf6,0,2.3]}[tc.getHex()]||[tc.getHex(),1.3,1];tc.setHex(TF[0]);const U={value:tc},US={value:TF[1]},UG={value:TF[2]};mt.onBeforeCompile=sh=>{sh.uniforms.uTint=U;sh.uniforms.uSat=US;sh.uniforms.uGain=UG;
       sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nattribute float aH;varying float vH;').replace('#include <begin_vertex>','#include <begin_vertex>\nvH=aH;');
       sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nuniform vec3 uTint;uniform float uSat;uniform float uGain;varying float vH;').replace('#include <map_fragment>',`#include <map_fragment>
         {vec3 c=diffuseColor.rgb;float rg=c.r/(c.g+.02),rb=c.r/(c.b+.02);float k=smoothstep(TR0,TR1,rg)*smoothstep(1.3,1.9,rb)*smoothstep(HY0,HY1,vH);
          float l=dot(c,vec3(.299,.587,.114));vec3 t=uTint*clamp(l*3.*uGain,0.,1.7);t=max(mix(vec3(dot(t,vec3(.299,.587,.114))),t,uSat),0.);diffuseColor.rgb=mix(c,t,smoothstep(0.,.45,k));}`.replace('TR0',TROOF[0]).replace('TR1',TROOF[1]).replace('HY0',TROOF[2]).replace('HY1',TROOF[3]));};
     mt.customProgramCacheKey=()=>'tintRoof';mt.needsUpdate=true;});}
-const TROOF=['1.12','1.45','.34','.4'];const FLOORH=.075;
+const TROOF=['1.12','1.45','.34','.4'];const TXM=!/[?&]tx=0/.test(location.search),TXC={};const FLOORH=.075;
 const BGLB={};
 function bldFig(file,o,ry,wTarget,roofs,drop,tint){const k=new THREE.Group();const R=BGLB[file]=BGLB[file]||{g:null,cbs:[]};
   const put=g=>{const m=g.scene.clone(true);m.traverse(c=>{if(c.isMesh&&drop.includes(c.material.name))c.visible=false;});
@@ -3196,6 +3199,7 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '인원 2·3·4 바꾸기':()=>{ui.n=ui.n>=4?2:ui.n+1;startNew(false);},
     '색상 A: 빨강·파랑·노랑·초록':()=>{const u=new URL(location.href);u.searchParams.set('cs','A');location.href=u;},
     '색상 B: 빨강·분홍·파랑·하양':()=>{const u=new URL(location.href);u.searchParams.set('cs','B');location.href=u;},
+    '지붕: 텍스처 ↔ 셰이더':()=>{const u=new URL(location.href);u.searchParams.set('tx',TXM?'0':'1');location.href=u;},
   };
   const build=()=>{const p=document.createElement('div');p.id='tbench';p.innerHTML='<button class="tg">테스트 ▾</button><b>게임</b>';
     const groups={'새 게임 (인트로 포함)':'게임','정착지 짓기':'건설','도적 이동':'연출','승리 화면':'결과','시작 연출 다시':'화면','색상 A: 빨강·파랑·노랑·초록':'색상 세트'};
