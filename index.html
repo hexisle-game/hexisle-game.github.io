@@ -1627,13 +1627,18 @@ html body .bld .pimg{height:96px!important}html body .bld .pimg img{max-height:9
 html.phone body .bld .pimg{height:var(--bpH,60px)!important}html.phone body .bld .pimg img{max-height:var(--bpH,60px)!important}
 /* ===== screen dressing v2 (?deco=1): left / right columns + wood panel, PC and mobile sets ===== */
 #deco.v2 .dk{display:none}#deco.v2 .dvig{z-index:0}
-#deco.v2 .d2{position:absolute;top:0;height:100%;background:left top/auto 100% no-repeat;display:block;z-index:1}
+#deco.v2 .d2{position:absolute;top:0;height:var(--woodTop,76%);background:left top/auto 100% no-repeat;display:block;z-index:1}
 #deco.v2 .d2.l{left:0;aspect-ratio:480/1440;background-image:url(assets/deco2/pc_left.webp)}
 #deco.v2 .d2.r{right:0;aspect-ratio:480/1440;background-image:url(assets/deco2/pc_right.webp);background-position:right top}
-#deco.v2 .d2.w{top:auto;bottom:0;left:0;right:0;height:calc(var(--trayH,0px) + 8px);min-height:24vh;aspect-ratio:auto;background:url(assets/deco2/pc_wood.webp) center top/100% auto no-repeat;z-index:2;box-shadow:0 -8px 22px rgba(0,0,0,.55)}
+#deco.v2 .d2.w{top:var(--woodTop,76%);bottom:0;left:0;right:0;height:auto;aspect-ratio:auto;background:url(assets/deco2/pc_wood.webp) center top/100% auto no-repeat;z-index:2;box-shadow:0 -8px 22px rgba(0,0,0,.55)}
 html.phone #deco.v2 .d2.l{aspect-ratio:505/1080;background-image:url(assets/deco2/mobile_left.webp)}
 html.phone #deco.v2 .d2.r{aspect-ratio:470/1080;background-image:url(assets/deco2/mobile_right.webp)}
-html.phone #deco.v2 .d2.w{background-image:url(assets/deco2/mobile_wood.webp);min-height:34%}
+html.phone #deco.v2 .d2.w{background-image:url(assets/deco2/mobile_wood.webp)}
+
+/* tray: no headings under the tabs; guide tab */
+html body .tray-act>.tray-h{visibility:hidden!important}
+html body #handHead .htab.hguide{color:#d9c79f!important;background:linear-gradient(180deg,rgba(40,30,20,.85),rgba(22,16,10,.85))!important;margin-left:6px!important}
+html.has-deco2 body .tray{background:none!important}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
@@ -2948,7 +2953,7 @@ function renderHand(me,groups){const box=$('#hand');const prev0=ui.prevRes?{...u
     box.dataset.hold='1';}}else delete box.dataset.hold;}const W0=Math.max(220,box.clientWidth||520);const cw=Math.round((W0<360?66:innerHeight<900&&innerWidth>1100?66:86)*(PH.on?.67:1));
   const list=RES.flatMap(r=>Array(me.res[r]).fill(r));
   const prev=ui.prevRes||me.res;let nn=0;const flags=list.map((r,i)=>{const idx=i-list.indexOf(r);return idx>=(prev[r]||0)&&ui.prevRes?++nn:0;});if(!box.dataset.hold)ui.prevRes={...me.res};
-  const hh=$('#handHead');if(true){if(!ui.handTab)ui.handTab='res';hh.innerHTML=`<div class="htabs"><button class="htab${ui.handTab==='res'?' on':''}" data-htab="res">자원카드 <i>${list.length}장</i></button><button class="htab${ui.handTab==='dev'?' on':''}" data-htab="dev">발전카드 <i>${me.dev.length}장</i></button></div><button class="qi" data-pop="all" aria-label="발전 카드 종류 보기">?</button>`;}
+  const hh=$('#handHead');if(true){if(!ui.handTab)ui.handTab='res';hh.innerHTML=`<div class="htabs"><button class="htab${ui.handTab==='res'?' on':''}" data-htab="res">자원카드 <i>${list.length}장</i></button><button class="htab${ui.handTab==='dev'?' on':''}" data-htab="dev">발전카드 <i>${me.dev.length}장</i></button><button class="htab hguide" data-pop="cost" aria-label="건설 비용 안내">안내</button></div>`;}
   else hh.innerHTML=`내 자원카드 <span id="handCount">· ${list.length}장${list.length>7?' (8장 이상: 7이 나오면 절반을 버려요)':''}</span>`;
   if(ui.handTab==='dev'){box.innerHTML=me.dev.length?row(me.dev.map(d=>`<div style="position:relative"><img class="card" src="${CARDIMG[d.t]}" alt="${DEVN[d.t]}" data-pop="${d.t}">${d.fresh&&d.t!=='vp'?'<span class="newtag">다음 차례</span>':''}</div>`),cw,W0,'devrow2'):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">발전 카드가 없어요.</div>`;return;}
   let h=list.length?row(list.map(r=>`<img class="card" data-res="${r}" src="${CARDIMG[r]}" alt="${RN[r]}" data-tip="${RN[r]}: ${TN[r]}에서 나와요. ${RUSE[r]}에 써요.">`),cw,W0,'',flags):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">자원 카드가 없어요.</div>`;
@@ -3301,6 +3306,11 @@ function showCredits(){openDialog(`<h3>Credits &amp; Licenses</h3><div class="cr
 
 // table dressing around the sea: curtains, valance and corner props, darkened behind the UI (pointer-transparent)
 {const q=location.search,r=document.documentElement.style;let m=/[?&]fbs=([1-4])/.exec(q);if(m)r.setProperty('--fbgC',`url(assets/fbg/C${m[1]}.webp)`);if(/[?&]fbm=2/.test(q))r.setProperty('--fbgA','url(assets/fbg/A2.webp)');}
+
+// wood panel / side art follow the tab baseline
+function placeWood(){const d=document.getElementById('deco');if(!d||!d.classList.contains('v2'))return;document.documentElement.classList.add('has-deco2');const t=document.querySelector('#handHead .htabs');const st=document.getElementById('stage');if(!t||!st||!t.offsetParent)return;
+  const k=PH.on?PH.k:1;const y=(t.getBoundingClientRect().bottom-st.getBoundingClientRect().top)/k-1;if(Math.abs(y-(placeWood.y||0))>.5){placeWood.y=y;d.style.setProperty('--woodTop',y+'px');}}
+setInterval(()=>{try{placeWood();}catch(e){}},300);
 function addDeco(){if(!/[?&]deco=1/.test(location.search)||document.getElementById('deco'))return;const st=document.getElementById('stage');if(!st)return;const d=document.createElement('div');d.id='deco';
   d.className='v2';d.innerHTML='<i class="d2 l"></i><i class="d2 r"></i><i class="d2 w"></i><i class="dk plank"></i><i class="dk cur l"></i><i class="dk cur r"></i><i class="dk ml"></i><i class="dk mr"></i><i class="dk bl"></i><i class="dk br"></i><i class="dvig"></i>';
   const cv=st.querySelector('canvas');if(cv&&cv.nextSibling)st.insertBefore(d,cv.nextSibling);else st.appendChild(d);}
