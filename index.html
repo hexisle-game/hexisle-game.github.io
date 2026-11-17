@@ -1639,6 +1639,27 @@ html.phone #deco.v2 .d2.w{background-image:url(assets/deco2/mobile_wood.webp)}
 html body .tray-act>.tray-h{visibility:hidden!important}
 html body #handHead .htab.hguide{color:#d9c79f!important;background:linear-gradient(180deg,rgba(40,30,20,.85),rgba(22,16,10,.85))!important;margin-left:6px!important}
 html.has-deco2 body .tray{background:none!important}
+
+/* ===== plan layout with side art (deco v2) ===== */
+html.has-deco2 body header.top{left:var(--sideL,24px)!important;right:var(--sideR,24px)!important}
+html.has-deco2 body #leftcol{left:var(--sideL,24px)!important}
+html.has-deco2 body .side{right:var(--sideR,24px)!important;width:250px!important}
+html.has-deco2 body header.top .tools .lb{display:none!important}
+html.has-deco2 body header.top .tools .ib{padding:6px 9px!important}
+html.has-deco2 body header.top .tools .ib::before,html.has-deco2 body header.top .tools .ib+.ib::before,html.has-deco2 body header.top .tools>*::before{display:none!important}
+html.has-deco2 body header.top .tools{gap:6px}
+html.has-deco2 body header.top .tools .gico{width:26px;height:26px}
+html.has-deco2 body .side .panel>h2,html.has-deco2 body .side #gameinfo,html.has-deco2 body .side .logpanel{display:none!important}
+html.has-deco2 body #players .pl .meta{display:none!important}
+html.has-deco2 body #players .pl{min-height:0!important;padding-top:6px!important;padding-bottom:6px!important}
+html.phone.has-deco2 body .side{width:170px!important}
+html.phone.has-deco2 body header.top .tools .gico{width:24px;height:24px}
+
+html.has-deco2 body #dicebox{position:relative;padding-bottom:14px}
+html.has-deco2 body #dicebox::after,html.has-deco2 body .side .panel::before,html.has-deco2 body .side .panel::after{content:'';display:block;height:9px;margin:0 6px;background:linear-gradient(90deg,transparent,rgba(217,172,104,.75) 30%,rgba(217,172,104,.75) 70%,transparent) center/100% 1px no-repeat,radial-gradient(circle,#f3d08a 0 2px,transparent 2.5px) center/9px 9px no-repeat}
+html.has-deco2 body #dicebox::after{position:absolute;left:0;right:0;bottom:0;margin:0}
+html.has-deco2 body .side .panel::before{margin-bottom:6px}html.has-deco2 body .side .panel::after{margin-top:6px}
+html.has-deco2 body .side .panel{background:none!important;border:0!important;box-shadow:none!important}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
@@ -3309,7 +3330,8 @@ function showCredits(){openDialog(`<h3>Credits &amp; Licenses</h3><div class="cr
 
 // wood panel / side art follow the tab baseline
 function placeWood(){const d=document.getElementById('deco');if(!d||!d.classList.contains('v2'))return;document.documentElement.classList.add('has-deco2');const t=document.querySelector('#handHead .htabs');const st=document.getElementById('stage');if(!t||!st||!t.offsetParent)return;
-  const k=PH.on?PH.k:1;const y=(t.getBoundingClientRect().bottom-st.getBoundingClientRect().top)/k-1;if(Math.abs(y-(placeWood.y||0))>.5){placeWood.y=y;d.style.setProperty('--woodTop',y+'px');}}
+  const k=PH.on?PH.k:1;const y=(t.getBoundingClientRect().bottom-st.getBoundingClientRect().top)/k-(st.getBoundingClientRect().width/k)*.008;if(Math.abs(y-(placeWood.y||0))>.5){placeWood.y=y;d.style.setProperty('--woodTop',y+'px');}
+  {const L=d.querySelector('.d2.l'),R=d.querySelector('.d2.r');if(L&&R){const r=document.documentElement.style;const wl=L.getBoundingClientRect().width/k,wr=R.getBoundingClientRect().width/k;r.setProperty('--sideL',Math.round(Math.max(14,wl*.42))+'px');r.setProperty('--sideR',Math.round(Math.max(14,wr*.42))+'px');}}}
 setInterval(()=>{try{placeWood();}catch(e){}},300);
 function addDeco(){if(!/[?&]deco=1/.test(location.search)||document.getElementById('deco'))return;const st=document.getElementById('stage');if(!st)return;const d=document.createElement('div');d.id='deco';
   d.className='v2';d.innerHTML='<i class="d2 l"></i><i class="d2 r"></i><i class="d2 w"></i><i class="dk plank"></i><i class="dk cur l"></i><i class="dk cur r"></i><i class="dk ml"></i><i class="dk mr"></i><i class="dk bl"></i><i class="dk br"></i><i class="dvig"></i>';
