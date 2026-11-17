@@ -2494,7 +2494,7 @@ function buildStatic(){
   S.board.hexes.forEach((t,i)=>{const {x,z}=hc(i);
     const hit=part('cyl6',HIT,[.97,.02,.97],[x,.005,z],{noShadow:true});hit.userData.info={t:'hex',i};W.infoG.add(hit);
     const r2=seeded(i*13+5);
-    if(t.res==='grain'){let placed=0;for(let k=0;k<60&&placed<4;k++){const a=r2()*6.28,rr=.5+r2()*.3;const hx=x+Math.cos(a)*rr,hz=z+Math.sin(a)*rr;if(heightAt(hx,hz)<-.02)continue;
+    if(t.res==='grain'){let placed=0;const ca=G.hexes[i].v.map(v=>{const q=vc(v);return Math.atan2(q.z-z,q.x-x);}).sort((p,q)=>p-q);const mids=ca.map((a,j)=>{const b=j+1<ca.length?ca[j+1]:ca[0]+6.2832;return (a+b)/2;});for(let k=0;k<60&&placed<4;k++){const a=mids[Math.floor(r2()*mids.length)]+(r2()-.5)*.35,rr=.5+r2()*.12;const hx=x+Math.cos(a)*rr,hz=z+Math.sin(a)*rr;if(heightAt(hx,hz)<-.02)continue;
       if(!placed)windmill(deco,hx,hz,2);else haystack(deco,hx,hz);placed++;}}
     if(t.res==='wool'){for(let k=0;k<30;k++){const a=r2()*6.28,rr=.5+r2()*.25;const hx=x+Math.cos(a)*rr,hz=z+Math.sin(a)*rr;if(heightAt(hx,hz)<-.02)continue;
       const hs=house(deco,hx,hz,.07,.05,.045,0x5b4a3e,r2()*3,0xd9d0bd);hs.position.y=heightAt(hx,hz);break;}}
@@ -2565,14 +2565,14 @@ function bldFig(file,o,ry,wTarget,roofs,drop){const k=new THREE.Group();const R=
     try{invalidate(true);}catch(e){}try{PERF.dirty=true;PERF.shadow=true;}catch(e){}};
   if(R.g)put(R.g);else{R.cbs.push(put);if(R.cbs.length===1)new THREE.GLTFLoader().load(file,g=>{R.g=g;R.cbs.splice(0).forEach(fn=>fn(g));},undefined,e=>console.warn('bld',e));}
   return k;}
-const USEBLD=!/[?&]bld=old/.test(location.search);
-function settlementMesh(o,ry){const k=new THREE.Group();basePlate(k,o,.17);if(USEBLD&&THREE.GLTFLoader){const h=bldFig('assets/bld/cottage.glb',o,ry,.29,['Rooftiles'],['Land']);h.position.y=.03;k.add(h);return k;}const h=new THREE.Group();h.rotation.y=ry;h.position.y=.03;k.add(h);
+const USEBLD=!/[?&]bld=old/.test(location.search);const TSM=(/[?&]sm=([1-4])/.exec(location.search)||[])[1];
+function settlementMesh(o,ry){const k=new THREE.Group();basePlate(k,o,.17);if(USEBLD&&THREE.GLTFLoader){const h=bldFig(TSM?`assets/test/t${TSM}.glb`:'assets/bld/cottage.glb',o,ry,.247,['Rooftiles'],['Land']);h.position.y=.03;k.add(h);return k;}const h=new THREE.Group();h.rotation.y=ry;h.position.y=.03;k.add(h);
   rhouse(h,-.02,-.01,.13,.1,.15,o,0);rhouse(h,.1,.06,.075,.065,.095,o,Math.PI/2);
   h.add(part('box',tmat('slate',0xbfb8ac,.3,.6),[.024,.07,.024],[.03,.21,-.03]));
   const wd=tmat('bark',0xffffff,.5,.3);for(let i=0;i<3;i++)h.add(part('cyl',wd,[.011,.05,.011],[-.12,.012+i*.019,.06+(i%2)*.012],{rx:Math.PI/2,ry:.3}));
   h.add(part('cyl',tmat('plank',0x8a6a48,.2,1),[.005,.22,.005],[-.12,.11,-.07]));h.add(part('box',PM(o),[.07,.045,.004],[-.085,.195,-.07],{noShadow:true}));
   return k;}
-function cityMesh(o,ry){const k=new THREE.Group();basePlate(k,o,.25);if(USEBLD&&THREE.GLTFLoader){const c=bldFig('assets/bld/castle.glb',o,ry,.39,['Roof'],['Dirt']);c.position.y=.03;k.add(c);return k;}const c=new THREE.Group();c.rotation.y=ry;c.position.y=.03;k.add(c);
+function cityMesh(o,ry){const k=new THREE.Group();basePlate(k,o,.25);if(USEBLD&&THREE.GLTFLoader){const c=bldFig('assets/bld/castle.glb',o,ry,.33,['Roof'],['Dirt']);c.position.y=.03;k.add(c);return k;}const c=new THREE.Group();c.rotation.y=ry;c.position.y=.03;k.add(c);
   const wall=tmat('slate',0xd2ccc0,2.2,.7),wall2=tmat('slate',0xbab3a6,.6,.3),S2=.17;
   for(const [x,z,rot] of [[0,S2,0],[0,-S2,0],[S2,0,Math.PI/2],[-S2,0,Math.PI/2]]){
     c.add(part('box',wall,[.34,.11,.04],[x,.055,z],{ry:rot}));
@@ -3066,7 +3066,7 @@ function showOver(){const order=S.players.map((_,i)=>i).sort((a,b)=>vp(b,true)-v
    <div class="box"><h1><img src="assets/result/${won?'victory':'gameover'}.webp" alt="${won?'VICTORY':'GAME OVER'}"></h1>
    <div class="sub">${won?'':`<b style="color:${muteCol(W2.color)}">${W2.name}</b>이(가) `}${S.turn}바퀴 만에 섬의 영주가 되었어요.</div>
    <div class="tbl">${order.map((i,k)=>{const p=S.players[i];const vc=p.dev.filter(d=>d.t==='vp').length;return `<div style="animation-delay:${2.1+k*.22}s"><span class="rk">${k+1}</span>${avHTML(p,'avr2')}<span class="nm">${p.name}${vc?` <small>(승점 카드 ${vc}장)</small>`:''}</span><b>${vp(i,true)}점</b></div>`;}).join('')}</div>
-   <div class="btns"><button class="btn" id="oClose">보드 보기</button><button class="btn sub" id="oNew">새 게임</button></div></div>`;
+   <div class="btns"><button class="btn" id="oClose">보드 보기</button><button class="btn sub" id="oNew" style="color:#fff3dc">새 게임</button></div></div>`;
   document.body.appendChild(el);
   $('#oClose').onclick=()=>{ui.modal='closed-over';el.classList.add('out');setTimeout(()=>el.remove(),450);};
   $('#oNew').onclick=()=>{if(window.NET&&NET.on){if(NET.isHost)MP.ref('meta/status').set('lobby');else MP.toast('방장이 새 게임을 시작할 수 있어요.');return;}el.remove();ui.modal=null;startNew();};}
@@ -3161,7 +3161,7 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
 #tbench b{color:#f3d08a;font-size:10px;letter-spacing:.06em;margin:4px 2px 0}#tbench button{all:unset;cursor:pointer;color:#eee;background:#2a2620;border:1px solid #5a4a30;border-radius:6px;padding:6px 9px;white-space:nowrap}#tbench button:active{background:#5a4a30}
 #tbench.min>*:not(.tg){display:none}html.phone #tbench{font-size:8px;padding:5px;gap:2px;left:4px;max-height:96%}html.phone #tbench button{padding:3px 6px}html.phone #tbench b{font-size:7px;margin-top:2px}#tbench .tg{background:#6a5636;text-align:center}`;document.head.appendChild(css);
   const go=()=>{if(typeof SND==='undefined'||typeof startNew!=='function'||typeof W==='undefined'){setTimeout(go,200);return;}
-    try{$('#splash').click();}catch(e){}setTimeout(()=>{try{SND.music&&SND.music('game');}catch(e){}ui.n=ui.n||4;startNew(false);},400);build();};
+    try{$('#splash').click();}catch(e){}setTimeout(()=>{try{SND.music&&SND.music('game');}catch(e){}ui.n=ui.n||4;startNew(false);if(TSM)setTimeout(()=>{try{act['초기 배치 자동 완료']();}catch(e){}},4200);},400);build();};
   const give=(p,o)=>{const r=S.players[p].res;for(const k in o)r[k]+=o[k];};
   const finishSetup=()=>{let g=0;while(S.phase==='setup'&&g++<200){const a=actor();if(a===null)break;aiStep(a);}update();};
   const act={
@@ -3182,9 +3182,14 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '시점 초기화':()=>{fitCam(true);},
     '주변 장식 켜기/끄기':()=>{const d=$('#deco');if(d){d.hidden=!d.hidden;return;}const u=new URL(location.href);u.searchParams.set('deco','1');location.href=u;},
     '인원 2·3·4 바꾸기':()=>{ui.n=ui.n>=4?2:ui.n+1;startNew(false);},
+    '정착지 모델: 기본':()=>{const u=new URL(location.href);u.searchParams.delete('sm');location.href=u;},
+    '정착지 모델: 후보 1':()=>{const u=new URL(location.href);u.searchParams.set('sm','1');location.href=u;},
+    '정착지 모델: 후보 2':()=>{const u=new URL(location.href);u.searchParams.set('sm','2');location.href=u;},
+    '정착지 모델: 후보 3':()=>{const u=new URL(location.href);u.searchParams.set('sm','3');location.href=u;},
+    '정착지 모델: 후보 4':()=>{const u=new URL(location.href);u.searchParams.set('sm','4');location.href=u;},
   };
   const build=()=>{const p=document.createElement('div');p.id='tbench';p.innerHTML='<button class="tg">테스트 ▾</button><b>게임</b>';
-    const groups={'새 게임 (인트로 포함)':'게임','정착지 짓기':'건설','도적 이동':'연출','승리 화면':'결과','시작 연출 다시':'화면'};
+    const groups={'새 게임 (인트로 포함)':'게임','정착지 짓기':'건설','도적 이동':'연출','승리 화면':'결과','시작 연출 다시':'화면','정착지 모델: 기본':'정착지 모델'};
     Object.keys(act).forEach(k=>{if(groups[k]&&groups[k]!=='게임'){const t=document.createElement('b');t.textContent=groups[k];p.appendChild(t);}const b=document.createElement('button');b.textContent=k;b.onclick=e=>{e.stopPropagation();try{act[k]();}catch(err){console.error(err);alert(err.message);}};p.appendChild(b);});
     p.querySelector('.tg').onclick=()=>p.classList.toggle('min');document.body.appendChild(p);};
   if(document.readyState==='complete')go();else addEventListener('load',go);})();
