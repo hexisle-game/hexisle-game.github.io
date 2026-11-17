@@ -1621,6 +1621,19 @@ html.phone body #handHead .htab{padding:4px 12px 5px!important;font-size:12px!im
 html body .bld b{font-size:11px!important}
 html.phone body .bld b{font-size:10.5px!important}
 html body .bld .mini{display:none!important}
+
+/* bigger build icons */
+html body .bld .pimg{height:96px!important}html body .bld .pimg img{max-height:96px!important}
+html.phone body .bld .pimg{height:var(--bpH,60px)!important}html.phone body .bld .pimg img{max-height:var(--bpH,60px)!important}
+/* ===== screen dressing v2 (?deco=1): left / right columns + wood panel, PC and mobile sets ===== */
+#deco.v2 .dk{display:none}#deco.v2 .dvig{z-index:0}
+#deco.v2 .d2{position:absolute;top:0;height:100%;background:left top/auto 100% no-repeat;display:block;z-index:1}
+#deco.v2 .d2.l{left:0;aspect-ratio:480/1440;background-image:url(assets/deco2/pc_left.webp)}
+#deco.v2 .d2.r{right:0;aspect-ratio:480/1440;background-image:url(assets/deco2/pc_right.webp);background-position:right top}
+#deco.v2 .d2.w{top:auto;bottom:0;left:0;right:0;height:calc(var(--trayH,0px) + 8px);min-height:24vh;aspect-ratio:auto;background:url(assets/deco2/pc_wood.webp) center top/100% auto no-repeat;z-index:2;box-shadow:0 -8px 22px rgba(0,0,0,.55)}
+html.phone #deco.v2 .d2.l{aspect-ratio:505/1080;background-image:url(assets/deco2/mobile_left.webp)}
+html.phone #deco.v2 .d2.r{aspect-ratio:470/1080;background-image:url(assets/deco2/mobile_right.webp)}
+html.phone #deco.v2 .d2.w{background-image:url(assets/deco2/mobile_wood.webp);min-height:34%}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
@@ -3289,7 +3302,7 @@ function showCredits(){openDialog(`<h3>Credits &amp; Licenses</h3><div class="cr
 // table dressing around the sea: curtains, valance and corner props, darkened behind the UI (pointer-transparent)
 {const q=location.search,r=document.documentElement.style;let m=/[?&]fbs=([1-4])/.exec(q);if(m)r.setProperty('--fbgC',`url(assets/fbg/C${m[1]}.webp)`);if(/[?&]fbm=2/.test(q))r.setProperty('--fbgA','url(assets/fbg/A2.webp)');}
 function addDeco(){if(!/[?&]deco=1/.test(location.search)||document.getElementById('deco'))return;const st=document.getElementById('stage');if(!st)return;const d=document.createElement('div');d.id='deco';
-  d.innerHTML='<i class="dk plank"></i><i class="dk cur l"></i><i class="dk cur r"></i><i class="dk ml"></i><i class="dk mr"></i><i class="dk bl"></i><i class="dk br"></i><i class="dvig"></i>';
+  d.className='v2';d.innerHTML='<i class="d2 l"></i><i class="d2 r"></i><i class="d2 w"></i><i class="dk plank"></i><i class="dk cur l"></i><i class="dk cur r"></i><i class="dk ml"></i><i class="dk mr"></i><i class="dk bl"></i><i class="dk br"></i><i class="dvig"></i>';
   const cv=st.querySelector('canvas');if(cv&&cv.nextSibling)st.insertBefore(d,cv.nextSibling);else st.appendChild(d);}
 function titleIntro(t){ui.introT0=performance.now();t.classList.remove('shine-on');t.classList.add('intro');setTimeout(()=>{t.classList.remove('intro');shineOn();},4800);}
 function shineOn(){const t=$('#title'),lg=$('#tLogo');if(t.classList.contains('intro')||ui.splash)return;if(lg.complete&&lg.naturalWidth)t.classList.add('shine-on');else lg.addEventListener('load',()=>{if(!t.classList.contains('intro'))t.classList.add('shine-on');},{once:true});}
