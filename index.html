@@ -996,7 +996,7 @@ html.phone .onl{font-size:12px!important;margin-top:4px!important}
 .title .tbot{position:absolute;left:0;right:0;bottom:7%;display:flex;justify-content:center}
 .title .ttap{margin:0;font-size:20px;letter-spacing:.06em;color:#f3e6c8;text-shadow:0 2px 6px #000,0 0 14px rgba(0,0,0,.8);animation:tpulse 1.8s ease-in-out infinite}
 @keyframes tpulse{50%{opacity:.45}}
-.title .tmenu{display:flex;gap:24px;justify-content:center;width:100%;padding:0 80px;box-sizing:border-box}
+.title .tmenu{display:flex;gap:16px;justify-content:center;width:100%;padding:0 80px;box-sizing:border-box}
 .title .tmenu[hidden]{display:none}
 .title .tm{flex:0 1 330px;height:68px;border-style:solid;border-width:10px 12px;border-color:transparent;background:none;font:inherit;font-size:21px;font-weight:700;color:#fff3dc;text-shadow:0 1px 0 #2a0e04,0 2px 5px rgba(0,0,0,.7);cursor:pointer;filter:drop-shadow(0 4px 10px rgba(0,0,0,.6));display:flex;align-items:center;justify-content:center;padding:0 0 2px;letter-spacing:.02em}
 .title .tm:hover{filter:brightness(1.12) drop-shadow(0 4px 10px rgba(0,0,0,.6))}
@@ -1007,7 +1007,7 @@ html.phone .onl{font-size:12px!important;margin-top:4px!important}
 html.phone .title .tlogo{width:300px;top:4%}
 html.phone .title .tbot{bottom:5%}
 html.phone .title .ttap{font-size:16px}
-html.phone .title .tmenu{gap:14px;padding:0 80px}
+html.phone .title .tmenu{gap:8px;padding:0 80px}
 html.phone .title .tm{height:52px;font-size:16px;border-width:8px 10px;border-image-width:8px 10px}
 html.on-title #modal{background:rgba(4,6,10,.62)}
 html body .sheet.sheet-frame{width:min(1180px,calc(100vw - 64px))!important;height:min(680px,calc(100dvh - 64px));display:flex!important;flex-direction:column;padding:6px 14px 6px!important;overflow:hidden!important}
@@ -1595,7 +1595,7 @@ html.phone #deco .bl{height:56vh}html.phone #deco .br{height:50vh}
 /* setup / lobby: faint illustration under the leather — single: harbour painting, multi: galleon engraving, lobby: sea chart */
 .sheet-frame.sheet-single,.sheet-frame.sheet-multi,.sheet-frame.sheet-lobby{--fbgi:var(--fbgC,url(assets/fbg/C.webp))}
 .sheet-frame.sheet-multi{--fbgi:url(assets/fbg/B.webp)}.sheet-frame.sheet-lobby{--fbgi:var(--fbgA,url(assets/fbg/A.webp))}
-.sheet-frame.sheet-single::before,.sheet-frame.sheet-multi::before,.sheet-frame.sheet-lobby::before{content:'';position:absolute;inset:0;background:var(--fbgi) left center/cover no-repeat;mix-blend-mode:screen;opacity:.8;pointer-events:none;z-index:0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent),linear-gradient(180deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent),linear-gradient(180deg,transparent,#000 8%,#000 92%,transparent);mask-composite:intersect}
+.sheet-frame.sheet-single::before,.sheet-frame.sheet-multi::before,.sheet-frame.sheet-lobby::before{content:'';position:absolute;left:0;bottom:0;width:71%;height:100%;background:var(--fbgi) left bottom/contain no-repeat;mix-blend-mode:color-dodge;opacity:.3;pointer-events:none;z-index:0;-webkit-mask-image:linear-gradient(90deg,#000,transparent 70%);mask-image:linear-gradient(90deg,#000,transparent 70%)}
 .sheet-frame>.fhead,.sheet-frame>.fbody{position:relative;z-index:1}
 html body .sheet.sheet-frame.sheet-single,html body .sheet.sheet-frame.sheet-multi,html body .sheet.sheet-frame.sheet-lobby{background:linear-gradient(rgba(14,12,10,.42),rgba(14,12,10,.42)),url(assets/ui/leather.jpg) 0 0/360px 360px repeat!important;background-clip:border-box!important}
 html.lbox,html.lbox body{background:#000}
@@ -2610,7 +2610,7 @@ function robberFig(file,H,o){o=o||{};const k=new THREE.Group();k.userData.glb=1;
     const b2=new THREE.Box3().setFromObject(m),c=b2.getCenter(new THREE.Vector3());m.position.set(-c.x,-b2.min.y,-c.z);
     const w=new THREE.Group();w.add(m);w.rotation.x=o.tilt||0;
     m.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;c.material=c.material.clone();if(o.recol&&o.recol[c.material.name]!==undefined){c.material.color.setHex(o.recol[c.material.name]);if(c.material.emissive)c.material.emissive.setHex(c.material.name==='material'?0x0a0310:0x000000);if(c.material.name==='material'){c.material.emissiveIntensity=.3;c.material.metalness=.2;c.material.roughness=.5;}}if(o.lift){c.material.emissive=(c.material.emissive||new THREE.Color()).clone().add(new THREE.Color(o.lift));c.material.emissiveIntensity=1;}}});
-    if(o.dagger){m.traverse(c=>{if(c.isMesh&&/^Material\.00[89]$/.test(c.material.name))c.visible=false;});const d=dagger();d.position.set(-.056,.205,.104);d.rotation.set(0,0,.22);w.add(d);}
+    if(o.dagger){m.traverse(c=>{if(c.isMesh&&/^Material\.00[89]$/.test(c.material.name))c.visible=false;});const d=dagger();d.position.set(-.056,.205,.104);d.rotation.set(0,0,.22);w.add(d);k.userData.dag=d;}
     k.add(w);k.userData.w=w;try{invalidate(true);}catch(e){}};
   const R=RGLB[file]=RGLB[file]||{g:null,cbs:[]};if(R.g)put(R.g);else{R.cbs.push(put);if(R.cbs.length===1)new THREE.GLTFLoader().load(file,g=>{R.g=g;R.cbs.splice(0).forEach(f=>f(g));},undefined,e=>console.warn('fig',e));}
   return k;}
@@ -2736,7 +2736,7 @@ function loop(t){requestAnimationFrame(loop);if(!W.ok||document.hidden)return;co
     if(o.userData.pulseR){const k=.55+Math.sin(s*3)*.12;o.children[0].material.opacity=k;}});
   if(GHOSTM.m)GHOSTM.m.opacity=.38+Math.sin(s*3.2)*.22;W.tgtG.children.forEach(o=>{if(o.userData.pulse===1){const k=.78+Math.sin(s*2.4)*.18;o.children[0].material.opacity=k;}else if(o.userData.pulse===2){o.children[0].material.opacity=.18+Math.sin(s*4)*.12;}});
   if(W.introFX)introFXStep(now);
-  if(W.robber&&W.robber.userData.w&&!W.robber.userData.move){const w=W.robber.userData.w,t=now/1000;w.position.y=.012*(1+Math.sin(t*1.7));w.rotation.z=Math.sin(t*1.15)*.045;w.rotation.y=Math.sin(t*.6)*.14;}
+  if(W.robber&&W.robber.userData.w&&!W.robber.userData.move){const w=W.robber.userData.w,t=now/1000;const dg=W.robber.userData.dag;if(dg){dg.rotation.z=.22+Math.sin(t*2.3)*.16;dg.rotation.x=Math.sin(t*1.7+1)*.12;}w.position.y=.012*(1+Math.sin(t*1.7));w.rotation.z=Math.sin(t*1.15)*.045;w.rotation.y=Math.sin(t*.6)*.14;}
   if(W.camAnim&&W.camAnim.sph){const a=W.camAnim,p=Math.max(0,Math.min(1,(now-a.t0)/a.dur)),e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;W.ctl.enableDamping=false;
     const L=(u,v)=>u+(v-u)*e;W.cam.position.setFromSpherical(new THREE.Spherical(L(a.from.r,a.to.r),L(a.from.phi,a.to.phi),L(a.from.theta,a.to.theta))).add(a.tp);W.ctl.target.copy(a.tp);W.cam.lookAt(a.tp);W.ctl.update();try{PERF.dirty=true;}catch(_){}if(p>=1){W.camAnim=null;W.ctl.enableDamping=true;}}
   else if(W.camAnim){const a=W.camAnim,p=Math.min(1,(now-a.t0)/700),e=1-Math.pow(1-p,3);W.ctl.enableDamping=false;W.cam.position.lerpVectors(a.fp,a.cp,e);W.ctl.target.lerpVectors(a.ft,a.tp,e);W.cam.lookAt(W.ctl.target);W.ctl.update();if(p>=1){W.camAnim=null;W.ctl.enableDamping=true;}}
