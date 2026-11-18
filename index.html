@@ -1630,10 +1630,10 @@ html.phone body .bld .pimg{height:var(--bpH,60px)!important}html.phone body .bld
 #deco.v2 .d2{position:absolute;top:0;height:calc(100% - var(--woodH,196px));background:left top/auto 100% no-repeat;display:block;z-index:1}
 #deco.v2 .d2.l{left:0;aspect-ratio:480/1440;background-image:url(assets/deco2/pc_left.webp)}
 #deco.v2 .d2.r{right:0;aspect-ratio:480/1440;background-image:url(assets/deco2/pc_right.webp);background-position:right top}
-#deco.v2 .d2.w{top:auto;bottom:0;left:0;right:0;height:calc(var(--woodH,196px) + 1.6vw);aspect-ratio:auto;background:url(assets/deco2/wood2.webp) center top/100% auto no-repeat;z-index:2;box-shadow:0 -8px 22px rgba(0,0,0,.55)}
+#deco.v2 .d2.w{top:auto;bottom:0;left:0;right:0;height:calc(var(--woodH,196px) + .9vw);aspect-ratio:auto;background:url(assets/deco2/wood2.webp) center top/100% auto no-repeat;z-index:2;box-shadow:0 -8px 22px rgba(0,0,0,.55)}
 html.phone #deco.v2 .d2.l{aspect-ratio:505/1080;background-image:url(assets/deco2/mobile_left.webp)}
 html.phone #deco.v2 .d2.r{aspect-ratio:470/1080;background-image:url(assets/deco2/mobile_right.webp)}
-html.phone #deco.v2 .d2.w{height:calc(var(--woodH) + 1.6vw)}
+html.phone #deco.v2 .d2.w{height:calc(var(--woodH) + .9vw)}
 
 /* tray: no headings under the tabs; guide tab */
 html body .tray-act>.tray-h{visibility:hidden!important}
@@ -1673,6 +1673,30 @@ html.phone body .bld b{font-size:8px!important}
 html body .bld .meta2{display:none!important}
 html body #hand .tally{display:none!important}
 
+
+/* mobile: narrower action buttons, bigger build icons centred in the wood */
+html.phone body .stagebtns{width:auto!important;grid-template-columns:74px 96px!important;gap:3px!important}
+html.phone body .stagebtns .tbtn{min-width:0!important}
+html.phone body .stagebtns .tbtn.primary{min-width:0!important}
+html.phone body .builds{grid-template-columns:repeat(4,60px)!important}
+html.phone body .bld .pimg{height:72px!important;width:60px!important}
+html.phone body .bld .pimg img{width:60px!important;max-width:60px!important;height:72px!important}
+html.phone body .bld b{font-size:9.6px!important}
+html.phone.has-deco2 body .tray-act{justify-content:center!important;padding-bottom:0!important}
+html.phone.has-deco2 body .tray-act #actions{padding-bottom:0!important;margin-top:auto;margin-bottom:auto}
+/* tabs: gold rim, dark gap, inner panel; active one glows */
+html body #handHead .htab{border:1px solid #b88c4a!important;border-bottom:0!important;border-radius:10px 10px 0 0!important;
+  background:linear-gradient(180deg,#2c241c,#16110c 70%)!important;
+  box-shadow:inset 0 0 0 2px #0d0906,inset 0 0 0 3px rgba(214,178,112,.28),inset 0 6px 10px rgba(255,235,190,.06),0 -2px 6px rgba(0,0,0,.5)!important;
+  color:#d8cdb6!important;text-shadow:0 1px 0 #000,0 0 1px #000!important;padding:7px 22px 8px!important}
+html body #handHead .htab.on{border-color:#f3c76e!important;color:#fff1cf!important;
+  background:radial-gradient(ellipse 60% 70% at 50% 110%,rgba(255,196,90,.35),transparent 70%),linear-gradient(180deg,#3a2c1c,#1c140c 75%)!important;
+  box-shadow:inset 0 0 0 2px #0d0906,inset 0 0 0 3px rgba(255,214,140,.55),0 0 10px rgba(255,186,80,.45),0 -2px 8px rgba(0,0,0,.5)!important;
+  text-shadow:0 0 8px rgba(255,200,110,.55),0 1px 0 #000!important}
+html body #handHead .htab.on::after{opacity:1!important;left:10%!important;right:10%!important;bottom:-1px!important;height:2px!important;background:linear-gradient(90deg,transparent,#ffd98a 30%,#fff6dc 50%,#ffd98a 70%,transparent)!important;box-shadow:0 0 8px rgba(255,200,110,.9)}
+html body #handHead .htab:not(.on)::after{display:none!important}
+html body #handHead .htab.hguide{color:#c9bb9c!important}
+html.phone body #handHead .htab{padding:4px 13px 5px!important}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
@@ -3344,7 +3368,7 @@ function showCredits(){openDialog(`<h3>Credits &amp; Licenses</h3><div class="cr
 
 // wood panel / side art follow the tab baseline
 function placeWood(){const d=document.getElementById('deco');if(!d||!d.classList.contains('v2'))return;document.documentElement.classList.add('has-deco2');const t=document.querySelector('#handHead .htabs');const st=document.getElementById('stage');if(!t||!st||!t.offsetParent)return;
-  const k=PH.on?PH.k:1;if(PH.on){const y=(st.getBoundingClientRect().bottom-t.getBoundingClientRect().bottom)/k+(st.getBoundingClientRect().width/k)*.006;if(Math.abs(y-(placeWood.y||0))>.5){placeWood.y=y;d.style.setProperty('--woodH',y+'px');}}else d.style.removeProperty('--woodH');
+  const k=PH.on?PH.k:1;{const y=(st.getBoundingClientRect().bottom-t.getBoundingClientRect().bottom)/k+(st.getBoundingClientRect().width/k)*.004;if(Math.abs(y-(placeWood.y||0))>.5){placeWood.y=y;d.style.setProperty('--woodH',y+'px');document.documentElement.style.setProperty('--woodH',y+'px');try{alignBtns();}catch(e){}}}
   {const L=d.querySelector('.d2.l'),R=d.querySelector('.d2.r');if(L&&R){const r=document.documentElement.style;const wl=L.getBoundingClientRect().width/k,wr=R.getBoundingClientRect().width/k;r.setProperty('--sideL',Math.round(Math.max(14,wl*.42))+'px');r.setProperty('--sideR',Math.round(Math.max(14,wr*.42))+'px');}}}
 setInterval(()=>{try{placeWood();}catch(e){}},300);
 function addDeco(){if(!/[?&]deco=1/.test(location.search)||document.getElementById('deco'))return;const st=document.getElementById('stage');if(!st)return;const d=document.createElement('div');d.id='deco';
@@ -3522,7 +3546,7 @@ function applyPhone(){const coarse=matchMedia('(pointer:coarse)').matches;const 
 function phoneDPR(){if(typeof W==='undefined'||!W.ok)return;const v=Math.min(window.devicePixelRatio||1,2)*(PH.on?Math.max(PH.k,.7):1);try{PERF.max=v;PERF.samples=[];setDPR(v);}catch(e){W.r.setPixelRatio(v);}}
 addEventListener('resize',()=>{applyPhone();setTimeout(()=>{fitChrome();if(S)render();},60);});applyPhone();
 function alignHeads(){const hh=$('#handHead'),ah=document.querySelector('.tray-act>.tray-h');if(!hh||!ah)return;ah.style.marginBottom='';if(!PH.on)return;const k=PH.k||1;const d=(ah.getBoundingClientRect().top-hh.getBoundingClientRect().top)/k;ah.style.setProperty('margin-bottom',Math.max(-16,6+d)+'px','important');}
-function alignBtns(){try{alignHeads();}catch(e){}const sb=$('#stagebtns'),bd=document.querySelector('.builds');if(!sb||!bd)return;if(!HUDQ.matches||PH.on){sb.style.bottom='';return;}const r=bd.getBoundingClientRect();if(!r.height)return;const c=r.top+r.height/2;sb.style.setProperty('bottom',Math.max(12,innerHeight-c-sb.offsetHeight/2)+'px','important');}
+function alignBtns(){try{alignHeads();}catch(e){}{const sb0=$('#stagebtns'),wh=parseFloat(document.documentElement.style.getPropertyValue('--woodH'))||0;if(sb0&&wh&&document.documentElement.classList.contains('has-deco2')&&HUDQ.matches){sb0.style.setProperty('bottom',Math.max(6,(wh-sb0.offsetHeight)/2)+'px','important');return;}}const sb=$('#stagebtns'),bd=document.querySelector('.builds');if(!sb||!bd)return;if(!HUDQ.matches||PH.on){sb.style.bottom='';return;}const r=bd.getBoundingClientRect();if(!r.height)return;const c=r.top+r.height/2;sb.style.setProperty('bottom',Math.max(12,innerHeight-c-sb.offsetHeight/2)+'px','important');}
 function fitChrome(){const h=document.querySelector('header.top');if(h)document.documentElement.style.setProperty('--chrome',(h.offsetHeight+16+40)+'px');
   {const tb=$('#turnbar'),sd=document.querySelector('.side'),st0=$('#stage');if(tb&&sd&&st0){if(HUDQ.matches){if(tb.parentNode!==st0)st0.appendChild(tb);}else if(tb.parentNode!==sd)sd.insertBefore(tb,sd.firstChild);}}
   const sb=$('#stagebtns'),tr=$('#tray'),st=$('#stage');if(sb&&tr&&st){if(HUDQ.matches){if(sb.parentNode!==tr)tr.appendChild(sb);}else if(sb.parentNode!==st)st.appendChild(sb);}
