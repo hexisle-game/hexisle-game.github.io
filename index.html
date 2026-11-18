@@ -1801,8 +1801,38 @@ html.has-deco2 body header.top .tools .ib{width:36px!important;min-width:0!impor
 html.has-deco2 body header.top .tools .ib::before,html.has-deco2 body header.top .tools .ib::after{display:none!important}
 html.has-deco2 body #dicebox::after{display:none!important}
 html.has-deco2 body #dicebox{padding-bottom:5px!important}
-html.has-deco2 body .coach{padding-left:9px!important}
-html.phone.has-deco2 body .coach{padding-left:10px!important}
+html.has-deco2 body .coach{padding-left:7px!important}
+html.phone.has-deco2 body .coach{padding-left:18px!important}
+
+/* ===== round 5 ===== */
+html.has-deco2 body #leftcol #coach{padding-left:0!important}html.phone.has-deco2 body #leftcol #coach{padding-left:10px!important}
+html.phone.has-deco2 body header.top .tools{gap:14px!important}
+html.has-deco2 body #players .pl>.av{width:21px!important;height:21px!important}
+html.phone.has-deco2 body #players .pl>.av{width:14px!important;height:14px!important}
+html.has-deco2 body #players .pl>.vp{font-size:18px!important}html.phone.has-deco2 body #players .pl>.vp{font-size:17px!important}
+html.has-deco2 body .side .panel::before{height:14px!important;margin:0 0 6px!important;background:url(assets/ui2/orn.webp) center/auto 14px no-repeat,linear-gradient(90deg,transparent,rgba(217,172,104,.8) 25%,rgba(217,172,104,.8) 75%,transparent) center/100% 1px no-repeat!important}
+html.has-deco2 body .side .panel::after{display:none!important}
+html.has-deco2 body .roundline{border-top:0!important;padding-top:20px!important;position:relative}
+html.has-deco2 body .roundline::before{content:'';position:absolute;left:0;right:0;top:0;height:14px;background:url(assets/ui2/orn.webp) center/auto 14px no-repeat,linear-gradient(90deg,transparent,rgba(217,172,104,.8) 25%,rgba(217,172,104,.8) 75%,transparent) center/100% 1px no-repeat}
+html.has-deco2 body .tray-act{position:relative}
+html.has-deco2 body .tray-act::before{content:'';position:absolute;left:-18px;top:12%;bottom:12%;width:1px;background:linear-gradient(180deg,transparent,rgba(233,196,122,.35) 30%,rgba(233,196,122,.35) 70%,transparent)}
+html.phone.has-deco2 body .builds{gap:0!important}
+html.phone.has-deco2 body .tray-act{transform:translate(60px,-8px)!important}
+html.phone.has-deco2 body .bld .pimg{transform:translateY(-4px)}
+.sheet-info .icols:not(.devc) .icol .ibld{transform:none!important}
+.sheet-info .ieq{transform:rotate(90deg);display:inline-block}
+.sheet-info .itip{font-size:16.5px!important;line-height:1.55!important;color:#e6dccb!important}
+html.phone .sheet-info .itip{font-size:13.5px!important}
+/* wood: draw it on a pseudo layer so the rope above the top edge is not clipped */
+html.has-deco2 body .tray{background:none!important;isolation:isolate}
+html.has-deco2 body .tray::after{content:'';position:absolute;left:0;right:0;top:-.9vw;bottom:0;z-index:-1;pointer-events:none;background:url(assets/deco2/wood2.webp) center top/100% auto no-repeat,linear-gradient(180deg,transparent calc(.9vw + 3px),#2a1f16 calc(.9vw + 3px))}
+/* result list and turn banner: ornament lines top and bottom */
+#result .tbl{position:relative}
+#result .tbl::before,#result .tbl::after{content:'';position:absolute;left:0;right:0;height:14px;background:url(assets/ui2/orn.webp) center/auto 14px no-repeat,linear-gradient(90deg,transparent,rgba(217,172,104,.8) 25%,rgba(217,172,104,.8) 75%,transparent) center/100% 1px no-repeat;z-index:1}
+#result .tbl::before{top:-7px}#result .tbl::after{bottom:-7px}
+#turnBan .tbo{display:none!important}
+#turnBan::before,#turnBan::after{content:'';position:absolute;left:12%;right:12%;height:14px;background:url(assets/ui2/orn.webp) center/auto 14px no-repeat,linear-gradient(90deg,transparent,rgba(217,172,104,.8) 25%,rgba(217,172,104,.8) 75%,transparent) center/100% 1px no-repeat}
+#turnBan::before{top:-7px}#turnBan::after{bottom:-7px}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
@@ -2674,7 +2704,7 @@ function haystack(g,x,z){const y=heightAt(x,z);g.add(part('cyl',0xd8b45a,[.028,.
 function addMapLabel(text,col,pos,kind,keep){const lay=$('#maplbls');const el=document.createElement('div');el.className='maplbl '+kind;el.innerHTML=(kind==='rob'?'':`<i style="background:${col}"></i>`)+`<span>${text}</span>`;lay.appendChild(el);
   const L={el,pos,keep,kind};(W.labels=W.labels||[]).push(L);return L;}
 const _lv=new THREE.Vector3();let LSC=1;
-function placeLabels(){if(!W.labels)return;const st=$('#stage');const w=st.clientWidth,h=st.clientHeight;{const d=W.cam.position.distanceTo(W.ctl.target);const ref=W.ctl.minDistance+(W.ctl.maxDistance-3.5-W.ctl.minDistance)*.5;LSC=Math.max(.35,Math.min(1.6,ref/d));}
+function placeLabels(){if(!W.labels)return;const st=$('#stage');const w=st.clientWidth,h=st.clientHeight;{const d=W.cam.position.distanceTo(W.ctl.target);const ref=W.ctl.minDistance+(W.ctl.maxDistance-3.5-W.ctl.minDistance)*.5;LSC=Math.max(PH.on?.42:.62,Math.min(1.6,ref/d))*(PH.on?.82:1);}
   for(const L of W.labels){if(L.anchor){L.anchor.getWorldPosition(_lv);_lv.add(L.off.clone().multiplyScalar(L.anchor.scale.x));}else _lv.copy(L.pos);_lv.project(W.cam);
     if(_lv.z>1||_lv.z<-1){L.el.style.display='none';continue;}L.el.style.display='';L.el.style.transform=`translate(${((_lv.x+1)/2*w).toFixed(1)}px,${((1-_lv.y)/2*h).toFixed(1)}px) translate(-50%,-50%) scale(${LSC.toFixed(3)})`;}}
 function buildStatic(){
@@ -3210,8 +3240,8 @@ function placeCrest(){const sh=$('#sheet'),c=$('#mcrest');if(!sh||!c||$('#modal'
 addEventListener('resize',()=>setTimeout(placeCrest,80));
 function infoDialog(k,guide){const ci=r=>`<img class="ic-card" src="${CARDIMG[r]}" alt="${RN[r]}">`;let body,title,sub;
   if(k==='cost'){title='건설 비용';sub='자원 카드를 모아 지어요.';
-    const D={road:'영역을 넓혀요',settlement:'1점 · 자원 1장씩',city:'2점 · 자원 2장씩',dev:'무작위 특수 카드'};
-    body=`<div class="icols">${['dev','road','settlement','city'].map(w=>`<div class="icol"><div class="ihd"><b>${BN[w]}</b><small>${D[w]}</small></div><img class="ibld" src="${BUILDIMG[w]}" alt=""><div class="ieq">=</div><div class="ccards">${RES.flatMap(r=>Array(COST[w][r]||0).fill(r)).map(ci).join('')}</div><div class="isum">${RES.filter(r=>COST[w][r]).map(r=>RN[r]+' '+COST[w][r]).join(' · ')}</div>${guide?`<p class="itip">${BTIP[w].replace(/^[^.]*\.\s*/,'')}</p>`:''}</div>`).join('')}</div>`;}
+    const D={dev:`특수카드 · 총 ${Object.values(DEVCNT).reduce((a,b)=>a+b,0)}장`,road:'영역을 넓혀요 · 총 15개',settlement:'1점 · 총 5개',city:'2점 · 총 4개'};const GT={dev:'랜덤으로 카드 1장을 뽑아요. 다음 차례부터 쓸 수 있어요.',road:'땅 사이에 놓아요. 정착지는 내 도로가 이어진 곳에만 지을 수 있어요.',settlement:'다른 건물과 2칸 이상 떨어진 빈 꼭지점에 지어요. 자원을 한장씩 받아요.',city:'정착지에서 업그레이드해요. 자원을 두장씩 받아요.'};
+    body=`<div class="icols">${['dev','road','settlement','city'].map(w=>`<div class="icol"><div class="ihd"><b>${BN[w]}</b><small>${D[w]}</small></div><img class="ibld" src="${BUILDIMG[w]}" alt=""><div class="ieq">=</div><div class="ccards">${RES.flatMap(r=>Array(COST[w][r]||0).fill(r)).map(ci).join('')}</div><div class="isum">${RES.filter(r=>COST[w][r]).map(r=>RN[r]+' '+COST[w][r]).join(' · ')}</div>${guide?`<p class="itip">${GT[w]}</p>`:''}</div>`).join('')}</div>`;}
   else{title='발전 카드';sub='한 차례에 1장만, 산 다음 내 차례부터 쓸 수 있어요.';
     const D={knight:'도적을 옮기고<br>상대 카드 1장을 빼앗아요.',vp:'갖고만 있어도 1점.<br>상대에게는 보이지 않아요.',roads:'도로 2개를<br>무료로 놓아요.',plenty:'은행에서 원하는 자원<br>2장을 받아요.',monopoly:'자원 1종을 골라 상대들이<br>가진 것을 전부 가져와요.'};
     body=`<div class="icols devc">${['knight','vp','roads','plenty','monopoly'].map(t=>`<div class="icol"><img class="idev" src="${CARDIMG[t]}" alt="${DEVN[t]}"><p>${D[t]}</p><small>총 ${DEVCNT[t]}장</small></div>`).join('')}</div>`;}
