@@ -2797,12 +2797,12 @@ function tintRoof(m,col){m.updateMatrixWorld(true);const bb=new THREE.Box3().set
     mt.customProgramCacheKey=()=>'tintRoof';mt.needsUpdate=true;});}
 const TROOF=['1.12','1.45','.34','.4'];const TXM=!/[?&]tx=0/.test(location.search),TXC={};const FLOORH=.075;
 // castle A (single texture): blue roofs -> player colour, bluish stone -> warm light stone
-function tintCastle(m,col){const tc=new THREE.Color(col);const TF={0xff2a1a:[0xff2a1a,.78,1],0x3a8cff:[0x18b4ff,1.75,1.12],0xf5c400:[0xffcf10,1.85,1.15],0x2fa548:[0x36c98c,1.25,1.05],0xe331c5:[0xe04ac0,.78,.92],0xefe6cf:[0xfff8ea,0,2.0]}[tc.getHex()]||[tc.getHex(),1.2,1];tc.setHex(TF[0]);
+function tintCastle(m,col){const tc=new THREE.Color(col);const TF={0xff2a1a:[0xff2a1a,.95,.95],0x3a8cff:[0x18b4ff,1.75,1.12],0xf5c400:[0xffcf10,1.85,1.15],0x2fa548:[0x36c98c,1.25,1.05],0xe331c5:[0xff5aa0,.7,.98],0xefe6cf:[0xfff8ea,0,2.0]}[tc.getHex()]||[tc.getHex(),1.2,1];tc.setHex(TF[0]);
   m.traverse(c=>{if(!c.isMesh)return;const mt=c.material;const U={value:tc},US={value:TF[1]},UG={value:TF[2]};
     mt.onBeforeCompile=sh=>{sh.uniforms.uTint=U;sh.uniforms.uSat=US;sh.uniforms.uGain=UG;
       sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nuniform vec3 uTint;uniform float uSat;uniform float uGain;').replace('#include <map_fragment>',`#include <map_fragment>
         {vec3 c=diffuseColor.rgb;float mx=max(c.r,max(c.g,c.b)),mn=min(c.r,min(c.g,c.b));float sat=(mx-mn)/(mx+.001);float k=smoothstep(.06,.14,c.b-c.r)*smoothstep(.32,.5,sat);float l=dot(c,vec3(.299,.587,.114));
-         vec3 warm=vec3(l)*vec3(1.1,1.0,.84)*1.95;vec3 t=uTint*clamp(l*2.6*uGain,0.,1.6);t=max(mix(vec3(dot(t,vec3(.299,.587,.114))),t,uSat),0.);diffuseColor.rgb=mix(warm,t,k);}`);};
+         vec3 warm=vec3(l)*vec3(1.1,1.0,.84)*1.95;vec3 t=uTint*clamp(l*3.1*uGain,0.,1.7);t=max(mix(vec3(dot(t,vec3(.299,.587,.114))),t,uSat),0.);t=mix(t,vec3(1.,.97,.92),.07);diffuseColor.rgb=mix(warm,t,k);}`);};
     mt.customProgramCacheKey=()=>'tintCastle';mt.needsUpdate=true;});}
 const BGLB={};
 function bldFig(file,o,ry,wTarget,roofs,drop,tint){const k=new THREE.Group();const R=BGLB[file]=BGLB[file]||{g:null,cbs:[]};
@@ -2820,13 +2820,13 @@ function bldFig(file,o,ry,wTarget,roofs,drop,tint){const k=new THREE.Group();con
   if(R.g)put(R.g);else{R.cbs.push(put);if(R.cbs.length===1)new THREE.GLTFLoader().load(file,g=>{R.g=g;R.cbs.splice(0).forEach(fn=>fn(g));},undefined,e=>console.warn('bld',e));}
   return k;}
 const USEBLD=!/[?&]bld=old/.test(location.search);const TSM=(/[?&]sm=([1-4])/.exec(location.search)||[])[1]||(/[?&]test=1/.test(location.search)?'4':undefined);
-function settlementMesh(o,ry){const k=new THREE.Group();basePlate(k,o,.17);if(USEBLD&&THREE.GLTFLoader){const h=bldFig(TSM?`assets/test/t${TSM}.glb`:'assets/bld/cottage.glb',o,ry,.247,['Rooftiles'],['Land'],TSM==='4');h.position.y=.03;k.add(h);return k;}const h=new THREE.Group();h.rotation.y=ry;h.position.y=.03;k.add(h);
+function settlementMesh(o,ry){const k=new THREE.Group();basePlate(k,o,TSM?.17*.85:.17);if(USEBLD&&THREE.GLTFLoader){const h=bldFig(TSM?`assets/test/t${TSM}.glb`:'assets/bld/cottage.glb',o,ry,.247,['Rooftiles'],['Land'],TSM==='4');h.position.y=.03;k.add(h);return k;}const h=new THREE.Group();h.rotation.y=ry;h.position.y=.03;k.add(h);
   rhouse(h,-.02,-.01,.13,.1,.15,o,0);rhouse(h,.1,.06,.075,.065,.095,o,Math.PI/2);
   h.add(part('box',tmat('slate',0xbfb8ac,.3,.6),[.024,.07,.024],[.03,.21,-.03]));
   const wd=tmat('bark',0xffffff,.5,.3);for(let i=0;i<3;i++)h.add(part('cyl',wd,[.011,.05,.011],[-.12,.012+i*.019,.06+(i%2)*.012],{rx:Math.PI/2,ry:.3}));
   h.add(part('cyl',tmat('plank',0x8a6a48,.2,1),[.005,.22,.005],[-.12,.11,-.07]));h.add(part('box',PM(o),[.07,.045,.004],[-.085,.195,-.07],{noShadow:true}));
   return k;}
-function cityMesh(o,ry){const k=new THREE.Group();basePlate(k,o,.25);if(USEBLD&&THREE.GLTFLoader){const c=TSM?bldFig('assets/test/c1.glb',o,ry,.33,[],[],'castle'):bldFig('assets/bld/castle.glb',o,ry,.33,['Roof'],['Dirt']);c.position.y=.03;k.add(c);return k;}const c=new THREE.Group();c.rotation.y=ry;c.position.y=.03;k.add(c);
+function cityMesh(o,ry){const k=new THREE.Group();basePlate(k,o,TSM?.25*.8:.25);if(USEBLD&&THREE.GLTFLoader){const c=TSM?bldFig('assets/test/c1.glb',o,ry,.3465,[],[],'castle'):bldFig('assets/bld/castle.glb',o,ry,.33,['Roof'],['Dirt']);c.position.y=.03;k.add(c);return k;}const c=new THREE.Group();c.rotation.y=ry;c.position.y=.03;k.add(c);
   const wall=tmat('slate',0xd2ccc0,2.2,.7),wall2=tmat('slate',0xbab3a6,.6,.3),S2=.17;
   for(const [x,z,rot] of [[0,S2,0],[0,-S2,0],[S2,0,Math.PI/2],[-S2,0,Math.PI/2]]){
     c.add(part('box',wall,[.34,.11,.04],[x,.055,z],{ry:rot}));
@@ -3426,7 +3426,7 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '정착지 짓기':()=>{if(S.phase==='setup')finishSetup();let sp=settleSpots(ME);if(!sp.length){const e=roadSpots(ME);if(e.length){give(ME,{wood:1,brick:1});placeRoad(ME,e[0]);sp=settleSpots(ME);}}
       if(!sp.length){const e=roadSpots(ME);if(e.length){give(ME,{wood:1,brick:1});placeRoad(ME,e[0]);sp=settleSpots(ME);}}
       if(sp.length){give(ME,{wood:1,brick:1,wool:1,grain:1});placeSettlement(ME,sp[0]);}update();},
-    '도시 짓기':()=>{if(S.phase==='setup')finishSetup();const cs=citySpots(ME);if(cs.length){give(ME,{ore:3,grain:2});placeCity(ME,cs[0]);}update();},
+    '도시 짓기 (모든 플레이어)':()=>{if(S.phase==='setup')finishSetup();S.players.forEach((_,i)=>{const cs=citySpots(i);if(cs.length){give(i,{ore:3,grain:2});placeCity(i,cs[0]);}});update();},
     '도로 5개 + 최장 교역로':()=>{if(S.phase==='setup')finishSetup();for(let i=0;i<5;i++){const pr=prodOf(ME);const rs=roadSpots(ME);if(!rs.length)break;give(ME,{wood:1,brick:1});placeRoad(ME,argmax(rs,e=>roadScore(ME,e,pr)));}updateLongest();update();},
     '최장 교역로 빛만 다시':()=>{roadGlow(roadPath(ME));},
     '도적 이동':()=>{if(S.phase==='setup')finishSetup();const hs=HIDX.filter(i=>i!==S.board.robber);S.board.robber=hs[Math.floor(Math.random()*hs.length)];update();},
