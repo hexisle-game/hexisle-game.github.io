@@ -1748,6 +1748,61 @@ html.has-deco2:not(.phone) body #hand{zoom:.9}
 html.phone.has-deco2{--barOff:8px}
 html.phone.has-deco2 body .tray{bottom:-8px!important}
 html.phone.has-deco2 body .tray-act{transform:translateY(-8px)}
+
+/* ===== round 4 ===== */
+header.top .uico{width:26px;height:26px;display:block;object-fit:contain;filter:drop-shadow(0 1px 2px rgba(0,0,0,.7))}
+html.phone header.top .uico{width:24px;height:24px}
+#fsBtn .uico.fs-out,#fsBtn.on .uico.fs-in{display:none}#fsBtn.on .uico.fs-out{display:block}
+html.has-deco2 body header.top .tools{gap:18px!important}
+html.has-deco2 body header.top .tools>.ib{width:36px!important;min-width:0!important;height:36px!important;padding:0!important;margin:0!important;display:grid!important;place-items:center!important;border:0!important;background:none!important}
+html.has-deco2 body header.top .tools>.ib[hidden]{display:none!important}
+html.has-deco2 body .side{top:var(--hdB,80px)!important}
+html.phone.has-deco2 body .side{top:var(--hdB,80px)!important}
+html.phone.has-deco2 body #players .pl:first-child{margin-top:0!important}
+/* player rows: avatar column (with badges below), name, score — all centred */
+html.has-deco2 body #players{display:flex;flex-direction:column;gap:4px}
+html.has-deco2 body #players .pl{display:grid!important;grid-template-columns:auto minmax(0,1fr) auto!important;grid-template-rows:auto auto;column-gap:10px!important;row-gap:3px!important;align-items:center!important;padding:4px 10px!important;min-height:0!important;margin:0!important}
+html.has-deco2 body #players .pl>.av{grid-column:1;grid-row:1;justify-self:center;width:26px!important;height:26px!important;min-width:0!important;margin:0!important}
+html.has-deco2 body #players .pl>.bdgs{grid-column:1;grid-row:2;justify-self:center;margin:0!important;display:flex;gap:2px}
+html.has-deco2 body #players .pl>.bdgs img{height:14px}
+html.has-deco2 body #players .pl>.nm{grid-column:2;grid-row:1/span 2;align-self:center;margin:0!important;line-height:1.2}
+html.has-deco2 body #players .pl>.vp{grid-column:3;grid-row:1/span 2;align-self:center;margin:0!important;line-height:1}
+html.phone.has-deco2 body #players .pl>.av{width:17px!important;height:17px!important;box-shadow:0 0 0 3px var(--c),0 0 0 5px rgba(0,0,0,.55)!important}
+html.phone.has-deco2 body #players .pl>.nm{font-size:calc(var(--nmF,12px) - 1px)!important}
+html.phone.has-deco2 body #players .pl>.vp{font-size:calc(var(--vpF,20px) - 1px)!important}
+html.phone.has-deco2 body header.top,html.phone.has-deco2 body .side{width:168px!important}
+/* left: coach text aligned with the dice, no line */
+html.has-deco2 body .coach{padding:0!important;margin:0!important;background:none!important;border:0!important;box-shadow:none!important;text-align:left;width:auto!important}
+html.has-deco2 body .coach::before,html.has-deco2 body .coach::after{display:none!important}
+/* no divider between build icons and the button set */
+html.has-deco2 body .tray>div+div,html.has-deco2 body .tray>#stagebtns{border-left:0!important}
+/* shift builds right; mobile card/build sizes */
+html.has-deco2 body .tray-act{transform:translateX(32px)}
+html.phone.has-deco2 body .tray-act{transform:translate(48px,-8px)!important}
+html.phone.has-deco2 body #hand{zoom:1.05;transform:translateY(-4px)}
+html.phone body .builds{grid-template-columns:repeat(4,69px)!important}
+html.phone body .bld .pimg{height:83px!important;width:69px!important}
+html.phone body .bld .pimg img{width:69px!important;max-width:69px!important;height:83px!important}
+/* map labels: port tags sea-blue, robber tag dark red */
+.maplbl.port{background:rgba(16,52,86,.82)!important;border-color:rgba(160,205,240,.35)!important}
+.maplbl.rob{background:rgba(92,18,14,.9)!important;border-color:rgba(230,120,90,.45)!important;padding-left:10px!important}
+
+/* guide: build images same size */
+.sheet-info .ibld{width:84px!important;height:100px!important;object-fit:contain!important}
+html.phone .sheet-info .ibld{width:56px!important;height:67px!important}
+html.phone body .sheet.sheet-info{transform:none!important}
+html.phone body .sheet-info .ifoot{right:18px;bottom:12px}
+html.phone body .sheet-info .ibody{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:4px 0 46px!important;margin:0!important;overflow:hidden}
+html.phone body .sheet-info .ibody .icols{zoom:.86}
+
+html.has-deco2 body header.top .tools>*{margin:0!important;padding:0!important;border:0!important}
+html.has-deco2 body header.top .tools>*::before,html.has-deco2 body header.top .tools>*::after{display:none!important}
+html.has-deco2 body header.top .tools .ib{width:36px!important;min-width:0!important;height:36px!important;padding:0!important;margin:0!important;display:grid!important;place-items:center!important;border:0!important;background:none!important}
+html.has-deco2 body header.top .tools .ib::before,html.has-deco2 body header.top .tools .ib::after{display:none!important}
+html.has-deco2 body #dicebox::after{display:none!important}
+html.has-deco2 body #dicebox{padding-bottom:5px!important}
+html.has-deco2 body .coach{padding-left:9px!important}
+html.phone.has-deco2 body .coach{padding-left:10px!important}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
@@ -1860,11 +1915,11 @@ html.phone body .dlg-snd .sndrow{grid-template-columns:auto 150px 60px;gap:12px}
     <h1 class="logo logoimg"><img id="logoImg" alt="HEXISLE 헥스아일 - 개척의 시대"></h1>
   </div>
   <div class="tools">
-    <button id="camReset" class="ib" data-tip="보드를 처음 시점으로 되돌려요"><svg class="gico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><defs><linearGradient id="ggr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbe6b4"/><stop offset=".55" stop-color="#d9ac68"/><stop offset="1" stop-color="#a87a42"/></linearGradient></defs><g stroke="#3a2412" stroke-width="3.2" transform="translate(.7 .9)" opacity=".85"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 3.8v4.2h4.2"/></g><g stroke="url(#ggr)" stroke-width="2.4"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 3.8v4.2h4.2"/></g></svg><span class="lb">시점 초기화</span></button>
-    <button id="fsBtn" class="ib" hidden><svg class="gico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><defs><linearGradient id="ggf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbe6b4"/><stop offset=".55" stop-color="#d9ac68"/><stop offset="1" stop-color="#a87a42"/></linearGradient></defs><g stroke="#3a2412" stroke-width="3.2" transform="translate(.7 .9)" opacity=".85"><g class="fs-in"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></g><g class="fs-out"><path d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></g></g><g stroke="url(#ggf)" stroke-width="2.4"><g class="fs-in"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></g><g class="fs-out"><path d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></g></g></svg><span class="lb">전체화면 켜기</span></button>
+    <button id="camReset" class="ib" data-tip="보드를 처음 시점으로 되돌려요"><img class="uico" src="assets/ui2/reset.webp" alt=""><span class="lb">시점 초기화</span></button>
+    <button id="fsBtn" class="ib" hidden><img class="uico fs-in" src="assets/ui2/fullscreen.webp" alt=""><img class="uico fs-out" src="assets/ui2/exit_fullscreen.webp" alt=""><span class="lb">전체화면 켜기</span></button>
     <button id="tExit" class="ib tut-only" hidden><svg class="gico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><defs><linearGradient id="gge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbe6b4"/><stop offset=".55" stop-color="#d9ac68"/><stop offset="1" stop-color="#a87a42"/></linearGradient></defs><g stroke="#3a2412" stroke-width="3.2" transform="translate(.7 .9)" opacity=".85"><path d="M14 4h4.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H14"/><path d="M10 8l-4 4 4 4M6 12h10"/></g><g stroke="url(#gge)" stroke-width="2.4"><path d="M14 4h4.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H14"/><path d="M10 8l-4 4 4 4M6 12h10"/></g></svg><span class="lb">나가기</span></button>
     <div class="setwrap">
-      <button id="setBtn" class="ib" aria-label="설정" aria-haspopup="true" aria-expanded="false" data-tip="설정"><svg class="gico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><defs><linearGradient id="ggs" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbe6b4"/><stop offset=".55" stop-color="#d9ac68"/><stop offset="1" stop-color="#a87a42"/></linearGradient></defs><g stroke="#3a2412" stroke-width="3.2" transform="translate(.7 .9)" opacity=".85"><path d="M12.00 5.00 L14.41 3.02 L16.65 3.95 L16.95 7.05 L18.06 8.50 L20.98 9.59 L21.30 12.00 L18.76 13.81 L18.06 15.50 L18.58 18.58 L16.65 20.05 L13.81 18.76 L12.00 19.00 L9.59 20.98 L7.35 20.05 L7.05 16.95 L5.94 15.50 L3.02 14.41 L2.70 12.00 L5.24 10.19 L5.94 8.50 L5.42 5.42 L7.35 3.95 L10.19 5.24 Z"/><circle cx="12" cy="12" r="3"/></g><g stroke="url(#ggs)" stroke-width="2.4"><path d="M12.00 5.00 L14.41 3.02 L16.65 3.95 L16.95 7.05 L18.06 8.50 L20.98 9.59 L21.30 12.00 L18.76 13.81 L18.06 15.50 L18.58 18.58 L16.65 20.05 L13.81 18.76 L12.00 19.00 L9.59 20.98 L7.35 20.05 L7.05 16.95 L5.94 15.50 L3.02 14.41 L2.70 12.00 L5.24 10.19 L5.94 8.50 L5.42 5.42 L7.35 3.95 L10.19 5.24 Z"/><circle cx="12" cy="12" r="3"/></g></svg></button>
+      <button id="setBtn" class="ib" aria-label="설정" aria-haspopup="true" aria-expanded="false" data-tip="설정"><img class="uico" src="assets/ui2/settings.webp" alt=""></button>
       <div id="setMenu" class="setmenu" hidden><div class="setdim" id="setDim"></div><nav class="setpanel" role="menu" aria-label="설정"><div class="sethead"><span>설정</span><button class="setx" id="setX" aria-label="닫기"></button></div>
         <button id="newBtn" class="mi" role="menuitem">새 게임</button>
         <button id="rulesBtn" class="mi" role="menuitem">게임 방법</button>
@@ -2616,12 +2671,12 @@ function windmill(g,x,z,s){const y=heightAt(x,z);const k=new THREE.Group();k.pos
   for(let i=0;i<4;i++){const arm=new THREE.Group();arm.rotation.z=i*Math.PI/2;arm.add(part('box',0x5a4632,[.005,.13,.004],[0,.065,0]));arm.add(part('box',0xefe6d2,[.026,.085,.002],[.015,.08,.002]));bl.add(arm);}
   k.add(bl);W.mills.push(bl);g.add(k);}
 function haystack(g,x,z){const y=heightAt(x,z);g.add(part('cyl',0xd8b45a,[.028,.03,.028],[x,y+.015,z]));g.add(part('cone8',0xc9a24a,[.03,.03,.03],[x,y+.045,z]));}
-function addMapLabel(text,col,pos,kind,keep){const lay=$('#maplbls');const el=document.createElement('div');el.className='maplbl '+kind;el.innerHTML=`<i style="background:${col}"></i><span>${text}</span>`;lay.appendChild(el);
+function addMapLabel(text,col,pos,kind,keep){const lay=$('#maplbls');const el=document.createElement('div');el.className='maplbl '+kind;el.innerHTML=(kind==='rob'?'':`<i style="background:${col}"></i>`)+`<span>${text}</span>`;lay.appendChild(el);
   const L={el,pos,keep,kind};(W.labels=W.labels||[]).push(L);return L;}
-const _lv=new THREE.Vector3();
-function placeLabels(){if(!W.labels)return;const st=$('#stage');const w=st.clientWidth,h=st.clientHeight;
+const _lv=new THREE.Vector3();let LSC=1;
+function placeLabels(){if(!W.labels)return;const st=$('#stage');const w=st.clientWidth,h=st.clientHeight;{const d=W.cam.position.distanceTo(W.ctl.target);const ref=W.ctl.minDistance+(W.ctl.maxDistance-3.5-W.ctl.minDistance)*.5;LSC=Math.max(.35,Math.min(1.6,ref/d));}
   for(const L of W.labels){if(L.anchor){L.anchor.getWorldPosition(_lv);_lv.add(L.off.clone().multiplyScalar(L.anchor.scale.x));}else _lv.copy(L.pos);_lv.project(W.cam);
-    if(_lv.z>1||_lv.z<-1){L.el.style.display='none';continue;}L.el.style.display='';L.el.style.transform=`translate(${((_lv.x+1)/2*w).toFixed(1)}px,${((1-_lv.y)/2*h).toFixed(1)}px) translate(-50%,-50%)`;}}
+    if(_lv.z>1||_lv.z<-1){L.el.style.display='none';continue;}L.el.style.display='';L.el.style.transform=`translate(${((_lv.x+1)/2*w).toFixed(1)}px,${((1-_lv.y)/2*h).toFixed(1)}px) translate(-50%,-50%) scale(${LSC.toFixed(3)})`;}}
 function buildStatic(){
   const key=JSON.stringify(S.board.hexes)+JSON.stringify(S.board.ports);if(key===W.boardKey)return;W.boardKey=key;W.prev=null;W.robberFrom=null;if(W.pieces){W.pieces.clear();}W.dynG.clear();W.anim.clear();W.robber=null;W.tkey=null;
   W.staticG.clear();W.mills=[];W.tokens=[];W.infoG.clear();makeEnv();if(W.labels){W.labels=W.labels.filter(L=>{if(L.keep)return true;L.el.remove();return false;});}
@@ -3156,7 +3211,7 @@ addEventListener('resize',()=>setTimeout(placeCrest,80));
 function infoDialog(k,guide){const ci=r=>`<img class="ic-card" src="${CARDIMG[r]}" alt="${RN[r]}">`;let body,title,sub;
   if(k==='cost'){title='건설 비용';sub='자원 카드를 모아 지어요.';
     const D={road:'영역을 넓혀요',settlement:'1점 · 자원 1장씩',city:'2점 · 자원 2장씩',dev:'무작위 특수 카드'};
-    body=`<div class="icols">${['road','settlement','city','dev'].map(w=>`<div class="icol"><div class="ihd"><b>${BN[w]}</b><small>${D[w]}</small></div><img class="ibld" src="${BUILDIMG[w]}" alt=""><div class="ieq">=</div><div class="ccards">${RES.flatMap(r=>Array(COST[w][r]||0).fill(r)).map(ci).join('')}</div><div class="isum">${RES.filter(r=>COST[w][r]).map(r=>RN[r]+' '+COST[w][r]).join(' · ')}</div>${guide?`<p class="itip">${BTIP[w].replace(/^[^.]*\.\s*/,'')}</p>`:''}</div>`).join('')}</div>`;}
+    body=`<div class="icols">${['dev','road','settlement','city'].map(w=>`<div class="icol"><div class="ihd"><b>${BN[w]}</b><small>${D[w]}</small></div><img class="ibld" src="${BUILDIMG[w]}" alt=""><div class="ieq">=</div><div class="ccards">${RES.flatMap(r=>Array(COST[w][r]||0).fill(r)).map(ci).join('')}</div><div class="isum">${RES.filter(r=>COST[w][r]).map(r=>RN[r]+' '+COST[w][r]).join(' · ')}</div>${guide?`<p class="itip">${BTIP[w].replace(/^[^.]*\.\s*/,'')}</p>`:''}</div>`).join('')}</div>`;}
   else{title='발전 카드';sub='한 차례에 1장만, 산 다음 내 차례부터 쓸 수 있어요.';
     const D={knight:'도적을 옮기고<br>상대 카드 1장을 빼앗아요.',vp:'갖고만 있어도 1점.<br>상대에게는 보이지 않아요.',roads:'도로 2개를<br>무료로 놓아요.',plenty:'은행에서 원하는 자원<br>2장을 받아요.',monopoly:'자원 1종을 골라 상대들이<br>가진 것을 전부 가져와요.'};
     body=`<div class="icols devc">${['knight','vp','roads','plenty','monopoly'].map(t=>`<div class="icol"><img class="idev" src="${CARDIMG[t]}" alt="${DEVN[t]}"><p>${D[t]}</p><small>총 ${DEVCNT[t]}장</small></div>`).join('')}</div>`;}
@@ -3421,7 +3476,7 @@ function showCredits(){openDialog(`<h3>Credits &amp; Licenses</h3><div class="cr
 // wood panel / side art follow the tab baseline
 function placeWood(){const d=document.getElementById('deco');if(!d||!d.classList.contains('v2'))return;document.documentElement.classList.add('has-deco2');const t=document.querySelector('#handHead .htabs');const st=document.getElementById('stage');if(!t||!st||!t.offsetParent)return;
   const k=PH.on?PH.k:1;{const y=(st.getBoundingClientRect().bottom-t.getBoundingClientRect().bottom)/k+(st.getBoundingClientRect().width/k)*.004;if(Math.abs(y-(placeWood.y||0))>.5){placeWood.y=y;d.style.setProperty('--woodH',y+'px');document.documentElement.style.setProperty('--woodH',y+'px');try{alignBtns();}catch(e){}}}
-  {const L=d.querySelector('.d2.l'),R=d.querySelector('.d2.r');if(L&&R){const r=document.documentElement.style;const wl=L.getBoundingClientRect().width/k,wr=R.getBoundingClientRect().width/k;r.setProperty('--sideL',Math.round(Math.max(14,wl*.42))+'px');r.setProperty('--sideR',Math.round(Math.max(14,wr*.42))+'px');r.setProperty('--dL',Math.round(wl*.24+12)+'px');r.setProperty('--dR',Math.round(wr*.58+8)+'px');r.setProperty('--dT',Math.round(L.getBoundingClientRect().height/k*.09)+'px');}}}
+  {const L=d.querySelector('.d2.l'),R=d.querySelector('.d2.r');if(L&&R){const r=document.documentElement.style;const wl=L.getBoundingClientRect().width/k,wr=R.getBoundingClientRect().width/k;r.setProperty('--sideL',Math.round(Math.max(14,wl*.42))+'px');r.setProperty('--sideR',Math.round(Math.max(14,wr*.42))+'px');r.setProperty('--dL',Math.round(wl*.24+12)+'px');r.setProperty('--dR',Math.round(wr*.58+8)+'px');r.setProperty('--dT',Math.round(L.getBoundingClientRect().height/k*.09)+'px');{const hd=document.querySelector('header.top .tools');if(hd){const hb=(hd.getBoundingClientRect().bottom-document.documentElement.getBoundingClientRect().top-PH.oy)/k;r.setProperty('--hdB',Math.round(hb+6)+'px');}}}}}
 setInterval(()=>{try{placeWood();}catch(e){}},300);
 function addDeco(){if(!/[?&]deco=1/.test(location.search)||document.getElementById('deco'))return;const st=document.getElementById('stage');if(!st)return;const d=document.createElement('div');d.id='deco';
   d.className='v2';d.innerHTML='<i class="d2 l"></i><i class="d2 r"></i><i class="d2 w"></i><i class="dk plank"></i><i class="dk cur l"></i><i class="dk cur r"></i><i class="dk ml"></i><i class="dk mr"></i><i class="dk bl"></i><i class="dk br"></i><i class="dvig"></i>';
