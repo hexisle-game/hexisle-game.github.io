@@ -1709,12 +1709,12 @@ html.has-deco2 #deco.v2 .d2{height:calc(100% - var(--barH))!important}
 html.has-deco2{--barH:max(150px,18.5vh)}
 html.phone.has-deco2{--barH:calc(var(--vh) * .3)}
 html.has-deco2 body .tray{position:fixed!important;left:0!important;right:0!important;bottom:0!important;top:auto!important;height:var(--barH)!important;
-  padding:0 var(--sideR,24px) 0 var(--sideL,24px)!important;margin:0!important;border:0!important;border-radius:0!important;
+  padding:0 calc(var(--sideR,24px) / 2) 0 calc(var(--sideL,24px) / 2)!important;margin:0!important;border:0!important;border-radius:0!important;
   background:url(assets/deco2/wood2.webp) center calc(-.9vw) / 100% auto no-repeat,#2a1f16!important;box-shadow:0 -6px 18px rgba(0,0,0,.55)!important;
   display:grid!important;grid-template-columns:minmax(0,1fr) auto auto!important;align-items:center!important;column-gap:28px!important;row-gap:0!important;overflow:visible!important}
 html.has-deco2 body .tray>*{align-self:center!important;margin:0!important;padding-top:0!important;padding-bottom:0!important}
 html.has-deco2 body .tray-hand{position:static!important;display:flex!important;flex-direction:column;justify-content:center;height:100%}
-html.has-deco2 body #handHead{position:absolute!important;left:var(--sideL,24px)!important;top:0!important;transform:translateY(-100%) translateY(1px);margin:0!important;padding:0!important}
+html.has-deco2 body #handHead{position:absolute!important;left:calc(var(--sideL,24px) / 2)!important;top:0!important;transform:translateY(-100%) translateY(5px);margin:0!important;padding:0!important}
 html.has-deco2 body .tray-act{display:flex!important;flex-direction:column!important;justify-content:center!important;height:100%}
 html.has-deco2 body .tray-act>.tray-h{display:none!important}
 html.has-deco2 body .tray-act #actions{padding:0!important;margin:0!important}
@@ -1723,6 +1723,16 @@ html.has-deco2.has-deco2 body .tray .tray-hand{display:flex!important;flex-direc
 html.has-deco2.has-deco2 body .tray .tray-hand #hand{margin:0!important;flex:none!important;width:100%!important}
 html.has-deco2.has-deco2 body .tray .tray-hand #hand .crow{padding-top:0!important}
 html.has-deco2 body #hand .emptyhand{min-height:0!important}
+
+html.phone.has-deco2 body #handHead{transform:translateY(-100%) translateY(4px)!important}
+html.phone.has-deco2 body .tray #stagebtns{transform:scale(.9);transform-origin:right center}
+html body #hand .cw img.card{transform:rotate(-3deg)}
+html body .builds{grid-template-columns:repeat(4,92px)!important}
+html body .bld .pimg{height:110px!important;width:92px!important}
+html body .bld .pimg img{width:92px!important;max-width:92px!important;height:110px!important}
+html.phone body .builds{grid-template-columns:repeat(4,66px)!important}
+html.phone body .bld .pimg{height:79px!important;width:66px!important}
+html.phone body .bld .pimg img{width:66px!important;max-width:66px!important;height:79px!important}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
@@ -3079,10 +3089,10 @@ function render(){{const r=document.getElementById('result');if(r&&(!S||S.phase!
   const mini=c=>{const have=S.players[ME].res;const seen={};return `<span class="mini">${RES.flatMap(r=>Array(c[r]||0).fill(r)).map(r=>{seen[r]=(seen[r]||0)+1;const ok=seen[r]<=have[r];return `<img src="${CARDIMG[r]}" alt="${RN[r]}" class="${ok?'':'lack'}" title="${RN[r]} ${ok?'있음':'부족'}">`;}).join('')}</span>`;};
   const bb=(id,label,meta,en)=>`<button class="bld${ui.mode===id?' active':''}" data-act="${id}" data-tip="${BTIP[id]}" ${en?'':'disabled'}><span class="pimg"><img src="${BUILDIMG[id]}" alt=""></span><b>${label}${(m=>m?`<span class="lft">(${m[1]})</span>`:'')(/(\d+) 남음/.exec(meta))}</b><span class="meta2">${meta}</span></button>`;
   $('#actions').innerHTML=`<div class="builds">
+    ${bb('dev','발전 카드',`덱 ${S.deck.length}장`,my&&S.rolled&&canBuild(ME,'dev'))}
     ${bb('road','도로',`${15-k0.r} 남음`,my&&S.rolled&&canBuild(ME,'road'))}
     ${bb('settlement','정착지',`1점 · ${5-k0.s} 남음`,my&&S.rolled&&canBuild(ME,'settlement'))}
     ${bb('city','도시',`2점 · ${4-k0.c} 남음`,my&&S.rolled&&canBuild(ME,'city'))}
-    ${bb('dev','발전 카드',`덱 ${S.deck.length}장`,my&&S.rolled&&canBuild(ME,'dev'))}
     </div>`;
   $('#players').innerHTML=S.players.map((p,i)=>`<div class="pl${i===S.cur&&S.phase!=='over'?' cur':''}">${avHTML(p,'dot avp')}
     <span class="nm">${p.name}${p.ai?(p.left?' · AI(나감)':' · AI'):''}${S.mp&&!p.ai&&window.NET&&NET.offline&&NET.offline(p.uid)?' <span class="badge off">연결 끊김</span>':''}</span>${S.lr.o===i||S.la.o===i?`<span class="bdgs">${S.lr.o===i?'<span class="badge bimg" data-tip="최장 교역로 +2점: 끊기지 않은 도로가 5칸 이상이면서 가장 긴 사람"><img src="assets/badge/lr.webp" alt="최장 교역로"></span>':''}${S.la.o===i?'<span class="badge bimg" data-tip="최강 기사단 +2점: 기사 카드를 3장 이상, 가장 많이 쓴 사람"><img src="assets/badge/la.webp" alt="최강 기사단"></span>':''}</span>`:''}
@@ -3135,7 +3145,7 @@ function infoDialog(k,guide){const ci=r=>`<img class="ic-card" src="${CARDIMG[r]
   else{title='발전 카드';sub='한 차례에 1장만, 산 다음 내 차례부터 쓸 수 있어요.';
     const D={knight:'도적을 옮기고<br>상대 카드 1장을 빼앗아요.',vp:'갖고만 있어도 1점.<br>상대에게는 보이지 않아요.',roads:'도로 2개를<br>무료로 놓아요.',plenty:'은행에서 원하는 자원<br>2장을 받아요.',monopoly:'자원 1종을 골라 상대들이<br>가진 것을 전부 가져와요.'};
     body=`<div class="icols devc">${['knight','vp','roads','plenty','monopoly'].map(t=>`<div class="icol"><img class="idev" src="${CARDIMG[t]}" alt="${DEVN[t]}"><p>${D[t]}</p><small>총 ${DEVCNT[t]}장</small></div>`).join('')}</div>`;}
-  openModal('info',`<button class="mclose" id="ix" aria-label="닫기"></button><div class="fhead"><h3>${title}</h3><span class="isub">${sub}</span></div><div class="ibody">${body}</div>${guide?`<div class="ifoot"><span class="ipg">${k==='cost'?1:2} / 2</span><button class="btn" id="iPrev" ${k==='cost'?'disabled':''}>이전</button><button class="btn sub" id="iNext" ${k==='cost'?'':'disabled'}>다음</button></div>`:''}`);
+  openModal('info',`<button class="mclose" id="ix" aria-label="닫기"></button><div class="fhead"><h3>${title}</h3><span class="isub">${sub}</span></div><div class="ibody">${body}</div>${guide?`<div class="ifoot"><button class="btn sub" id="iPrev" ${k==='cost'?'disabled':''}>이전</button><button class="btn sub" id="iNext" ${k==='cost'?'':'disabled'}>다음</button></div>`:''}`);
   $('#sheet').classList.add('sheet-frame');sheetReady();$('#ix').onclick=()=>{closeModal();update();};
   if(guide){$('#iPrev').onclick=()=>infoDialog('cost',true);$('#iNext').onclick=()=>infoDialog('all',true);}}
 
