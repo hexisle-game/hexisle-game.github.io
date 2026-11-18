@@ -521,7 +521,7 @@ html.phone .bld .meta2{display:none}
 html.phone .bld b{font-size:12.5px}
 html.phone .stagebtns{width:230px!important;right:14px!important;bottom:12px!important;gap:8px!important}
 html.phone .stagebtns .tbtn{font-size:15px!important;padding:12px 8px!important}
-html.phone .stagebtns .tbtn.primary{font-size:17px!important;padding:14px 8px!important}
+html.phone .stagebtns .tbtn.primary{font-size:17px!important;padding:7px 8px!important}
 html.phone .side{max-height:calc(var(--vh) - 112px - var(--sbH,110px) - 24px)}
 html.phone .overlay{padding:0!important}
 html.phone .sheet,html.phone .sheet.sheet-rules{width:100%!important;max-width:none!important;height:100%!important;max-height:100%!important;border-radius:0!important;padding:22px 28px!important;font-size:16px;box-sizing:border-box;overflow:auto}
@@ -731,7 +731,7 @@ html body .stagebtns .tbtn[data-act="roll"]:disabled,html body .sheet .btn.prima
 html body .stagebtns .tbtn{height:52px!important;font-size:17px!important}
 html body .stagebtns .tbtn[data-act="roll"]{height:66px!important;font-size:19px!important}
 html.phone body .stagebtns .tbtn{height:42px!important;font-size:15px!important}
-html.phone body .stagebtns .tbtn[data-act="roll"]{height:52px!important;font-size:16px!important}
+html.phone body .stagebtns .tbtn[data-act="roll"]{height:42px!important;font-size:16px!important}
 html.phone html body .stagebtns .tbtn[data-act="roll"],html body .sheet .btn.primary:not(#cYes):not(#oNew):not(#rn):not(#rd){border-width:13px 16px!important;border-image-width:13px 16px!important}
 html.phone html body .stagebtns .tbtn[data-act="trade"],html body #cYes,html body #oNew,html body #rn,html body #rd,html body .sheet .btn.sub,html body #oClose,html body #cNo,html body #rp,html body #rs,html body .sheet .row .btn:not(.primary):not(.sub):not(#sNew),html body .stagebtns .tbtn[data-act="end"]{border-width:8px 10px!important;border-image-width:8px 10px!important}
 html body .sheet{border-style:solid!important;border-color:transparent!important;border-image:url(assets/ui/518989b1.webp) 150 / 50px stretch!important;background:url(assets/ui/4bfed2ad.webp) 0 0/360px 360px repeat!important;background-clip:border-box!important;box-shadow:0 20px 60px rgba(0,0,0,.55)!important;border-radius:0!important}
@@ -1627,13 +1627,13 @@ html body .bld .pimg{height:96px!important}html body .bld .pimg img{max-height:9
 html.phone body .bld .pimg{height:var(--bpH,60px)!important}html.phone body .bld .pimg img{max-height:var(--bpH,60px)!important}
 /* ===== screen dressing v2 (?deco=1): left / right columns + wood panel, PC and mobile sets ===== */
 #deco.v2 .dk{display:none}#deco.v2 .dvig{z-index:0}
-#deco.v2 .d2{position:absolute;top:0;height:var(--woodTop,76%);background:left top/auto 100% no-repeat;display:block;z-index:1}
+#deco.v2 .d2{position:absolute;top:0;height:calc(100% - var(--woodH,196px));background:left top/auto 100% no-repeat;display:block;z-index:1}
 #deco.v2 .d2.l{left:0;aspect-ratio:480/1440;background-image:url(assets/deco2/pc_left.webp)}
 #deco.v2 .d2.r{right:0;aspect-ratio:480/1440;background-image:url(assets/deco2/pc_right.webp);background-position:right top}
-#deco.v2 .d2.w{top:var(--woodTop,76%);bottom:0;left:0;right:0;height:auto;aspect-ratio:auto;background:url(assets/deco2/pc_wood.webp) center top/100% auto no-repeat;z-index:2;box-shadow:0 -8px 22px rgba(0,0,0,.55)}
+#deco.v2 .d2.w{top:auto;bottom:0;left:0;right:0;height:calc(var(--woodH,196px) + .9vw);aspect-ratio:auto;background:url(assets/deco2/wood2.webp) center top/100% auto no-repeat;z-index:2;box-shadow:0 -8px 22px rgba(0,0,0,.55)}
 html.phone #deco.v2 .d2.l{aspect-ratio:505/1080;background-image:url(assets/deco2/mobile_left.webp)}
 html.phone #deco.v2 .d2.r{aspect-ratio:470/1080;background-image:url(assets/deco2/mobile_right.webp)}
-html.phone #deco.v2 .d2.w{background-image:url(assets/deco2/mobile_wood.webp)}
+html.phone #deco.v2 .d2.w{height:calc(var(--woodH) + .9vw)}
 
 /* tray: no headings under the tabs; guide tab */
 html body .tray-act>.tray-h{visibility:hidden!important}
@@ -1660,6 +1660,79 @@ html.has-deco2 body #dicebox::after,html.has-deco2 body .side .panel::before,htm
 html.has-deco2 body #dicebox::after{position:absolute;left:0;right:0;bottom:0;margin:0}
 html.has-deco2 body .side .panel::before{margin-bottom:6px}html.has-deco2 body .side .panel::after{margin-top:6px}
 html.has-deco2 body .side .panel{background:none!important;border:0!important;box-shadow:none!important}
+
+/* new build icons (840x1000 art): PC 84px / gap 6, mobile 50px / gap 4, label under the art */
+html body .builds{grid-template-columns:repeat(4,84px)!important;gap:6px!important}
+html body .bld .pimg{height:100px!important;width:84px!important;align-items:flex-end!important}
+html body .bld .pimg img{width:84px!important;max-width:84px!important;max-height:none!important;height:100px!important}
+html body .bld b{font-size:10px!important;margin:0!important;line-height:1.2!important}
+html.phone body .builds{grid-template-columns:repeat(4,50px)!important;gap:4px!important}
+html.phone body .bld .pimg{height:60px!important;width:50px!important}
+html.phone body .bld .pimg img{width:50px!important;max-width:50px!important;height:60px!important}
+html.phone body .bld b{font-size:8px!important}
+html body .bld .meta2{display:none!important}
+html body #hand .tally{display:none!important}
+
+
+/* mobile: narrower action buttons, bigger build icons centred in the wood */
+html.phone body .stagebtns{width:auto!important;grid-template-columns:74px 96px!important;gap:3px!important}
+html.phone body .stagebtns .tbtn{min-width:0!important}
+html.phone body .stagebtns .tbtn.primary{min-width:0!important}
+html.phone body .builds{grid-template-columns:repeat(4,60px)!important}
+html.phone body .bld .pimg{height:72px!important;width:60px!important}
+html.phone body .bld .pimg img{width:60px!important;max-width:60px!important;height:72px!important}
+html.phone body .bld b{font-size:9.6px!important}
+html.phone.has-deco2 body .tray-act{justify-content:center!important;padding-bottom:0!important}
+html.phone.has-deco2 body .tray-act #actions{padding-bottom:0!important;margin-top:auto;margin-bottom:auto}
+/* tabs: gold rim, dark gap, inner panel; active one glows */
+html body #handHead .htab{border:1px solid #b88c4a!important;border-bottom:0!important;border-radius:10px 10px 0 0!important;
+  background:linear-gradient(180deg,#2c241c,#16110c 70%)!important;
+  box-shadow:inset 0 0 0 2px #0d0906,inset 0 0 0 3px rgba(214,178,112,.28),inset 0 6px 10px rgba(255,235,190,.06),0 -2px 6px rgba(0,0,0,.5)!important;
+  color:#d8cdb6!important;text-shadow:0 1px 0 #000,0 0 1px #000!important;padding:7px 22px 8px!important}
+html body #handHead .htab.on{border-color:#f3c76e!important;color:#fff1cf!important;
+  background:radial-gradient(ellipse 60% 70% at 50% 110%,rgba(255,196,90,.35),transparent 70%),linear-gradient(180deg,#3a2c1c,#1c140c 75%)!important;
+  box-shadow:inset 0 0 0 2px #0d0906,inset 0 0 0 3px rgba(255,214,140,.55),0 0 10px rgba(255,186,80,.45),0 -2px 8px rgba(0,0,0,.5)!important;
+  text-shadow:0 0 8px rgba(255,200,110,.55),0 1px 0 #000!important}
+html body #handHead .htab.on::after{opacity:1!important;left:10%!important;right:10%!important;bottom:-1px!important;height:2px!important;background:linear-gradient(90deg,transparent,#ffd98a 30%,#fff6dc 50%,#ffd98a 70%,transparent)!important;box-shadow:0 0 8px rgba(255,200,110,.9)}
+html body #handHead .htab:not(.on)::after{display:none!important}
+html body #handHead .htab.hguide{color:#c9bb9c!important}
+html.phone body #handHead .htab{padding:4px 13px 5px!important}
+
+/* guide popup pager */
+.sheet-info .ifoot{position:absolute;right:22px;bottom:16px;display:flex;align-items:center;gap:8px;z-index:2}
+.sheet-info .ifoot .ipg{color:#bfb29a;font-size:13px;margin-right:6px}
+.sheet-info .itip{margin:6px 4px 0;font-size:12px;line-height:1.5;color:#d9cdb4;word-break:keep-all;text-align:center}
+html body #handHead .htabs{gap:4px!important}html body #handHead .htab.hguide{margin-left:0!important}
+/* ===== bottom bar as one unit (deco v2): wood, tabs, cards, builds and buttons sized by % of the screen ===== */
+html.has-deco2 #deco.v2 .d2.w{display:none!important}
+html.has-deco2 #deco.v2 .d2{height:calc(100% - var(--barH))!important}
+html.has-deco2{--barH:max(150px,18.5vh)}
+html.phone.has-deco2{--barH:calc(var(--vh) * .3)}
+html.has-deco2 body .tray{position:fixed!important;left:0!important;right:0!important;bottom:0!important;top:auto!important;height:var(--barH)!important;
+  padding:0 calc(var(--sideR,24px) / 2) 0 calc(var(--sideL,24px) / 2)!important;margin:0!important;border:0!important;border-radius:0!important;
+  background:url(assets/deco2/wood2.webp) center calc(-.9vw) / 100% auto no-repeat,#2a1f16!important;box-shadow:0 -6px 18px rgba(0,0,0,.55)!important;
+  display:grid!important;grid-template-columns:minmax(0,1fr) auto auto!important;align-items:center!important;column-gap:28px!important;row-gap:0!important;overflow:visible!important}
+html.has-deco2 body .tray>*{align-self:center!important;margin:0!important;padding-top:0!important;padding-bottom:0!important}
+html.has-deco2 body .tray-hand{position:static!important;display:flex!important;flex-direction:column;justify-content:center;height:100%}
+html.has-deco2 body #handHead{position:absolute!important;left:calc(var(--sideL,24px) / 2)!important;top:0!important;transform:translateY(-100%) translateY(5px);margin:0!important;padding:0!important}
+html.has-deco2 body .tray-act{display:flex!important;flex-direction:column!important;justify-content:center!important;height:100%}
+html.has-deco2 body .tray-act>.tray-h{display:none!important}
+html.has-deco2 body .tray-act #actions{padding:0!important;margin:0!important}
+html.has-deco2 body .tray #stagebtns{position:static!important;align-self:center!important;margin:0!important}
+html.has-deco2.has-deco2 body .tray .tray-hand{display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:flex-start!important}
+html.has-deco2.has-deco2 body .tray .tray-hand #hand{margin:0!important;flex:none!important;width:100%!important}
+html.has-deco2.has-deco2 body .tray .tray-hand #hand .crow{padding-top:0!important}
+html.has-deco2 body #hand .emptyhand{min-height:0!important}
+
+html.phone.has-deco2 body #handHead{transform:translateY(-100%) translateY(4px)!important}
+html.phone.has-deco2 body .tray #stagebtns{transform:scale(.9);transform-origin:right center}
+html body #hand .cw img.card{transform:rotate(-3deg)}
+html body .builds{grid-template-columns:repeat(4,92px)!important}
+html body .bld .pimg{height:110px!important;width:92px!important}
+html body .bld .pimg img{width:92px!important;max-width:92px!important;height:110px!important}
+html.phone body .builds{grid-template-columns:repeat(4,66px)!important}
+html.phone body .bld .pimg{height:79px!important;width:66px!important}
+html.phone body .bld .pimg img{width:66px!important;max-width:66px!important;height:79px!important}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
@@ -1826,7 +1899,7 @@ html.phone body .dlg-snd .sndrow{grid-template-columns:auto 150px 60px;gap:12px}
 <div id="dialog" class="overlay dlgov" hidden><div class="sheet sheet-dialog" id="dsheet"></div></div>
 <div id="modal" class="overlay" hidden><div class="sheet" id="sheet"></div><i class="mcrest" id="mcrest" aria-hidden="true"></i></div>
 
-<script>document.getElementById('logoImg')&&(document.getElementById('logoImg').src=window.LOGO_URL);</script>
+<script>document.getElementById('logoImg')&&(document.getElementById('logoImg').src='assets/logo_game.webp');</script>
 <script id="logic">
 // ================= GAME LOGIC (no DOM) =================
 let ME=0; // seat index of the local player
@@ -2596,6 +2669,7 @@ function toBlobURL(d){if(!/^data:/.test(d))return d;try{const i=d.indexOf(',');c
 const ARTIMG={};
 // Card art: pre-rendered. Wood & ore use Poly Haven CC0 scans (dead_tree_trunk, boulder_01); others use Poly Haven CC0 textures.
 const BUILDIMG={"dev": "assets/build/dev.webp", "road": "assets/build/road.webp", "settlement": "assets/build/settlement.webp", "city": "assets/build/city.webp"};
+['road','settlement','city','dev'].forEach(k=>BUILDIMG[k]='assets/build2/'+k+'.webp');
 const SUMIMG={"2": "assets/sum/2.webp", "3": "assets/sum/3.webp", "4": "assets/sum/4.webp", "5": "assets/sum/5.webp", "6": "assets/sum/6.webp", "7": "assets/sum/7.webp", "8": "assets/sum/8.webp", "9": "assets/sum/9.webp", "10": "assets/sum/10.webp", "11": "assets/sum/11.webp", "12": "assets/sum/12.webp"};
 const RESICON={"wood": "assets/icons/wood.webp", "brick": "assets/icons/brick.webp", "wool": "assets/icons/wool.webp", "grain": "assets/icons/grain.webp", "ore": "assets/icons/ore.webp"};
 const DIEFACE512="assets/ui/dieface.webp";let DIEFACEIMG=null;{const im=new Image();im.onload=()=>{DIEFACEIMG=im;if(typeof DICE!=='undefined')DICE.mats=null;};im.src=DIEFACE512;}
@@ -2974,7 +3048,7 @@ function renderHand(me,groups){const box=$('#hand');const prev0=ui.prevRes?{...u
     box.dataset.hold='1';}}else delete box.dataset.hold;}const W0=Math.max(220,box.clientWidth||520);const cw=Math.round((W0<360?66:innerHeight<900&&innerWidth>1100?66:86)*(PH.on?.67:1));
   const list=RES.flatMap(r=>Array(me.res[r]).fill(r));
   const prev=ui.prevRes||me.res;let nn=0;const flags=list.map((r,i)=>{const idx=i-list.indexOf(r);return idx>=(prev[r]||0)&&ui.prevRes?++nn:0;});if(!box.dataset.hold)ui.prevRes={...me.res};
-  const hh=$('#handHead');if(true){if(!ui.handTab)ui.handTab='res';hh.innerHTML=`<div class="htabs"><button class="htab${ui.handTab==='res'?' on':''}" data-htab="res">자원카드 <i>${list.length}장</i></button><button class="htab${ui.handTab==='dev'?' on':''}" data-htab="dev">발전카드 <i>${me.dev.length}장</i></button><button class="htab hguide" data-pop="cost" aria-label="건설 비용 안내">안내</button></div>`;}
+  const hh=$('#handHead');if(true){if(!ui.handTab)ui.handTab='res';hh.innerHTML=`<div class="htabs"><button class="htab${ui.handTab==='res'?' on':''}" data-htab="res">자원카드 <i>${list.length}</i></button><button class="htab${ui.handTab==='dev'?' on':''}" data-htab="dev">발전카드 <i>${me.dev.length}</i></button><button class="htab hguide" data-pop="guide" aria-label="안내">안내</button></div>`;}
   else hh.innerHTML=`내 자원카드 <span id="handCount">· ${list.length}장${list.length>7?' (8장 이상: 7이 나오면 절반을 버려요)':''}</span>`;
   if(ui.handTab==='dev'){box.innerHTML=me.dev.length?row(me.dev.map(d=>`<div style="position:relative"><img class="card" src="${CARDIMG[d.t]}" alt="${DEVN[d.t]}" data-pop="${d.t}">${d.fresh&&d.t!=='vp'?'<span class="newtag">다음 차례</span>':''}</div>`),cw,W0,'devrow2'):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">발전 카드가 없어요.</div>`;return;}
   let h=list.length?row(list.map(r=>`<img class="card" data-res="${r}" src="${CARDIMG[r]}" alt="${RN[r]}" data-tip="${RN[r]}: ${TN[r]}에서 나와요. ${RUSE[r]}에 써요.">`),cw,W0,'',flags):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">자원 카드가 없어요.</div>`;
@@ -3015,10 +3089,10 @@ function render(){{const r=document.getElementById('result');if(r&&(!S||S.phase!
   const mini=c=>{const have=S.players[ME].res;const seen={};return `<span class="mini">${RES.flatMap(r=>Array(c[r]||0).fill(r)).map(r=>{seen[r]=(seen[r]||0)+1;const ok=seen[r]<=have[r];return `<img src="${CARDIMG[r]}" alt="${RN[r]}" class="${ok?'':'lack'}" title="${RN[r]} ${ok?'있음':'부족'}">`;}).join('')}</span>`;};
   const bb=(id,label,meta,en)=>`<button class="bld${ui.mode===id?' active':''}" data-act="${id}" data-tip="${BTIP[id]}" ${en?'':'disabled'}><span class="pimg"><img src="${BUILDIMG[id]}" alt=""></span><b>${label}${(m=>m?`<span class="lft">(${m[1]})</span>`:'')(/(\d+) 남음/.exec(meta))}</b><span class="meta2">${meta}</span></button>`;
   $('#actions').innerHTML=`<div class="builds">
+    ${bb('dev','발전 카드',`덱 ${S.deck.length}장`,my&&S.rolled&&canBuild(ME,'dev'))}
     ${bb('road','도로',`${15-k0.r} 남음`,my&&S.rolled&&canBuild(ME,'road'))}
     ${bb('settlement','정착지',`1점 · ${5-k0.s} 남음`,my&&S.rolled&&canBuild(ME,'settlement'))}
     ${bb('city','도시',`2점 · ${4-k0.c} 남음`,my&&S.rolled&&canBuild(ME,'city'))}
-    ${bb('dev','발전 카드',`덱 ${S.deck.length}장`,my&&S.rolled&&canBuild(ME,'dev'))}
     </div>`;
   $('#players').innerHTML=S.players.map((p,i)=>`<div class="pl${i===S.cur&&S.phase!=='over'?' cur':''}">${avHTML(p,'dot avp')}
     <span class="nm">${p.name}${p.ai?(p.left?' · AI(나감)':' · AI'):''}${S.mp&&!p.ai&&window.NET&&NET.offline&&NET.offline(p.uid)?' <span class="badge off">연결 끊김</span>':''}</span>${S.lr.o===i||S.la.o===i?`<span class="bdgs">${S.lr.o===i?'<span class="badge bimg" data-tip="최장 교역로 +2점: 끊기지 않은 도로가 5칸 이상이면서 가장 긴 사람"><img src="assets/badge/lr.webp" alt="최장 교역로"></span>':''}${S.la.o===i?'<span class="badge bimg" data-tip="최강 기사단 +2점: 기사 카드를 3장 이상, 가장 많이 쓴 사람"><img src="assets/badge/la.webp" alt="최강 기사단"></span>':''}</span>`:''}
@@ -3046,7 +3120,7 @@ document.addEventListener('pointerdown',e=>{if(!ui.tips||e.pointerType==='mouse'
       const vw=PH.on?PH.vw:innerWidth;let l=(r.left-PH.ox+r.width/2)/k-w/2;l=Math.max(8,Math.min(vw-w-8,l));tipEl.style.left=l+'px';tipEl.style.top=((r.top-PH.oy)/k-h-12)+'px';{const br=t.getBoundingClientRect();tipEl.style.setProperty('--ax',((br.left-PH.ox+br.width/2)/k-l)+'px');}}
     else{tipEl.classList.remove('bubble');showTipAt(t.dataset.tip,e.clientX,e.clientY);}clearTimeout(tipTimer);tipTimer=setTimeout(()=>{hideTip();tipEl.classList.remove('bubble');},2800);}});
 document.addEventListener('click',e=>{const b=e.target.closest('[data-pop]');
-  if(b&&(b.dataset.pop==='all'||b.dataset.pop==='cost')){e.stopPropagation();hideTip();popEl.hidden=true;infoDialog(b.dataset.pop);return;}
+  if(b&&(b.dataset.pop==='all'||b.dataset.pop==='cost'||b.dataset.pop==='guide')){e.stopPropagation();hideTip();popEl.hidden=true;if(b.dataset.pop==='guide'){ui.guideI=0;infoDialog('cost',true);}else infoDialog(b.dataset.pop);return;}
   if(b){e.stopPropagation();hideTip();popEl.innerHTML=devPop(b.dataset.pop);const r=b.getBoundingClientRect();placeFloat(popEl,r.left,r.bottom-8);return;}
   if(!popEl.hidden&&!e.target.closest('#pop'))popEl.hidden=true;},true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){popEl.hidden=true;hideTip();}});
@@ -3064,15 +3138,16 @@ function infoText(f){
 function openModal(key,html){{const m=document.getElementById('modal');if(m&&m.classList.contains('mfade')){clearTimeout(ui.mfT);m.classList.remove('mfade');}}ui.modalFresh=!ui.modal||ui.modal!==key;{const c=document.getElementById('mcrest');if(c)c.style.visibility='';}if(!ui.modal&&typeof SND!=='undefined')SND.sfx('ui');ui.modal=key;$('#sheet').className='sheet sheet-'+key+(['offer','steal'].includes(key)?' sheet-dialog':'');if(['offer','steal'].includes(key))html=`<img class="dorn" src="${TITLEIMG.orn2}" alt="">`+html;$('#sheet').innerHTML=html;$('#modal').hidden=false;placeCrest();requestAnimationFrame(placeCrest);setTimeout(placeCrest,120);setTimeout(placeCrest,400);}
 function placeCrest(){const sh=$('#sheet'),c=$('#mcrest');if(!sh||!c||$('#modal').hidden)return;const r=sh.getBoundingClientRect(),o=$('#modal').getBoundingClientRect(),k=PH.on?PH.k:1;c.style.left=((r.left-o.left+r.width/2)/k)+'px';c.style.top=((r.top-o.top)/k)+'px';}
 addEventListener('resize',()=>setTimeout(placeCrest,80));
-function infoDialog(k){const ci=r=>`<img class="ic-card" src="${CARDIMG[r]}" alt="${RN[r]}">`;let body,title,sub;
+function infoDialog(k,guide){const ci=r=>`<img class="ic-card" src="${CARDIMG[r]}" alt="${RN[r]}">`;let body,title,sub;
   if(k==='cost'){title='건설 비용';sub='자원 카드를 모아 지어요.';
     const D={road:'영역을 넓혀요',settlement:'1점 · 자원 1장씩',city:'2점 · 자원 2장씩',dev:'무작위 특수 카드'};
-    body=`<div class="icols">${['road','settlement','city','dev'].map(w=>`<div class="icol"><div class="ihd"><b>${BN[w]}</b><small>${D[w]}</small></div><img class="ibld" src="${BUILDIMG[w]}" alt=""><div class="ieq">=</div><div class="ccards">${RES.flatMap(r=>Array(COST[w][r]||0).fill(r)).map(ci).join('')}</div><div class="isum">${RES.filter(r=>COST[w][r]).map(r=>RN[r]+' '+COST[w][r]).join(' · ')}</div></div>`).join('')}</div>`;}
+    body=`<div class="icols">${['road','settlement','city','dev'].map(w=>`<div class="icol"><div class="ihd"><b>${BN[w]}</b><small>${D[w]}</small></div><img class="ibld" src="${BUILDIMG[w]}" alt=""><div class="ieq">=</div><div class="ccards">${RES.flatMap(r=>Array(COST[w][r]||0).fill(r)).map(ci).join('')}</div><div class="isum">${RES.filter(r=>COST[w][r]).map(r=>RN[r]+' '+COST[w][r]).join(' · ')}</div>${guide?`<p class="itip">${BTIP[w].replace(/^[^.]*\.\s*/,'')}</p>`:''}</div>`).join('')}</div>`;}
   else{title='발전 카드';sub='한 차례에 1장만, 산 다음 내 차례부터 쓸 수 있어요.';
     const D={knight:'도적을 옮기고<br>상대 카드 1장을 빼앗아요.',vp:'갖고만 있어도 1점.<br>상대에게는 보이지 않아요.',roads:'도로 2개를<br>무료로 놓아요.',plenty:'은행에서 원하는 자원<br>2장을 받아요.',monopoly:'자원 1종을 골라 상대들이<br>가진 것을 전부 가져와요.'};
     body=`<div class="icols devc">${['knight','vp','roads','plenty','monopoly'].map(t=>`<div class="icol"><img class="idev" src="${CARDIMG[t]}" alt="${DEVN[t]}"><p>${D[t]}</p><small>총 ${DEVCNT[t]}장</small></div>`).join('')}</div>`;}
-  openModal('info',`<button class="mclose" id="ix" aria-label="닫기"></button><div class="fhead"><h3>${title}</h3><span class="isub">${sub}</span></div><div class="ibody">${body}</div>`);
-  $('#sheet').classList.add('sheet-frame');sheetReady();$('#ix').onclick=()=>{closeModal();update();};}
+  openModal('info',`<button class="mclose" id="ix" aria-label="닫기"></button><div class="fhead"><h3>${title}</h3><span class="isub">${sub}</span></div><div class="ibody">${body}</div>${guide?`<div class="ifoot"><button class="btn sub" id="iPrev" ${k==='cost'?'disabled':''}>이전</button><button class="btn sub" id="iNext" ${k==='cost'?'':'disabled'}>다음</button></div>`:''}`);
+  $('#sheet').classList.add('sheet-frame');sheetReady();$('#ix').onclick=()=>{closeModal();update();};
+  if(guide){$('#iPrev').onclick=()=>infoDialog('cost',true);$('#iNext').onclick=()=>infoDialog('all',true);}}
 
 // popups: hold the sheet until its frame/background images are decoded, then fade the contents in
 function sheetReady(){const sh=$('#sheet');if(!sh)return;sh.classList.remove('fin');sh.classList.add('fwait');
@@ -3330,7 +3405,7 @@ function showCredits(){openDialog(`<h3>Credits &amp; Licenses</h3><div class="cr
 
 // wood panel / side art follow the tab baseline
 function placeWood(){const d=document.getElementById('deco');if(!d||!d.classList.contains('v2'))return;document.documentElement.classList.add('has-deco2');const t=document.querySelector('#handHead .htabs');const st=document.getElementById('stage');if(!t||!st||!t.offsetParent)return;
-  const k=PH.on?PH.k:1;const y=(t.getBoundingClientRect().bottom-st.getBoundingClientRect().top)/k-(st.getBoundingClientRect().width/k)*.008;if(Math.abs(y-(placeWood.y||0))>.5){placeWood.y=y;d.style.setProperty('--woodTop',y+'px');}
+  const k=PH.on?PH.k:1;{const y=(st.getBoundingClientRect().bottom-t.getBoundingClientRect().bottom)/k+(st.getBoundingClientRect().width/k)*.004;if(Math.abs(y-(placeWood.y||0))>.5){placeWood.y=y;d.style.setProperty('--woodH',y+'px');document.documentElement.style.setProperty('--woodH',y+'px');try{alignBtns();}catch(e){}}}
   {const L=d.querySelector('.d2.l'),R=d.querySelector('.d2.r');if(L&&R){const r=document.documentElement.style;const wl=L.getBoundingClientRect().width/k,wr=R.getBoundingClientRect().width/k;r.setProperty('--sideL',Math.round(Math.max(14,wl*.42))+'px');r.setProperty('--sideR',Math.round(Math.max(14,wr*.42))+'px');}}}
 setInterval(()=>{try{placeWood();}catch(e){}},300);
 function addDeco(){if(!/[?&]deco=1/.test(location.search)||document.getElementById('deco'))return;const st=document.getElementById('stage');if(!st)return;const d=document.createElement('div');d.id='deco';
@@ -3488,7 +3563,7 @@ function paintCard(res,label,dark){
   x.textAlign='center';x.textBaseline='middle';x.lineJoin='round';x.lineWidth=20*K;x.strokeStyle='rgba(18,9,2,.9)';x.strokeText(label,CW/2,ty);
   const g=x.createLinearGradient(0,ty-fs/2,0,ty+fs/2);g.addColorStop(0,'#fff4d0');g.addColorStop(.6,'#f0cf86');g.addColorStop(1,'#c99449');x.fillStyle=g;x.shadowColor='rgba(0,0,0,.5)';x.shadowBlur=8*K;x.shadowOffsetY=4*K;x.fillText(label,CW/2,ty);
   return toBlobURL(c.toDataURL('image/png'));}
-function buildCards(resOnly){RES.forEach(r=>CARDIMG[r]=paintCard(r,RN[r]));if(!resOnly)Object.keys(DEVN).forEach(t=>CARDIMG[t]=paintCard(t,DEVN[t],true));}
+function buildCards(resOnly){RES.forEach(r=>CARDIMG[r]='assets/cards2/'+r+'.webp');if(!resOnly)Object.keys(DEVN).forEach(t=>CARDIMG[t]=paintCard(t,DEVN[t],true));}
 
 const PH={on:false,k:1,vw:0,vh:0,ox:0,oy:0,orig:new Map()};
 const HUDQ={get matches(){return PH.on||matchMedia('(min-width:1101px) and (min-height:640px)').matches;}};
@@ -3508,7 +3583,7 @@ function applyPhone(){const coarse=matchMedia('(pointer:coarse)').matches;const 
 function phoneDPR(){if(typeof W==='undefined'||!W.ok)return;const v=Math.min(window.devicePixelRatio||1,2)*(PH.on?Math.max(PH.k,.7):1);try{PERF.max=v;PERF.samples=[];setDPR(v);}catch(e){W.r.setPixelRatio(v);}}
 addEventListener('resize',()=>{applyPhone();setTimeout(()=>{fitChrome();if(S)render();},60);});applyPhone();
 function alignHeads(){const hh=$('#handHead'),ah=document.querySelector('.tray-act>.tray-h');if(!hh||!ah)return;ah.style.marginBottom='';if(!PH.on)return;const k=PH.k||1;const d=(ah.getBoundingClientRect().top-hh.getBoundingClientRect().top)/k;ah.style.setProperty('margin-bottom',Math.max(-16,6+d)+'px','important');}
-function alignBtns(){try{alignHeads();}catch(e){}const sb=$('#stagebtns'),bd=document.querySelector('.builds');if(!sb||!bd)return;if(!HUDQ.matches||PH.on){sb.style.bottom='';return;}const r=bd.getBoundingClientRect();if(!r.height)return;const c=r.top+r.height/2;sb.style.setProperty('bottom',Math.max(12,innerHeight-c-sb.offsetHeight/2)+'px','important');}
+function alignBtns(){try{alignHeads();}catch(e){}if(document.documentElement.classList.contains('has-deco2')){const sb0=$('#stagebtns');if(sb0)sb0.style.removeProperty('bottom');return;}const sb=$('#stagebtns'),bd=document.querySelector('.builds');if(!sb||!bd)return;if(!HUDQ.matches||PH.on){sb.style.bottom='';return;}const r=bd.getBoundingClientRect();if(!r.height)return;const c=r.top+r.height/2;sb.style.setProperty('bottom',Math.max(12,innerHeight-c-sb.offsetHeight/2)+'px','important');}
 function fitChrome(){const h=document.querySelector('header.top');if(h)document.documentElement.style.setProperty('--chrome',(h.offsetHeight+16+40)+'px');
   {const tb=$('#turnbar'),sd=document.querySelector('.side'),st0=$('#stage');if(tb&&sd&&st0){if(HUDQ.matches){if(tb.parentNode!==st0)st0.appendChild(tb);}else if(tb.parentNode!==sd)sd.insertBefore(tb,sd.firstChild);}}
   const sb=$('#stagebtns'),tr=$('#tray'),st=$('#stage');if(sb&&tr&&st){if(HUDQ.matches){if(sb.parentNode!==tr)tr.appendChild(sb);}else if(sb.parentNode!==st)st.appendChild(sb);}
