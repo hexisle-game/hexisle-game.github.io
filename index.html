@@ -1805,6 +1805,8 @@ html.has-deco2 body .coach{padding-left:7px!important}
 html.phone.has-deco2 body .coach{padding-left:18px!important}
 
 /* ===== round 5 ===== */
+html body #result #oNew{opacity:1!important;color:#ece6dc!important}
+html.phone body .sheet-info .itip{padding:0 14px!important}
 html.has-deco2 body #leftcol #coach{padding-left:0!important}html.phone.has-deco2 body #leftcol #coach{padding-left:10px!important}
 html.phone.has-deco2 body header.top .tools{gap:14px!important}
 html.has-deco2 body #players .pl>.av{width:21px!important;height:21px!important}
@@ -3311,7 +3313,7 @@ function showOver(){const order=S.players.map((_,i)=>i).sort((a,b)=>vp(b,true)-v
    <div class="box"><h1><img src="assets/result/${won?'victory':'gameover'}.webp" alt="${won?'VICTORY':'GAME OVER'}"></h1>
    <div class="sub">${won?'':`<b style="color:${muteCol(W2.color)}">${W2.name}</b>이(가) `}${S.turn}바퀴 만에 섬의 영주가 되었어요.</div>
    <div class="tbl">${order.map((i,k)=>{const p=S.players[i];const vc=p.dev.filter(d=>d.t==='vp').length;return `<div style="animation-delay:${2.1+k*.22}s"><span class="rk">${k+1}</span>${avHTML(p,'avr2')}<span class="nm">${p.name}${vc?` <small>(승점 카드 ${vc}장)</small>`:''}</span><b>${vp(i,true)}점</b></div>`;}).join('')}</div>
-   <div class="btns"><button class="btn" id="oClose">보드 보기</button><button class="btn sub" id="oNew" style="color:#fff3dc">새 게임</button></div></div>`;
+   <div class="btns"><button class="btn" id="oClose">보드 보기</button><button class="btn sub" id="oNew">새 게임</button></div></div>`;
   document.body.appendChild(el);
   $('#oClose').onclick=()=>{ui.modal='closed-over';el.classList.add('out');setTimeout(()=>el.remove(),450);};
   $('#oNew').onclick=()=>{if(window.NET&&NET.on){if(NET.isHost)MP.ref('meta/status').set('lobby');else MP.toast('방장이 새 게임을 시작할 수 있어요.');return;}el.remove();ui.modal=null;startNew();};}
