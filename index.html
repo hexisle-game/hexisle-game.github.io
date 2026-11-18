@@ -1587,7 +1587,9 @@ html.phone .setpanel .credit-link{display:none}
 #deco .mr{right:-2vh;bottom:22vh;height:64vh;aspect-ratio:600/1037;background-image:url(assets/deco/mr.webp);transform:scaleX(-1)}
 #deco .bl{left:-3vh;bottom:-4vh;height:60vh;aspect-ratio:1000/821;background-image:url(assets/deco/bl.webp);background-position:left bottom}
 #deco .br{right:-3vh;bottom:-4vh;height:54vh;aspect-ratio:1000/582;background-image:url(assets/deco/br.webp);background-position:right bottom}
-#deco .dvig{position:absolute;inset:0;background:radial-gradient(ellipse 78% 92% at 50% 26%,#fff 34%,#7f8fb0 60%,#2a3556 82%,#0b1022 100%);mix-blend-mode:multiply}
+#deco .dvig{position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 34%,#fff 26%,#6a7aa0 52%,#1c2644 74%,#05080f 100%);mix-blend-mode:multiply}
+#deco .plank{left:0;right:0;bottom:0;height:calc(var(--trayH,0px) + 3vh);min-height:22vh;background:url(assets/deco/plank.webp) left top/auto 200% repeat-x;box-shadow:0 -6px 18px rgba(0,0,0,.6);z-index:2}
+#deco .dvig{z-index:1}#deco .bl,#deco .br{z-index:3}
 html.phone #deco .cur{height:86vh}
 html.phone #deco .ml{height:54vh}html.phone #deco .mr{height:60vh}
 html.phone #deco .bl{height:56vh}html.phone #deco .br{height:50vh}
@@ -1605,6 +1607,59 @@ html.phone.lbox body{top:var(--oy,0px)!important}
 #stage.intro-hide #maplbls{opacity:0!important;transition:none}
 .sheet-frame.sheet-multi,.sheet-frame.sheet-lobby{--fbo:.35}.sheet-frame.sheet-multi{--fbo:.39}
 html.phone .sheet-frame.sheet-single{--fbo:.35}html.phone .sheet-frame.sheet-multi,html.phone .sheet-frame.sheet-lobby{--fbo:.4}
+
+/* ===== tray: tabbed hand (resource / development) on every device, simpler build buttons ===== */
+html body .tray-dev{display:none!important}
+#handHead{display:flex!important;align-items:flex-end;gap:8px}
+#handHead .htabs{display:flex;gap:4px;align-items:flex-end}
+html body #handHead .htab{padding:6px 18px 7px!important;font-size:14px!important;font-weight:700!important;color:#bfb29a!important;border:1px solid rgba(201,163,90,.45)!important;border-bottom:0!important;border-radius:8px 8px 0 0!important;background:linear-gradient(180deg,rgba(52,38,24,.92),rgba(26,19,12,.92))!important;box-shadow:inset 0 1px 0 rgba(255,230,170,.12)!important}
+html body #handHead .htab i{font-style:normal;font-weight:500;opacity:.8;margin-left:4px}
+html body #handHead .htab.on{color:#ffe6a8!important;background:linear-gradient(180deg,rgba(110,78,36,.95),rgba(48,33,18,.95))!important;border-color:rgba(243,208,138,.85)!important}
+html body #handHead .htab::before{display:none!important}
+html body #handHead .htab::after{left:8%!important;right:8%!important;bottom:-1px!important}
+html.phone body #handHead .htab{padding:4px 12px 5px!important;font-size:12px!important}
+html body .bld b{font-size:11px!important}
+html.phone body .bld b{font-size:10.5px!important}
+html body .bld .mini{display:none!important}
+
+/* bigger build icons */
+html body .bld .pimg{height:96px!important}html body .bld .pimg img{max-height:96px!important}
+html.phone body .bld .pimg{height:var(--bpH,60px)!important}html.phone body .bld .pimg img{max-height:var(--bpH,60px)!important}
+/* ===== screen dressing v2 (?deco=1): left / right columns + wood panel, PC and mobile sets ===== */
+#deco.v2 .dk{display:none}#deco.v2 .dvig{z-index:0}
+#deco.v2 .d2{position:absolute;top:0;height:var(--woodTop,76%);background:left top/auto 100% no-repeat;display:block;z-index:1}
+#deco.v2 .d2.l{left:0;aspect-ratio:480/1440;background-image:url(assets/deco2/pc_left.webp)}
+#deco.v2 .d2.r{right:0;aspect-ratio:480/1440;background-image:url(assets/deco2/pc_right.webp);background-position:right top}
+#deco.v2 .d2.w{top:var(--woodTop,76%);bottom:0;left:0;right:0;height:auto;aspect-ratio:auto;background:url(assets/deco2/pc_wood.webp) center top/100% auto no-repeat;z-index:2;box-shadow:0 -8px 22px rgba(0,0,0,.55)}
+html.phone #deco.v2 .d2.l{aspect-ratio:505/1080;background-image:url(assets/deco2/mobile_left.webp)}
+html.phone #deco.v2 .d2.r{aspect-ratio:470/1080;background-image:url(assets/deco2/mobile_right.webp)}
+html.phone #deco.v2 .d2.w{background-image:url(assets/deco2/mobile_wood.webp)}
+
+/* tray: no headings under the tabs; guide tab */
+html body .tray-act>.tray-h{visibility:hidden!important}
+html body #handHead .htab.hguide{color:#d9c79f!important;background:linear-gradient(180deg,rgba(40,30,20,.85),rgba(22,16,10,.85))!important;margin-left:6px!important}
+html.has-deco2 body .tray{background:none!important}
+
+/* ===== plan layout with side art (deco v2) ===== */
+html.has-deco2 body header.top{left:var(--sideL,24px)!important;right:var(--sideR,24px)!important}
+html.has-deco2 body #leftcol{left:var(--sideL,24px)!important}
+html.has-deco2 body .side{right:var(--sideR,24px)!important;width:250px!important}
+html.has-deco2 body header.top .tools .lb{display:none!important}
+html.has-deco2 body header.top .tools .ib{padding:6px 9px!important}
+html.has-deco2 body header.top .tools .ib::before,html.has-deco2 body header.top .tools .ib+.ib::before,html.has-deco2 body header.top .tools>*::before{display:none!important}
+html.has-deco2 body header.top .tools{gap:6px}
+html.has-deco2 body header.top .tools .gico{width:26px;height:26px}
+html.has-deco2 body .side .panel>h2,html.has-deco2 body .side #gameinfo,html.has-deco2 body .side .logpanel{display:none!important}
+html.has-deco2 body #players .pl .meta{display:none!important}
+html.has-deco2 body #players .pl{min-height:0!important;padding-top:6px!important;padding-bottom:6px!important}
+html.phone.has-deco2 body .side{width:170px!important}
+html.phone.has-deco2 body header.top .tools .gico{width:24px;height:24px}
+
+html.has-deco2 body #dicebox{position:relative;padding-bottom:14px}
+html.has-deco2 body #dicebox::after,html.has-deco2 body .side .panel::before,html.has-deco2 body .side .panel::after{content:'';display:block;height:9px;margin:0 6px;background:linear-gradient(90deg,transparent,rgba(217,172,104,.75) 30%,rgba(217,172,104,.75) 70%,transparent) center/100% 1px no-repeat,radial-gradient(circle,#f3d08a 0 2px,transparent 2.5px) center/9px 9px no-repeat}
+html.has-deco2 body #dicebox::after{position:absolute;left:0;right:0;bottom:0;margin:0}
+html.has-deco2 body .side .panel::before{margin-bottom:6px}html.has-deco2 body .side .panel::after{margin-top:6px}
+html.has-deco2 body .side .panel{background:none!important;border:0!important;box-shadow:none!important}
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
@@ -1894,7 +1949,7 @@ function placeRoad(p,e,free){
   updateLongest();
 }
 function placeCity(p,v){pay(p,COST.city);S.vb[v].c=true;log(p,'정착지를 도시로 업그레이드했어요. (+1점)','','도시는 2점이고, 닿아 있는 땅에서 자원을 2장씩 받아요.');}
-function buyDev(p){pay(p,COST.dev);const t=S.deck.pop();S.players[p].dev.push({t,fresh:true});if(p===ME&&PH.on){ui.handTab='dev';ui.devFlash=true;}
+function buyDev(p){pay(p,COST.dev);const t=S.deck.pop();S.players[p].dev.push({t,fresh:true});if(p===ME){ui.handTab='dev';ui.devFlash=true;}
   log(p,p===0?`발전 카드를 샀어요. (${DEVN[t]})`:'발전 카드를 샀어요.','',p===0?DEVD[t]+' 산 차례에는 쓸 수 없어요.':'어떤 카드인지는 비공개예요. 다음 차례부터 쓸 수 있어요.');return t;}
 
 function roll(p){
@@ -2494,7 +2549,7 @@ function buildStatic(){
   S.board.hexes.forEach((t,i)=>{const {x,z}=hc(i);
     const hit=part('cyl6',HIT,[.97,.02,.97],[x,.005,z],{noShadow:true});hit.userData.info={t:'hex',i};W.infoG.add(hit);
     const r2=seeded(i*13+5);
-    if(t.res==='grain'){let placed=0;for(let k=0;k<60&&placed<4;k++){const a=r2()*6.28,rr=.5+r2()*.3;const hx=x+Math.cos(a)*rr,hz=z+Math.sin(a)*rr;if(heightAt(hx,hz)<-.02)continue;
+    if(t.res==='grain'){let placed=0;const ca=G.hexes[i].v.map(v=>{const q=vc(v);return Math.atan2(q.z-z,q.x-x);}).sort((p,q)=>p-q);const mids=ca.map((a,j)=>{const b=j+1<ca.length?ca[j+1]:ca[0]+6.2832;return (a+b)/2;});for(let k=0;k<60&&placed<4;k++){const a=mids[Math.floor(r2()*mids.length)]+(r2()-.5)*.35,rr=.5+r2()*.12;const hx=x+Math.cos(a)*rr,hz=z+Math.sin(a)*rr;if(heightAt(hx,hz)<-.02)continue;
       if(!placed)windmill(deco,hx,hz,2);else haystack(deco,hx,hz);placed++;}}
     if(t.res==='wool'){for(let k=0;k<30;k++){const a=r2()*6.28,rr=.5+r2()*.25;const hx=x+Math.cos(a)*rr,hz=z+Math.sin(a)*rr;if(heightAt(hx,hz)<-.02)continue;
       const hs=house(deco,hx,hz,.07,.05,.045,0x5b4a3e,r2()*3,0xd9d0bd);hs.position.y=heightAt(hx,hz);break;}}
@@ -2549,10 +2604,24 @@ const RULEIMG=["assets/rules/1.webp", "assets/rules/2.webp", "assets/rules/3.web
 const CARDFRAME="assets/cards/frame.webp";
 const SCANART={"wood": "assets/cards/wood.webp", "wool": "assets/cards/wool.webp", "brick": "assets/cards/brick.webp", "ore": "assets/cards/ore.webp", "grain": "assets/cards/grain.webp", "knight": "assets/cards/knight.webp", "roads": "assets/cards/roads.webp", "plenty": "assets/cards/plenty.webp", "monopoly": "assets/cards/monopoly.webp", "vp": "assets/cards/vp.webp"};
 let FRAMEIMG=null;{let left=Object.keys(SCANART).length+1;const done=()=>{if(--left===0)setTimeout(()=>{try{buildCards();if(S)render();}catch(e){}},0);};{const im=new Image();im.onload=()=>{FRAMEIMG=im;done();};im.src=CARDFRAME;}for(const k in SCANART){const im=new Image();im.onload=()=>{ARTIMG[k]=im;done();};im.src=SCANART[k];}}
-function basePlate(k,o,r){k.add(part('cyl16',pc3(o)===0xff2a1a?(basePlate.m0||(basePlate.m0=M(0xff2a1a,{emissive:0xff3020,emissiveIntensity:.75,roughness:.5,toneMapped:false}))):PM(o),[r+.03,.02,r+.03],[0,.01,0],{noShadow:true}));k.add(part('cyl16',tmat('slate',0x9a9488,1.5,.2),[r,.034,r],[0,.017,0]));}
+function basePlate(k,o,r){k.add(part('cyl16',pc3(o)===0xff2a1a?(basePlate.m0||(basePlate.m0=TSM?M(0xff1500,{emissive:0xff1800,emissiveIntensity:1.15,roughness:.4,toneMapped:false}):M(0xff2a1a,{emissive:0xff3020,emissiveIntensity:.75,roughness:.5,toneMapped:false}))):PM(o),[r+.03,.02,r+.03],[0,.01,0],{noShadow:true}));k.add(part('cyl16',tmat('slate',0x9a9488,1.5,.2),[r,.034,r],[0,.017,0]));}
 // Sketchfab buildings (LiberiArcano, CC BY): roofs take the player's colour, ground discs removed
+// single-texture models: recolour the red roof tiles (red-dominant texels high on the model) to the player colour
+function tintRoof(m,col){m.updateMatrixWorld(true);const bb=new THREE.Box3().setFromObject(m),y0=bb.min.y,hh=Math.max(1e-6,bb.max.y-y0);const v=new THREE.Vector3();
+  m.traverse(c=>{if(!c.isMesh)return;const g=c.geometry;if(!g.userData.aH){const p=g.attributes.position,a=new Float32Array(p.count);for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i).applyMatrix4(c.matrixWorld);a[i]=(v.y-y0)/hh;}g.setAttribute('aH',new THREE.BufferAttribute(a,1));g.userData.aH=1;
+      if(g.index){const I=g.index.array,keep=[];for(let t=0;t<I.length;t+=3){const A=a[I[t]],B=a[I[t+1]],C=a[I[t+2]];if(Math.max(A,B,C)<FLOORH)continue;keep.push(I[t],I[t+1],I[t+2]);}g.setIndex(keep);}}
+    {const nm={0xff2a1a:'red',0x3a8cff:'blue',0x2fa548:'green',0xf5c400:'yellow'}[new THREE.Color(col).getHex()];
+     if(TXM&&nm&&c.material.map){const mt=c.material;TXC[nm]=TXC[nm]||new Promise(res=>new THREE.ImageLoader().load(`assets/test/tex/${nm}.jpg`,res));
+       TXC[nm].then(img=>{const t=mt.map.clone();t.source=new THREE.Source(img);t.needsUpdate=true;mt.map=t;if(mt.emissiveMap)mt.emissiveMap=t;mt.needsUpdate=true;try{PERF.dirty=true;}catch(e){}});return;}}
+    const mt=c.material;const tc=new THREE.Color(col);const TF={0xff2a1a:[0xff2a1a,.78,1],0x3a8cff:[0x18b4ff,1.75,1.12],0xf5c400:[0xffcf10,1.85,1.15],0x2fa548:[0x36c98c,1.25,1.05],0xe331c5:[0xe04ac0,.78,.92],0xefe6cf:[0xfffdf6,0,2.3]}[tc.getHex()]||[tc.getHex(),1.3,1];tc.setHex(TF[0]);const U={value:tc},US={value:TF[1]},UG={value:TF[2]};mt.onBeforeCompile=sh=>{sh.uniforms.uTint=U;sh.uniforms.uSat=US;sh.uniforms.uGain=UG;
+      sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nattribute float aH;varying float vH;').replace('#include <begin_vertex>','#include <begin_vertex>\nvH=aH;');
+      sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nuniform vec3 uTint;uniform float uSat;uniform float uGain;varying float vH;').replace('#include <map_fragment>',`#include <map_fragment>
+        {vec3 c=diffuseColor.rgb;float rg=c.r/(c.g+.02),rb=c.r/(c.b+.02);float k=smoothstep(TR0,TR1,rg)*smoothstep(1.3,1.9,rb)*smoothstep(HY0,HY1,vH);
+         float l=dot(c,vec3(.299,.587,.114));vec3 t=uTint*clamp(l*3.*uGain,0.,1.7);t=max(mix(vec3(dot(t,vec3(.299,.587,.114))),t,uSat),0.);diffuseColor.rgb=mix(c,t,smoothstep(0.,.45,k));}`.replace('TR0',TROOF[0]).replace('TR1',TROOF[1]).replace('HY0',TROOF[2]).replace('HY1',TROOF[3]));};
+    mt.customProgramCacheKey=()=>'tintRoof';mt.needsUpdate=true;});}
+const TROOF=['1.12','1.45','.34','.4'];const TXM=!/[?&]tx=0/.test(location.search),TXC={};const FLOORH=.075;
 const BGLB={};
-function bldFig(file,o,ry,wTarget,roofs,drop){const k=new THREE.Group();const R=BGLB[file]=BGLB[file]||{g:null,cbs:[]};
+function bldFig(file,o,ry,wTarget,roofs,drop,tint){const k=new THREE.Group();const R=BGLB[file]=BGLB[file]||{g:null,cbs:[]};
   const put=g=>{const m=g.scene.clone(true);m.traverse(c=>{if(c.isMesh&&drop.includes(c.material.name))c.visible=false;});
     m.updateMatrixWorld(true);const bb=new THREE.Box3();m.traverse(c=>{if(c.isMesh&&c.visible)bb.expandByObject(c);});const sz=bb.getSize(new THREE.Vector3());const sc=wTarget/Math.max(sz.x,sz.z);m.scale.setScalar(sc);
     m.updateMatrixWorld(true);const b2=new THREE.Box3();m.traverse(c=>{if(c.isMesh&&c.visible)b2.expandByObject(c);});const cc=b2.getCenter(new THREE.Vector3());m.position.set(-cc.x,-b2.min.y,-cc.z);
@@ -2560,19 +2629,20 @@ function bldFig(file,o,ry,wTarget,roofs,drop){const k=new THREE.Group();const R=
     m.traverse(c=>{if(!c.isMesh)return;c.castShadow=true;c.receiveShadow=true;const nm=c.material.name;c.material=c.material.clone();
       if(roofs.includes(nm)){c.material.map=null;c.material.color.copy(col).lerp(new THREE.Color(0x3a2a20),.1);c.material.emissive=col.clone();c.material.emissiveIntensity=.14;c.material.roughness=.7;c.material.metalness=0;}
       if(/^Castle_(Base|Pedestal)$/.test(nm))c.material.color.multiplyScalar(1.3);c.material.needsUpdate=true;});
+    if(tint)tintRoof(m,col);
     const w=new THREE.Group();w.rotation.y=ry;w.add(m);k.add(w);
     let p=k;while(p){if(p.userData&&p.userData.ghost){ghostify(w);break;}p=p.parent;}
     try{invalidate(true);}catch(e){}try{PERF.dirty=true;PERF.shadow=true;}catch(e){}};
   if(R.g)put(R.g);else{R.cbs.push(put);if(R.cbs.length===1)new THREE.GLTFLoader().load(file,g=>{R.g=g;R.cbs.splice(0).forEach(fn=>fn(g));},undefined,e=>console.warn('bld',e));}
   return k;}
-const USEBLD=!/[?&]bld=old/.test(location.search);
-function settlementMesh(o,ry){const k=new THREE.Group();basePlate(k,o,.17);if(USEBLD&&THREE.GLTFLoader){const h=bldFig('assets/bld/cottage.glb',o,ry,.29,['Rooftiles'],['Land']);h.position.y=.03;k.add(h);return k;}const h=new THREE.Group();h.rotation.y=ry;h.position.y=.03;k.add(h);
+const USEBLD=!/[?&]bld=old/.test(location.search);const TSM=(/[?&]sm=([1-4])/.exec(location.search)||[])[1]||(/[?&]test=1/.test(location.search)?'4':undefined);
+function settlementMesh(o,ry){const k=new THREE.Group();basePlate(k,o,.17);if(USEBLD&&THREE.GLTFLoader){const h=bldFig(TSM?`assets/test/t${TSM}.glb`:'assets/bld/cottage.glb',o,ry,.247,['Rooftiles'],['Land'],TSM==='4');h.position.y=.03;k.add(h);return k;}const h=new THREE.Group();h.rotation.y=ry;h.position.y=.03;k.add(h);
   rhouse(h,-.02,-.01,.13,.1,.15,o,0);rhouse(h,.1,.06,.075,.065,.095,o,Math.PI/2);
   h.add(part('box',tmat('slate',0xbfb8ac,.3,.6),[.024,.07,.024],[.03,.21,-.03]));
   const wd=tmat('bark',0xffffff,.5,.3);for(let i=0;i<3;i++)h.add(part('cyl',wd,[.011,.05,.011],[-.12,.012+i*.019,.06+(i%2)*.012],{rx:Math.PI/2,ry:.3}));
   h.add(part('cyl',tmat('plank',0x8a6a48,.2,1),[.005,.22,.005],[-.12,.11,-.07]));h.add(part('box',PM(o),[.07,.045,.004],[-.085,.195,-.07],{noShadow:true}));
   return k;}
-function cityMesh(o,ry){const k=new THREE.Group();basePlate(k,o,.25);if(USEBLD&&THREE.GLTFLoader){const c=bldFig('assets/bld/castle.glb',o,ry,.39,['Roof'],['Dirt']);c.position.y=.03;k.add(c);return k;}const c=new THREE.Group();c.rotation.y=ry;c.position.y=.03;k.add(c);
+function cityMesh(o,ry){const k=new THREE.Group();basePlate(k,o,.25);if(USEBLD&&THREE.GLTFLoader){const c=bldFig('assets/bld/castle.glb',o,ry,.33,['Roof'],['Dirt']);c.position.y=.03;k.add(c);return k;}const c=new THREE.Group();c.rotation.y=ry;c.position.y=.03;k.add(c);
   const wall=tmat('slate',0xd2ccc0,2.2,.7),wall2=tmat('slate',0xbab3a6,.6,.3),S2=.17;
   for(const [x,z,rot] of [[0,S2,0],[0,-S2,0],[S2,0,Math.PI/2],[-S2,0,Math.PI/2]]){
     c.add(part('box',wall,[.34,.11,.04],[x,.055,z],{ry:rot}));
@@ -2840,7 +2910,7 @@ function fan(items,cw,maxW,extra){const n=items.length;if(!n)return '';const ch=
     return `<div class="cw" style="transform:translateX(calc(-50% + ${m*step}px)) translateY(${y}px) rotate(${a}deg);z-index:${i}">${it}</div>`;}).join('')}</div>`;}
 
 // ---- motion: resource cards fly from the producing land into their slot in the hand ----
-function flyCards(){const box=$('#hand');const news=[...box.querySelectorAll('.cw.new')];if(!news.length)return false;if(PH.on&&ui.handTab==='dev')return false;
+function flyCards(){const box=$('#hand');const news=[...box.querySelectorAll('.cw.new')];if(!news.length)return false;if(ui.handTab==='dev')return false;
   news.forEach((cw,i)=>{cw.classList.remove('new');const a=cw.animate([{transform:'translateY(80px) scale(.9) rotate(2deg)',opacity:0},{offset:.55,transform:'translateY(-12px) scale(1.04) rotate(-1deg)',opacity:1},{offset:.8,transform:'translateY(3px) scale(.99)',opacity:1},{transform:'none',opacity:1}],{duration:560,delay:i*140,easing:'cubic-bezier(.25,.75,.3,1)',fill:'backwards'});
     a.onfinish=()=>{try{SND.sfx('gain');}catch(e){}};});
   return true;}
@@ -2904,9 +2974,9 @@ function renderHand(me,groups){const box=$('#hand');const prev0=ui.prevRes?{...u
     box.dataset.hold='1';}}else delete box.dataset.hold;}const W0=Math.max(220,box.clientWidth||520);const cw=Math.round((W0<360?66:innerHeight<900&&innerWidth>1100?66:86)*(PH.on?.67:1));
   const list=RES.flatMap(r=>Array(me.res[r]).fill(r));
   const prev=ui.prevRes||me.res;let nn=0;const flags=list.map((r,i)=>{const idx=i-list.indexOf(r);return idx>=(prev[r]||0)&&ui.prevRes?++nn:0;});if(!box.dataset.hold)ui.prevRes={...me.res};
-  const hh=$('#handHead');if(PH.on){if(!ui.handTab)ui.handTab='res';hh.innerHTML=`<button class="htab${ui.handTab==='res'?' on':''}" data-htab="res">내 자원카드 · ${list.length}장</button><button class="htab${ui.handTab==='dev'?' on':''}" data-htab="dev">내 발전카드 · ${me.dev.length}장</button><button class="qi" data-pop="all" aria-label="발전 카드 종류 보기">?</button>`;}
+  const hh=$('#handHead');if(true){if(!ui.handTab)ui.handTab='res';hh.innerHTML=`<div class="htabs"><button class="htab${ui.handTab==='res'?' on':''}" data-htab="res">자원카드 <i>${list.length}장</i></button><button class="htab${ui.handTab==='dev'?' on':''}" data-htab="dev">발전카드 <i>${me.dev.length}장</i></button><button class="htab hguide" data-pop="cost" aria-label="건설 비용 안내">안내</button></div>`;}
   else hh.innerHTML=`내 자원카드 <span id="handCount">· ${list.length}장${list.length>7?' (8장 이상: 7이 나오면 절반을 버려요)':''}</span>`;
-  if(PH.on&&ui.handTab==='dev'){box.innerHTML=me.dev.length?row(me.dev.map(d=>`<div style="position:relative"><img class="card" src="${CARDIMG[d.t]}" alt="${DEVN[d.t]}" data-pop="${d.t}">${d.fresh&&d.t!=='vp'?'<span class="newtag">다음 차례</span>':''}</div>`),cw,W0,'devrow2'):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">발전 카드가 없어요.</div>`;return;}
+  if(ui.handTab==='dev'){box.innerHTML=me.dev.length?row(me.dev.map(d=>`<div style="position:relative"><img class="card" src="${CARDIMG[d.t]}" alt="${DEVN[d.t]}" data-pop="${d.t}">${d.fresh&&d.t!=='vp'?'<span class="newtag">다음 차례</span>':''}</div>`),cw,W0,'devrow2'):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">발전 카드가 없어요.</div>`;return;}
   let h=list.length?row(list.map(r=>`<img class="card" data-res="${r}" src="${CARDIMG[r]}" alt="${RN[r]}" data-tip="${RN[r]}: ${TN[r]}에서 나와요. ${RUSE[r]}에 써요.">`),cw,W0,'',flags):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">자원 카드가 없어요.</div>`;
   h+=`<div class="tally">${RES.map(r=>`<span class="${me.res[r]?'':'z'}">${RN[r]} ${me.res[r]}</span>`).join('')}</div>`;
   const gone=box.dataset.hold?[]:handLeaving(box,me,prev0);
@@ -2943,7 +3013,7 @@ function render(){{const r=document.getElementById('result');if(r&&(!S||S.phase!
   renderHand(me,groups);
   const my=S.phase==='main'&&S.cur===ME&&!S.pend;const k0=count(ME);
   const mini=c=>{const have=S.players[ME].res;const seen={};return `<span class="mini">${RES.flatMap(r=>Array(c[r]||0).fill(r)).map(r=>{seen[r]=(seen[r]||0)+1;const ok=seen[r]<=have[r];return `<img src="${CARDIMG[r]}" alt="${RN[r]}" class="${ok?'':'lack'}" title="${RN[r]} ${ok?'있음':'부족'}">`;}).join('')}</span>`;};
-  const bb=(id,label,meta,en)=>`<button class="bld${ui.mode===id?' active':''}" data-act="${id}" data-tip="${BTIP[id]}" ${en?'':'disabled'}><span class="pimg"><img src="${BUILDIMG[id]}" alt=""></span><b>${label}${(m=>m?`<span class="lft">(${m[1]})</span>`:'')(/(\d+) 남음/.exec(meta))}</b>${mini(COST[id])}<span class="meta2">${meta}</span></button>`;
+  const bb=(id,label,meta,en)=>`<button class="bld${ui.mode===id?' active':''}" data-act="${id}" data-tip="${BTIP[id]}" ${en?'':'disabled'}><span class="pimg"><img src="${BUILDIMG[id]}" alt=""></span><b>${label}${(m=>m?`<span class="lft">(${m[1]})</span>`:'')(/(\d+) 남음/.exec(meta))}</b><span class="meta2">${meta}</span></button>`;
   $('#actions').innerHTML=`<div class="builds">
     ${bb('road','도로',`${15-k0.r} 남음`,my&&S.rolled&&canBuild(ME,'road'))}
     ${bb('settlement','정착지',`1점 · ${5-k0.s} 남음`,my&&S.rolled&&canBuild(ME,'settlement'))}
@@ -3066,7 +3136,7 @@ function showOver(){const order=S.players.map((_,i)=>i).sort((a,b)=>vp(b,true)-v
    <div class="box"><h1><img src="assets/result/${won?'victory':'gameover'}.webp" alt="${won?'VICTORY':'GAME OVER'}"></h1>
    <div class="sub">${won?'':`<b style="color:${muteCol(W2.color)}">${W2.name}</b>이(가) `}${S.turn}바퀴 만에 섬의 영주가 되었어요.</div>
    <div class="tbl">${order.map((i,k)=>{const p=S.players[i];const vc=p.dev.filter(d=>d.t==='vp').length;return `<div style="animation-delay:${2.1+k*.22}s"><span class="rk">${k+1}</span>${avHTML(p,'avr2')}<span class="nm">${p.name}${vc?` <small>(승점 카드 ${vc}장)</small>`:''}</span><b>${vp(i,true)}점</b></div>`;}).join('')}</div>
-   <div class="btns"><button class="btn" id="oClose">보드 보기</button><button class="btn sub" id="oNew">새 게임</button></div></div>`;
+   <div class="btns"><button class="btn" id="oClose">보드 보기</button><button class="btn sub" id="oNew" style="color:#fff3dc">새 게임</button></div></div>`;
   document.body.appendChild(el);
   $('#oClose').onclick=()=>{ui.modal='closed-over';el.classList.add('out');setTimeout(()=>el.remove(),450);};
   $('#oNew').onclick=()=>{if(window.NET&&NET.on){if(NET.isHost)MP.ref('meta/status').set('lobby');else MP.toast('방장이 새 게임을 시작할 수 있어요.');return;}el.remove();ui.modal=null;startNew();};}
@@ -3161,7 +3231,7 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
 #tbench b{color:#f3d08a;font-size:10px;letter-spacing:.06em;margin:4px 2px 0}#tbench button{all:unset;cursor:pointer;color:#eee;background:#2a2620;border:1px solid #5a4a30;border-radius:6px;padding:6px 9px;white-space:nowrap}#tbench button:active{background:#5a4a30}
 #tbench.min>*:not(.tg){display:none}html.phone #tbench{font-size:8px;padding:5px;gap:2px;left:4px;max-height:96%}html.phone #tbench button{padding:3px 6px}html.phone #tbench b{font-size:7px;margin-top:2px}#tbench .tg{background:#6a5636;text-align:center}`;document.head.appendChild(css);
   const go=()=>{if(typeof SND==='undefined'||typeof startNew!=='function'||typeof W==='undefined'){setTimeout(go,200);return;}
-    try{$('#splash').click();}catch(e){}setTimeout(()=>{try{SND.music&&SND.music('game');}catch(e){}ui.n=ui.n||4;startNew(false);},400);build();};
+    try{$('#splash').click();}catch(e){}setTimeout(()=>{try{SND.music&&SND.music('game');}catch(e){}ui.n=4;startNew(false);{const cs=(/[?&]cs=([AB])/.exec(location.search)||[0,'A'])[1];const P=cs==='B'?['#ff2a1a','#e331c5','#3a8cff','#efe6cf']:['#ff2a1a','#3a8cff','#f5c400','#2fa548'];S.players.forEach((pl,i)=>pl.color=P[i]);update();}if(TSM)setTimeout(()=>{try{act['초기 배치 자동 완료']();}catch(e){}},4200);},400);build();};
   const give=(p,o)=>{const r=S.players[p].res;for(const k in o)r[k]+=o[k];};
   const finishSetup=()=>{let g=0;while(S.phase==='setup'&&g++<200){const a=actor();if(a===null)break;aiStep(a);}update();};
   const act={
@@ -3182,9 +3252,12 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '시점 초기화':()=>{fitCam(true);},
     '주변 장식 켜기/끄기':()=>{const d=$('#deco');if(d){d.hidden=!d.hidden;return;}const u=new URL(location.href);u.searchParams.set('deco','1');location.href=u;},
     '인원 2·3·4 바꾸기':()=>{ui.n=ui.n>=4?2:ui.n+1;startNew(false);},
+    '색상 A: 빨강·파랑·노랑·초록':()=>{const u=new URL(location.href);u.searchParams.set('cs','A');location.href=u;},
+    '색상 B: 빨강·분홍·파랑·하양':()=>{const u=new URL(location.href);u.searchParams.set('cs','B');location.href=u;},
+    '지붕: 텍스처 ↔ 셰이더':()=>{const u=new URL(location.href);u.searchParams.set('tx',TXM?'0':'1');location.href=u;},
   };
   const build=()=>{const p=document.createElement('div');p.id='tbench';p.innerHTML='<button class="tg">테스트 ▾</button><b>게임</b>';
-    const groups={'새 게임 (인트로 포함)':'게임','정착지 짓기':'건설','도적 이동':'연출','승리 화면':'결과','시작 연출 다시':'화면'};
+    const groups={'새 게임 (인트로 포함)':'게임','정착지 짓기':'건설','도적 이동':'연출','승리 화면':'결과','시작 연출 다시':'화면','색상 A: 빨강·파랑·노랑·초록':'색상 세트'};
     Object.keys(act).forEach(k=>{if(groups[k]&&groups[k]!=='게임'){const t=document.createElement('b');t.textContent=groups[k];p.appendChild(t);}const b=document.createElement('button');b.textContent=k;b.onclick=e=>{e.stopPropagation();try{act[k]();}catch(err){console.error(err);alert(err.message);}};p.appendChild(b);});
     p.querySelector('.tg').onclick=()=>p.classList.toggle('min');document.body.appendChild(p);};
   if(document.readyState==='complete')go();else addEventListener('load',go);})();
@@ -3254,8 +3327,14 @@ function showCredits(){openDialog(`<h3>Credits &amp; Licenses</h3><div class="cr
 
 // table dressing around the sea: curtains, valance and corner props, darkened behind the UI (pointer-transparent)
 {const q=location.search,r=document.documentElement.style;let m=/[?&]fbs=([1-4])/.exec(q);if(m)r.setProperty('--fbgC',`url(assets/fbg/C${m[1]}.webp)`);if(/[?&]fbm=2/.test(q))r.setProperty('--fbgA','url(assets/fbg/A2.webp)');}
+
+// wood panel / side art follow the tab baseline
+function placeWood(){const d=document.getElementById('deco');if(!d||!d.classList.contains('v2'))return;document.documentElement.classList.add('has-deco2');const t=document.querySelector('#handHead .htabs');const st=document.getElementById('stage');if(!t||!st||!t.offsetParent)return;
+  const k=PH.on?PH.k:1;const y=(t.getBoundingClientRect().bottom-st.getBoundingClientRect().top)/k-(st.getBoundingClientRect().width/k)*.008;if(Math.abs(y-(placeWood.y||0))>.5){placeWood.y=y;d.style.setProperty('--woodTop',y+'px');}
+  {const L=d.querySelector('.d2.l'),R=d.querySelector('.d2.r');if(L&&R){const r=document.documentElement.style;const wl=L.getBoundingClientRect().width/k,wr=R.getBoundingClientRect().width/k;r.setProperty('--sideL',Math.round(Math.max(14,wl*.42))+'px');r.setProperty('--sideR',Math.round(Math.max(14,wr*.42))+'px');}}}
+setInterval(()=>{try{placeWood();}catch(e){}},300);
 function addDeco(){if(!/[?&]deco=1/.test(location.search)||document.getElementById('deco'))return;const st=document.getElementById('stage');if(!st)return;const d=document.createElement('div');d.id='deco';
-  d.innerHTML='<i class="dk cur l"></i><i class="dk cur r"></i><i class="dk ml"></i><i class="dk mr"></i><i class="dk bl"></i><i class="dk br"></i><i class="dvig"></i>';
+  d.className='v2';d.innerHTML='<i class="d2 l"></i><i class="d2 r"></i><i class="d2 w"></i><i class="dk plank"></i><i class="dk cur l"></i><i class="dk cur r"></i><i class="dk ml"></i><i class="dk mr"></i><i class="dk bl"></i><i class="dk br"></i><i class="dvig"></i>';
   const cv=st.querySelector('canvas');if(cv&&cv.nextSibling)st.insertBefore(d,cv.nextSibling);else st.appendChild(d);}
 function titleIntro(t){ui.introT0=performance.now();t.classList.remove('shine-on');t.classList.add('intro');setTimeout(()=>{t.classList.remove('intro');shineOn();},4800);}
 function shineOn(){const t=$('#title'),lg=$('#tLogo');if(t.classList.contains('intro')||ui.splash)return;if(lg.complete&&lg.naturalWidth)t.classList.add('shine-on');else lg.addEventListener('load',()=>{if(!t.classList.contains('intro'))t.classList.add('shine-on');},{once:true});}
@@ -3386,6 +3465,7 @@ function pine(x,cx,by,h,col,hi){const w=h*.42;x.fillStyle='#3b2a1a';x.fillRect(c
   for(let t=0;t<3;t++){const ty=by-h*.1-t*h*.27,tw=w*(1-t*.25);x.fillStyle=col;x.beginPath();x.moveTo(cx-tw,ty);x.lineTo(cx,ty-h*.42);x.lineTo(cx+tw,ty);x.closePath();x.fill();
     x.fillStyle=hi;x.beginPath();x.moveTo(cx-tw,ty);x.lineTo(cx,ty-h*.42);x.lineTo(cx-tw*.25,ty);x.closePath();x.fill();}}
 const CTINT={wood:'#17502e',brick:'#7a2210',wool:'#5e8212',grain:'#7a560c',ore:'#38495a'},GOLDM={wood:[.94,1.03,.9],brick:[1.04,.94,.9],wool:[.96,1.04,.88],ore:[.9,.97,1.1]};
+const FULLART=[10,1430],NOCARDTXT0=false;
 function paintCard(res,label,dark){
   if(!FRAMEIMG)return CARDIMG[res]||'data:image/gif;base64,R0lGODlhAQABAAAAACw=';
   const K=CW/999,c=document.createElement('canvas');c.width=CW;c.height=CH;const x=c.getContext('2d');
@@ -3401,6 +3481,9 @@ function paintCard(res,label,dark){
     const ff=.15+L0;const V=[R,G,B];for(let k=0;k<3;k++)p[i+k]=255*(V[k]*(1-w)+Math.min(1,t[k]*ff)*w);}
   fx.putImageData(d,0,0);}
   x.drawImage(f,0,0);
+  if(!dark&&A&&!NOCARDTXT0){const bh=FULLART[1]*K-ay;const r=Math.max(aw/A.width,bh/A.height),dw=A.width*r,dh=A.height*r;x.save();x.beginPath();x.rect(ax,ay,aw,bh);x.clip();x.drawImage(A,ax+(aw-dw)/2,ay+(bh-dh)/2,dw,dh);
+    const sh=x.createLinearGradient(0,ay+bh-60*K,0,ay+bh);sh.addColorStop(0,'rgba(0,0,0,0)');sh.addColorStop(1,'rgba(0,0,0,.35)');x.fillStyle=sh;x.fillRect(ax,ay,aw,bh);x.restore();
+    x.strokeStyle='#c9a35a';x.lineWidth=FULLART[0]*K;x.strokeRect(ax+x.lineWidth/2,ay+x.lineWidth/2,aw-x.lineWidth,bh-x.lineWidth);return toBlobURL(c.toDataURL('image/png'));}
   const ty=1282*K;let fs=216*K;const FF=z=>`800 ${z}px "Hahmlet",serif`;x.font=FF(fs);while(x.measureText(label).width>620*K&&fs>60*K){fs-=4*K;x.font=FF(fs);}
   x.textAlign='center';x.textBaseline='middle';x.lineJoin='round';x.lineWidth=20*K;x.strokeStyle='rgba(18,9,2,.9)';x.strokeText(label,CW/2,ty);
   const g=x.createLinearGradient(0,ty-fs/2,0,ty+fs/2);g.addColorStop(0,'#fff4d0');g.addColorStop(.6,'#f0cf86');g.addColorStop(1,'#c99449');x.fillStyle=g;x.shadowColor='rgba(0,0,0,.5)';x.shadowBlur=8*K;x.shadowOffsetY=4*K;x.fillText(label,CW/2,ty);
@@ -3898,7 +3981,7 @@ function showSound(){const row=(k,label)=>`<div class="sndrow"><span class="sndl
   document.querySelectorAll('#dsheet .sndt').forEach(b=>b.onclick=()=>{const k=b.dataset.t;SND.on[k]=!SND.on[k];b.setAttribute('aria-checked',SND.on[k]);SND.unlock();SND.apply();SND.save();});
   $('#sndOk').onclick=closeDialog;}
 
-function devTabWatch(){if(!S||!S.players||!S.players[ME])return;const n=S.players[ME].dev.length;const p=ui.devN;ui.devN=n;if(p===undefined||!PH.on)return;if(n>p&&ui.handTab!=='dev'){ui.handTab='dev';ui.devFlash=true;setTimeout(()=>{try{render();}catch(e){}},0);}else if(n<p&&ui.handTab==='dev'){ui.handTab='res';setTimeout(()=>{try{render();}catch(e){}},0);}}
+function devTabWatch(){if(!S||!S.players||!S.players[ME])return;const n=S.players[ME].dev.length;const p=ui.devN;ui.devN=n;if(p===undefined)return;if(n>p&&ui.handTab!=='dev'){ui.handTab='dev';ui.devFlash=true;setTimeout(()=>{try{render();}catch(e){}},0);}else if(n<p&&ui.handTab==='dev'){ui.handTab='res';setTimeout(()=>{try{render();}catch(e){}},0);}}
 function sndWatch(){devTabWatch();if(typeof SND==='undefined'||!S||!S.players||!S.players[ME])return;const me=S.players[ME];const k=count(ME);
   let ob=0;S.players.forEach((q,i)=>{if(i!==ME){const c=count(i);ob+=c.s+2*c.c+c.r;}});
   const cur={id:S.rollId,res:sumRes(me.res),s:k.s,c:k.c,r:k.r,ob,dev:me.dev.length,cur:S.cur,ph:S.phase,rob:S.board.robber,st:S.lastSteal?JSON.stringify(S.lastSteal):'',g:S.board.hexes.map(h=>h.num).join('')+S.board.ports.map(p=>p.e).join('')};
