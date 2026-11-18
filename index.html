@@ -521,7 +521,7 @@ html.phone .bld .meta2{display:none}
 html.phone .bld b{font-size:12.5px}
 html.phone .stagebtns{width:230px!important;right:14px!important;bottom:12px!important;gap:8px!important}
 html.phone .stagebtns .tbtn{font-size:15px!important;padding:12px 8px!important}
-html.phone .stagebtns .tbtn.primary{font-size:17px!important;padding:14px 8px!important}
+html.phone .stagebtns .tbtn.primary{font-size:17px!important;padding:7px 8px!important}
 html.phone .side{max-height:calc(var(--vh) - 112px - var(--sbH,110px) - 24px)}
 html.phone .overlay{padding:0!important}
 html.phone .sheet,html.phone .sheet.sheet-rules{width:100%!important;max-width:none!important;height:100%!important;max-height:100%!important;border-radius:0!important;padding:22px 28px!important;font-size:16px;box-sizing:border-box;overflow:auto}
@@ -731,7 +731,7 @@ html body .stagebtns .tbtn[data-act="roll"]:disabled,html body .sheet .btn.prima
 html body .stagebtns .tbtn{height:52px!important;font-size:17px!important}
 html body .stagebtns .tbtn[data-act="roll"]{height:66px!important;font-size:19px!important}
 html.phone body .stagebtns .tbtn{height:42px!important;font-size:15px!important}
-html.phone body .stagebtns .tbtn[data-act="roll"]{height:52px!important;font-size:16px!important}
+html.phone body .stagebtns .tbtn[data-act="roll"]{height:42px!important;font-size:16px!important}
 html.phone html body .stagebtns .tbtn[data-act="roll"],html body .sheet .btn.primary:not(#cYes):not(#oNew):not(#rn):not(#rd){border-width:13px 16px!important;border-image-width:13px 16px!important}
 html.phone html body .stagebtns .tbtn[data-act="trade"],html body #cYes,html body #oNew,html body #rn,html body #rd,html body .sheet .btn.sub,html body #oClose,html body #cNo,html body #rp,html body #rs,html body .sheet .row .btn:not(.primary):not(.sub):not(#sNew),html body .stagebtns .tbtn[data-act="end"]{border-width:8px 10px!important;border-image-width:8px 10px!important}
 html body .sheet{border-style:solid!important;border-color:transparent!important;border-image:url(assets/ui/518989b1.webp) 150 / 50px stretch!important;background:url(assets/ui/4bfed2ad.webp) 0 0/360px 360px repeat!important;background-clip:border-box!important;box-shadow:0 20px 60px rgba(0,0,0,.55)!important;border-radius:0!important}
@@ -1627,13 +1627,13 @@ html body .bld .pimg{height:96px!important}html body .bld .pimg img{max-height:9
 html.phone body .bld .pimg{height:var(--bpH,60px)!important}html.phone body .bld .pimg img{max-height:var(--bpH,60px)!important}
 /* ===== screen dressing v2 (?deco=1): left / right columns + wood panel, PC and mobile sets ===== */
 #deco.v2 .dk{display:none}#deco.v2 .dvig{z-index:0}
-#deco.v2 .d2{position:absolute;top:0;height:var(--woodTop,76%);background:left top/auto 100% no-repeat;display:block;z-index:1}
+#deco.v2 .d2{position:absolute;top:0;height:calc(100% - var(--woodH,196px));background:left top/auto 100% no-repeat;display:block;z-index:1}
 #deco.v2 .d2.l{left:0;aspect-ratio:480/1440;background-image:url(assets/deco2/pc_left.webp)}
 #deco.v2 .d2.r{right:0;aspect-ratio:480/1440;background-image:url(assets/deco2/pc_right.webp);background-position:right top}
-#deco.v2 .d2.w{top:var(--woodTop,76%);bottom:0;left:0;right:0;height:auto;aspect-ratio:auto;background:url(assets/deco2/pc_wood.webp) center top/100% auto no-repeat;z-index:2;box-shadow:0 -8px 22px rgba(0,0,0,.55)}
+#deco.v2 .d2.w{top:auto;bottom:0;left:0;right:0;height:calc(var(--woodH,196px) + 1.6vw);aspect-ratio:auto;background:url(assets/deco2/wood2.webp) center top/100% auto no-repeat;z-index:2;box-shadow:0 -8px 22px rgba(0,0,0,.55)}
 html.phone #deco.v2 .d2.l{aspect-ratio:505/1080;background-image:url(assets/deco2/mobile_left.webp)}
 html.phone #deco.v2 .d2.r{aspect-ratio:470/1080;background-image:url(assets/deco2/mobile_right.webp)}
-html.phone #deco.v2 .d2.w{background-image:url(assets/deco2/mobile_wood.webp)}
+html.phone #deco.v2 .d2.w{height:calc(var(--woodH) + 1.6vw)}
 
 /* tray: no headings under the tabs; guide tab */
 html body .tray-act>.tray-h{visibility:hidden!important}
@@ -1660,6 +1660,19 @@ html.has-deco2 body #dicebox::after,html.has-deco2 body .side .panel::before,htm
 html.has-deco2 body #dicebox::after{position:absolute;left:0;right:0;bottom:0;margin:0}
 html.has-deco2 body .side .panel::before{margin-bottom:6px}html.has-deco2 body .side .panel::after{margin-top:6px}
 html.has-deco2 body .side .panel{background:none!important;border:0!important;box-shadow:none!important}
+
+/* new build icons (840x1000 art): PC 84px / gap 6, mobile 50px / gap 4, label under the art */
+html body .builds{grid-template-columns:repeat(4,84px)!important;gap:6px!important}
+html body .bld .pimg{height:100px!important;width:84px!important;align-items:flex-end!important}
+html body .bld .pimg img{width:84px!important;max-width:84px!important;max-height:none!important;height:100px!important}
+html body .bld b{font-size:10px!important;margin:0!important;line-height:1.2!important}
+html.phone body .builds{grid-template-columns:repeat(4,50px)!important;gap:4px!important}
+html.phone body .bld .pimg{height:60px!important;width:50px!important}
+html.phone body .bld .pimg img{width:50px!important;max-width:50px!important;height:60px!important}
+html.phone body .bld b{font-size:8px!important}
+html body .bld .meta2{display:none!important}
+html body #hand .tally{display:none!important}
+
 /* title ambience: sun glow + rays, gold dust, logo shine */
 .title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
@@ -1826,7 +1839,7 @@ html.phone body .dlg-snd .sndrow{grid-template-columns:auto 150px 60px;gap:12px}
 <div id="dialog" class="overlay dlgov" hidden><div class="sheet sheet-dialog" id="dsheet"></div></div>
 <div id="modal" class="overlay" hidden><div class="sheet" id="sheet"></div><i class="mcrest" id="mcrest" aria-hidden="true"></i></div>
 
-<script>document.getElementById('logoImg')&&(document.getElementById('logoImg').src=window.LOGO_URL);</script>
+<script>document.getElementById('logoImg')&&(document.getElementById('logoImg').src='assets/logo_game.webp');</script>
 <script id="logic">
 // ================= GAME LOGIC (no DOM) =================
 let ME=0; // seat index of the local player
@@ -2596,6 +2609,7 @@ function toBlobURL(d){if(!/^data:/.test(d))return d;try{const i=d.indexOf(',');c
 const ARTIMG={};
 // Card art: pre-rendered. Wood & ore use Poly Haven CC0 scans (dead_tree_trunk, boulder_01); others use Poly Haven CC0 textures.
 const BUILDIMG={"dev": "assets/build/dev.webp", "road": "assets/build/road.webp", "settlement": "assets/build/settlement.webp", "city": "assets/build/city.webp"};
+['road','settlement','city','dev'].forEach(k=>BUILDIMG[k]='assets/build2/'+k+'.webp');
 const SUMIMG={"2": "assets/sum/2.webp", "3": "assets/sum/3.webp", "4": "assets/sum/4.webp", "5": "assets/sum/5.webp", "6": "assets/sum/6.webp", "7": "assets/sum/7.webp", "8": "assets/sum/8.webp", "9": "assets/sum/9.webp", "10": "assets/sum/10.webp", "11": "assets/sum/11.webp", "12": "assets/sum/12.webp"};
 const RESICON={"wood": "assets/icons/wood.webp", "brick": "assets/icons/brick.webp", "wool": "assets/icons/wool.webp", "grain": "assets/icons/grain.webp", "ore": "assets/icons/ore.webp"};
 const DIEFACE512="assets/ui/dieface.webp";let DIEFACEIMG=null;{const im=new Image();im.onload=()=>{DIEFACEIMG=im;if(typeof DICE!=='undefined')DICE.mats=null;};im.src=DIEFACE512;}
@@ -3330,7 +3344,7 @@ function showCredits(){openDialog(`<h3>Credits &amp; Licenses</h3><div class="cr
 
 // wood panel / side art follow the tab baseline
 function placeWood(){const d=document.getElementById('deco');if(!d||!d.classList.contains('v2'))return;document.documentElement.classList.add('has-deco2');const t=document.querySelector('#handHead .htabs');const st=document.getElementById('stage');if(!t||!st||!t.offsetParent)return;
-  const k=PH.on?PH.k:1;const y=(t.getBoundingClientRect().bottom-st.getBoundingClientRect().top)/k-(st.getBoundingClientRect().width/k)*.008;if(Math.abs(y-(placeWood.y||0))>.5){placeWood.y=y;d.style.setProperty('--woodTop',y+'px');}
+  const k=PH.on?PH.k:1;if(PH.on){const y=(st.getBoundingClientRect().bottom-t.getBoundingClientRect().bottom)/k+(st.getBoundingClientRect().width/k)*.006;if(Math.abs(y-(placeWood.y||0))>.5){placeWood.y=y;d.style.setProperty('--woodH',y+'px');}}else d.style.removeProperty('--woodH');
   {const L=d.querySelector('.d2.l'),R=d.querySelector('.d2.r');if(L&&R){const r=document.documentElement.style;const wl=L.getBoundingClientRect().width/k,wr=R.getBoundingClientRect().width/k;r.setProperty('--sideL',Math.round(Math.max(14,wl*.42))+'px');r.setProperty('--sideR',Math.round(Math.max(14,wr*.42))+'px');}}}
 setInterval(()=>{try{placeWood();}catch(e){}},300);
 function addDeco(){if(!/[?&]deco=1/.test(location.search)||document.getElementById('deco'))return;const st=document.getElementById('stage');if(!st)return;const d=document.createElement('div');d.id='deco';
@@ -3488,7 +3502,7 @@ function paintCard(res,label,dark){
   x.textAlign='center';x.textBaseline='middle';x.lineJoin='round';x.lineWidth=20*K;x.strokeStyle='rgba(18,9,2,.9)';x.strokeText(label,CW/2,ty);
   const g=x.createLinearGradient(0,ty-fs/2,0,ty+fs/2);g.addColorStop(0,'#fff4d0');g.addColorStop(.6,'#f0cf86');g.addColorStop(1,'#c99449');x.fillStyle=g;x.shadowColor='rgba(0,0,0,.5)';x.shadowBlur=8*K;x.shadowOffsetY=4*K;x.fillText(label,CW/2,ty);
   return toBlobURL(c.toDataURL('image/png'));}
-function buildCards(resOnly){RES.forEach(r=>CARDIMG[r]=paintCard(r,RN[r]));if(!resOnly)Object.keys(DEVN).forEach(t=>CARDIMG[t]=paintCard(t,DEVN[t],true));}
+function buildCards(resOnly){RES.forEach(r=>CARDIMG[r]='assets/cards2/'+r+'.webp');if(!resOnly)Object.keys(DEVN).forEach(t=>CARDIMG[t]=paintCard(t,DEVN[t],true));}
 
 const PH={on:false,k:1,vw:0,vh:0,ox:0,oy:0,orig:new Map()};
 const HUDQ={get matches(){return PH.on||matchMedia('(min-width:1101px) and (min-height:640px)').matches;}};
