@@ -2696,8 +2696,8 @@ function sheepGeo(){if(SHEEPG)return SHEEPG;const U=THREE.BufferGeometryUtils;co
   const tail=new THREE.SphereGeometry(.022,6,5);tail.translate(-.13,.15,0);parts.push(col(tail,[.85,.83,.77]));
   SHEEPG=U.mergeBufferGeometries(parts);SHEEPG.computeVertexNormals();return SHEEPG;}
 // test windmill candidates (?wm=1..3 / test bench): GLB on the grain tile, blades spin
-const WMV=(/[?&]wm=([1-3])/.exec(location.search)||[])[1]||(/[?&]test=1/.test(location.search)?'3':undefined);
-const WMDEF={'1':{blades:['polySurface106'],drop:['pPlane1','group10','group13','group14','group15','pCube64','pCube65','pCube66','pCube67'],H:.52,ry:Math.PI,bright:1.35},'2':{blades:['Cube011','Cube051','Cube048','Cube049','Cube050','Cylinder002'],drop:['Sun'],H:.52},'3':{anim:true,H:.52,ry:-Math.PI/2}};
+const WMV=(/[?&]wm=([1-5])/.exec(location.search)||[])[1]||(/[?&]test=1/.test(location.search)?'4':undefined);
+const WMDEF={'1':{blades:['polySurface106'],drop:['pPlane1','group10','group13','group14','group15','pCube64','pCube65','pCube66','pCube67'],H:.52,ry:Math.PI,bright:1.35},'2':{blades:['Cube011','Cube051','Cube048','Cube049','Cube050','Cylinder002'],drop:['Sun'],H:.52},'3':{anim:true,H:.52,ry:-Math.PI/2},'4':{blades:['Windheel_low'],H:.52},'5':{split:-3,H:.52,bright:1.6}};
 function glbWindmill(g,x,z){const D=WMDEF[WMV];const k=new THREE.Group();k.position.set(x,heightAt(x,z),z);k.userData.nomerge=1;g.add(k);
   new THREE.GLTFLoader().load(`assets/test/wm/w${WMV}_w.glb`,gl=>{const m=gl.scene;(D.drop||[]).forEach(n=>{const o=m.getObjectByName(n);if(o)o.visible=false;});
     m.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;o.frustumCulled=false;if(D.bright){o.material=o.material.clone();o.material.color.multiplyScalar(D.bright);}}});
@@ -2705,7 +2705,9 @@ function glbWindmill(g,x,z){const D=WMDEF[WMV];const k=new THREE.Group();k.posit
     const bb=new THREE.Box3();m.traverse(o=>{if(o.isMesh&&o.visible)bb.expandByObject(o);});const sz=bb.getSize(new THREE.Vector3());const sc=D.H/Math.max(1e-6,sz.y);w.scale.setScalar(sc);k.updateMatrixWorld(true);
     const b2=new THREE.Box3();m.traverse(o=>{if(o.isMesh&&o.visible){if(o.isSkinnedMesh){o.skeleton.update();const p=o.geometry.attributes.position,v=new THREE.Vector3();for(let q=0;q<p.count;q+=7){v.fromBufferAttribute(p,q);o.boneTransform(q,v);v.applyMatrix4(o.matrixWorld);b2.expandByPoint(v);}}else b2.expandByObject(o);}});const kp=k.getWorldPosition(new THREE.Vector3());w.position.y-=b2.min.y-kp.y;w.position.x-=(b2.min.x+b2.max.x)/2-kp.x;w.position.z-=(b2.min.z+b2.max.z)/2-kp.z;k.updateMatrixWorld(true);
     if(D.anim&&gl.animations.length){const mx=new THREE.AnimationMixer(m);mx.clipAction(gl.animations[0]).play();(W.wmMix=W.wmMix||[]).push(mx);}
-    else if(D.blades){const parts=D.blades.map(n=>m.getObjectByName(n)).filter(Boolean);if(parts.length){const bx=new THREE.Box3();parts.forEach(p=>bx.expandByObject(p));const c=bx.getCenter(new THREE.Vector3()),s3=bx.getSize(new THREE.Vector3());
+    else if(D.blades||D.split){let parts=[];if(D.split){m.traverse(o=>{if(!o.isMesh||parts.length)return;const g=o.geometry,p=g.attributes.position,I=g.index.array,A=[],B=[];for(let t=0;t<I.length;t+=3){const cy=(p.getY(I[t])+p.getY(I[t+1])+p.getY(I[t+2]))/3;(cy<D.split?B:A).push(I[t],I[t+1],I[t+2]);}
+        const gb=g.clone();gb.setIndex(B);g.setIndex(A);const bm=new THREE.Mesh(gb,o.material);bm.castShadow=true;bm.frustumCulled=false;o.parent.add(bm);bm.position.copy(o.position);bm.quaternion.copy(o.quaternion);bm.scale.copy(o.scale);bm.updateMatrixWorld(true);parts.push(bm);});}
+      else parts=D.blades.map(n=>m.getObjectByName(n)).filter(Boolean);if(parts.length){const bx=new THREE.Box3();parts.forEach(p=>bx.expandByObject(p));const c=bx.getCenter(new THREE.Vector3()),s3=bx.getSize(new THREE.Vector3());
       const thin=s3.x<s3.z?'x':'z';const piv=new THREE.Group();piv.position.copy(k.worldToLocal(c.clone()));piv.rotation.y=thin==='x'?Math.PI/2:0;k.add(piv);k.updateMatrixWorld(true);
       const spin=new THREE.Group();piv.add(spin);spin.updateMatrixWorld(true);parts.forEach(p=>spin.attach(p));W.mills.push(spin);}}
     try{PERF.dirty=true;PERF.shadow=true;}catch(e){}},undefined,e=>console.warn('wm',e));}
@@ -3455,8 +3457,8 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '색상 A: 빨강·파랑·노랑·초록':()=>{const u=new URL(location.href);u.searchParams.set('cs','A');location.href=u;},
     '색상 B: 빨강·분홍·파랑·하양':()=>{const u=new URL(location.href);u.searchParams.set('cs','B');location.href=u;},
     '풍차 1 (dutch)':()=>{const u=new URL(location.href);u.searchParams.set('wm','1');location.href=u;},
-    '풍차 2 (old)':()=>{const u=new URL(location.href);u.searchParams.set('wm','2');location.href=u;},
-    '풍차 3 (stylized)':()=>{const u=new URL(location.href);u.searchParams.set('wm','3');location.href=u;},
+    '풍차 4 (stylized wip)':()=>{const u=new URL(location.href);u.searchParams.set('wm','4');location.href=u;},
+    '풍차 5 (brick)':()=>{const u=new URL(location.href);u.searchParams.set('wm','5');location.href=u;},
     '지붕: 텍스처 ↔ 셰이더':()=>{const u=new URL(location.href);u.searchParams.set('tx',TXM?'0':'1');location.href=u;},
   };
   const build=()=>{const p=document.createElement('div');p.id='tbench';p.innerHTML='<button class="tg">테스트 ▾</button><b>게임</b>';
