@@ -1965,6 +1965,11 @@ html.phone .cardpick .plcards{--cw:min(112px,calc(100cqw / 7.6))}
 .cardpick .plcards.mono{gap:calc(var(--cw) * .22)}
 .cardpick .plcards.dcards{gap:0}
 .cardpick .plcards.dcards .plc+.plc{margin-left:min(calc(var(--cw) * .08),calc((100cqw - var(--cw)) / max(1,var(--m) - 1) - var(--cw)))}
+
+#pop .rprod{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 8px}
+#pop .rprod span{font-size:12px;line-height:1.5;padding:1px 9px;border:1px solid rgba(217,172,104,.45);border-radius:10px;color:#e9dcc0;white-space:nowrap}
+#pop .rprod b{color:#f3d58e;margin-right:2px}#pop .rprod b.hot{color:#ff7a5c}
+#pop .rprod span.rob{opacity:.55}
 </style>
 
 
@@ -3297,7 +3302,9 @@ function renderHand(me,groups){const box=$('#hand');const prev0=ui.prevRes?{...u
 
 function devPop(t){
   if(t.startsWith('res:')){const k=t.slice(4),me=S.players[ME],rat=ratios(ME)[k],turn=S.cur===ME&&S.phase==='main'&&S.rolled&&!S.pend,can=turn&&me.res[k]>=rat&&RES.some(r=>r!==k&&S.bank[r]>0);
-    return `<h4>${RN[k]} 카드</h4><p>${TN[k]}에서 나와요. ${RUSE[k]}에 써요.</p><p class="muted">보유 ${me.res[k]}장 · 은행 교환 ${rat}:1${rat<4?' (항구)':''}</p><button class="btn primary" data-trade="${k}" ${can?'':'disabled'} style="margin-top:4px">${can?'교환하기':S.cur!==ME||S.phase!=='main'?'내 차례에 교환할 수 있어요':!S.rolled?'주사위를 먼저 굴리세요':S.pend?'지금 하던 행동을 먼저 끝내세요':me.res[k]<rat?`교환하려면 ${rat}장 필요해요`:'은행에 받을 자원이 없어요'}</button>`;}
+    const pm={};S.vb.forEach((b,v)=>{if(b&&b.o===ME)for(const hi of G.verts[v].h)if(S.board.hexes[hi].res===k)pm[hi]=(pm[hi]||0)+(b.c?2:1);});const pl=Object.keys(pm).map(Number).sort((x,y)=>S.board.hexes[x].num-S.board.hexes[y].num);
+    const prod=pl.length?`<div class="rprod">${pl.map(hi=>{const n=S.board.hexes[hi].num,rb=hi===S.board.robber;return `<span class="${rb?'rob':''}"${rb?' title="도적이 있어 지금은 안 나와요"':''}><b class="${n===6||n===8?'hot':''}">${n}</b> 나오면 ${pm[hi]}장${rb?' · 도적':''}</span>`;}).join('')}</div>`:`<p class="muted">내 건물 주변에 ${TN[k]}${(TN[k].charCodeAt(TN[k].length-1)-44032)%28?'이':'가'} 없어요.</p>`;
+    return `<h4>${RN[k]} 카드</h4><p>${TN[k]}에서 나와요. ${RUSE[k]}에 써요.</p>${prod}<p class="muted">보유 ${me.res[k]}장 · 은행 교환 ${rat}:1${rat<4?' (항구)':''}</p><button class="btn primary" data-trade="${k}" ${can?'':'disabled'} style="margin-top:4px">${can?'교환하기':S.cur!==ME||S.phase!=='main'?'내 차례에 교환할 수 있어요':!S.rolled?'주사위를 먼저 굴리세요':S.pend?'지금 하던 행동을 먼저 끝내세요':me.res[k]<rat?`교환하려면 ${rat}장 필요해요`:'은행에 받을 자원이 없어요'}</button>`;}
   if(t==='cost')return `<h4>건설 비용</h4><table class="reftable"><tbody>${['road','settlement','city','dev'].map(w=>`<tr><td>${BN[w]}</td><td>${costPips(COST[w])}</td></tr>`).join('')}</tbody></table><p class="muted">도로는 길을 넓히고, 정착지 1점, 도시 2점이에요. 발전 카드는 무작위 특수 카드예요.</p>`;
   if(t==='all')return `<h4>발전 카드란?</h4><p>양모·곡물·광석 1장씩으로 사는 무작위 특수 카드예요. 총 25장이 있어요.</p><ul>${Object.keys(DEVCNT).map(k=>`<li><b>${DEVN[k]}</b> ${DEVCNT[k]}장: ${DEVD[k]}</li>`).join('')}</ul><p class="muted">산 차례에는 못 쓰고, 한 차례에 1장만 쓸 수 있어요. 남은 덱 ${S.deck.length}장.</p>`;
   const own=S.players[ME].dev.some(d=>d.t===t);const can=canPlayDev(ME,t);
