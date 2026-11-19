@@ -3475,8 +3475,9 @@ function showPlenty(){const picks=[];const draw=()=>{const n=picks.length;const 
   $('#pk').onclick=()=>{const l=picks.map(id=>id.slice(0,-1));closeModal();act('plenty',l[0],l[1]);};};draw();}
 const POP2=/[?&]test=1/.test(location.search);
 function showMono2(){cardDlg('mono',`<h3>독점</h3><p>자원 하나를 고르면 상대 ${S.players.length-1}명이 가진 그 자원을 전부 가져와요.<br>상대 손패는 보이지 않으니 기록을 보고 추측해 보세요.</p>
-  <div class="plwrap"><div class="plcards mono" id="mp">${RES.map(k=>`<div class="plg"><button class="plc" data-k="${k}" aria-label="${RN[k]}"><img src="${CARDIMG[k]}" alt="${RN[k]}"></button></div>`).join('')}</div></div><div class="row"><button class="btn" id="mx">취소</button></div>`);
-  $('#mx').onclick=closeModal;$('#mp').onclick=e=>{const t=e.target.closest('button');if(!t)return;t.classList.add('on');setTimeout(()=>{closeModal();act('mono',t.dataset.k);},220);};}
+  <div class="plwrap"><div class="plcards mono" id="mp">${RES.map(k=>`<div class="plg"><button class="plc" data-k="${k}" aria-label="${RN[k]}"><img src="${CARDIMG[k]}" alt="${RN[k]}"></button></div>`).join('')}</div></div><div class="row"><button class="btn" id="mx">취소</button><button class="btn primary" id="mk" disabled>확인</button></div>`);
+  let pick=null;$('#mx').onclick=closeModal;$('#mp').onclick=e=>{const t=e.target.closest('button');if(!t)return;pick=pick===t.dataset.k?null:t.dataset.k;$('#mp').querySelectorAll('.plc').forEach(b=>b.classList.toggle('on',b.dataset.k===pick));$('#mk').disabled=!pick;};
+  $('#mk').onclick=()=>{if(!pick)return;closeModal();act('mono',pick);};}
 function showDiscard2(n){n=n||S.pend.n;const me=S.players[ME];const cards=RES.flatMap(r=>Array(me.res[r]).fill(r));const sel=new Set();
   const draw=()=>{const k=sel.size,full=k>=n;
     cardDlg('discard',`<h3>카드 ${n}장 버리기</h3>${S.mp?'<p class="muted">남은 시간 <i data-cd="dl"></i> · 시간이 지나면 무작위로 버려져요</p>':''}<p>주사위 7이 나왔고 내 카드가 8장 이상이라 절반을 은행에 버려야 해요.<br>아래 카드 중 버릴 카드를 누르세요.</p>
@@ -3578,7 +3579,10 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '지붕: 텍스처 ↔ 셰이더':()=>{const u=new URL(location.href);u.searchParams.set('tx',TXM?'0':'1');location.href=u;},
     '풍년':()=>showPlenty(),
     '독점 (새 팝업)':()=>showMono2(),
-    '카드 5장 버리기 (새 팝업)':()=>{const me=S.players[ME];RES.forEach(r=>me.res[r]=2);update();showDiscard2(5);},
+    '카드 버리기: 8장 보유 (새 팝업)':()=>{const me=S.players[ME];RES.forEach((r,i)=>me.res[r]=Math.floor(8/5)+(i<8%5?1:0));update();showDiscard2(4);},
+    '카드 버리기: 10장 보유 (새 팝업)':()=>{const me=S.players[ME];RES.forEach((r,i)=>me.res[r]=Math.floor(10/5)+(i<10%5?1:0));update();showDiscard2(5);},
+    '카드 버리기: 12장 보유 (새 팝업)':()=>{const me=S.players[ME];RES.forEach((r,i)=>me.res[r]=Math.floor(12/5)+(i<12%5?1:0));update();showDiscard2(6);},
+    '카드 버리기: 16장 보유 (새 팝업)':()=>{const me=S.players[ME];RES.forEach((r,i)=>me.res[r]=Math.floor(16/5)+(i<16%5?1:0));update();showDiscard2(8);},
   };
   const build=()=>{const p=document.createElement('div');p.id='tbench';p.innerHTML='<button class="tg">테스트 ▾</button><b>게임</b>';
     const groups={'새 게임 (인트로 포함)':'게임','정착지 짓기':'건설','도적 이동':'연출','승리 화면':'결과','시작 연출 다시':'화면','색상 A: 빨강·파랑·노랑·초록':'색상 세트','흙: 새 모델':'흙 지형','풍년':'팝업'};
