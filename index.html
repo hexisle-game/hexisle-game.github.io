@@ -2702,7 +2702,7 @@ function wmMod(m,mod){
   const adj=(mt,fn)=>{mt.onBeforeCompile=sh=>{sh.fragmentShader=sh.fragmentShader.replace('#include <map_fragment>','#include <map_fragment>\n{vec3 c=diffuseColor.rgb;float l=dot(c,vec3(.299,.587,.114));'+fn+'diffuseColor.rgb=c;}');};mt.customProgramCacheKey=()=>'wm'+fn.length;mt.needsUpdate=true;};
   if(mod==='w4')m.traverse(o=>{if(!o.isMesh)return;const n=o.material.name;o.material=o.material.clone();
     if(n==='TreeLight')adj(o.material,'c=vec3(.6,.45,.27)*(.55+l*.5);');
-    else if(n==='Takplattor')adj(o.material,'c*=1.4;');
+    else if(n==='Takplattor')adj(o.material,'c=mix(c*1.4,vec3(.62,.48,.32)*(.55+l*.7),.6);');
     else if(n==='Windheel')adj(o.material,'c=c*vec3(.95,.86,.7);');});
   if(mod==='w1'){const cap=m.getObjectByName('WindMill_Cap_Windmill_0');if(cap){cap.material=cap.material.clone();adj(cap.material,'c=mix(vec3(l),c,.7)*.78;');}
     const o=m.getObjectByName('polySurface109_Wood_0');if(o){const g=o.geometry,p=g.attributes.position,I=g.index.array,A=[],B=[];for(let t=0;t<I.length;t+=3){let y=0,z=0;for(let q=0;q<3;q++){y+=p.getY(I[t+q]);z+=p.getZ(I[t+q]);}y/=3;z/=3;(y<1.3&&z>2.4?B:A).push(I[t],I[t+1],I[t+2]);}
@@ -2816,7 +2816,7 @@ function tintRoof(m,col){m.updateMatrixWorld(true);const bb=new THREE.Box3().set
     {const nm={0xff2a1a:'red',0x3a8cff:'blue',0x2fa548:'green',0xf5c400:'yellow'}[new THREE.Color(col).getHex()];
      if(TXM&&nm&&c.material.map){const mt=c.material;TXC[nm]=TXC[nm]||new Promise(res=>new THREE.ImageLoader().load(`assets/test/tex/${nm}.jpg`,res));
        TXC[nm].then(img=>{const t=mt.map.clone();t.source=new THREE.Source(img);t.needsUpdate=true;mt.map=t;if(mt.emissiveMap)mt.emissiveMap=t;mt.needsUpdate=true;try{PERF.dirty=true;}catch(e){}});return;}}
-    const mt=c.material;const tc=new THREE.Color(col);const TF={0xff2a1a:[0xff2a1a,.78,1],0x3a8cff:[0x18b4ff,1.75,1.12],0xf5c400:[0xffcf10,1.85,1.15],0x2fa548:[0x36c98c,1.25,1.05],0xe331c5:[0xff4fb4,1.15,1.0],0xefe6cf:[0xfffdf6,0,2.3]}[tc.getHex()]||[tc.getHex(),1.3,1];tc.setHex(TF[0]);const U={value:tc},US={value:TF[1]},UG={value:TF[2]};mt.onBeforeCompile=sh=>{sh.uniforms.uTint=U;sh.uniforms.uSat=US;sh.uniforms.uGain=UG;
+    const mt=c.material;const tc=new THREE.Color(col);const TF={0xff2a1a:[0xff2a1a,.78,1],0x3a8cff:[0x18b4ff,1.75,1.12],0xf5c400:[0xffcf10,1.85,1.15],0x2fa548:[0x36c98c,1.25,1.05],0xe331c5:[0xff4fb4,.98,1.0],0xefe6cf:[0xfffdf6,0,2.3]}[tc.getHex()]||[tc.getHex(),1.3,1];tc.setHex(TF[0]);const U={value:tc},US={value:TF[1]},UG={value:TF[2]};mt.onBeforeCompile=sh=>{sh.uniforms.uTint=U;sh.uniforms.uSat=US;sh.uniforms.uGain=UG;
       sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nattribute float aH;varying float vH;').replace('#include <begin_vertex>','#include <begin_vertex>\nvH=aH;');
       sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nuniform vec3 uTint;uniform float uSat;uniform float uGain;varying float vH;').replace('#include <map_fragment>',`#include <map_fragment>
         {vec3 c=diffuseColor.rgb;float rg=c.r/(c.g+.02),rb=c.r/(c.b+.02);float k=smoothstep(TR0,TR1,rg)*smoothstep(1.3,1.9,rb)*smoothstep(HY0,HY1,vH);
@@ -2824,12 +2824,12 @@ function tintRoof(m,col){m.updateMatrixWorld(true);const bb=new THREE.Box3().set
     mt.customProgramCacheKey=()=>'tintRoof';mt.needsUpdate=true;});}
 const TROOF=['1.12','1.45','.34','.4'];const TXM=!/[?&]tx=0/.test(location.search),TXC={};const FLOORH=.075;
 // castle A (single texture): blue roofs -> player colour, bluish stone -> warm light stone
-function tintCastle(m,col){const tc=new THREE.Color(col);const TF={0xff2a1a:[0xff2a1a,1.15,.95],0x3a8cff:[0x2a7cff,1.6,.9],0xf5c400:[0xffcf10,1.85,1.15],0x2fa548:[0x36c98c,1.25,1.05],0xe331c5:[0xff3d96,1.05,.82],0xefe6cf:[0xfff8ea,0,2.0]}[tc.getHex()]||[tc.getHex(),1.2,1];tc.setHex(TF[0]);
+function tintCastle(m,col){const tc=new THREE.Color(col);const TF={0xff2a1a:[0xff2a1a,1.15,.95],0x3a8cff:[0x2a7cff,1.6,.9],0xf5c400:[0xffcf10,1.85,1.15],0x2fa548:[0x36c98c,1.25,1.05],0xe331c5:[0xff2a9a,1.35,.86],0xefe6cf:[0xfff8ea,0,2.0]}[tc.getHex()]||[tc.getHex(),1.2,1];tc.setHex(TF[0]);
   m.traverse(c=>{if(!c.isMesh)return;const mt=c.material;const U={value:tc},US={value:TF[1]},UG={value:TF[2]};
     mt.onBeforeCompile=sh=>{sh.uniforms.uTint=U;sh.uniforms.uSat=US;sh.uniforms.uGain=UG;
       sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nuniform vec3 uTint;uniform float uSat;uniform float uGain;').replace('#include <map_fragment>',`#include <map_fragment>
         {vec3 c=diffuseColor.rgb;float mx=max(c.r,max(c.g,c.b)),mn=min(c.r,min(c.g,c.b));float sat=(mx-mn)/(mx+.001);float k=smoothstep(.06,.14,c.b-c.r)*smoothstep(.32,.5,sat);float l=dot(c,vec3(.299,.587,.114));
-         vec3 warm=vec3(l)*vec3(1.1,1.0,.84)*1.95;vec3 t=uTint*clamp(l*3.1*uGain,0.,1.7);t=max(mix(vec3(dot(t,vec3(.299,.587,.114))),t,uSat),0.);t=mix(t,vec3(1.,.97,.92),.07);diffuseColor.rgb=mix(warm,t,k);}`);};
+         vec3 warm=vec3(l)*vec3(1.1,1.0,.84)*1.95;vec3 t=uTint*clamp(l*3.1*uGain,0.,1.7);t=max(mix(vec3(dot(t,vec3(.299,.587,.114))),t,uSat*1.15),0.);diffuseColor.rgb=mix(warm,t,k);}`);};
     mt.customProgramCacheKey=()=>'tintCastle';mt.needsUpdate=true;});}
 const BGLB={};
 function bldFig(file,o,ry,wTarget,roofs,drop,tint){const k=new THREE.Group();const R=BGLB[file]=BGLB[file]||{g:null,cbs:[]};
