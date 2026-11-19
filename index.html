@@ -2723,7 +2723,7 @@ function glbWindmill(g,x,z){const D=WMDEF[WMV];const k=new THREE.Group();k.posit
       const spin=new THREE.Group();piv.add(spin);spin.updateMatrixWorld(true);parts.forEach(p=>spin.attach(p));W.mills.push(spin);}}
     try{PERF.dirty=true;PERF.shadow=true;}catch(e){}},undefined,e=>console.warn('wm',e));}
 // test: one volcano model per mountain tile, clipped to the hex, number token sits in the crater
-const VOLC=false;const MNT=(/[?&]mnt=([25ijk])/.exec(location.search)||[])[1]||(/[?&]test=1/.test(location.search)?'2':undefined);const VOLC_W=1.62,VOLC_TOP=.25;
+const VOLC=false;const MNT=(/[?&]mnt=([5ijk])/.exec(location.search)||[])[1]||(/[?&]test=1/.test(location.search)?'k':undefined);const VOLC_W=1.62,VOLC_TOP=.25;
 function volcano(g,x,z,i){const k=new THREE.Group();k.position.set(x,heightAt(x,z)-.01,z);k.userData.nomerge=1;g.add(k);
   const R=BGLB['vol']=BGLB['vol']||{g:null,cbs:[]};const put=gl=>{const m=gl.scene.clone(true);m.updateMatrixWorld(true);const bb=new THREE.Box3().setFromObject(m),sz=bb.getSize(new THREE.Vector3());const sc=VOLC_W/Math.max(sz.x,sz.z);m.scale.set(sc,sc*.72,sc);m.updateMatrixWorld(true);
     const b2=new THREE.Box3().setFromObject(m),c=b2.getCenter(new THREE.Vector3());m.position.set(-c.x,-b2.min.y,-c.z);m.rotation.y=(i*1.7)%6.28;
@@ -3508,7 +3508,6 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '인원 2·3·4 바꾸기':()=>{ui.n=ui.n>=4?2:ui.n+1;startNew(false);},
     '색상 A: 빨강·파랑·노랑·초록':()=>{const u=new URL(location.href);u.searchParams.set('cs','A');location.href=u;},
     '색상 B: 빨강·분홍·파랑·하양':()=>{const u=new URL(location.href);u.searchParams.set('cs','B');location.href=u;},
-    '산 모델 A (mountain2)':()=>{const u=new URL(location.href);u.searchParams.set('mnt','2');location.href=u;},
     '산 모델 D (mountain5)':()=>{const u=new URL(location.href);u.searchParams.set('mnt','5');location.href=u;},
     '화산 J (mountainj)':()=>{const u=new URL(location.href);u.searchParams.set('mnt','j');location.href=u;},
     '화산 J-2 (높낮이 강조)':()=>{const u=new URL(location.href);u.searchParams.set('mnt','k');location.href=u;},
