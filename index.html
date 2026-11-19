@@ -2502,6 +2502,11 @@ function camIntro(){if(!W.ok)return;const tp=W.ctl.target.clone(),off=W.cam.posi
   const from={r:Math.max(W.ctl.minDistance+.3,sp.radius*.4),phi:W.ctl.maxPolarAngle,theta:sp.theta-3.0};
   W.cam.position.setFromSpherical(new THREE.Spherical(from.r,from.phi,from.theta)).add(tp);W.cam.lookAt(tp);W.ctl.update();try{introFXStart(performance.now()+350);}catch(e){}
   W.camAnim={sph:true,t0:performance.now()+350,dur:3000,tp,from,to:{r:sp.radius,phi:sp.phi,theta:sp.theta}};}
+function robWall(){const H=.5;const g=new THREE.CylinderGeometry(.985,.985,H,6,1,true);g.translate(0,H/2,0);
+  const m=new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:THREE.DoubleSide,uniforms:{uA:W.robA,uC:{value:new THREE.Color(0x9a0f0a)}},
+    vertexShader:'varying float vh;void main(){vh=position.y/'+H.toFixed(3)+';gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+    fragmentShader:'uniform float uA;uniform vec3 uC;varying float vh;void main(){float a=(1.-smoothstep(.7,1.,vh))*.8*uA;gl_FragColor=vec4(uC,a);}'});
+  const w=new THREE.Mesh(g,m);w.renderOrder=5;w.castShadow=w.receiveShadow=false;w.raycast=()=>{};w.userData.nomerge=1;return w;}
 function introFXStart(t0){const tk=[];W.tokens.forEach((m,i)=>{if(!m||!m.parent)return;const g=m.parent;const h=hc(i);tk.push({g,y:g.position.y,d:Math.hypot(h.x,h.z-.35)});g.visible=false;});
   tk.sort((a,b)=>a.d-b.d);W.robA.value=0;W.tgtG.visible=false;W.tgtA=0;$('#stage').classList.add('intro-hide');W.introFX={t0,tk};}
 function introFXStep(now){const F=W.introFX;if(!F)return;const el=now-F.t0,T0=900,gap=40,dd=460;
@@ -3049,7 +3054,7 @@ function sync3D(){
   for(const [key,mk] of want){if(W.pieces.has(key))continue;const k=mk();if(!first){k.userData.born=now;k.userData.kind='bld';W.anim.add(k);spawnDust(k.position.x,k.position.z,now+200,key[0]==='e');}W.pieces.set(key,k);W.dynG.add(k);}
   W.prev=true;
   {const {x,z}=hc(S.board.robber);const to=new THREE.Vector3(x-.42,heightAt(x-.42,z+.12),z+.12);let rb=W.robber;if(!rb||rb.parent!==W.dynG){rb=W.robber=robberMesh();rb.scale.setScalar(1.75);rb.traverse(o=>{if(o.isMesh){o.material=o.material.clone();o.material.transparent=true;o.renderOrder=6;}});rb.userData.info={t:'robber'};rb.position.copy(to);W.dynG.add(rb);}
-    {const hh=G.hexes[S.board.robber];W.robU.value.set(hh.q,hh.r);}
+    {const hh=G.hexes[S.board.robber];W.robU.value.set(hh.q,hh.r);}{const wm=W.robWall||(W.robWall=robWall());wm.position.set(x,0,z);if(wm.parent!==W.dynG)W.dynG.add(wm);}
     if(W.robberFrom&&W.robberFrom.distanceTo(to)>.01){rb.userData.move={from:rb.position.clone(),to:to.clone(),t0:now};W.anim.add(rb);try{camVisit(to);}catch(e){}}else if(!rb.userData.move)rb.position.copy(to);W.robberFrom=to;
     const rmode=targets().kind==='robber';W.robLbl=W.robLbl||addMapLabel('','#e0402e',new THREE.Vector3(),'rob',true);W.robLbl.anchor=rb;W.robLbl.off=new THREE.Vector3(0,rb.userData.sprite?.72:rb.userData.glb?.6:.5,0);W.robLbl.el.classList.toggle('hot',rmode);W.robLbl.el.querySelector('span').textContent=rmode?'도적을 옮길 땅을 누르세요':'도적: 생산 정지';$('#stage').classList.toggle('robmode',rmode);
     if(rmode&&!rb.userData.robPulse){rb.traverse(o=>{if(o.isMesh&&o.material.emissive){o.material.emissive.setHex(0xff3a0a);o.material.emissiveIntensity=.12;}});
@@ -3363,7 +3368,7 @@ function infoText(f){
   return null;}
 
 // ---------- modals ----------
-function openModal(key,html){{const m=document.getElementById('modal');if(m&&m.classList.contains('mfade')){clearTimeout(ui.mfT);m.classList.remove('mfade');}}ui.modalFresh=!ui.modal||ui.modal!==key;{const c=document.getElementById('mcrest');if(c)c.style.visibility='';}if(!ui.modal&&typeof SND!=='undefined')SND.sfx('ui');ui.modal=key;$('#sheet').className='sheet sheet-'+key+(['offer','steal','plentyc'].includes(key)||(key==='plenty')||(POP2&&['mono','discard'].includes(key))?' sheet-dialog':'');if(['offer','steal','plenty'].includes(key)||(POP2&&['mono','discard'].includes(key)))html=`<img class="dorn" src="${TITLEIMG.orn2}" alt="">`+html;$('#sheet').innerHTML=html;$('#modal').hidden=false;placeCrest();requestAnimationFrame(placeCrest);setTimeout(placeCrest,120);setTimeout(placeCrest,400);}
+function openModal(key,html){{const m=document.getElementById('modal');if(m&&m.classList.contains('mfade')){clearTimeout(ui.mfT);m.classList.remove('mfade');}}ui.modalFresh=!ui.modal||ui.modal!==key;{const c=document.getElementById('mcrest');if(c)c.style.visibility='';}if(!ui.modal&&typeof SND!=='undefined')SND.sfx('ui');ui.modal=key;$('#sheet').className='sheet sheet-'+key+(['offer','steal','plenty','mono','discard'].includes(key)?' sheet-dialog':'');if(['offer','steal','plenty','mono','discard'].includes(key))html=`<img class="dorn" src="${TITLEIMG.orn2}" alt="">`+html;$('#sheet').innerHTML=html;$('#modal').hidden=false;placeCrest();requestAnimationFrame(placeCrest);setTimeout(placeCrest,120);setTimeout(placeCrest,400);}
 function placeCrest(){const sh=$('#sheet'),c=$('#mcrest');if(!sh||!c||$('#modal').hidden)return;const r=sh.getBoundingClientRect(),o=$('#modal').getBoundingClientRect(),k=PH.on?PH.k:1;c.style.left=((r.left-o.left+r.width/2)/k)+'px';c.style.top=((r.top-o.top)/k)+'px';}
 addEventListener('resize',()=>setTimeout(placeCrest,80));
 function infoDialog(k,guide){const ci=r=>`<img class="ic-card" src="${CARDIMG[r]}" alt="${RN[r]}">`;let body,title,sub;
@@ -3417,20 +3422,6 @@ function forcedModals(){
   if(['discard','steal','over','offer'].includes(ui.modal))closeModal();
 }
 function stepper(idp,vals,max){return `<div class="step" id="${idp}">${RES.map(k=>`<div class="cell bg-${k}"><div>${RN[k]}</div><div class="v">${vals[k]}</div><div class="b"><button data-k="${k}" data-d="-1" ${vals[k]<=0?'disabled':''} aria-label="${RN[k]} 빼기">−</button><button data-k="${k}" data-d="1" ${vals[k]>=max(k)?'disabled':''} aria-label="${RN[k]} 더하기">+</button></div></div>`).join('')}</div>`;}
-function showDiscard(){if(POP2)return showDiscard2();const n=S.pend.n;const sel=emptyRes();const me=S.players[ME];
-  const draw=()=>{const left=RES.flatMap(r=>Array(me.res[r]-sel[r]).fill(r)),out=RES.flatMap(r=>Array(sel[r]).fill(r));const k=out.length,full=k>=n;
-    const cw=PH.on?48:84;const cd=r=>`<img class="card" src="${CARDIMG[r]}" alt="${RN[r]}" data-r="${r}">`;
-    openModal('discard',`<h3>카드 ${n}장 버리기</h3>${S.mp?'<p class="muted">남은 시간 <i data-cd="dl"></i> · 시간이 지나면 무작위로 버려져요</p>':''}<p>주사위 7이 나왔고 내 카드가 8장 이상이라 절반을 은행에 버려야 해요. 아래 카드 중 버릴 카드를 누르세요.</p>
-    <div class="label">버릴 카드 <b class="dcnt${full?' ok':''}">${k} / ${n}</b>${k?' · 다시 누르면 내 자원카드로 돌아가요':''}</div>
-    <div class="dzone" id="dOut" style="--cw:${cw}px"></div>
-    <div class="label">내 자원카드 · ${left.length}장</div>
-    <div class="drow"><div class="dzone" id="dIn" style="--cw:${cw}px"></div>
-    <div class="row"><button class="btn primary" id="dOk" ${full?'':'disabled'}>버리기</button></div></div>`);
-    const mw=Math.max(cw*2,$('#dIn').clientWidth-4);$('#dOut').innerHTML=k?row(out.map(cd),cw,mw,'dpick'):`<div class="dempty">아래 내 자원카드에서 카드를 눌러 주세요</div>`;$('#dIn').innerHTML=row(left.map(cd),cw,mw,'dpick'+(full?' dfull':''));
-    $('#dIn').onclick=e=>{const t=e.target.closest('[data-r]');if(!t||sumRes(sel)>=n)return;sel[t.dataset.r]++;draw();};
-    $('#dOut').onclick=e=>{const t=e.target.closest('[data-r]');if(!t)return;sel[t.dataset.r]--;draw();};
-    $('#dOk').onclick=()=>{closeModal();act('discard',sel);};};
-  draw();}
 function showSteal(){openModal('steal',`<h3>누구에게서 빼앗을까요?</h3><p>도적이 앉은 땅에 건물이 있는 상대 중 한 명을 고르세요.<br>카드 1장을 무작위로 가져와요.</p>
   <div class="prow">${S.pend.v.map(q=>`<button class="pbtn" data-q="${q}" style="--pc:${S.players[q].color}"><span>${S.players[q].name} (카드 ${sumRes(S.players[q].res)}장)</span></button>`).join('')}</div>`);$('#sheet').classList.add('dlg-wide');
   $('#sheet').querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{closeModal();act('steal',+b.dataset.q);});}
@@ -3473,12 +3464,11 @@ function showPlenty(){const picks=[];const draw=()=>{const n=picks.length;const 
   $('#px').onclick=closeModal;
   $('#pl').onclick=e=>{const t=e.target.closest('button');if(!t||t.disabled)return;const id=t.dataset.id,ix=picks.indexOf(id);if(ix>=0)picks.splice(ix,1);else if(picks.length<2)picks.push(id);draw();};
   $('#pk').onclick=()=>{const l=picks.map(id=>id.slice(0,-1));closeModal();act('plenty',l[0],l[1]);};};draw();}
-const POP2=/[?&]test=1/.test(location.search);
-function showMono2(){cardDlg('mono',`<h3>독점</h3><p>자원 하나를 고르면 상대 ${S.players.length-1}명이 가진 그 자원을 전부 가져와요.<br>상대 손패는 보이지 않으니 기록을 보고 추측해 보세요.</p>
+function showMonopoly(){cardDlg('mono',`<h3>독점</h3><p>자원 하나를 고르면 상대 ${S.players.length-1}명이 가진 그 자원을 전부 가져와요.<br>상대 손패는 보이지 않으니 기록을 보고 추측해 보세요.</p>
   <div class="plwrap"><div class="plcards mono" id="mp">${RES.map(k=>`<div class="plg"><button class="plc" data-k="${k}" aria-label="${RN[k]}"><img src="${CARDIMG[k]}" alt="${RN[k]}"></button></div>`).join('')}</div></div><div class="row"><button class="btn" id="mx">취소</button><button class="btn primary" id="mk" disabled>확인</button></div>`);
   let pick=null;$('#mx').onclick=closeModal;$('#mp').onclick=e=>{const t=e.target.closest('button');if(!t)return;pick=pick===t.dataset.k?null:t.dataset.k;$('#mp').querySelectorAll('.plc').forEach(b=>b.classList.toggle('on',b.dataset.k===pick));$('#mk').disabled=!pick;};
   $('#mk').onclick=()=>{if(!pick)return;closeModal();act('mono',pick);};}
-function showDiscard2(n){n=n||S.pend.n;const me=S.players[ME];const cards=RES.flatMap(r=>Array(me.res[r]).fill(r));const sel=new Set();
+function showDiscard(n){n=n||S.pend.n;const me=S.players[ME];const cards=RES.flatMap(r=>Array(me.res[r]).fill(r));const sel=new Set();
   const draw=()=>{const k=sel.size,full=k>=n;
     cardDlg('discard',`<h3>카드 ${n}장 버리기</h3>${S.mp?'<p class="muted">남은 시간 <i data-cd="dl"></i> · 시간이 지나면 무작위로 버려져요</p>':''}<p>주사위 7이 나왔고 내 카드가 8장 이상이라 절반을 은행에 버려야 해요.<br>아래 카드 중 버릴 카드를 누르세요.</p>
     <div class="plwrap"><div class="plcards dcards" id="dc" style="--m:${cards.length}">${cards.map((r,i)=>{const on=sel.has(i);return `<button class="plc${on?' on':''}" data-i="${i}" ${!on&&full?'disabled':''} aria-label="${RN[r]}"><img src="${CARDIMG[r]}" alt="${RN[r]}"></button>`;}).join('')}</div></div>
@@ -3486,12 +3476,6 @@ function showDiscard2(n){n=n||S.pend.n;const me=S.players[ME];const cards=RES.fl
     $('#dc').onclick=e=>{const t=e.target.closest('button');if(!t||t.disabled)return;const i=+t.dataset.i;if(sel.has(i))sel.delete(i);else if(sel.size<n)sel.add(i);draw();};
     $('#dOk').onclick=()=>{const o=emptyRes();sel.forEach(i=>o[cards[i]]++);closeModal();act('discard',o);};};
   draw();}
-function showMonopoly(){if(POP2)return showMono2();openModal('mono',`<h3>독점</h3><p>자원 하나를 고르면 상대 3명이 가진 그 자원을 전부 가져와요. 상대 손패는 보이지 않으니 기록을 보고 추측해 보세요.</p>
-  <div class="pick" id="mp">${RES.map(k=>`<button class="bg-${k}" data-k="${k}">${icon(k)}${RN[k]}</button>`).join('')}</div><div class="row"><button class="btn" id="mx">취소</button></div>`);
-  $('#mx').onclick=closeModal;$('#mp').onclick=e=>{const t=e.target.closest('button');if(!t)return;closeModal();act('mono',t.dataset.k);};}
-
-// ---------- rules / tutorial ----------
-const DG={wood:'#3a7232',brick:'#a65a36',wool:'#76a845',grain:'#c49b36',ore:'#73777f',desert:'#c8ad78'};
 function dHex(cx,cy,r,res,num,label){const pts=[0,1,2,3,4,5].map(k=>{const a=(60*k-90)*Math.PI/180;return (cx+r*Math.cos(a)).toFixed(1)+','+(cy+r*Math.sin(a)).toFixed(1);}).join(' ');
   let s=`<polygon points="${pts}" fill="${DG[res]}" stroke="#2a2016" stroke-width="3"/>`;
   if(label)s+=`<text x="${cx}" y="${cy-r*.42}" text-anchor="middle" font-size="12" font-weight="700" fill="#fff" style="paint-order:stroke" stroke="rgba(0,0,0,.45)" stroke-width="3">${label}</text>`;
@@ -3577,15 +3561,9 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '흙: 새 모델':()=>{const u=new URL(location.href);u.searchParams.delete('mud');location.href=u;},
     '흙: 기존':()=>{const u=new URL(location.href);u.searchParams.set('mud','0');location.href=u;},
     '지붕: 텍스처 ↔ 셰이더':()=>{const u=new URL(location.href);u.searchParams.set('tx',TXM?'0':'1');location.href=u;},
-    '풍년':()=>showPlenty(),
-    '독점 (새 팝업)':()=>showMono2(),
-    '카드 버리기: 8장 보유 (새 팝업)':()=>{const me=S.players[ME];RES.forEach((r,i)=>me.res[r]=Math.floor(8/5)+(i<8%5?1:0));update();showDiscard2(4);},
-    '카드 버리기: 10장 보유 (새 팝업)':()=>{const me=S.players[ME];RES.forEach((r,i)=>me.res[r]=Math.floor(10/5)+(i<10%5?1:0));update();showDiscard2(5);},
-    '카드 버리기: 12장 보유 (새 팝업)':()=>{const me=S.players[ME];RES.forEach((r,i)=>me.res[r]=Math.floor(12/5)+(i<12%5?1:0));update();showDiscard2(6);},
-    '카드 버리기: 16장 보유 (새 팝업)':()=>{const me=S.players[ME];RES.forEach((r,i)=>me.res[r]=Math.floor(16/5)+(i<16%5?1:0));update();showDiscard2(8);},
   };
   const build=()=>{const p=document.createElement('div');p.id='tbench';p.innerHTML='<button class="tg">테스트 ▾</button><b>게임</b>';
-    const groups={'새 게임 (인트로 포함)':'게임','정착지 짓기':'건설','도적 이동':'연출','승리 화면':'결과','시작 연출 다시':'화면','색상 A: 빨강·파랑·노랑·초록':'색상 세트','흙: 새 모델':'흙 지형','풍년':'팝업'};
+    const groups={'새 게임 (인트로 포함)':'게임','정착지 짓기':'건설','도적 이동':'연출','승리 화면':'결과','시작 연출 다시':'화면','색상 A: 빨강·파랑·노랑·초록':'색상 세트','흙: 새 모델':'흙 지형'};
     Object.keys(act).forEach(k=>{if(groups[k]&&groups[k]!=='게임'){const t=document.createElement('b');t.textContent=groups[k];p.appendChild(t);}const b=document.createElement('button');b.textContent=k;b.onclick=e=>{e.stopPropagation();try{act[k]();}catch(err){console.error(err);alert(err.message);}};p.appendChild(b);});
     p.querySelector('.tg').onclick=()=>p.classList.toggle('min');document.body.appendChild(p);};
   if(document.readyState==='complete')go();else addEventListener('load',go);})();
