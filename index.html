@@ -3476,6 +3476,9 @@ function showDiscard(n){n=n||S.pend.n;const me=S.players[ME];const cards=RES.fla
     $('#dc').onclick=e=>{const t=e.target.closest('button');if(!t||t.disabled)return;const i=+t.dataset.i;if(sel.has(i))sel.delete(i);else if(sel.size<n)sel.add(i);draw();};
     $('#dOk').onclick=()=>{const o=emptyRes();sel.forEach(i=>o[cards[i]]++);closeModal();act('discard',o);};};
   draw();}
+
+// ---------- rules / tutorial ----------
+const DG={wood:'#3a7232',brick:'#a65a36',wool:'#76a845',grain:'#c49b36',ore:'#73777f',desert:'#c8ad78'};
 function dHex(cx,cy,r,res,num,label){const pts=[0,1,2,3,4,5].map(k=>{const a=(60*k-90)*Math.PI/180;return (cx+r*Math.cos(a)).toFixed(1)+','+(cy+r*Math.sin(a)).toFixed(1);}).join(' ');
   let s=`<polygon points="${pts}" fill="${DG[res]}" stroke="#2a2016" stroke-width="3"/>`;
   if(label)s+=`<text x="${cx}" y="${cy-r*.42}" text-anchor="middle" font-size="12" font-weight="700" fill="#fff" style="paint-order:stroke" stroke="rgba(0,0,0,.45)" stroke-width="3">${label}</text>`;
