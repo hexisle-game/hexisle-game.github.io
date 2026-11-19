@@ -2533,7 +2533,7 @@ function heightAt(x,z){
   if(i>=0){const t=S.board.hexes[i].res;const c=hc(i);const dx=Math.abs(x-c.x),dz=Math.abs(z-c.z);const d=Math.hypot(dx,dz);
     const hd=Math.max(dx/.866,(dx*.5+dz*.866)/.866);const edge=1-sstep(.68,.9,hd);if(edge<=0)return 0;const m=sstep(.36,.52,d)*edge;const cen=1-sstep(.3,.5,d);
     let h=0;
-    if(t==='ore'){const pk=peaksOf(i);let hh=0;for(const [px,pz,A,sg] of pk){const q=((x-px)**2+(z-pz)**2)/(2*sg*sg);hh=Math.max(hh,A*Math.exp(-q));}
+    if(t==='ore'&&VOLC)return .04*edge;if(t==='ore'){const pk=peaksOf(i);let hh=0;for(const [px,pz,A,sg] of pk){const q=((x-px)**2+(z-pz)**2)/(2*sg*sg);hh=Math.max(hh,A*Math.exp(-q));}
       const rn=1-Math.abs(2*fbm(RN1,x*4+3,z*4+7,3)-1),rn2=1-Math.abs(2*fbm(RN3,x*11+1,z*11+5,3)-1);hh*=.7+.4*rn+.18*rn2;return (hh+fbm(RN2,x*8,z*8,3)*.05*m+.06)*edge*(1-.7*cen*(1-m));}
     else if(t==='brick'){h=Math.max(0,fbm(RN1,x*3.2,z*3.2,4)-.32)*.36;return h*m+.035*cen*edge;}
     else if(t==='wool')h=fbm(RN2,x*2.6,z*2.6,3)*.06;
@@ -2722,6 +2722,16 @@ function glbWindmill(g,x,z){const D=WMDEF[WMV];const k=new THREE.Group();k.posit
       0;const thin=s3.x<s3.z?'x':'z';const piv=new THREE.Group();piv.position.copy(k.worldToLocal(c.clone()));piv.rotation.y=thin==='x'?Math.PI/2:0;k.add(piv);k.updateMatrixWorld(true);
       const spin=new THREE.Group();piv.add(spin);spin.updateMatrixWorld(true);parts.forEach(p=>spin.attach(p));W.mills.push(spin);}}
     try{PERF.dirty=true;PERF.shadow=true;}catch(e){}},undefined,e=>console.warn('wm',e));}
+// test: one volcano model per mountain tile, clipped to the hex, number token sits in the crater
+const VOLC=/[?&]test=1/.test(location.search)&&!/[?&]vol=0/.test(location.search);const VOLC_W=1.62,VOLC_TOP=.25;
+function volcano(g,x,z,i){const k=new THREE.Group();k.position.set(x,heightAt(x,z)-.01,z);k.userData.nomerge=1;g.add(k);
+  const R=BGLB['vol']=BGLB['vol']||{g:null,cbs:[]};const put=gl=>{const m=gl.scene.clone(true);m.updateMatrixWorld(true);const bb=new THREE.Box3().setFromObject(m),sz=bb.getSize(new THREE.Vector3());const sc=VOLC_W/Math.max(sz.x,sz.z);m.scale.set(sc,sc*.72,sc);m.updateMatrixWorld(true);
+    const b2=new THREE.Box3().setFromObject(m),c=b2.getCenter(new THREE.Vector3());m.position.set(-c.x,-b2.min.y,-c.z);m.rotation.y=(i*1.7)%6.28;
+    const cx={value:new THREE.Vector2(x,z)};m.traverse(o=>{if(!o.isMesh)return;o.castShadow=true;o.receiveShadow=false;const mt=o.material=new THREE.MeshStandardMaterial({map:o.material.map,roughness:.92,metalness:0,side:THREE.FrontSide});
+      mt.onBeforeCompile=sh=>{sh.uniforms.uC=cx;sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vWV;').replace('#include <project_vertex>','#include <project_vertex>\nvWV=(modelMatrix*vec4(transformed,1.)).xyz;');
+        sh.fragmentShader=sh.fragmentShader.replace('#include <map_fragment>','#include <map_fragment>\ndiffuseColor.rgb=pow(diffuseColor.rgb,vec3(.55))*1.05;').replace('#include <common>','#include <common>\nvarying vec3 vWV;uniform vec2 uC;').replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\n{vec2 d=abs(vWV.xz-uC);float hd=max(d.x/.866,(d.x*.5+d.y*.866)/.866);if(hd>.84)discard;}');};
+      mt.customProgramCacheKey=()=>'volc';});k.add(m);try{PERF.dirty=true;PERF.shadow=true;}catch(e){}};
+  if(R.g)put(R.g);else{R.cbs.push(put);if(R.cbs.length===1)new THREE.GLTFLoader().load('assets/test/mountain/volcano.glb',gl=>{R.g=gl;R.cbs.splice(0).forEach(fn=>fn(gl));});}}
 function windmill(g,x,z,s){if(WMV&&THREE.GLTFLoader){glbWindmill(g,x,z);return;}const y=heightAt(x,z);const k=new THREE.Group();k.position.set(x,y,z);k.scale.setScalar(s);
   const tw=new THREE.Mesh(new THREE.CylinderGeometry(.03,.045,.19,10),M(0xe6dcc6));tw.position.y=.095;tw.castShadow=true;k.add(tw);
   const rf=new THREE.Mesh(new THREE.ConeGeometry(.042,.06,10),M(0x6e3424));rf.position.y=.22;rf.castShadow=true;k.add(rf);
@@ -2755,7 +2765,7 @@ function buildStatic(){
       if(!placed)windmill(deco,hx,hz,2);else haystack(deco,hx,hz);placed++;}}
     if(t.res==='wool'){for(let k=0;k<30;k++){const a=r2()*6.28,rr=.5+r2()*.25;const hx=x+Math.cos(a)*rr,hz=z+Math.sin(a)*rr;if(heightAt(hx,hz)<-.02)continue;
       const hs=house(deco,hx,hz,.07,.05,.045,0x5b4a3e,r2()*3,0xd9d0bd);hs.position.y=heightAt(hx,hz);break;}}
-    if(t.num){const tk=new THREE.Group();tk.position.set(x,heightAt(x,z),z);if(TOKS)tk.scale.setScalar(1.12);
+    if(VOLC&&t.res==='ore')volcano(g,x,z,i);if(t.num){const tk=new THREE.Group();tk.position.set(x,heightAt(x,z)+(VOLC&&t.res==='ore'?VOLC_TOP:0),z);if(TOKS)tk.scale.setScalar(1.12);
       if(TOKS){if(!TOKBODY){const pts=[],rr=.31,hh=.09,f1=.028,f0=.008;pts.push(new THREE.Vector2(0,0),new THREE.Vector2(rr-f0,0));for(let k=1;k<=4;k++){const a=-Math.PI/2+k/4*Math.PI/2;pts.push(new THREE.Vector2(rr-f0+Math.cos(a)*f0,f0+Math.sin(a)*f0));}for(let k=0;k<=8;k++){const a=k/8*Math.PI/2;pts.push(new THREE.Vector2(rr-f1+Math.cos(a)*f1,hh-f1+Math.sin(a)*f1));}pts.push(new THREE.Vector2(0,hh));TOKBODY=new THREE.LatheGeometry(pts,64);}
         const bm=new THREE.Mesh(TOKBODY,new THREE.MeshStandardMaterial({color:TOKSIDE[1],roughness:.42,metalness:.55,envMapIntensity:.8}));bm.castShadow=true;bm.receiveShadow=true;tk.add(bm);}
       else{tk.add(part('cyl16',TOKSIDE[0],[.31,.05,.31],[0,.025,0]));tk.add(part('cyl16',TOKSIDE[1],[.3,.07,.3],[0,.055,0]));}
@@ -2824,7 +2834,7 @@ function tintRoof(m,col){m.updateMatrixWorld(true);const bb=new THREE.Box3().set
     mt.customProgramCacheKey=()=>'tintRoof';mt.needsUpdate=true;});}
 const TROOF=['1.12','1.45','.34','.4'];const TXM=!/[?&]tx=0/.test(location.search),TXC={},TXT={};const FLOORH=.075;
 // castle A (single texture): blue roofs -> player colour, bluish stone -> warm light stone
-function tintCastle(m,col){const tc=new THREE.Color(col);const TF={0xff2a1a:[0xff2a1a,.867,1.188],0x3a8cff:[0x2a7cff,1.397,1.107],0xf5c400:[0xffcf10,1.85,1.244],0x2fa548:[0x36c98c,1.25,1.19],0xe331c5:[0xff2a9a,.898,1.3],0xefe6cf:[0xfff8ea,0,2.0]}[tc.getHex()]||[tc.getHex(),1.2,1];tc.setHex(TF[0]);
+function tintCastle(m,col){const tc=new THREE.Color(col);const TF={0xff2a1a:[0xff2a1a,.824,1.188],0x3a8cff:[0x2a7cff,1.327,1.107],0xf5c400:[0xffcf10,1.85,1.244],0x2fa548:[0x36c98c,1.25,1.19],0xe331c5:[0xff2a9a,.808,1.3],0xefe6cf:[0xfff8ea,0,2.0]}[tc.getHex()]||[tc.getHex(),1.2,1];tc.setHex(TF[0]);
   m.traverse(c=>{if(!c.isMesh)return;const mt=c.material;const U={value:tc},US={value:TF[1]},UG={value:TF[2]};
     mt.onBeforeCompile=sh=>{sh.uniforms.uTint=U;sh.uniforms.uSat=US;sh.uniforms.uGain=UG;
       sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nuniform vec3 uTint;uniform float uSat;uniform float uGain;').replace('#include <map_fragment>',`#include <map_fragment>
