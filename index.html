@@ -3068,7 +3068,7 @@ const PERF={born:performance.now(),dpr:Math.min(window.devicePixelRatio||1,2),ma
 ['pointerdown','pointermove','wheel','keydown','touchstart'].forEach(e=>addEventListener(e,()=>{PERF.act=performance.now();},{passive:true,capture:true}));
 function invalidate(shadow){PERF.dirty=true;PERF.act=performance.now();if(shadow)PERF.shadow=true;}
 function setDPR(v){PERF.dpr=v;W.r.setPixelRatio(v);if(W.comp)W.comp.setPixelRatio(v);fitCam(false);PERF.shadow=true;PERF.dirty=true;}
-function loop(t){requestAnimationFrame(loop);if(!W.ok||document.hidden)return;const s=t/1000;const moved=W.ctl.update();
+function loop(t){requestAnimationFrame(loop);if(!W.ok||document.hidden)return;if(ui.splash||document.documentElement.classList.contains('on-title')){const n=performance.now();if(n-(W.titleR||0)<1000)return;W.titleR=n;PERF.dirty=true;}const s=t/1000;const moved=W.ctl.update();
   const now0=performance.now();if(W.robber&&W.robber.userData.mixer){const t=now0/1000;W.robber.userData.mixer.update(Math.min(.05,t-(W.robber.userData.mt||t)));W.robber.userData.mt=t;}const robP=(W.robber&&(W.robber.userData.robPulse||W.robber.userData.mixer||W.robber.userData.glb));const anim=moved||W.camAnim||W.introFX||(W.wmMix&&W.wmMix.length)||DICE.list.length||W.tgtG.children.length||W.anim.size||robP;
   const ambientDue=now0-PERF.ambient>(now0-PERF.act>45000?600:PERF.dpr<PERF.max?140:80);
   if(!anim&&!PERF.dirty&&!ambientDue)return;
@@ -3799,7 +3799,7 @@ function boot(data){
   init3D();phoneDPR();fitChrome();
   if(data&&data.S){S=data.S;migrate();ui.shownRoll=S.rollId;ui.mode=null;closeModal();update();return;}
   ui.splash=1;ui.titleMenu=true;noiseTile();
-  {const big=(Math.max(innerWidth,innerHeight)*(devicePixelRatio||1)<1400)?TITLEIMG.titlebgS:TITLEIMG.titlebg;const pre=[big,window.LOGO_URL].map(u=>{const i=new Image();i.src=u;return i.decode?i.decode().catch(()=>{}):Promise.resolve();});
+  {const big=(Math.max(innerWidth,innerHeight)*(devicePixelRatio||1)<1400)?TITLEIMG.titlebgS:TITLEIMG.titlebg;const pre=[big,window.LOGO_URL].map(u=>{const i=new Image();i.src=u;return i.decode?i.decode().catch(()=>{}):Promise.resolve();});CRITIMG.forEach(im=>pre.push(im.decode?im.decode().catch(()=>{}):Promise.resolve()));
    const sp0=$('#splash');sp0.classList.add('loading');Promise.race([Promise.all(pre),new Promise(r=>setTimeout(r,6000))]).then(()=>{sp0.classList.remove('loading');ui.artReady=1;});}
   {const sp=$('#splash'),im=$('#spLogo');const rdy=()=>{im.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(()=>sp.classList.add('ready'),60)));};im.onload=rdy;im.src=window.LOGO_URL;if(im.complete&&im.naturalWidth)rdy();setTimeout(()=>sp.classList.add('ready'),2500);sp.addEventListener('click',splashOff);}
   newGame();render();showStart();
