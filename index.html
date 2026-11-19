@@ -2829,7 +2829,7 @@ function tintCastle(m,col){const tc=new THREE.Color(col);const TF={0xff2a1a:[0xf
     mt.onBeforeCompile=sh=>{sh.uniforms.uTint=U;sh.uniforms.uSat=US;sh.uniforms.uGain=UG;
       sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nuniform vec3 uTint;uniform float uSat;uniform float uGain;').replace('#include <map_fragment>',`#include <map_fragment>
         {vec3 c=diffuseColor.rgb;float mx=max(c.r,max(c.g,c.b)),mn=min(c.r,min(c.g,c.b));float sat=(mx-mn)/(mx+.001);float k=smoothstep(.06,.14,c.b-c.r)*smoothstep(.32,.5,sat);float l=dot(c,vec3(.299,.587,.114));
-         vec3 warm=vec3(l)*vec3(1.1,1.0,.84)*1.95;vec3 t=uTint*clamp(l*3.1*uGain,0.,1.7);t=max(mix(vec3(dot(t,vec3(.299,.587,.114))),t,uSat*1.15),0.);diffuseColor.rgb=mix(warm,t,k);}`);};
+         vec3 warm=vec3(l)*vec3(1.1,1.0,.84)*1.95;vec3 t=uTint*clamp(l*3.1*uGain,0.,1.7);t=max(mix(vec3(dot(t,vec3(.299,.587,.114))),t,uSat*1.15),0.);diffuseColor.rgb=mix(warm,t,k)*1.06;}`);};
     mt.customProgramCacheKey=()=>'tintCastle';mt.needsUpdate=true;});}
 const BGLB={};
 function bldFig(file,o,ry,wTarget,roofs,drop,tint){const k=new THREE.Group();const R=BGLB[file]=BGLB[file]||{g:null,cbs:[]};
