@@ -2696,7 +2696,7 @@ function sheepGeo(){if(SHEEPG)return SHEEPG;const U=THREE.BufferGeometryUtils;co
   const tail=new THREE.SphereGeometry(.022,6,5);tail.translate(-.13,.15,0);parts.push(col(tail,[.85,.83,.77]));
   SHEEPG=U.mergeBufferGeometries(parts);SHEEPG.computeVertexNormals();return SHEEPG;}
 // test windmill candidates (?wm=1..3 / test bench): GLB on the grain tile, blades spin
-const WMV=/[?&]test=1/.test(location.search)?'4':undefined;
+const WMV=/[?&]wm=0/.test(location.search)?undefined:'4';
 const WMDEF={'1':{blades:['polySurface106'],drop:['pPlane1','group10','group13','group14','group15','pCube64','pCube65','pCube66','pCube67'],H:.52,ry:Math.PI,bright:1.35,mod:'w1'},'2':{blades:['Cube011','Cube051','Cube048','Cube049','Cube050','Cylinder002'],drop:['Sun'],H:.52},'3':{anim:true,H:.52,ry:-Math.PI/2},'4':{blades:['Windheel_low'],H:.494,mod:'w4'}};
 function wmMod(m,mod){
   const adj=(mt,fn)=>{mt.onBeforeCompile=sh=>{sh.fragmentShader=sh.fragmentShader.replace('#include <map_fragment>','#include <map_fragment>\n{vec3 c=diffuseColor.rgb;float l=dot(c,vec3(.299,.587,.114));'+fn+'diffuseColor.rgb=c;}');};mt.customProgramCacheKey=()=>'wm'+fn.length;mt.needsUpdate=true;};
@@ -2723,7 +2723,7 @@ function glbWindmill(g,x,z){const D=WMDEF[WMV];const k=new THREE.Group();k.posit
       const spin=new THREE.Group();piv.add(spin);spin.updateMatrixWorld(true);parts.forEach(p=>spin.attach(p));W.mills.push(spin);}}
     try{PERF.dirty=true;PERF.shadow=true;}catch(e){}},undefined,e=>console.warn('wm',e));}
 // test: one volcano model per mountain tile, clipped to the hex, number token sits in the crater
-const VOLC=false;const MNT=/[?&]test=1/.test(location.search)&&!/[?&]mnt=0/.test(location.search)?'k':undefined;const VOLC_W=1.62,VOLC_TOP=.25;
+const VOLC=false;const MNT=!/[?&]mnt=0/.test(location.search)?'k':undefined;const VOLC_W=1.62,VOLC_TOP=.25;
 function volcano(g,x,z,i){const k=new THREE.Group();k.position.set(x,heightAt(x,z)-.01,z);k.userData.nomerge=1;g.add(k);
   const R=BGLB['vol']=BGLB['vol']||{g:null,cbs:[]};const put=gl=>{const m=gl.scene.clone(true);m.updateMatrixWorld(true);const bb=new THREE.Box3().setFromObject(m),sz=bb.getSize(new THREE.Vector3());const sc=VOLC_W/Math.max(sz.x,sz.z);m.scale.set(sc,sc*.72,sc);m.updateMatrixWorld(true);
     const b2=new THREE.Box3().setFromObject(m),c=b2.getCenter(new THREE.Vector3());m.position.set(-c.x,-b2.min.y,-c.z);m.rotation.y=(i*1.7)%6.28;
@@ -2758,7 +2758,7 @@ vec3 e2tx(sampler2D t,vec2 p){vec3 a=texture2D(t,p).rgb;vec3 b=texture2D(t,p*.31
 vec3 e2grass(vec2 p){return e2sat(e2tx(tGrass,p*1.15),1.15)*vec3(1.02,1.06,.9)*1.12;}
 vec3 e2clay(vec2 p){float m=smoothstep(.35,.65,fbm(p*1.7+2.));vec3 c=mix(e2tx(tClay,p*1.25),e2tx(tClay,p*.83+.5)*vec3(.95,.72,.62)*1.15,m);c=e2sat(c,.78)*vec3(.98,.9,.86);c=mix(c,e2grass(p)*.9,smoothstep(.56,.72,fbm(p*2.2+3.))*.75);return c;}
 `;
-const MUD=/[?&]test=1/.test(location.search)?((/[?&]mud=([bc0])/.exec(location.search)||[0,'b'])[1].replace('0','')||undefined):undefined;
+const MUD=/[?&]mud=0/.test(location.search)?undefined:'c';
 const MUDTILE={b:{f:'mud/a.glb',w:2.0,ys:.6,lift:.09,pb:[.42,.84],sat:'1.2',over:['.35','.6'],fl:[-.02,-.01],sk:'vec3(.98,.9,.86)',skb:'.85',pin:1,tint:'vec3(1.2,.86,.62)',gt:'tClay',gsat:.78}};
 Object.assign(MUDTILE.b,{env:.18,edge2:1,rs:'1.35',stp:[.78,'1.35']});
 MUDTILE.c=Object.assign({},MUDTILE.b,{tint:'vec3(1.76,1.13,.87)',sat:0,rs:0,noRed:1});
@@ -2900,7 +2900,7 @@ function bldFig(file,o,ry,wTarget,roofs,drop,tint){const k=new THREE.Group();con
     try{invalidate(true);}catch(e){}try{PERF.dirty=true;PERF.shadow=true;}catch(e){}};
   if(R.g)put(R.g);else{R.cbs.push(put);if(R.cbs.length===1)new THREE.GLTFLoader().load(file,g=>{R.g=g;R.cbs.splice(0).forEach(fn=>fn(g));},undefined,e=>console.warn('bld',e));}
   return k;}
-const USEBLD=!/[?&]bld=old/.test(location.search);const TSM=(/[?&]sm=([1-4])/.exec(location.search)||[])[1]||(/[?&]test=1/.test(location.search)?'4':undefined);
+const USEBLD=!/[?&]bld=old/.test(location.search);const TSM=(/[?&]sm=([1-4])/.exec(location.search)||[])[1]||(/[?&]sm=0/.test(location.search)?undefined:'4');
 function settlementMesh(o,ry){const k=new THREE.Group();basePlate(k,o,TSM?.17*.85:.17);if(USEBLD&&THREE.GLTFLoader){const h=bldFig(TSM?`assets/test/t${TSM}.glb`:'assets/bld/cottage.glb',o,ry,.247,['Rooftiles'],['Land'],TSM==='4');h.position.y=.03;k.add(h);return k;}const h=new THREE.Group();h.rotation.y=ry;h.position.y=.03;k.add(h);
   rhouse(h,-.02,-.01,.13,.1,.15,o,0);rhouse(h,.1,.06,.075,.065,.095,o,Math.PI/2);
   h.add(part('box',tmat('slate',0xbfb8ac,.3,.6),[.024,.07,.024],[.03,.21,-.03]));
@@ -3521,13 +3521,12 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '인원 2·3·4 바꾸기':()=>{ui.n=ui.n>=4?2:ui.n+1;startNew(false);},
     '색상 A: 빨강·파랑·노랑·초록':()=>{const u=new URL(location.href);u.searchParams.set('cs','A');location.href=u;},
     '색상 B: 빨강·분홍·파랑·하양':()=>{const u=new URL(location.href);u.searchParams.set('cs','B');location.href=u;},
-    '흙 B (경계 개선)':()=>{const u=new URL(location.href);u.searchParams.set('mud','b');location.href=u;},
-    '흙 C (텍스처 톤 선보정)':()=>{const u=new URL(location.href);u.searchParams.set('mud','c');location.href=u;},
+    '흙: 새 모델':()=>{const u=new URL(location.href);u.searchParams.delete('mud');location.href=u;},
     '흙: 기존':()=>{const u=new URL(location.href);u.searchParams.set('mud','0');location.href=u;},
     '지붕: 텍스처 ↔ 셰이더':()=>{const u=new URL(location.href);u.searchParams.set('tx',TXM?'0':'1');location.href=u;},
   };
   const build=()=>{const p=document.createElement('div');p.id='tbench';p.innerHTML='<button class="tg">테스트 ▾</button><b>게임</b>';
-    const groups={'새 게임 (인트로 포함)':'게임','정착지 짓기':'건설','도적 이동':'연출','승리 화면':'결과','시작 연출 다시':'화면','색상 A: 빨강·파랑·노랑·초록':'색상 세트','흙 B (경계 개선)':'흙 지형'};
+    const groups={'새 게임 (인트로 포함)':'게임','정착지 짓기':'건설','도적 이동':'연출','승리 화면':'결과','시작 연출 다시':'화면','색상 A: 빨강·파랑·노랑·초록':'색상 세트','흙: 새 모델':'흙 지형'};
     Object.keys(act).forEach(k=>{if(groups[k]&&groups[k]!=='게임'){const t=document.createElement('b');t.textContent=groups[k];p.appendChild(t);}const b=document.createElement('button');b.textContent=k;b.onclick=e=>{e.stopPropagation();try{act[k]();}catch(err){console.error(err);alert(err.message);}};p.appendChild(b);});
     p.querySelector('.tg').onclick=()=>p.classList.toggle('min');document.body.appendChild(p);};
   if(document.readyState==='complete')go();else addEventListener('load',go);})();
@@ -3603,7 +3602,7 @@ function placeWood(){const d=document.getElementById('deco');if(!d||!d.classList
   const k=PH.on?PH.k:1;{const y=(st.getBoundingClientRect().bottom-t.getBoundingClientRect().bottom)/k+(st.getBoundingClientRect().width/k)*.004;if(Math.abs(y-(placeWood.y||0))>.5){placeWood.y=y;d.style.setProperty('--woodH',y+'px');document.documentElement.style.setProperty('--woodH',y+'px');try{alignBtns();}catch(e){}}}
   {const L=d.querySelector('.d2.l'),R=d.querySelector('.d2.r');if(L&&R){const r=document.documentElement.style;const wl=L.getBoundingClientRect().width/k,wr=R.getBoundingClientRect().width/k;r.setProperty('--sideL',Math.round(Math.max(14,wl*.42))+'px');r.setProperty('--sideR',Math.round(Math.max(14,wr*.42))+'px');r.setProperty('--dL',Math.round(wl*.24+12)+'px');r.setProperty('--dR',Math.round(wr*.58+8)+'px');r.setProperty('--dT',Math.round(L.getBoundingClientRect().height/k*.09)+'px');{const hd=document.querySelector('header.top .tools');if(hd){const hb=(hd.getBoundingClientRect().bottom-document.documentElement.getBoundingClientRect().top-PH.oy)/k;r.setProperty('--hdB',Math.round(hb+6)+'px');}}}}}
 setInterval(()=>{try{placeWood();}catch(e){}},300);
-function addDeco(){if(!/[?&]deco=1/.test(location.search)||document.getElementById('deco'))return;const st=document.getElementById('stage');if(!st)return;const d=document.createElement('div');d.id='deco';
+function addDeco(){if(/[?&]deco=0/.test(location.search)||document.getElementById('deco'))return;const st=document.getElementById('stage');if(!st)return;const d=document.createElement('div');d.id='deco';
   d.className='v2';d.innerHTML='<i class="d2 l"></i><i class="d2 r"></i><i class="d2 w"></i><i class="dk plank"></i><i class="dk cur l"></i><i class="dk cur r"></i><i class="dk ml"></i><i class="dk mr"></i><i class="dk bl"></i><i class="dk br"></i><i class="dvig"></i>';
   const cv=st.querySelector('canvas');if(cv&&cv.nextSibling)st.insertBefore(d,cv.nextSibling);else st.appendChild(d);}
 function titleIntro(t){ui.introT0=performance.now();t.classList.remove('shine-on');t.classList.add('intro');setTimeout(()=>{t.classList.remove('intro');shineOn();},4800);}
