@@ -2533,7 +2533,7 @@ function heightAt(x,z){
   if(i>=0){const t=S.board.hexes[i].res;const c=hc(i);const dx=Math.abs(x-c.x),dz=Math.abs(z-c.z);const d=Math.hypot(dx,dz);
     const hd=Math.max(dx/.866,(dx*.5+dz*.866)/.866);const edge=1-sstep(.68,.9,hd);if(edge<=0)return 0;const m=sstep(.36,.52,d)*edge;const cen=1-sstep(.3,.5,d);
     let h=0;
-    if(t==='ore'&&VOLC)return .04*edge;if(t==='ore'){const pk=peaksOf(i);let hh=0;for(const [px,pz,A,sg] of pk){const q=((x-px)**2+(z-pz)**2)/(2*sg*sg);hh=Math.max(hh,A*Math.exp(-q));}
+    if(t==='ore'&&(VOLC||MNT))return .04*edge;if(t==='ore'){const pk=peaksOf(i);let hh=0;for(const [px,pz,A,sg] of pk){const q=((x-px)**2+(z-pz)**2)/(2*sg*sg);hh=Math.max(hh,A*Math.exp(-q));}
       const rn=1-Math.abs(2*fbm(RN1,x*4+3,z*4+7,3)-1),rn2=1-Math.abs(2*fbm(RN3,x*11+1,z*11+5,3)-1);hh*=.7+.4*rn+.18*rn2;return (hh+fbm(RN2,x*8,z*8,3)*.05*m+.06)*edge*(1-.7*cen*(1-m));}
     else if(t==='brick'){h=Math.max(0,fbm(RN1,x*3.2,z*3.2,4)-.32)*.36;return h*m+.035*cen*edge;}
     else if(t==='wool')h=fbm(RN2,x*2.6,z*2.6,3)*.06;
@@ -2723,7 +2723,7 @@ function glbWindmill(g,x,z){const D=WMDEF[WMV];const k=new THREE.Group();k.posit
       const spin=new THREE.Group();piv.add(spin);spin.updateMatrixWorld(true);parts.forEach(p=>spin.attach(p));W.mills.push(spin);}}
     try{PERF.dirty=true;PERF.shadow=true;}catch(e){}},undefined,e=>console.warn('wm',e));}
 // test: one volcano model per mountain tile, clipped to the hex, number token sits in the crater
-const VOLC=false;const VOLC_W=1.62,VOLC_TOP=.25;
+const VOLC=false;const MNT=(/[?&]mnt=([23])/.exec(location.search)||[])[1]||(/[?&]test=1/.test(location.search)?'2':undefined);const VOLC_W=1.62,VOLC_TOP=.25;
 function volcano(g,x,z,i){const k=new THREE.Group();k.position.set(x,heightAt(x,z)-.01,z);k.userData.nomerge=1;g.add(k);
   const R=BGLB['vol']=BGLB['vol']||{g:null,cbs:[]};const put=gl=>{const m=gl.scene.clone(true);m.updateMatrixWorld(true);const bb=new THREE.Box3().setFromObject(m),sz=bb.getSize(new THREE.Vector3());const sc=VOLC_W/Math.max(sz.x,sz.z);m.scale.set(sc,sc*.72,sc);m.updateMatrixWorld(true);
     const b2=new THREE.Box3().setFromObject(m),c=b2.getCenter(new THREE.Vector3());m.position.set(-c.x,-b2.min.y,-c.z);m.rotation.y=(i*1.7)%6.28;
@@ -2732,6 +2732,14 @@ function volcano(g,x,z,i){const k=new THREE.Group();k.position.set(x,heightAt(x,
         sh.fragmentShader=sh.fragmentShader.replace('#include <map_fragment>','#include <map_fragment>\ndiffuseColor.rgb=pow(diffuseColor.rgb,vec3(.55))*1.05;').replace('#include <common>','#include <common>\nvarying vec3 vWV;uniform vec2 uC;').replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\n{vec2 d=abs(vWV.xz-uC);float hd=max(d.x/.866,(d.x*.5+d.y*.866)/.866);if(hd>.84)discard;}');};
       mt.customProgramCacheKey=()=>'volc';});k.add(m);try{PERF.dirty=true;PERF.shadow=true;}catch(e){}};
   if(R.g)put(R.g);else{R.cbs.push(put);if(R.cbs.length===1)new THREE.GLTFLoader().load('assets/test/mountain/volcano.glb',gl=>{R.g=gl;R.cbs.splice(0).forEach(fn=>fn(gl));});}}
+// test: small mountain models on the mountain tile (one per peak)
+function mntPeaks(g,i){const R=BGLB['mnt'+MNT]=BGLB['mnt'+MNT]||{g:null,cbs:[],parts:null};
+  const put=gl=>{if(!R.parts){R.parts=[];gl.scene.updateMatrixWorld(true);gl.scene.traverse(o=>{if(!o.isMesh||/Ladder/i.test(o.name))return;const geo=o.geometry.clone();['position','normal'].forEach(k=>{const at=geo.attributes[k];if(!at||at.array instanceof Float32Array)return;const f=new Float32Array(at.count*3);for(let q=0;q<at.count;q++){f[q*3]=at.getX(q);f[q*3+1]=at.getY(q);f[q*3+2]=at.getZ(q);}geo.setAttribute(k,new THREE.BufferAttribute(f,3));});geo.applyMatrix4(o.matrixWorld);geo.computeBoundingBox();const bb=geo.boundingBox,c=bb.getCenter(new THREE.Vector3());geo.translate(-c.x,-bb.min.y,-c.z);geo.computeBoundingBox();
+      const mt=o.material.clone();mt.metalness=0;mt.roughness=.9;mt.metalnessMap=null;mt.roughnessMap=null;mt.onBeforeCompile=sh=>{sh.fragmentShader=sh.fragmentShader.replace('#include <map_fragment>','#include <map_fragment>\ndiffuseColor.rgb=pow(diffuseColor.rgb,vec3(.7))*1.1;');};mt.customProgramCacheKey=()=>'mntlift';R.parts.push({geo,mt});});}
+    const pk=peaksOf(i);pk.forEach(([px,pz,A,sg],k)=>{const P=R.parts[(i+k)%R.parts.length];const m=new THREE.Mesh(P.geo,P.mt);const sz=P.geo.boundingBox.getSize(new THREE.Vector3());
+      const w=sg*4.6/Math.max(sz.x,sz.z),h=A*1.15/sz.y;m.scale.set(w,Math.min(h,w*1.6),w);m.position.set(px,heightAt(px,pz)-.01,pz);m.rotation.y=(i*2.3+k*1.9)%6.28;m.castShadow=true;m.receiveShadow=true;g.add(m);});
+    try{PERF.dirty=true;PERF.shadow=true;}catch(e){}};
+  if(R.g)put(R.g);else{R.cbs.push(put);if(R.cbs.length===1)new THREE.GLTFLoader().load(`assets/test/m${MNT}/mt.glb`,gl=>{R.g=gl;R.cbs.splice(0).forEach(fn=>fn(gl));});}}
 function windmill(g,x,z,s){if(WMV&&THREE.GLTFLoader){glbWindmill(g,x,z);return;}const y=heightAt(x,z);const k=new THREE.Group();k.position.set(x,y,z);k.scale.setScalar(s);
   const tw=new THREE.Mesh(new THREE.CylinderGeometry(.03,.045,.19,10),M(0xe6dcc6));tw.position.y=.095;tw.castShadow=true;k.add(tw);
   const rf=new THREE.Mesh(new THREE.ConeGeometry(.042,.06,10),M(0x6e3424));rf.position.y=.22;rf.castShadow=true;k.add(rf);
@@ -2765,7 +2773,7 @@ function buildStatic(){
       if(!placed)windmill(deco,hx,hz,2);else haystack(deco,hx,hz);placed++;}}
     if(t.res==='wool'){for(let k=0;k<30;k++){const a=r2()*6.28,rr=.5+r2()*.25;const hx=x+Math.cos(a)*rr,hz=z+Math.sin(a)*rr;if(heightAt(hx,hz)<-.02)continue;
       const hs=house(deco,hx,hz,.07,.05,.045,0x5b4a3e,r2()*3,0xd9d0bd);hs.position.y=heightAt(hx,hz);break;}}
-    if(VOLC&&t.res==='ore')volcano(g,x,z,i);if(t.num){const tk=new THREE.Group();tk.position.set(x,heightAt(x,z)+(VOLC&&t.res==='ore'?VOLC_TOP:0),z);if(TOKS)tk.scale.setScalar(1.12);
+    if(VOLC&&t.res==='ore')volcano(g,x,z,i);if(MNT&&t.res==='ore')mntPeaks(g,i);if(t.num){const tk=new THREE.Group();tk.position.set(x,heightAt(x,z)+(VOLC&&t.res==='ore'?VOLC_TOP:0),z);if(TOKS)tk.scale.setScalar(1.12);
       if(TOKS){if(!TOKBODY){const pts=[],rr=.31,hh=.09,f1=.028,f0=.008;pts.push(new THREE.Vector2(0,0),new THREE.Vector2(rr-f0,0));for(let k=1;k<=4;k++){const a=-Math.PI/2+k/4*Math.PI/2;pts.push(new THREE.Vector2(rr-f0+Math.cos(a)*f0,f0+Math.sin(a)*f0));}for(let k=0;k<=8;k++){const a=k/8*Math.PI/2;pts.push(new THREE.Vector2(rr-f1+Math.cos(a)*f1,hh-f1+Math.sin(a)*f1));}pts.push(new THREE.Vector2(0,hh));TOKBODY=new THREE.LatheGeometry(pts,64);}
         const bm=new THREE.Mesh(TOKBODY,new THREE.MeshStandardMaterial({color:TOKSIDE[1],roughness:.42,metalness:.55,envMapIntensity:.8}));bm.castShadow=true;bm.receiveShadow=true;tk.add(bm);}
       else{tk.add(part('cyl16',TOKSIDE[0],[.31,.05,.31],[0,.025,0]));tk.add(part('cyl16',TOKSIDE[1],[.3,.07,.3],[0,.055,0]));}
@@ -3477,10 +3485,12 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '인원 2·3·4 바꾸기':()=>{ui.n=ui.n>=4?2:ui.n+1;startNew(false);},
     '색상 A: 빨강·파랑·노랑·초록':()=>{const u=new URL(location.href);u.searchParams.set('cs','A');location.href=u;},
     '색상 B: 빨강·분홍·파랑·하양':()=>{const u=new URL(location.href);u.searchParams.set('cs','B');location.href=u;},
+    '산 모델 A (mountain2)':()=>{const u=new URL(location.href);u.searchParams.set('mnt','2');location.href=u;},
+    '산 모델 B (mountain3)':()=>{const u=new URL(location.href);u.searchParams.set('mnt','3');location.href=u;},
     '지붕: 텍스처 ↔ 셰이더':()=>{const u=new URL(location.href);u.searchParams.set('tx',TXM?'0':'1');location.href=u;},
   };
   const build=()=>{const p=document.createElement('div');p.id='tbench';p.innerHTML='<button class="tg">테스트 ▾</button><b>게임</b>';
-    const groups={'새 게임 (인트로 포함)':'게임','정착지 짓기':'건설','도적 이동':'연출','승리 화면':'결과','시작 연출 다시':'화면','색상 A: 빨강·파랑·노랑·초록':'색상 세트'};
+    const groups={'새 게임 (인트로 포함)':'게임','정착지 짓기':'건설','도적 이동':'연출','승리 화면':'결과','시작 연출 다시':'화면','색상 A: 빨강·파랑·노랑·초록':'색상 세트','산 모델 A (mountain2)':'산'};
     Object.keys(act).forEach(k=>{if(groups[k]&&groups[k]!=='게임'){const t=document.createElement('b');t.textContent=groups[k];p.appendChild(t);}const b=document.createElement('button');b.textContent=k;b.onclick=e=>{e.stopPropagation();try{act[k]();}catch(err){console.error(err);alert(err.message);}};p.appendChild(b);});
     p.querySelector('.tg').onclick=()=>p.classList.toggle('min');document.body.appendChild(p);};
   if(document.readyState==='complete')go();else addEventListener('load',go);})();
