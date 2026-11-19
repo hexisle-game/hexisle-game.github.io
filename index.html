@@ -2824,7 +2824,7 @@ function tintRoof(m,col){m.updateMatrixWorld(true);const bb=new THREE.Box3().set
     mt.customProgramCacheKey=()=>'tintRoof';mt.needsUpdate=true;});}
 const TROOF=['1.12','1.45','.34','.4'];const TXM=!/[?&]tx=0/.test(location.search),TXC={};const FLOORH=.075;
 // castle A (single texture): blue roofs -> player colour, bluish stone -> warm light stone
-function tintCastle(m,col){const tc=new THREE.Color(col);const TF={0xff2a1a:[0xff2a1a,1.035,.98],0x3a8cff:[0x2a7cff,1.44,.93],0xf5c400:[0xffcf10,1.85,1.15],0x2fa548:[0x36c98c,1.25,1.1],0xe331c5:[0xff2a9a,.945,.95],0xefe6cf:[0xfff8ea,0,2.0]}[tc.getHex()]||[tc.getHex(),1.2,1];tc.setHex(TF[0]);
+function tintCastle(m,col){const tc=new THREE.Color(col);const TF={0xff2a1a:[0xff2a1a,1.035,1.049],0x3a8cff:[0x2a7cff,1.44,.977],0xf5c400:[0xffcf10,1.85,1.185],0x2fa548:[0x36c98c,1.25,1.133],0xe331c5:[0xff2a9a,.945,1.045],0xefe6cf:[0xfff8ea,0,2.0]}[tc.getHex()]||[tc.getHex(),1.2,1];tc.setHex(TF[0]);
   m.traverse(c=>{if(!c.isMesh)return;const mt=c.material;const U={value:tc},US={value:TF[1]},UG={value:TF[2]};
     mt.onBeforeCompile=sh=>{sh.uniforms.uTint=U;sh.uniforms.uSat=US;sh.uniforms.uGain=UG;
       sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nuniform vec3 uTint;uniform float uSat;uniform float uGain;').replace('#include <map_fragment>',`#include <map_fragment>
