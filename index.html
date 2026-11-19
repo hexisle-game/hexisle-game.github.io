@@ -2723,7 +2723,7 @@ function glbWindmill(g,x,z){const D=WMDEF[WMV];const k=new THREE.Group();k.posit
       const spin=new THREE.Group();piv.add(spin);spin.updateMatrixWorld(true);parts.forEach(p=>spin.attach(p));W.mills.push(spin);}}
     try{PERF.dirty=true;PERF.shadow=true;}catch(e){}},undefined,e=>console.warn('wm',e));}
 // test: one volcano model per mountain tile, clipped to the hex, number token sits in the crater
-const VOLC=false;const MNT=(/[?&]mnt=([2345])/.exec(location.search)||[])[1]||(/[?&]test=1/.test(location.search)?'2':undefined);const VOLC_W=1.62,VOLC_TOP=.25;
+const VOLC=false;const MNT=(/[?&]mnt=([25])/.exec(location.search)||[])[1]||(/[?&]test=1/.test(location.search)?'2':undefined);const VOLC_W=1.62,VOLC_TOP=.25;
 function volcano(g,x,z,i){const k=new THREE.Group();k.position.set(x,heightAt(x,z)-.01,z);k.userData.nomerge=1;g.add(k);
   const R=BGLB['vol']=BGLB['vol']||{g:null,cbs:[]};const put=gl=>{const m=gl.scene.clone(true);m.updateMatrixWorld(true);const bb=new THREE.Box3().setFromObject(m),sz=bb.getSize(new THREE.Vector3());const sc=VOLC_W/Math.max(sz.x,sz.z);m.scale.set(sc,sc*.72,sc);m.updateMatrixWorld(true);
     const b2=new THREE.Box3().setFromObject(m),c=b2.getCenter(new THREE.Vector3());m.position.set(-c.x,-b2.min.y,-c.z);m.rotation.y=(i*1.7)%6.28;
@@ -2733,7 +2733,7 @@ function volcano(g,x,z,i){const k=new THREE.Group();k.position.set(x,heightAt(x,
       mt.customProgramCacheKey=()=>'volc';});k.add(m);try{PERF.dirty=true;PERF.shadow=true;}catch(e){}};
   if(R.g)put(R.g);else{R.cbs.push(put);if(R.cbs.length===1)new THREE.GLTFLoader().load('assets/test/mountain/volcano.glb',gl=>{R.g=gl;R.cbs.splice(0).forEach(fn=>fn(gl));});}}
 // test: small mountain models on the mountain tile (one per peak)
-const MNTSET={'2':[{f:'m2/mt.glb'}],'3':[{f:'m3/mt.glb'}],'4':[{f:'m4/a.glb',one:1},{f:'m4/b.glb',one:1},{f:'m4/c.glb',one:1,only:/Landscape/}],'5':[{f:'m5/mt.glb'}]};
+const MNTSET={'2':[{f:'m2/mt.glb'}],'5':[{f:'m5/mt.glb'}]};
 const MNTPAINT={'4':1};
 function mntGeo(o){const geo=o.geometry.clone();['position','normal'].forEach(k=>{const at=geo.attributes[k];if(!at||at.array instanceof Float32Array)return;const f=new Float32Array(at.count*3);for(let q=0;q<at.count;q++){f[q*3]=at.getX(q);f[q*3+1]=at.getY(q);f[q*3+2]=at.getZ(q);}geo.setAttribute(k,new THREE.BufferAttribute(f,3));});geo.applyMatrix4(o.matrixWorld);return geo;}
 function mntMat(o){let mt;if(MNTPAINT[MNT]){mt=new THREE.MeshStandardMaterial({color:0xffffff,roughness:.92,metalness:0});
@@ -3495,8 +3495,6 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '색상 A: 빨강·파랑·노랑·초록':()=>{const u=new URL(location.href);u.searchParams.set('cs','A');location.href=u;},
     '색상 B: 빨강·분홍·파랑·하양':()=>{const u=new URL(location.href);u.searchParams.set('cs','B');location.href=u;},
     '산 모델 A (mountain2)':()=>{const u=new URL(location.href);u.searchParams.set('mnt','2');location.href=u;},
-    '산 모델 B (mountain3)':()=>{const u=new URL(location.href);u.searchParams.set('mnt','3');location.href=u;},
-    '산 모델 C (mountain4)':()=>{const u=new URL(location.href);u.searchParams.set('mnt','4');location.href=u;},
     '산 모델 D (mountain5)':()=>{const u=new URL(location.href);u.searchParams.set('mnt','5');location.href=u;},
     '지붕: 텍스처 ↔ 셰이더':()=>{const u=new URL(location.href);u.searchParams.set('tx',TXM?'0':'1');location.href=u;},
   };
