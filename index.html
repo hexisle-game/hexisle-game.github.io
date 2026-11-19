@@ -503,6 +503,7 @@ html.phone header.top{top:8px!important;left:14px!important;right:14px!important
 html.phone header.top .tools .btn{font-size:13px!important;padding:7px 12px!important}
 html.phone #leftcol{left:14px;top:50px;gap:8px}
 html.phone .dicebox{padding:6px 10px!important;min-height:0}
+html.phone.has-deco2 body #dicebox,html.phone.has-deco2 body #coach{translate:32px 0}
 html.phone .dicebox .who{display:none}
 html.phone .coach{font-size:13px;line-height:1.45;padding:9px 12px!important}
 html.phone #leftcol>.toast .ex{display:none}
@@ -1952,7 +1953,7 @@ html.phone body .dlg-snd .sndrow{grid-template-columns:auto 150px 60px;gap:12px}
     <button id="tExit" class="ib tut-only" hidden><svg class="gico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><defs><linearGradient id="gge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbe6b4"/><stop offset=".55" stop-color="#d9ac68"/><stop offset="1" stop-color="#a87a42"/></linearGradient></defs><g stroke="#3a2412" stroke-width="3.2" transform="translate(.7 .9)" opacity=".85"><path d="M14 4h4.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H14"/><path d="M10 8l-4 4 4 4M6 12h10"/></g><g stroke="url(#gge)" stroke-width="2.4"><path d="M14 4h4.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H14"/><path d="M10 8l-4 4 4 4M6 12h10"/></g></svg><span class="lb">나가기</span></button>
     <div class="setwrap">
       <button id="setBtn" class="ib" aria-label="설정" aria-haspopup="true" aria-expanded="false" data-tip="설정"><img class="uico" src="assets/ui2/settings.webp" alt=""></button>
-      <div id="setMenu" class="setmenu" hidden><div class="setdim" id="setDim"></div><nav class="setpanel" role="menu" aria-label="설정"><div class="sethead"><span>설정</span><button class="setx" id="setX" aria-label="닫기"></button></div>
+      <svg width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true"><defs><linearGradient id="ggs" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbe6b4"/><stop offset=".55" stop-color="#d9ac68"/><stop offset="1" stop-color="#a87a42"/></linearGradient></defs></svg><div id="setMenu" class="setmenu" hidden><div class="setdim" id="setDim"></div><nav class="setpanel" role="menu" aria-label="설정"><div class="sethead"><span>설정</span><button class="setx" id="setX" aria-label="닫기"></button></div>
         <button id="newBtn" class="mi" role="menuitem">새 게임</button>
         <button id="rulesBtn" class="mi" role="menuitem">게임 방법</button>
         <button id="sndBtn" class="mi" role="menuitem">사운드</button>
@@ -3349,6 +3350,7 @@ function sheetReady(){const sh=$('#sheet');if(!sh)return;sh.classList.remove('fi
   let done=false;const go=()=>{if(done)return;done=true;sh.classList.remove('fwait');void sh.offsetWidth;sh.classList.add('fin');clearTimeout(ui.finT);ui.finT=setTimeout(()=>sh.classList.remove('fin'),1300);};
   Promise.all([...urls].slice(0,40).map(load)).then(go);setTimeout(go,1800);}
 // warm the cache for popup artwork right after the first tap
+const CRITIMG=['assets/ui/leather.jpg','assets/fbg/C.webp','assets/fbg/B.webp','assets/fbg/A.webp'].map(u=>{const im=new Image();im.decoding='async';im.src=u;im.decode&&im.decode().catch(()=>{});return im;});
 function preloadUI(){if(preloadUI.done)return;preloadUI.done=1;const set=new Set();for(const sh of document.styleSheets){let rs;try{rs=sh.cssRules;}catch(e){continue;}for(const r of rs){const t=r.cssText||'';t.replace(/url\(["']?(assets\/[^"')]+)["']?\)/g,(m,u)=>{set.add(u);});}}
   [...set].forEach((u,i)=>setTimeout(()=>{const im=new Image();im.src=u;},i*30));}
 function openDialog(html,cls){if(!ui.dialog&&typeof SND!=='undefined')SND.sfx('ui');$('#dsheet').className='sheet sheet-dialog'+(cls?' '+cls:'');$('#dsheet').innerHTML=`<img class="dorn" src="${TITLEIMG.orn2}" alt="">`+html;$('#dialog').hidden=false;ui.dialog=true;}
