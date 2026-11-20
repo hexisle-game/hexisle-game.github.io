@@ -2600,6 +2600,14 @@ float vn(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);return mix(mix(
 float fbm(vec2 p){float s=0.,a=.5;for(int i=0;i<5;i++){s+=a*vn(p);p=p*2.03+vec2(1.7,9.2);a*=.5;}return s;}
 float fbm3(vec2 p){float s=0.,a=.5;for(int i=0;i<3;i++){s+=a*vn(p);p=p*2.07+vec2(5.1,1.3);a*=.5;}return s;}
 `;
+// water-only noise: better hash + quintic fade + rotated octaves (no straight grid creases in the ripples)
+const GLSL_WNOISE=`
+float h21(vec2 p){vec3 p3=fract(vec3(p.xyx)*.1031);p3+=dot(p3,p3.yzx+33.33);return fract((p3.x+p3.y)*p3.z);}
+float vn(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*f*(f*(f*6.-15.)+10.);return mix(mix(h21(i),h21(i+vec2(1,0)),u.x),mix(h21(i+vec2(0,1)),h21(i+vec2(1,1)),u.x),u.y);}
+const mat2 WR=mat2(.8,.6,-.6,.8);
+float fbm(vec2 p){float s=0.,a=.5;for(int i=0;i<5;i++){s+=a*vn(p);p=WR*p*2.03+vec2(1.7,9.2);a*=.5;}return s;}
+float fbm3(vec2 p){float s=0.,a=.5;for(int i=0;i<3;i++){s+=a*vn(p);p=WR*p*2.07+vec2(5.1,1.3);a*=.5;}return s;}
+`;
 const GLSL_TERRAIN=GLSL_NOISE+`
 varying vec3 vWP;uniform vec2 uRob;uniform float uRobA;uniform float uRobFill;uniform float uWG;uniform float uTimeT;vec2 gCell;uniform sampler2D uHex;uniform sampler2D tPasture;uniform sampler2D tRockG;uniform sampler2D tGrass;uniform sampler2D tClay;uniform sampler2D tRock;uniform sampler2D tSnow;uniform sampler2D tDesert;uniform sampler2D nRock;uniform sampler2D nDesert;
 void hexAt(vec2 p,out float type,out float hd,out float valid){
@@ -2673,8 +2681,12 @@ function depthTex(){const N=512,E=7.5;const hf=!!(THREE.DataUtils&&THREE.DataUti
 const SEA2=/[?&]test=1/.test(location.search)&&!/[?&]sea=0/.test(location.search);
 function waterMaterial(){const m=new THREE.MeshStandardMaterial({color:0xffffff,roughness:.07,metalness:0,transparent:true,envMapIntensity:1.15,depthWrite:false});const dt=depthTex();
   m.onBeforeCompile=sh=>{sh.uniforms.uDep={value:dt};sh.uniforms.uTime=W.waterTime;
-    sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vWP;').replace('#include <project_vertex>','#include <project_vertex>\nvWP=(modelMatrix*vec4(transformed,1.0)).xyz;');
-    sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vWP;uniform sampler2D uDep;uniform float uTime;'+GLSL_NOISE)
+    sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vWP;varying vec2 vSg;uniform float uTime;uniform sampler2D uDep;').replace('#include <project_vertex>',SEA2?`vec4 wq=modelMatrix*vec4(transformed,1.);{float dp=texture2D(uDep,clamp((wq.xz+7.5)/15.,0.,1.)).r;float amp=smoothstep(.12,.55,dp);
+      vec2 d1=normalize(vec2(1.,.35)),d2=normalize(vec2(-.45,1.)),d3=normalize(vec2(.7,-.8));float f1=1.6,f2=2.5,f3=4.;
+      float p1=dot(d1,wq.xz)*f1+uTime*.42,p2=dot(d2,wq.xz)*f2+uTime*.6,p3=dot(d3,wq.xz)*f3+uTime*.85;
+      wq.y+=(.024*sin(p1)+.012*sin(p2)+.005*sin(p3))*amp;vSg=(.024*f1*cos(p1)*d1+.012*f2*cos(p2)*d2+.005*f3*cos(p3)*d3)*amp;}
+      vec4 mvPosition=viewMatrix*wq;gl_Position=projectionMatrix*mvPosition;vWP=wq.xyz;`:'#include <project_vertex>\nvWP=(modelMatrix*vec4(transformed,1.0)).xyz;vSg=vec2(0.);');
+    sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vWP;varying vec2 vSg;uniform sampler2D uDep;uniform float uTime;'+GLSL_WNOISE)
       .replace('#include <map_fragment>',`#include <map_fragment>
         float dep=texture2D(uDep,(vWP.xz+7.5)/15.).r;vec2 p=vWP.xz;
         vec3 shallow=vec3(.20,.66,.64),mid=vec3(.05,.36,.48),deep=vec3(.015,.11,.24);
@@ -2688,9 +2700,9 @@ function waterMaterial(){const m=new THREE.MeshStandardMaterial({color:0xffffff,
         diffuseColor.rgb=mix(wc,vec3(.94,.97,.98),max(fo*.9,wcap));
         diffuseColor.a=max(mix(.36,1.,smoothstep(0.,.42,dep)),fo*.95);`)
       .replace('#include <normal_fragment_maps>',`#include <normal_fragment_maps>
-        {float e=.03;vec2 q1=p*2.6+vec2(uTime*.05,uTime*.03),q2=p*6.5-vec2(uTime*.04,-uTime*.06),q3=p*17.+vec2(uTime*.11,uTime*.07),q4=p*41.-vec2(uTime*.13,uTime*.09);
+        {float e=.03;vec2 q1=p*2.6+vec2(uTime*.05,uTime*.03),q2=p*6.5-vec2(uTime*.04,-uTime*.06),q3=WR*p*17.+vec2(uTime*.11,uTime*.07),q4=WR*WR*p*41.-vec2(uTime*.13,uTime*.09);
          float b0=fbm3(q1)+.5*fbm3(q2)+.22*vn(q3)+.1*vn(q4),bx=fbm3(q1+vec2(e,0.))+.5*fbm3(q2+vec2(e,0.))+.22*vn(q3+vec2(e*6.,0.))+.1*vn(q4+vec2(e*15.,0.)),bz=fbm3(q1+vec2(0.,e))+.5*fbm3(q2+vec2(0.,e))+.22*vn(q3+vec2(0.,e*6.))+.1*vn(q4+vec2(0.,e*15.));
-         float k=(.6*smoothstep(0.,.15,dep)+.12)*${SEA2?'1.7':'1.'};vec3 g=vec3(-(bx-b0)/e,0.,-(bz-b0)/e)*k*.12;normal=normalize(normal+(viewMatrix*vec4(g,0.)).xyz);}`)
+         float k=(.6*smoothstep(0.,.15,dep)+.12)*${SEA2?'1.7':'1.'};vec3 g=vec3(-(bx-b0)/e,0.,-(bz-b0)/e)*k*.12+vec3(-vSg.x,0.,-vSg.y);normal=normalize(normal+(viewMatrix*vec4(g,0.)).xyz);}`)
       .replace('#include <roughnessmap_fragment>','#include <roughnessmap_fragment>\nroughnessFactor=mix(.06,.5,fo);');};
   return m;}
 function makeEnv(){if(W.envDone)return;W.envDone=1;try{const pm=new THREE.PMREMGenerator(W.r);const sc=new THREE.Scene();
@@ -2904,7 +2916,7 @@ function buildStatic(){
   for(let i=0;i<tp.count;i++)tp.setY(i,heightAt(tp.getX(i),tp.getZ(i)));tg.computeVertexNormals();
   const terr=new THREE.Mesh(tg,terrainMaterial());terr.receiveShadow=true;terr.castShadow=false;terr.userData.keep=1;g.add(terr);
   W.waterTime=W.waterTime||{value:0};
-  const water=new THREE.Mesh(new THREE.PlaneGeometry(90,90).rotateX(-Math.PI/2),waterMaterial());water.position.y=SEA;water.receiveShadow=true;water.renderOrder=1;water.userData.keep=1;g.add(water);
+  const water=new THREE.Mesh(new THREE.PlaneGeometry(90,90,SEA2?220:1,SEA2?220:1).rotateX(-Math.PI/2),waterMaterial());water.position.y=SEA;water.receiveShadow=true;water.renderOrder=1;water.userData.keep=1;g.add(water);
   const portAngles=S.board.ports.map(pt=>{const E=G.edges[pt.e],A=vc(E.a),B=vc(E.b);return Math.atan2((A.z+B.z)/2,(A.x+B.x)/2);});
   buildForest(g,rng,portAngles);
   const deco=new THREE.Group();g.add(deco);
@@ -3182,7 +3194,7 @@ function loop(t){requestAnimationFrame(loop);if(!W.ok||document.hidden)return;if
   if(!anim&&!PERF.dirty)PERF.ambient=now0;
   const movingObj=DICE.list.length||W.anim.size;if(movingObj)PERF.shadow=true;
   if(PERF.shadow){W.r.shadowMap.needsUpdate=true;PERF.shadow=false;}PERF.dirty=false;
-  if(W.waterTime)W.waterTime.value=s*(SEA2?2.6:1);
+  if(W.waterTime)W.waterTime.value=(s*(SEA2?2.6:1))%2400;
   {const tg=W.ctl.target,cx=Math.max(-3,Math.min(3,tg.x)),cz=Math.max(-2.6,Math.min(3.2,tg.z));if(cx!==tg.x||cz!==tg.z){const dx=cx-tg.x,dz=cz-tg.z;tg.x=cx;tg.z=cz;W.cam.position.x+=dx;W.cam.position.z+=dz;}}
   W.mills.forEach(m=>m.rotation.z=s*1.0);
   const now=performance.now();stepDice(now);
