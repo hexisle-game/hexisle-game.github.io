@@ -3499,7 +3499,7 @@ function scorePops(){const now=S.players.map((_,i)=>vp(i,i===ME));const prev=ui.
 function camVisit(p){if(!W.ok||(W.camAnim&&W.camAnim.sph))return;const c=W.ctl;if(!W.visitBack)W.visitBack={cp:W.cam.position.clone(),tp:c.target.clone()};
   const dir=W.cam.position.clone().sub(c.target).normalize();const d=Math.max(c.minDistance+1.5,Math.min(9,W.cam.position.distanceTo(c.target)*.7));
   const tp=new THREE.Vector3(p.x,0,p.z),cp=tp.clone().add(dir.multiplyScalar(d));W.camAnim={t0:performance.now(),fp:W.cam.position.clone(),ft:c.target.clone(),tp,cp};
-  clearTimeout(W.visitT);W.visitT=setTimeout(()=>{const b=W.visitBack;W.visitBack=null;if(!b||(W.camAnim&&W.camAnim.sph))return;W.camAnim={t0:performance.now(),fp:W.cam.position.clone(),ft:W.ctl.target.clone(),tp:b.tp,cp:b.cp};},1500);}
+  clearTimeout(W.visitT);W.visitT=setTimeout(()=>{const b=W.visitBack;W.visitBack=null;if(!b||(W.camAnim&&W.camAnim.sph))return;W.camAnim={t0:performance.now(),fp:W.cam.position.clone(),ft:W.ctl.target.clone(),tp:b.tp,cp:b.cp};},750);}
 // longest road: the actual chain of edges, then a light that runs along it
 function roadPath(p){let best=[];const used=new Set(),path=[];
   const dfs=v=>{if(path.length>best.length)best=path.slice();const b=S.vb[v];if(path.length>0&&b&&b.o!==p)return;
