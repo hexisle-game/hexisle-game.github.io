@@ -2508,7 +2508,7 @@ function camIntro(){if(!W.ok)return;const tp=W.ctl.target.clone(),off=W.cam.posi
   W.cam.position.setFromSpherical(new THREE.Spherical(from.r,from.phi,from.theta)).add(tp);W.cam.lookAt(tp);W.ctl.update();try{introFXStart(performance.now()+350);}catch(e){}
   W.camAnim={sph:true,t0:performance.now()+350,dur:3000,tp,from,to:{r:sp.radius,phi:sp.phi,theta:sp.theta}};}
 const ROBV2=/[?&]test=1/.test(location.search)&&!/[?&]rob=0/.test(location.search);
-function robWall(){const H=.5;const g=new THREE.CylinderGeometry(1,1,H,72,1,true);{const P=g.attributes.position;for(let k=0;k<P.count;k++){const x=P.getX(k),z=P.getZ(k),th=Math.atan2(x,z);let d=((th-Math.PI/6)%(Math.PI/3)+Math.PI/3)%(Math.PI/3)-Math.PI/6;const hr=.97*.866/Math.cos(d),r=hr*.62+.9*.38;P.setXYZ(k,Math.sin(th)*r,P.getY(k),Math.cos(th)*r);}g.computeVertexNormals();}g.translate(0,H/2,0);
+function robWall(){const H=.5;const g=new THREE.CylinderGeometry(1,1,H,72,1,true);{const P=g.attributes.position;for(let k=0;k<P.count;k++){const x=P.getX(k),z=P.getZ(k),th=Math.atan2(x,z);let d=((th%(Math.PI/3))+Math.PI/3)%(Math.PI/3)-Math.PI/6;const hr=.97*.866/Math.cos(d),r=hr*.62+.9*.38;P.setXYZ(k,Math.sin(th)*r,P.getY(k),Math.cos(th)*r);}g.computeVertexNormals();}g.translate(0,H/2,0);
   const m=new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:THREE.DoubleSide,uniforms:{uA:W.robA,uC:{value:new THREE.Color(0x9a0f0a)}},
     vertexShader:'varying float vh;varying float va;void main(){vh=position.y/'+H.toFixed(3)+';va=atan(position.x,position.z);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
     fragmentShader:'uniform float uA;uniform vec3 uC;varying float vh;varying float va;void main(){float t=vh+.07*sin(va*9.+1.3)+.04*sin(va*23.);float a=(1.-smoothstep(.45,1.,t))*mix(.45,.7,smoothstep(0.,.18,vh))*uA;gl_FragColor=vec4(uC,a);}'});
@@ -2715,7 +2715,7 @@ function treeGeos(){if(W.treeGeo)return W.treeGeo;const U=THREE.BufferGeometryUt
     pine.computeVertexNormals();return pine;};
   return W.treeGeo={dec:[decVar(4),decVar(5),decVar(3)],pine:[pineVar(),pineVar()]};}
 const FORESTV=/[?&]test=1/.test(location.search)&&!/[?&]forest=0/.test(location.search);
-const TREEF={a:{z:'in',br:1.9},c:{z:'any',one:1},d:{z:'any',one:1},e:{z:'mix'},f:{z:'rim',one:1},g:{z:'rim',one:1},h:{z:'rim',one:1}};
+const TREEF={a:{z:'in',br:1.9},c:{z:'any',one:1},d:{z:'any',one:1},e:{z:'mix',br:1.3},f:{z:'rim',one:1},g:{z:'rim',one:1},h:{z:'rim',one:1}};
 function treeVariants(){if(W.treeVar)return W.treeVar;W.treeVar=Promise.all(Object.keys(TREEF).map(k=>new Promise(res=>new THREE.GLTFLoader().load('assets/test/trees/'+k+'.glb',gl=>res([k,gl]),undefined,()=>res([k,null]))))).then(list=>{
   const V=[];const U=THREE.BufferGeometryUtils;const fixMat=m=>{if(m.userData.fx)return m;m.userData.fx=1;if(m.transparent||m.alphaTest>0||(m.map&&/BLEND|MASK/.test(m.userData.am||''))){m.transparent=false;m.alphaTest=.5;m.depthWrite=true;}m.side=THREE.DoubleSide;m.metalness=0;if(m.color)m.color.multiplyScalar(1.2);m.roughness=Math.max(m.roughness||0,.85);m.envMapIntensity=.25;m.needsUpdate=true;return m;};
   list.forEach(([k,gl])=>{if(!gl)return;gl.scene.updateMatrixWorld(true);const ms=[];gl.scene.traverse(o=>{if(o.isMesh){const b=new THREE.Box3().setFromObject(o);ms.push({o,b,c:new THREE.Vector2((b.min.x+b.max.x)/2,(b.min.z+b.max.z)/2),w:Math.max(b.max.x-b.min.x,b.max.z-b.min.z)});}});
@@ -2738,10 +2738,10 @@ function glbForest(g){const b0=S.board;treeVariants().then(V=>{if(S.board!==b0||
   S.board.hexes.forEach((t,i)=>{if(t.res!=='wood')return;const c=hc(i);const pts=[];
     for(let k=0;k<9000&&pts.length<230;k++){const a=rnd()*6.283,r=k%2?.36+rnd()*.28:Math.sqrt(rnd())*.95;const x=c.x+Math.cos(a)*r,z=c.z+Math.sin(a)*r;const dx=Math.abs(x-c.x),dz=Math.abs(z-c.z);const hd=Math.max(dx/.866,(dx*.5+dz*.866)/.866);
       const rr=Math.hypot(dx,dz);if(rr<.36||hd>.86||heightAt(x,z)<-.03)continue;const sp=rr<.62?.042:.06;if(pts.some(p=>Math.hypot(p[0]-x,p[1]-z)<sp))continue;pts.push([x,z]);
-      const [L,Wt]=hd>.66?RIM:IN;if(L.length)add(pick(L,Wt),x,z,.2*(.8+rnd()*.4));}
+      const [L,Wt]=hd>.66?RIM:IN;if(L.length)add(pick(L,Wt),x,z,.24*(.8+rnd()*.4));}
     if(D.length)for(let k=0;k<14;k++){const a=rnd()*6.283;const x=c.x+Math.cos(a)*(.8+rnd()*.1)*.95,z=c.z+Math.sin(a)*(.8+rnd()*.1)*.95;const dx=Math.abs(x-c.x),dz=Math.abs(z-c.z);const hd=Math.max(dx/.866,(dx*.5+dz*.866)/.866);if(hd>.88||heightAt(x,z)<-.03)continue;add(D[Math.floor(rnd()*D.length)],x,z,.2*(.8+rnd()*.4));}});
   const o=new THREE.Object3D();inst.forEach((arr,v)=>{v.parts.forEach(p=>{const im=new THREE.InstancedMesh(p.geo,p.mat,arr.length);arr.forEach(([x,y,z,s,ry],j)=>{o.position.set(x,y,z);o.rotation.set(0,ry,0);o.scale.setScalar(s);o.updateMatrix();im.setMatrixAt(j,o.matrix);});
-    im.instanceMatrix.needsUpdate=true;im.castShadow=!v.ns&&!v.deco;im.receiveShadow=true;im.userData.keep=1;im.userData.nomerge=1;im.userData.forest=1;im.userData.noAO=1;g.add(im);});});
+    im.instanceMatrix.needsUpdate=true;im.castShadow=!v.ns&&!v.deco;im.receiveShadow=true;im.userData.keep=1;im.userData.nomerge=1;im.userData.forest=1;im.userData.tk=v.deco?'deco':v.k;im.visible=!(W.treeOff&&W.treeOff[im.userData.tk]);im.userData.noAO=1;g.add(im);});});
   try{PERF.dirty=true;PERF.shadow=true;}catch(e){}});}
 function buildForest(g,rng,portAngles){const TG=treeGeos();const D=[[],[],[]],P=[[],[]];
   const ok=(x,z)=>{const i=hexAtXZ(x,z);if(i<0)return false;const c=hc(i);const dx=Math.abs(x-c.x),dz=Math.abs(z-c.z);const hd=Math.max(dx/.866,(dx*.5+dz*.866)/.866);if(Math.hypot(dx,dz)<.42||hd>.86)return false;return heightAt(x,z)>-.03;};
@@ -2842,8 +2842,8 @@ MUDTILE.c=Object.assign({},MUDTILE.b,{tint:'vec3(1.76,1.13,.87)',sat:0,rs:0,noRe
 const WHEAT=/[?&]test=1/.test(location.search)&&!/[?&]wheat=0/.test(location.search);
 const TRACTOR=/[?&]test=1/.test(location.search)&&/[?&]tractor=1/.test(location.search);
 function tractorTile(g,i){const c=hc(i);const av=(W.grainAvoid=W.grainAvoid||{})[i]=W.grainAvoid[i]||[];const wm=av[0];const a0=wm?Math.atan2(wm[1]-c.z,wm[0]-c.x)+Math.PI:seeded(i*5)()*6.283;
-  const px=c.x+Math.cos(a0)*.43,pz=c.z+Math.sin(a0)*.43;const k=new THREE.Group();k.position.set(px,heightAt(px,pz),pz);k.rotation.y=-a0;g.add(k);(W.tractors=W.tractors||[]).push({k,cx:c.x,cz:c.z,a0,r:.43});
-  const R=BGLB['tractor']=BGLB['tractor']||{g:null,cbs:[]};const put=gl=>{const m=gl.scene.clone(true);const b=new THREE.Box3().setFromObject(m),sz=b.getSize(new THREE.Vector3());const sc=.14/Math.max(sz.x,sz.z);m.scale.setScalar(sc);
+  const px=c.x+Math.cos(a0)*.43,pz=c.z+Math.sin(a0)*.43;const k=new THREE.Group();k.userData.nomerge=1;k.position.set(px,heightAt(px,pz),pz);k.rotation.y=-a0;g.add(k);(W.tractors=W.tractors||[]).push({k,cx:c.x,cz:c.z,a0,r:.43});
+  const R=BGLB['tractor']=BGLB['tractor']||{g:null,cbs:[]};const put=gl=>{const m=gl.scene.clone(true);const b=new THREE.Box3().setFromObject(m),sz=b.getSize(new THREE.Vector3());const sc=.17/Math.max(sz.x,sz.z);m.scale.setScalar(sc);
     const b2=new THREE.Box3().setFromObject(m);const cc=b2.getCenter(new THREE.Vector3());m.position.set(-cc.x,-b2.min.y,-cc.z);m.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;if(o.material){o.material.envMapIntensity=.3;o.material.metalness=0;o.material.alphaTest=0;o.material.transparent=false;o.material.needsUpdate=true;}}});k.add(m);try{PERF.dirty=true;PERF.shadow=true;}catch(e){}};
   if(R.g)put(R.g);else{R.cbs.push(put);if(R.cbs.length===1)new THREE.GLTFLoader().load('assets/test/wheat/tractor.glb',gl=>{R.g=gl;R.cbs.splice(0).forEach(fn=>fn(gl));});}}
 function wheatTile(g,i){const c=hc(i);const R=BGLB['wheat']=BGLB['wheat']||{g:null,cbs:[]};
@@ -2853,11 +2853,11 @@ function wheatTile(g,i){const c=hc(i);const R=BGLB['wheat']=BGLB['wheat']||{g:nu
       const gg=THREE.BufferGeometryUtils.mergeBufferGeometries([g1,g2]);const nn=new Float32Array(gg.attributes.position.count*3);for(let k=0;k<nn.length;k+=3)nn[k+1]=1;gg.setAttribute('normal',new THREE.BufferAttribute(nn,3));R.geo=gg;
       R.mat=new THREE.MeshStandardMaterial({map:src.material.map,alphaTest:.45,side:THREE.FrontSide,roughness:.9,metalness:0,envMapIntensity:.25});}
     const rnd=seeded(i*71+3),av=(W.grainAvoid&&W.grainAvoid[i])||[],pts=[];
-    for(let k=0;k<24000&&pts.length<4600;k++){const px=c.x+(rnd()*2-1)*.95,pz=c.z+(rnd()*2-1)*.95;const dx=Math.abs(px-c.x),dz=Math.abs(pz-c.z);const hd=Math.max(dx/.866,(dx*.5+dz*.866)/.866);
+    for(let k=0;k<16000&&pts.length<3070;k++){const px=c.x+(rnd()*2-1)*.95,pz=c.z+(rnd()*2-1)*.95;const dx=Math.abs(px-c.x),dz=Math.abs(pz-c.z);const hd=Math.max(dx/.866,(dx*.5+dz*.866)/.866);
       if(hd>.8||Math.hypot(px-c.x,pz-c.z)<.37)continue;if(av.some(([ax,az,ar])=>Math.hypot(px-ax,pz-az)<ar))continue;pts.push([px,pz]);}
     const im=new THREE.InstancedMesh(R.geo,R.mat,pts.length);const m4=new THREE.Matrix4(),q=new THREE.Quaternion(),sc=new THREE.Vector3(),ps=new THREE.Vector3(),up=new THREE.Vector3(0,1,0);
-    pts.forEach(([px,pz],k)=>{const s=.05+rnd()*.025;q.setFromAxisAngle(up,rnd()*6.283);sc.set(s*(.9+rnd()*.25),s,s*(.9+rnd()*.25));ps.set(px,heightAt(px,pz)-.004,pz);m4.compose(ps,q,sc);im.setMatrixAt(k,m4);});
-    im.instanceMatrix.needsUpdate=true;im.castShadow=false;im.receiveShadow=false;im.userData.nomerge=1;im.userData.keep=1;im.userData.wheat=i;im.userData.noAO=1;g.children.filter(o=>o.userData.wheat===i).forEach(o=>g.remove(o));g.add(im);try{PERF.dirty=true;}catch(e){}};
+    const TONES=[[1,1,1],[1.14,1.06,.84],[.8,.78,.7],[1.02,.86,.6]].map(a=>new THREE.Color(...a));pts.forEach(([px,pz],k)=>{const s=(.05+rnd()*.025)*1.3;{const nv=fbm(RN2,px*3.1+i,pz*3.1,2)+(rnd()-.5)*.18;im.setColorAt(k,TONES[nv<.4?2:nv<.5?0:nv<.6?1:3]);}q.setFromAxisAngle(up,rnd()*6.283);sc.set(s*(.9+rnd()*.25),s,s*(.9+rnd()*.25));ps.set(px,heightAt(px,pz)-.004,pz);m4.compose(ps,q,sc);im.setMatrixAt(k,m4);});
+    im.instanceMatrix.needsUpdate=true;if(im.instanceColor)im.instanceColor.needsUpdate=true;im.castShadow=false;im.receiveShadow=false;im.userData.nomerge=1;im.userData.keep=1;im.userData.wheat=i;im.userData.noAO=1;g.children.filter(o=>o.userData.wheat===i).forEach(o=>g.remove(o));g.add(im);try{PERF.dirty=true;}catch(e){}};
   if(R.g)put(R.g);else{R.cbs.push(put);if(R.cbs.length===1)new THREE.GLTFLoader().load('assets/test/wheat/a.glb',gl=>{R.g=gl;R.cbs.splice(0).forEach(fn=>fn(gl));});}}
 function mntTile(g,i,D,key){D=D||MNTTILE[MNT];key=key||MNT;const c=hc(i);const k=new THREE.Group();k.position.set(c.x,heightAt(c.x,c.z)-.01,c.z);k.userData.nomerge=1;g.add(k);
   const R=BGLB['tile'+key]=BGLB['tile'+key]||{g:null,cbs:[]};const put=gl=>{const m0=gl.scene.clone(true);if(D.dropMat){const kill=[];m0.traverse(o=>{if(o.isMesh&&D.dropMat.test(o.material.name))kill.push(o);});kill.forEach(o=>o.parent.remove(o));}if(D.only){const kill=[];m0.traverse(o=>{if(o.isMesh&&!D.only.test(o.name))kill.push(o);});kill.forEach(o=>o.parent.remove(o));}else if(D.only===0){let first=null;const kill=[];m0.traverse(o=>{if(o.isMesh){if(!first)first=o;else kill.push(o);}});kill.forEach(o=>o.parent.remove(o));}const m=new THREE.Group();m.add(m0);if(D.rx)m0.rotation.x=D.rx;m.updateMatrixWorld(true);const bb=new THREE.Box3().setFromObject(m),sz=bb.getSize(new THREE.Vector3());const sc=D.w*(D.ws||1)/Math.max(sz.x,sz.z);m.scale.set(sc,sc*D.ys,sc);m.updateMatrixWorld(true);
@@ -3625,6 +3625,14 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '흙: 기존':()=>{const u=new URL(location.href);u.searchParams.set('mud','0');location.href=u;},
     '숲: 새 나무':()=>{const u=new URL(location.href);u.searchParams.delete('forest');location.href=u;},
     '숲: 기존':()=>{const u=new URL(location.href);u.searchParams.set('forest','0');location.href=u;},
+    '나무 A 켜기/끄기':()=>{W.treeOff=W.treeOff||{};W.treeOff['a']=!W.treeOff['a'];W.scene.traverse(o=>{if(o.userData.tk==='a')o.visible=!W.treeOff['a'];});PERF.dirty=true;},
+    '나무 C 켜기/끄기':()=>{W.treeOff=W.treeOff||{};W.treeOff['c']=!W.treeOff['c'];W.scene.traverse(o=>{if(o.userData.tk==='c')o.visible=!W.treeOff['c'];});PERF.dirty=true;},
+    '나무 D 켜기/끄기':()=>{W.treeOff=W.treeOff||{};W.treeOff['d']=!W.treeOff['d'];W.scene.traverse(o=>{if(o.userData.tk==='d')o.visible=!W.treeOff['d'];});PERF.dirty=true;},
+    '나무 E 켜기/끄기':()=>{W.treeOff=W.treeOff||{};W.treeOff['e']=!W.treeOff['e'];W.scene.traverse(o=>{if(o.userData.tk==='e')o.visible=!W.treeOff['e'];});PERF.dirty=true;},
+    '나무 F 켜기/끄기':()=>{W.treeOff=W.treeOff||{};W.treeOff['f']=!W.treeOff['f'];W.scene.traverse(o=>{if(o.userData.tk==='f')o.visible=!W.treeOff['f'];});PERF.dirty=true;},
+    '나무 G 켜기/끄기':()=>{W.treeOff=W.treeOff||{};W.treeOff['g']=!W.treeOff['g'];W.scene.traverse(o=>{if(o.userData.tk==='g')o.visible=!W.treeOff['g'];});PERF.dirty=true;},
+    '나무 H 켜기/끄기':()=>{W.treeOff=W.treeOff||{};W.treeOff['h']=!W.treeOff['h'];W.scene.traverse(o=>{if(o.userData.tk==='h')o.visible=!W.treeOff['h'];});PERF.dirty=true;},
+    '풀·꽃 켜기/끄기':()=>{W.treeOff=W.treeOff||{};W.treeOff.deco=!W.treeOff.deco;W.scene.traverse(o=>{if(o.userData.tk==='deco')o.visible=!W.treeOff.deco;});PERF.dirty=true;},
     '밀: 켜기':()=>{const u=new URL(location.href);u.searchParams.delete('wheat');location.href=u;},
     '밀: 끄기':()=>{const u=new URL(location.href);u.searchParams.set('wheat','0');location.href=u;},
     '밀 + 트랙터':()=>{const u=new URL(location.href);u.searchParams.delete('wheat');u.searchParams.set('tractor','1');location.href=u;},
