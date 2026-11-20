@@ -2684,7 +2684,8 @@ function waterMaterial(){const m=new THREE.MeshStandardMaterial({color:0xffffff,
     sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vWP;varying vec2 vSg;uniform float uTime;uniform sampler2D uDep;').replace('#include <project_vertex>',SEA2?`vec4 wq=modelMatrix*vec4(transformed,1.);{float dp=texture2D(uDep,clamp((wq.xz+7.5)/15.,0.,1.)).r;float amp=smoothstep(.12,.55,dp);
       vec2 d1=normalize(vec2(1.,.35)),d2=normalize(vec2(-.45,1.)),d3=normalize(vec2(.7,-.8));float f1=1.6,f2=2.5,f3=4.;
       float p1=dot(d1,wq.xz)*f1+uTime*.42,p2=dot(d2,wq.xz)*f2+uTime*.6,p3=dot(d3,wq.xz)*f3+uTime*.85;
-      wq.y+=(.024*sin(p1)+.012*sin(p2)+.005*sin(p3))*amp;vSg=(.024*f1*cos(p1)*d1+.012*f2*cos(p2)*d2+.005*f3*cos(p3)*d3)*amp;}
+      wq.y+=(.034*sin(p1)+.017*sin(p2)+.007*sin(p3))*amp;vSg=(.034*f1*cos(p1)*d1+.017*f2*cos(p2)*d2+.007*f3*cos(p3)*d3)*amp;
+      {float an=atan(wq.z,wq.x);float cr=.34*(1.-fract(uTime*.075+sin(an*2.)*.12+sin(an*5.)*.04));float bw=exp(-pow((dp-cr)/.035,2.))*smoothstep(.0,.06,cr)*(1.-smoothstep(.3,.36,dp));wq.y+=.03*bw;}}
       vec4 mvPosition=viewMatrix*wq;gl_Position=projectionMatrix*mvPosition;vWP=wq.xyz;`:'#include <project_vertex>\nvWP=(modelMatrix*vec4(transformed,1.0)).xyz;vSg=vec2(0.);');
     sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vWP;varying vec2 vSg;uniform sampler2D uDep;uniform float uTime;'+GLSL_WNOISE)
       .replace('#include <map_fragment>',`#include <map_fragment>
@@ -2696,6 +2697,7 @@ function waterMaterial(){const m=new THREE.MeshStandardMaterial({color:0xffffff,
         float wcap=dep<.4?0.:smoothstep(.78,.92,fbm(p*3.+vec2(uTime*.06,uTime*.03)))*smoothstep(.4,.9,dep)*.35;
         float fo=dep<.06?(1.-smoothstep(.0,.06,dep))*smoothstep(.42,.7,fbm(p*10.+vec2(uTime*.12,-uTime*.08))):0.;
         if(dep<.13)fo+=(1.-smoothstep(.02,.13,dep))*smoothstep(.82,.98,sin(dep*48.-uTime*1.1)*.5+.5)*smoothstep(.35,.6,fbm3(p*7.+uTime*.05))*.7;
+        ${SEA2?`{float an=atan(p.y,p.x);float cr=.34*(1.-fract(uTime*.075+sin(an*2.)*.12+sin(an*5.)*.04));float band=1.-smoothstep(.0,.03,abs(dep-cr+.008));float tail=smoothstep(cr,cr+.05,dep)*(1.-smoothstep(cr+.05,cr+.11,dep));fo+=(band*.85+tail*.25)*smoothstep(.0,.06,cr)*(1.-smoothstep(.28,.36,dep))*smoothstep(.3,.62,fbm3(p*6.+uTime*.05));}`:''}
         fo=clamp(fo,0.,1.);
         diffuseColor.rgb=mix(wc,vec3(.94,.97,.98),max(fo*.9,wcap));
         diffuseColor.a=max(mix(.36,1.,smoothstep(0.,.42,dep)),fo*.95);`)
