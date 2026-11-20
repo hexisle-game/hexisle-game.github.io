@@ -2639,7 +2639,6 @@ vec3 terrainColor(vec3 wp,vec3 wn){
   c=mix(c,vec3(.56,.49,.36),smoothstep(-.105,-.14,h));
   c=mix(c,vec3(.42,.42,.34),smoothstep(-.18,-.35,h));c=mix(c,vec3(.03,.12,.22),smoothstep(-.35,-.6,h));
   float ty2,hd2,va2;hexAt(p,ty2,hd2,va2);
-  if(va2>.5&&distance(gCell,uRob)<.5){vec3 c0=c;float pu=.5+.5*sin(uTimeT*3.);c=c*vec3(.34,.24,.22)*(.9+.15*pu);c=mix(c,vec3(.36,.07,.05),.55*smoothstep(.84,.95,hd2)*(1.-smoothstep(.975,1.,hd2)));c=mix(c0,c,uRobA);}
   if(va2>.5)c=mix(c,c*1.28+.05,smoothstep(.955,.988,hd2)*.6);
   return c;}
 `;
@@ -2713,9 +2712,39 @@ function treeGeos(){if(W.treeGeo)return W.treeGeo;const U=THREE.BufferGeometryUt
     colorize(pine,(x,y,z)=>{if(y<.065&&Math.hypot(x,z)<.011)return [.32,.24,.18];const t=Math.min(1,Math.max(0,(y-.05)/.25));const out=Math.min(1,Math.hypot(x,z)/.05);const v=.38+.3*t+.35*out;return [v*.9,v,v*.85];});
     pine.computeVertexNormals();return pine;};
   return W.treeGeo={dec:[decVar(4),decVar(5),decVar(3)],pine:[pineVar(),pineVar()]};}
+const FORESTV=/[?&]test=1/.test(location.search)&&!/[?&]forest=0/.test(location.search);
+const TREEF={a:{z:'in'},b:{z:'mix',ns:1},c:{z:'any',one:1},d:{z:'any',one:1},e:{z:'mix'},f:{z:'rim',one:1},g:{z:'rim',one:1},h:{z:'rim',one:1}};
+function treeVariants(){if(W.treeVar)return W.treeVar;W.treeVar=Promise.all(Object.keys(TREEF).map(k=>new Promise(res=>new THREE.GLTFLoader().load('assets/test/trees/'+k+'.glb',gl=>res([k,gl]),undefined,()=>res([k,null]))))).then(list=>{
+  const V=[];const U=THREE.BufferGeometryUtils;const fixMat=m=>{if(m.userData.fx)return m;m.userData.fx=1;if(m.transparent||m.alphaTest>0||(m.map&&/BLEND|MASK/.test(m.userData.am||''))){m.transparent=false;m.alphaTest=.5;m.depthWrite=true;}m.side=THREE.DoubleSide;m.metalness=0;m.roughness=Math.max(m.roughness||0,.85);m.envMapIntensity=.25;m.needsUpdate=true;return m;};
+  list.forEach(([k,gl])=>{if(!gl)return;gl.scene.updateMatrixWorld(true);const ms=[];gl.scene.traverse(o=>{if(o.isMesh){const b=new THREE.Box3().setFromObject(o);ms.push({o,b,c:new THREE.Vector2((b.min.x+b.max.x)/2,(b.min.z+b.max.z)/2),w:Math.max(b.max.x-b.min.x,b.max.z-b.min.z)});}});
+    const cl=[];if(TREEF[k].one)cl.push(ms);else ms.forEach(m=>{const t=cl.find(q=>q.some(n=>n.c.distanceTo(m.c)<.5*Math.min(n.w,m.w)));if(t)t.push(m);else cl.push([m]);});
+    const items=cl.map(q=>{const b=new THREE.Box3();q.forEach(m=>b.union(m.b));return {q,b,deco:k==='e'&&q.every(m=>/grass|daisy|daffodil/.test(m.o.name))};});
+    const H=Math.max(...items.filter(it=>!it.deco).map(it=>it.b.max.y-it.b.min.y));
+    items.forEach(it=>{const cx=(it.b.min.x+it.b.max.x)/2,cz=(it.b.min.z+it.b.max.z)/2,y0=it.b.min.y;const byM=new Map();
+      it.q.forEach(({o})=>{let g2=o.geometry.clone();for(const a of Object.keys(g2.attributes))if(!['position','normal','uv'].includes(a))g2.deleteAttribute(a);if(g2.index)g2=g2.toNonIndexed();g2.applyMatrix4(o.matrixWorld);g2.translate(-cx,-y0,-cz);g2.scale(1/H,1/H,1/H);if(!g2.attributes.normal)g2.computeVertexNormals();
+        const mt=fixMat(o.material);if(!byM.has(mt))byM.set(mt,[]);byM.get(mt).push(g2);});
+      const parts=[];byM.forEach((gs,mt)=>{const mg=gs.length>1?U.mergeBufferGeometries(gs):gs[0];if(mg)parts.push({geo:mg,mat:mt});});
+      V.push({k,deco:it.deco,parts,z:TREEF[k].z,ns:!!TREEF[k].ns});});});
+  return V;});return W.treeVar;}
+function glbForest(g){const b0=S.board;treeVariants().then(V=>{if(S.board!==b0||!g.parent&&g!==W.scene)return;g.children.filter(o=>o.userData.forest).forEach(o=>g.remove(o));
+  const pick=(list,w)=>{let r=Math.random()*w.reduce((a,b)=>a+b,0);for(let j=0;j<list.length;j++){r-=w[j];if(r<=0)return list[j];}return list[list.length-1];};
+  const T=V.filter(v=>!v.deco),D=V.filter(v=>v.deco);const by=k=>T.filter(v=>v.k===k);
+  const grp=(keys,ws)=>{const L=[],Wt=[];keys.forEach((k,j)=>{const vs=by(k);vs.forEach(v=>{L.push(v);Wt.push(ws[j]/vs.length);});});return [L,Wt];};
+  const IN=grp(['a','c','d','b','e'],[.55,.15,.15,.07,.08]),RIM=grp(['f','g','h','c','d','b','e'],[.12,.12,.12,.2,.2,.1,.14]);
+  const inst=new Map();const add=(v,x,z,s)=>{if(!inst.has(v))inst.set(v,[]);inst.get(v).push([x,heightAt(x,z)-.004,z,s,Math.random()*6.283]);};
+  const rnd=seeded(77);
+  S.board.hexes.forEach((t,i)=>{if(t.res!=='wood')return;const c=hc(i);const pts=[];
+    for(let k=0;k<3000&&pts.length<75;k++){const a=rnd()*6.283,r=Math.sqrt(rnd())*.95;const x=c.x+Math.cos(a)*r,z=c.z+Math.sin(a)*r;const dx=Math.abs(x-c.x),dz=Math.abs(z-c.z);const hd=Math.max(dx/.866,(dx*.5+dz*.866)/.866);
+      if(Math.hypot(dx,dz)<.42||hd>.86||heightAt(x,z)<-.03)continue;if(pts.some(p=>Math.hypot(p[0]-x,p[1]-z)<.085))continue;pts.push([x,z]);
+      const [L,Wt]=hd>.66?RIM:IN;if(L.length)add(pick(L,Wt),x,z,.2*(.8+rnd()*.4));}
+    if(D.length)for(let k=0;k<14;k++){const a=rnd()*6.283;const x=c.x+Math.cos(a)*(.8+rnd()*.1)*.95,z=c.z+Math.sin(a)*(.8+rnd()*.1)*.95;const dx=Math.abs(x-c.x),dz=Math.abs(z-c.z);const hd=Math.max(dx/.866,(dx*.5+dz*.866)/.866);if(hd>.88||heightAt(x,z)<-.03)continue;add(D[Math.floor(rnd()*D.length)],x,z,.2*(.8+rnd()*.4));}});
+  const o=new THREE.Object3D();inst.forEach((arr,v)=>{v.parts.forEach(p=>{const im=new THREE.InstancedMesh(p.geo,p.mat,arr.length);arr.forEach(([x,y,z,s,ry],j)=>{o.position.set(x,y,z);o.rotation.set(0,ry,0);o.scale.setScalar(s);o.updateMatrix();im.setMatrixAt(j,o.matrix);});
+    im.instanceMatrix.needsUpdate=true;im.castShadow=!v.ns&&!v.deco;im.receiveShadow=true;im.userData.keep=1;im.userData.nomerge=1;im.userData.forest=1;g.add(im);});});
+  try{PERF.dirty=true;PERF.shadow=true;}catch(e){}});}
 function buildForest(g,rng,portAngles){const TG=treeGeos();const D=[[],[],[]],P=[[],[]];
   const ok=(x,z)=>{const i=hexAtXZ(x,z);if(i<0)return false;const c=hc(i);const dx=Math.abs(x-c.x),dz=Math.abs(z-c.z);const hd=Math.max(dx/.866,(dx*.5+dz*.866)/.866);if(Math.hypot(dx,dz)<.42||hd>.86)return false;return heightAt(x,z)>-.03;};
-  S.board.hexes.forEach((t,i)=>{if(t.res!=='wood')return;const c=hc(i);const pts=[];
+  if(FORESTV)glbForest(g);
+  S.board.hexes.forEach((t,i)=>{if(t.res!=='wood'||FORESTV)return;const c=hc(i);const pts=[];
     for(let k=0;k<2400&&pts.length<230;k++){const a=rng()*6.28,r=Math.sqrt(rng())*.95;const x=c.x+Math.cos(a)*r,z=c.z+Math.sin(a)*r;if(!ok(x,z))continue;if(pts.some(p=>Math.hypot(p[0]-x,p[1]-z)<.034))continue;pts.push([x,z]);
       const pine=fbm(RN1,x*2.4+i,z*2.4,2)>.5;const arr=pine?P[Math.floor(rng()*2)]:D[Math.floor(rng()*3)];arr.push([x,heightAt(x,z),z,.55+rng()*.45,rng()*6.28,rng(),pine]);}});
   const tm=new THREE.MeshStandardMaterial({vertexColors:true,roughness:.92,envMapIntensity:.2});
@@ -2809,17 +2838,23 @@ const MUDTILE={b:{f:'mud/a.glb',w:2.0,ys:.6,lift:.09,pb:[.42,.84],sat:'1.2',over
 Object.assign(MUDTILE.b,{env:.18,edge2:1,rs:'1.35',stp:[.78,'1.35']});
 MUDTILE.c=Object.assign({},MUDTILE.b,{tint:'vec3(1.76,1.13,.87)',sat:0,rs:0,noRed:1});
 const WHEAT=/[?&]test=1/.test(location.search)&&!/[?&]wheat=0/.test(location.search);
+const TRACTOR=/[?&]test=1/.test(location.search)&&/[?&]tractor=1/.test(location.search);
+function tractorTile(g,i){const c=hc(i);const av=(W.grainAvoid=W.grainAvoid||{})[i]=W.grainAvoid[i]||[];const wm=av[0];const a0=wm?Math.atan2(wm[1]-c.z,wm[0]-c.x)+Math.PI:seeded(i*5)()*6.283;
+  const px=c.x+Math.cos(a0)*.56,pz=c.z+Math.sin(a0)*.56;av.push([px,pz,.13]);const k=new THREE.Group();k.position.set(px,heightAt(px,pz),pz);k.rotation.y=-a0;g.add(k);
+  const R=BGLB['tractor']=BGLB['tractor']||{g:null,cbs:[]};const put=gl=>{const m=gl.scene.clone(true);const b=new THREE.Box3().setFromObject(m),sz=b.getSize(new THREE.Vector3());const sc=.17/Math.max(sz.x,sz.z);m.scale.setScalar(sc);
+    const b2=new THREE.Box3().setFromObject(m);const cc=b2.getCenter(new THREE.Vector3());m.position.set(-cc.x,-b2.min.y,-cc.z);m.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;if(o.material){o.material.envMapIntensity=.3;o.material.metalness=0;}}});k.add(m);try{PERF.dirty=true;PERF.shadow=true;}catch(e){}};
+  if(R.g)put(R.g);else{R.cbs.push(put);if(R.cbs.length===1)new THREE.GLTFLoader().load('assets/test/wheat/tractor.glb',gl=>{R.g=gl;R.cbs.splice(0).forEach(fn=>fn(gl));});}}
 function wheatTile(g,i){const c=hc(i);const R=BGLB['wheat']=BGLB['wheat']||{g:null,cbs:[]};
   const put=gl=>{if(S.board.hexes[i].res!=='grain')return;let src=null;gl.scene.updateMatrixWorld(true);gl.scene.traverse(o=>{if(o.isMesh&&!src)src=o;});if(!src)return;
     if(!R.geo){const geo=src.geometry.clone();geo.applyMatrix4(src.matrixWorld);geo.computeBoundingBox();const b=geo.boundingBox,h=b.max.y-b.min.y;geo.translate(-(b.min.x+b.max.x)/2,-b.min.y,-(b.min.z+b.max.z)/2);geo.scale(1/h,1/h,1/h);
       const n=geo.attributes.normal;for(let k=0;k<n.count;k++)n.setXYZ(k,0,1,0);R.geo=geo;
       R.mat=new THREE.MeshStandardMaterial({map:src.material.map,alphaTest:.45,side:THREE.DoubleSide,roughness:.9,metalness:0,envMapIntensity:.25});}
     const rnd=seeded(i*71+3),av=(W.grainAvoid&&W.grainAvoid[i])||[],pts=[];
-    for(let k=0;k<900&&pts.length<150;k++){const px=c.x+(rnd()*2-1)*.95,pz=c.z+(rnd()*2-1)*.95;const dx=Math.abs(px-c.x),dz=Math.abs(pz-c.z);const hd=Math.max(dx/.866,(dx*.5+dz*.866)/.866);
+    for(let k=0;k<5000&&pts.length<700;k++){const px=c.x+(rnd()*2-1)*.95,pz=c.z+(rnd()*2-1)*.95;const dx=Math.abs(px-c.x),dz=Math.abs(pz-c.z);const hd=Math.max(dx/.866,(dx*.5+dz*.866)/.866);
       if(hd>.8||Math.hypot(px-c.x,pz-c.z)<.37)continue;if(av.some(([ax,az,ar])=>Math.hypot(px-ax,pz-az)<ar))continue;pts.push([px,pz]);}
     const im=new THREE.InstancedMesh(R.geo,R.mat,pts.length);const m4=new THREE.Matrix4(),q=new THREE.Quaternion(),sc=new THREE.Vector3(),ps=new THREE.Vector3(),up=new THREE.Vector3(0,1,0);
-    pts.forEach(([px,pz],k)=>{const s=.12+rnd()*.05;q.setFromAxisAngle(up,rnd()*6.283);sc.set(s*(.9+rnd()*.25),s,s*(.9+rnd()*.25));ps.set(px,heightAt(px,pz)-.004,pz);m4.compose(ps,q,sc);im.setMatrixAt(k,m4);});
-    im.instanceMatrix.needsUpdate=true;im.castShadow=false;im.receiveShadow=true;im.userData.nomerge=1;im.userData.keep=1;im.userData.wheat=i;g.children.filter(o=>o.userData.wheat===i).forEach(o=>g.remove(o));g.add(im);try{PERF.dirty=true;}catch(e){}};
+    pts.forEach(([px,pz],k)=>{const s=.05+rnd()*.025;q.setFromAxisAngle(up,rnd()*6.283);sc.set(s*(.9+rnd()*.25),s,s*(.9+rnd()*.25));ps.set(px,heightAt(px,pz)-.004,pz);m4.compose(ps,q,sc);im.setMatrixAt(k,m4);});
+    im.instanceMatrix.needsUpdate=true;im.castShadow=false;im.receiveShadow=false;im.userData.nomerge=1;im.userData.keep=1;im.userData.wheat=i;g.children.filter(o=>o.userData.wheat===i).forEach(o=>g.remove(o));g.add(im);try{PERF.dirty=true;}catch(e){}};
   if(R.g)put(R.g);else{R.cbs.push(put);if(R.cbs.length===1)new THREE.GLTFLoader().load('assets/test/wheat/a.glb',gl=>{R.g=gl;R.cbs.splice(0).forEach(fn=>fn(gl));});}}
 function mntTile(g,i,D,key){D=D||MNTTILE[MNT];key=key||MNT;const c=hc(i);const k=new THREE.Group();k.position.set(c.x,heightAt(c.x,c.z)-.01,c.z);k.userData.nomerge=1;g.add(k);
   const R=BGLB['tile'+key]=BGLB['tile'+key]||{g:null,cbs:[]};const put=gl=>{const m0=gl.scene.clone(true);if(D.dropMat){const kill=[];m0.traverse(o=>{if(o.isMesh&&D.dropMat.test(o.material.name))kill.push(o);});kill.forEach(o=>o.parent.remove(o));}if(D.only){const kill=[];m0.traverse(o=>{if(o.isMesh&&!D.only.test(o.name))kill.push(o);});kill.forEach(o=>o.parent.remove(o));}else if(D.only===0){let first=null;const kill=[];m0.traverse(o=>{if(o.isMesh){if(!first)first=o;else kill.push(o);}});kill.forEach(o=>o.parent.remove(o));}const m=new THREE.Group();m.add(m0);if(D.rx)m0.rotation.x=D.rx;m.updateMatrixWorld(true);const bb=new THREE.Box3().setFromObject(m),sz=bb.getSize(new THREE.Vector3());const sc=D.w*(D.ws||1)/Math.max(sz.x,sz.z);m.scale.set(sc,sc*D.ys,sc);m.updateMatrixWorld(true);
@@ -2863,7 +2898,7 @@ function buildStatic(){
     const hit=part('cyl6',HIT,[.97,.02,.97],[x,.005,z],{noShadow:true});hit.userData.info={t:'hex',i};W.infoG.add(hit);
     const r2=seeded(i*13+5);
     if(t.res==='grain'){let placed=0;(W.grainAvoid=W.grainAvoid||{})[i]=[];const ca=G.hexes[i].v.map(v=>{const q=vc(v);return Math.atan2(q.z-z,q.x-x);}).sort((p,q)=>p-q);const mids=ca.map((a,j)=>{const b=j+1<ca.length?ca[j+1]:ca[0]+6.2832;return (a+b)/2;});for(let k=0;k<60&&placed<4;k++){const a=mids[Math.floor(r2()*mids.length)]+(r2()-.5)*.35,rr=.5+r2()*.12;const hx=x+Math.cos(a)*rr,hz=z+Math.sin(a)*rr;if(heightAt(hx,hz)<-.02)continue;
-      if(!placed)windmill(deco,hx,hz,2);else haystack(deco,hx,hz);(W.grainAvoid=W.grainAvoid||{})[i]=(W.grainAvoid[i]||[]).concat([[hx,hz,placed?.11:.17]]);placed++;}if(WHEAT)wheatTile(g,i);}
+      if(!placed)windmill(deco,hx,hz,2);else haystack(deco,hx,hz);(W.grainAvoid=W.grainAvoid||{})[i]=(W.grainAvoid[i]||[]).concat([[hx,hz,placed?.11:.17]]);placed++;}if(TRACTOR)tractorTile(deco,i);if(WHEAT)wheatTile(g,i);}
     if(t.res==='wool'){for(let k=0;k<30;k++){const a=r2()*6.28,rr=.5+r2()*.25;const hx=x+Math.cos(a)*rr,hz=z+Math.sin(a)*rr;if(heightAt(hx,hz)<-.02)continue;
       const hs=house(deco,hx,hz,.07,.05,.045,0x5b4a3e,r2()*3,0xd9d0bd);hs.position.y=heightAt(hx,hz);break;}}
     if(VOLC&&t.res==='ore')volcano(g,x,z,i);if(MNT&&t.res==='ore'){if(MNTTILE[MNT])mntTile(g,i);else mntPeaks(g,i);}if(MUD&&t.res==='brick')mntTile(g,i,MUDTILE[MUD],'mud'+MUD);if(t.num){const tk=new THREE.Group();tk.position.set(x,heightAt(x,z)+(VOLC&&t.res==='ore'?VOLC_TOP:0),z);if(TOKS)tk.scale.setScalar(1.12);
@@ -3585,12 +3620,16 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '색상 B: 빨강·분홍·파랑·하양':()=>{const u=new URL(location.href);u.searchParams.set('cs','B');location.href=u;},
     '흙: 새 모델':()=>{const u=new URL(location.href);u.searchParams.delete('mud');location.href=u;},
     '흙: 기존':()=>{const u=new URL(location.href);u.searchParams.set('mud','0');location.href=u;},
+    '숲: 새 나무':()=>{const u=new URL(location.href);u.searchParams.delete('forest');location.href=u;},
+    '숲: 기존':()=>{const u=new URL(location.href);u.searchParams.set('forest','0');location.href=u;},
     '밀: 켜기':()=>{const u=new URL(location.href);u.searchParams.delete('wheat');location.href=u;},
     '밀: 끄기':()=>{const u=new URL(location.href);u.searchParams.set('wheat','0');location.href=u;},
+    '밀 + 트랙터':()=>{const u=new URL(location.href);u.searchParams.delete('wheat');u.searchParams.set('tractor','1');location.href=u;},
+    '트랙터 빼기':()=>{const u=new URL(location.href);u.searchParams.delete('tractor');location.href=u;},
     '지붕: 텍스처 ↔ 셰이더':()=>{const u=new URL(location.href);u.searchParams.set('tx',TXM?'0':'1');location.href=u;},
   };
   const build=()=>{const p=document.createElement('div');p.id='tbench';p.innerHTML='<button class="tg">테스트 ▾</button><b>게임</b>';
-    const groups={'새 게임 (인트로 포함)':'게임','정착지 짓기':'건설','도적 이동':'연출','승리 화면':'결과','시작 연출 다시':'화면','색상 A: 빨강·파랑·노랑·초록':'색상 세트','흙: 새 모델':'흙 지형','밀: 켜기':'곡물 지형'};
+    const groups={'새 게임 (인트로 포함)':'게임','정착지 짓기':'건설','도적 이동':'연출','승리 화면':'결과','시작 연출 다시':'화면','색상 A: 빨강·파랑·노랑·초록':'색상 세트','흙: 새 모델':'흙 지형','밀: 켜기':'곡물 지형','숲: 새 나무':'숲 지형'};
     Object.keys(act).forEach(k=>{if(groups[k]&&groups[k]!=='게임'){const t=document.createElement('b');t.textContent=groups[k];p.appendChild(t);}const b=document.createElement('button');b.textContent=k;b.onclick=e=>{e.stopPropagation();try{act[k]();}catch(err){console.error(err);alert(err.message);}};p.appendChild(b);});
     p.querySelector('.tg').onclick=()=>p.classList.toggle('min');document.body.appendChild(p);};
   if(document.readyState==='complete')go();else addEventListener('load',go);})();
