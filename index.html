@@ -2690,9 +2690,9 @@ function waterMaterial(){const m=new THREE.MeshStandardMaterial({color:0xffffff,
     sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vWP;varying vec2 vSg;uniform sampler2D uDep;uniform float uTime;'+GLSL_WNOISE)
       .replace('#include <map_fragment>',`#include <map_fragment>
         float dep=texture2D(uDep,(vWP.xz+7.5)/15.).r;vec2 p=vWP.xz;
-        float dd=dep/1.5+(fbm3(p*.55+3.1)-.5)*.22+(fbm3(p*1.7)-.5)*.06;
-        vec3 shallow=${SEA2?'vec3(.07,.62,.46),mid=vec3(.04,.33,.42),deep=vec3(.015,.06,.21)':'vec3(.20,.66,.64),mid=vec3(.05,.36,.48),deep=vec3(.015,.11,.24)'};
-        vec3 wc=${SEA2?'mix(mix(shallow,mid,smoothstep(.0,.42,dd)),deep,smoothstep(.25,1.05,dd))':'dep<.22?mix(shallow,mid,smoothstep(0.,.22,dep)):mix(mid,deep,smoothstep(.22,.95,dep))'};
+        float dd=pow(clamp(dep,0.,1.),1.45)+(fbm3(p*.55+3.1)-.5)*.16*smoothstep(.0,.25,dep)+(fbm3(p*1.7)-.5)*.04;
+        vec3 shallow=${SEA2?'vec3(.07,.6,.45),mid=vec3(.025,.2,.31),deep=vec3(.008,.035,.13)':'vec3(.20,.66,.64),mid=vec3(.05,.36,.48),deep=vec3(.015,.11,.24)'};
+        vec3 wc=${SEA2?'mix(mix(shallow,mid,smoothstep(.0,.2,dd)),deep,smoothstep(.12,.62,dd))':'dep<.22?mix(shallow,mid,smoothstep(0.,.22,dep)):mix(mid,deep,smoothstep(.22,.95,dep))'};
         wc*=.9+.18*fbm3(p*1.3+uTime*.01);${SEA2?'wc=mix(vec3(dot(wc,vec3(.299,.587,.114))),wc,mix(.78,.6,smoothstep(.1,.8,dd)));':''}
         float cau=pow(abs(sin(fbm3(p*5.+uTime*.15)*12.)),8.)*(1.-smoothstep(.0,.25,dep))*smoothstep(.01,.05,dep);wc+=vec3(.25,.35,.3)*cau*.5;
         float wcap=dep<.4?0.:${SEA2?'smoothstep(.0,.12,fbm(p*3.+vec2(uTime*.06,uTime*.03))-(.84+.1*sin(uTime*.35+fbm3(p*.8)*14.)))*.6':'smoothstep(.78,.92,fbm(p*3.+vec2(uTime*.06,uTime*.03)))'}*smoothstep(.4,.9,dep)*.35;
