@@ -3073,15 +3073,31 @@ function desertDeco(g){if(!/[?&]test=1/.test(location.search))return;g.children.
   const LAY=[[0,0,1],[1,1,1],[1,0,.72],[2,1,1],[2,0,1]];const pts=[];
   LAY.forEach(([type,near,sc])=>{for(let k=0;k<200;k++){let x,z;if(near){const a=rnd()*6.283,r=.27+rnd()*.08;x=ox+Math.cos(a)*r;z=oz+Math.sin(a)*r;}else{const a=rnd()*6.283,r=.3+rnd()*.5;x=c.x+Math.cos(a)*r;z=c.z+Math.sin(a)*r;}
     if(!inHex(x,z,.8)||Math.hypot(x-c.x,z-c.z)<.28||(!near&&Math.hypot(x-ox,z-oz)<.42)||pts.some(p=>Math.hypot(p[0]-x,p[1]-z)<.14))continue;pts.push([x,z]);const m=cactus(type,rnd);m.scale.setScalar(sc*(.95+rnd()*.15));m.position.set(x,heightAt(x,z)-.002,z);m.rotation.y=rnd()*6.283;m.userData.keep=1;m.userData.nomerge=1;m.userData.dextra=1;g.add(m);break;}});}
+// code-built shepherd dog (white with black patches): legs trot, tail wags; rig parts are animated in stepDogs
+function codeDog(){const g=new THREE.Group();g.userData.keep=1;g.userData.nomerge=1;const M=c=>new THREE.MeshStandardMaterial({color:c,roughness:.85,metalness:0,envMapIntensity:.3});const W1=M(0xf4f2ec),K=M(0x26221f),PK=M(0x3a302c);
+  const mesh=(geo,m,x,y,z,par)=>{const o=new THREE.Mesh(geo,m);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;(par||g).add(o);return o;};
+  const body=new THREE.Group();body.position.y=.06;g.add(body);
+  const tb=new THREE.CapsuleGeometry(.021,.06,4,12);tb.rotateX(Math.PI/2);mesh(tb,W1,0,0,0,body);
+  const sp=(rx,ry,rz)=>{const q=new THREE.SphereGeometry(1,10,8);q.scale(rx,ry,rz);return q;};
+  mesh(sp(.019,.012,.026),K,.006,.012,-.006,body);mesh(sp(.012,.01,.014),K,-.012,.008,.022,body);
+  const head=new THREE.Group();head.position.set(0,.026,.05);body.add(head);mesh(sp(.019,.018,.02),W1,0,0,0,head);
+  const sn=new THREE.BoxGeometry(.017,.013,.024);mesh(sn,W1,0,-.005,.022,head);mesh(sp(.005,.004,.004),K,0,-.0005,.035,head);
+  mesh(sp(.012,.011,.012),K,.008,.004,.002,head);
+  for(const s of [-1,1]){const e=mesh(sp(.006,.014,.009),K,s*.016,.002,-.002,head);e.rotation.z=s*.35;mesh(sp(.0025,.0025,.002),K,s*.008,.006,.019,head);}
+  const legs=[];const lg=new THREE.CapsuleGeometry(.0065,.036,3,8);lg.translate(0,-.025,0);
+  for(const [x,z] of [[.012,.03],[-.012,.03],[.012,-.03],[-.012,-.03]]){const p=new THREE.Group();p.position.set(x,-.004,z);body.add(p);mesh(lg,W1,0,0,0,p);legs.push(p);}
+  const tail=new THREE.Group();tail.position.set(0,.012,-.043);body.add(tail);const tg=new THREE.CapsuleGeometry(.0045,.034,3,8);tg.translate(0,.019,0);const tm=mesh(tg,W1,0,0,0,tail);tail.rotation.x=-.75;
+  const wr=new THREE.Group();wr.add(g);wr.userData.keep=1;wr.userData.nomerge=1;wr.userData.rig={body,head,legs,tail};g.scale.setScalar(1.05);return wr;}
 function pastureExtras(g){if(!/[?&]test=1/.test(location.search))return;g.children.filter(o=>o.userData.pextra).forEach(o=>g.remove(o));const tok=W.dogTok=(W.dogTok||0)+1;const P=[];S.board.hexes.forEach((t,i)=>{if(t.res==='wool')P.push(i);});if(!P.length)return;const rnd=seeded(9133);
   P.forEach(i=>{const c=hc(i);for(let k=0;k<20;k++){const a=rnd()*6.283,r=.44+rnd()*.12;const x=c.x+Math.cos(a)*r,z=c.z+Math.sin(a)*r;if(hexAtXZ(x,z)!==i)continue;const t=troughMesh();t.position.set(x,heightAt(x,z),z);t.rotation.y=a+Math.PI/2+(rnd()-.5)*.6;t.userData.pextra=1;g.add(t);break;}});
-  W.dogs=[];const DG=[{f:'dog1',clip:'run',len:.18,v:.26,br:1.6,fy:Math.PI},{f:'dog2',clip:null,sub:[.1,1.35],len:.18*1.3,v:.2,br:1.6*1.4,fy:0}];
+  W.dogs=[];const DG=[{f:'dog1',clip:'run',len:.18,v:.26,br:1.6,fy:Math.PI}];
+  {const hi=P[1%P.length];const c=hc(hi);const cd=codeDog();cd.userData.pextra=1;g.add(cd);W.dogs.push({wr:cd,cx:c.x,cz:c.z,r:.47,a:3.6,v:.26,dir:-1,code:cd.userData.rig,ph:0});}
   DG.forEach((D,j)=>{const hi=P[j%P.length];const c=hc(hi);glbLoad('dog_'+D.f,'assets/test/dog/'+D.f+'.glb',gl=>{if(tok!==W.dogTok)return;const m=THREE.SkeletonUtils?THREE.SkeletonUtils.clone(gl.scene):gl.scene.clone(true);m.updateMatrixWorld(true);const bb=new THREE.Box3().setFromObject(m),sz=bb.getSize(new THREE.Vector3());const sc=D.len/Math.max(sz.x,sz.z);m.scale.setScalar(sc);m.position.set(-(bb.min.x+bb.max.x)/2*sc,-bb.min.y*sc,-(bb.min.z+bb.max.z)/2*sc);
       m.traverse(o=>{if(!o.isMesh)return;o.castShadow=true;o.receiveShadow=true;o.frustumCulled=false;o.material=o.material.clone();o.material.metalness=0;o.material.roughness=Math.max(o.material.roughness||0,.8);o.material.envMapIntensity=.35;o.material.color.multiplyScalar(D.br);});
       const wr=new THREE.Group();wr.add(m);wr.userData.keep=1;wr.userData.nomerge=1;wr.userData.pextra=1;g.add(wr);
       if(gl.animations&&gl.animations.length){const mx=new THREE.AnimationMixer(m);let cl=(D.clip&&gl.animations.find(a=>a.name===D.clip))||gl.animations[0];if(D.sub)cl=THREE.AnimationUtils.subclip(cl,'walk',Math.round(D.sub[0]*100),Math.round(D.sub[1]*100),100);mx.clipAction(cl).play();(W.sheepMix=W.sheepMix||[]).push(mx);}
       m.rotation.y=D.fy;if(D.fy){m.position.x*=-1;m.position.z*=-1;}W.dogs.push({wr,cx:c.x,cz:c.z,r:.5+j*.03,a:j*2.4,v:D.v,dir:j?-1:1});try{PERF.dirty=true;}catch(e){}});});}
-function stepDogs(dt){const L=W.dogs;if(!L||!L.length)return;L.forEach(d=>{if(!d.wr.parent)return;d.a+=d.dir*d.v/d.r*dt;const r=d.r+Math.sin(d.a*2.3)*.05;const x=d.cx+Math.cos(d.a)*r,z=d.cz+Math.sin(d.a)*r;d.wr.position.set(x,heightAt(x,z),z);const tx=-Math.sin(d.a)*d.dir,tz=Math.cos(d.a)*d.dir;d.wr.rotation.y=Math.atan2(tx,tz);});PERF.dirty=true;}
+function stepDogs(dt){const L=W.dogs;if(!L||!L.length)return;L.forEach(d=>{if(!d.wr.parent)return;d.a+=d.dir*d.v/d.r*dt;const r=d.r+Math.sin(d.a*2.3)*.05;const x=d.cx+Math.cos(d.a)*r,z=d.cz+Math.sin(d.a)*r;d.wr.position.set(x,heightAt(x,z),z);const tx=-Math.sin(d.a)*d.dir,tz=Math.cos(d.a)*d.dir;d.wr.rotation.y=Math.atan2(tx,tz);if(d.code){const R=d.code;d.ph+=dt*d.v*62;const sw=Math.sin(d.ph);R.legs[0].rotation.x=sw*.75;R.legs[3].rotation.x=sw*.75;R.legs[1].rotation.x=-sw*.75;R.legs[2].rotation.x=-sw*.75;R.body.position.y=.06+Math.abs(Math.cos(d.ph))*.005;R.body.rotation.x=Math.sin(d.ph*2)*.03;R.head.rotation.x=Math.sin(d.ph*2+.6)*.06;const t=performance.now()/1000;R.tail.rotation.z=Math.sin(t*13)*.55;}});PERF.dirty=true;}
 function walkSheep(g,SH){const P=sheepParts();const mat=new THREE.MeshStandardMaterial({vertexColors:true,roughness:1,envMapIntensity:.3});
   const imB=new THREE.InstancedMesh(P.body,mat,SH.length),imH=new THREE.InstancedMesh(P.head,mat,SH.length),imL=new THREE.InstancedMesh(P.leg,mat,SH.length*4);[imB,imH,imL].forEach(m=>{m.castShadow=true;m.receiveShadow=true;m.userData.keep=1;m.userData.nomerge=1;m.frustumCulled=false;g.add(m);});
   const list=SH.map(([x,y,z,ry])=>{const i=hexAtXZ(x,z),c=hc(i);return {cx:c.x,cz:c.z,x,z,ry,tx:x,tz:z,wait:Math.random()*3,ph:Math.random()*6.28,s:.536*1.2*.9*(.95+Math.random()*.1)};});
