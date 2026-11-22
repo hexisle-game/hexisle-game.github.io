@@ -2418,6 +2418,8 @@ const costPips=c=>`<span class="cost">${RES.filter(k=>c[k]).map(k=>`<span class=
 const pname=p=>`<b style="color:${S.players[p].color}">${S.players[p].name}</b>`;
 
 function targets(){const t=targets0();if(typeof TUT!=='undefined'&&TUT.on)TUT.filter(t);return t;}
+// robber hint: the hex that hurts the strongest opponents most and none of my own buildings
+function robberHint(){const top=Math.max(...S.players.map((_,i)=>i===ME?0:vp(i)));let best=-1,bs=-1e9;HIDX.forEach(hi=>{if(hi===S.board.robber)return;const t=S.board.hexes[hi];let s=t.res==='desert'?-5:0;for(const v of G.hexes[hi].v){const b=S.vb[v];if(!b)continue;if(b.o===ME)s-=20;else s+=(b.c?2:1)*pips(t.num)*(1+vp(b.o)/4)*(vp(b.o)>=top?1.5:1)+(sumRes(S.players[b.o].res)?.5:0);}if(s>bs){bs=s;best=hi;}});return bs>0?best:-1;}
 function targets0(){const t={v:[],e:[],h:[],kind:null};
   if(!S||S.phase==='over'||S.cur!==ME||ui.modal==='start')return t;
   if(S.phase==='setup'){if(S.sub==='settlement'){t.kind='setupS';t.v=settleSpots(ME,true);}else{t.kind='setupR';t.e=roadSpots(ME,true);}return t;}
@@ -3619,7 +3621,8 @@ function sync3D(){
       rb.userData.robPulse=1;}
     else if(!rmode&&rb.userData.robPulse){const fx=rb.getObjectByName('robfx');if(fx)rb.remove(fx);rb.traverse(o=>{if(o.isMesh&&o.material.emissive)o.material.emissiveIntensity=0;});delete rb.userData.robPulse;}}
   const T=targets();const tkey=[T.kind,T.v.join(','),T.e.join(','),T.h.join(','),ui.hints,PH.on].join('|');if(tkey===W.tkey)return;W.tkey=tkey;W.tgtG.clear();
-  const HINT=new Set();if(ui.hints&&T.kind==='setupS'){const pr=prodOf(ME);[...T.v].sort((a,b)=>spotValue(b,ME,pr)-spotValue(a,ME,pr)).slice(0,3).forEach(v=>HINT.add(v));}
+  const HINT=new Set();if(ui.hints&&(T.kind==='setupS'||T.kind==='settlement')&&T.v.length){const pr=prodOf(ME);[...T.v].sort((a,b)=>spotValue(b,ME,pr)-spotValue(a,ME,pr)).slice(0,T.v.length>4?3:1).forEach(v=>HINT.add(v));}
+  const RHINT=ui.hints&&T.kind==='robber'?robberHint():-1;
   T.e.forEach(e=>{const E=G.edges[e],A=vc(E.a),B=vc(E.b);const dx=B.x-A.x,dz=B.z-A.z,L=Math.hypot(dx,dz);const k=new THREE.Group();k.position.set((A.x+B.x)/2,0,(A.z+B.z)/2);k.rotation.y=Math.atan2(dx,dz);
     {const d=decal('bar',0xffffff,.9,.16,L*.66,heightAt(k.position.x,k.position.z)+.04);d.rotation.y=Math.PI/2;d.scale.set(L*.7,1,PH.on?.28:.16);k.add(d);}k.add(part('box',HIT,[PH.on?.4:.26,.25,L*.7],[0,.1,0],{noShadow:true}));
     if(typeof TUT!=='undefined'&&TUT.on){const gh=roadPiece(ME,L*.72);ghostify(gh);k.add(gh);}
@@ -3630,7 +3633,7 @@ function sync3D(){
     else{const z=PH.on?.6:.4;k.add(decal('spot',0xffcf55,1,z,z,hy+.035));}
     {const z=PH.on?.34:.24;k.add(part('sph',HIT,[z,z,z],[0,.1,0],{noShadow:true}));}if(typeof TUT!=='undefined'&&TUT.on){const ry=Math.atan2(V.x,V.z)+Math.PI;const gh=T.kind==='city'?cityMesh(ME,ry):settlementMesh(ME,ry);gh.scale.setScalar(T.kind==='city'?1.9:2.08);ghostify(gh);k.add(gh);}k.userData.pick={v};k.userData.pulse=1;W.tgtG.add(k);});
   T.h.forEach(h=>{const {x,z}=hc(h);const k=new THREE.Group();k.position.set(x,0,z);
-    k.add(part('cyl6',glow(0xffc94a,.28),[.9,.02,.9],[0,.02,0],{noShadow:true}));
+    if(h===RHINT){k.add(part('cyl6',glow(0xffe58a,.6),[.92,.025,.92],[0,.025,0],{noShadow:true}));k.add(decal('halo',0xffd86a,1,1.5,1.5,heightAt(x,z)+.05));}else k.add(part('cyl6',glow(0xffc94a,.28),[.9,.02,.9],[0,.02,0],{noShadow:true}));
     k.add(part('cyl6',HIT,[.9,.3,.9],[0,.15,0],{noShadow:true}));k.userData.pick={h};k.userData.pulse=2;W.tgtG.add(k);});
 }
 
