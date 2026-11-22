@@ -1609,19 +1609,15 @@ html.phone.lbox body{top:var(--oy,0px)!important}
 #stage.intro-hide #maplbls{opacity:0!important;transition:none}
 #veil{position:fixed;inset:0;z-index:39;pointer-events:none;overflow:hidden;display:none;contain:strict}
 #veil.on{display:block;pointer-events:auto}#veil.open{pointer-events:none}
-#veil .vfog{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 55%,rgba(236,242,247,.82),rgba(214,225,235,.94));transition:opacity 2.4s ease .3s}
+#veil .vfog{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 55%,rgba(236,242,247,.75),rgba(216,226,236,.85));transition:opacity 1.7s ease .25s}
 #veil.open .vfog{opacity:0}
-#veil .vh{position:absolute;top:-12%;bottom:-12%;width:80%;will-change:transform;transition:transform 2.1s cubic-bezier(.62,.02,.22,1)}
-#veil .vL{left:-10%}#veil .vR{right:-10%;transform:scaleX(-1)}
-#veil .vf{transition-duration:1.7s;width:82%}
-#veil.open .vL{transform:translateX(-118%)}#veil.open .vR{transform:translateX(118%) scaleX(-1)}
-#veil.open .vf.vL{transform:translateX(-150%) scale(1.15)}#veil.open .vf.vR{transform:translateX(150%) scaleX(-1) scale(1.15)}
-#veil.inst .vh,#veil.inst .vfog{transition:none!important}
-#veil .vfill{position:absolute;left:0;top:0;bottom:0;width:80%;background:linear-gradient(180deg,#f4f7fa,#dfe7ee 70%,#d3dde7)}
-#veil .pf{position:absolute;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle at 42% 38%,#fff 0,#f5f8fb 34%,#dfe7ef 56%,rgba(223,231,239,0) 70%)}
-#veil .pf.dk{background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.9) 0,rgba(226,234,241,.85) 40%,rgba(205,217,228,0) 70%)}
+#veil .vl{position:absolute;inset:-20%;will-change:transform;transition:transform 2.5s cubic-bezier(.58,.02,.24,1)}
+#veil .vl.b{transition-duration:2.2s}
+#veil .vl canvas{position:absolute;inset:0;width:100%;height:100%}
+#veil.open .vl.a{transform:translate(-78%,24%)}#veil.open .vl.b{transform:translate(78%,-24%)}
+#veil.inst .vl,#veil.inst .vfog{transition:none!important}
 #veil .vin{position:absolute;inset:0;animation:vbr 5s ease-in-out infinite alternate}
-@keyframes vbr{from{transform:translateX(-1.2%)}to{transform:translateX(1.2%)}}
+@keyframes vbr{from{transform:translate(-1.2%,.5%)}to{transform:translate(1.2%,-.5%)}}
 #veil .vmsg{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:15px;letter-spacing:.06em;color:#5f7284;opacity:0;transition:opacity .5s;white-space:nowrap;text-shadow:0 1px 0 #fff}
 #veil.busy .vmsg{opacity:1}#veil.open .vmsg{opacity:0;transition-duration:.25s}
 #veil .vmsg i{display:inline-block;width:1.2em;text-align:left;font-style:normal}
@@ -2547,21 +2543,20 @@ const LDC={n:0,t:0};
 function ldPatch(){[THREE.GLTFLoader,THREE.ImageLoader,THREE.TextureLoader].forEach(L=>{if(!L||L.prototype._ldc)return;const o=L.prototype.load;L.prototype._ldc=1;
   L.prototype.load=function(url,onL,onP,onE){LDC.n++;LDC.t=performance.now();let d=0;const done=()=>{if(!d){d=1;LDC.n--;LDC.t=performance.now();}};
     return o.call(this,url,(...a)=>{try{return onL&&onL(...a);}finally{done();}},onP,(...a)=>{try{return onE&&onE(...a);}finally{done();}});};});}
-function veilPaint(c,front){const R=Math.random,k=.5,vw=innerWidth,vh=innerHeight;const w=c.width=Math.ceil(vw*(front?.82:.8)*k),h=c.height=Math.ceil(vh*1.24*k);const x=c.getContext('2d');
-  const puff=(px,py,r,a,col)=>{const g=x.createRadialGradient(px,py,0,px,py,r);g.addColorStop(0,`rgba(${col},${a})`);g.addColorStop(.45,`rgba(${col},${a*.9})`);g.addColorStop(.75,`rgba(${col},${a*.38})`);g.addColorStop(1,`rgba(${col},0)`);x.fillStyle=g;x.beginPath();x.arc(px,py,r,0,6.2832);x.fill();};
-  const U=Math.min(w,h);const xe=w*(front?.74:.7);const rr=a=>Math.min(U*a,w*.15);
-  if(!front){const g=x.createLinearGradient(0,0,0,h);g.addColorStop(0,'#f2f6f9');g.addColorStop(.6,'#e3eaf0');g.addColorStop(1,'#d5dfe8');x.fillStyle=g;x.fillRect(0,0,xe-w*.04,h);
-    for(let q=0;q<26;q++)puff(R()*(xe-w*.08),R()*h,rr(.12+R()*.2),.35,'200,213,226');
-    for(let q=0;q<30;q++)puff(R()*(xe-w*.08),R()*h,rr(.1+R()*.16),.55,'255,255,255');}
-  const n=Math.round(h/(U*(front?.1:.07)));
-  for(let pass=0;pass<2;pass++)for(let q=0;q<n;q++){const py=(q+R()*.8)/n*h,r=rr(front?.06+R()*.1:.08+R()*.12),px=xe-w*.05+R()*w*.1;
-    if(pass===0)puff(px+r*.08,py+r*.22,r*1.05,front?.4:.6,'196,210,224');else puff(px,py,r*.95,front?.75:.95,'255,255,255');}
-  for(let q=0;q<(front?10:18);q++){const py=R()*h,r=rr(.04+R()*.05),px=xe+R()*w*.1;puff(px,py+r*.2,r,.35,'200,213,226');puff(px,py,r*.9,.8,'252,253,255');}
-  c.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%';}
-function veilBuild(v){const R=Math.random;
-  const half=(cls,front)=>{const h=document.createElement('div');h.className='vh '+cls+(front?' vf':'');const n=document.createElement('div');n.className='vin';n.style.animationDelay=(-R()*5).toFixed(2)+'s';h.appendChild(n);const c=document.createElement('canvas');veilPaint(c,front);n.appendChild(c);return h;};
-  v.innerHTML='';const fg=document.createElement('div');fg.className='vfog';v.appendChild(fg);
-  v.appendChild(half('vL'));v.appendChild(half('vR'));v.appendChild(half('vL',1));v.appendChild(half('vR',1));
+// mist layer: soft diagonal streaks (lower-left → upper-right) filling one side of a ragged diagonal edge; two layers overlap in the middle
+function veilPaint(c,side){const vw=innerWidth,vh=innerHeight,S=1.4;let k=.3;if(vw*vh*S*S*k*k>2.2e5)k=Math.sqrt(2.2e5/(vw*vh*S*S));
+  const W2=c.width=Math.max(8,Math.round(vw*S*k)),H2=c.height=Math.max(8,Math.round(vh*S*k));const x=c.getContext('2d'),img=x.createImageData(W2,H2),D=img.data;
+  const T=veilPaint.T||(veilPaint.T=(()=>{const t=new Float32Array(65536);for(let q=0;q<65536;q++)t[q]=Math.random();return t;})());const of=(Math.random()*256)|0;
+  const vn=(px,py)=>{const i=Math.floor(px),j=Math.floor(py),fx=px-i,fy=py-j,ux=fx*fx*(3-2*fx),uy=fy*fy*(3-2*fy);const i0=(i+of)&255,i1=(i0+1)&255,j0=(j&255)<<8,j1=((j+1)&255)<<8;const a=T[j0|i0],b=T[j0|i1],cc=T[j1|i0],d=T[j1|i1];return a+(b-a)*ux+(cc-a)*uy+(a-b-cc+d)*ux*uy;};
+  const fb=(px,py)=>vn(px,py)*.5+vn(px*2.1+17,py*2.1)*.27+vn(px*4.3+31,py*4.3)*.15+vn(px*8.7+53,py*8.7)*.08;
+  const ca=Math.cos(.5),sa=Math.sin(.5),asp=vw/vh;const jg=new Float32Array(H2);for(let j=0;j<H2;j++){const sy=(j/H2)*S-.2;jg[j]=(side?.43:.53)+.2*(sy-.5)+(vn(sy*3.2+side*9,5)-.5)*.16+(vn(sy*9+side*4,7)-.5)*.06;}
+  for(let j=0;j<H2;j++){const sy=(j/H2)*S-.2,xb=jg[j];for(let i=0;i<W2;i++){const sx=(i/W2)*S-.2;
+    const X=sx*asp;const u=X*ca-sy*sa,v=X*sa+sy*ca;const n=fb(u*1.1+3,v*7.5+40),n2=fb(u*.6+11,v*3.2+90);
+    let e=(side?sx-xb:xb-sx)/.11+(n-.5)*3.2+(n2-.5)*1.6;let a=Math.max(0,Math.min(1,(e+1)/2));a=a*a*(3-2*a);if(a<1)a*=.86+.14*n2;
+    const L=n*.65+n2*.35;const o=(j*W2+i)*4;D[o]=206+L*49;D[o+1]=216+L*39;D[o+2]=228+L*28;D[o+3]=a*255;}}
+  x.putImageData(img,0,0);}
+function veilBuild(v){v.innerHTML='';const fg=document.createElement('div');fg.className='vfog';v.appendChild(fg);
+  ['a','b'].forEach((cl,si)=>{const l=document.createElement('div');l.className='vl '+cl;const n=document.createElement('div');n.className='vin';n.style.animationDelay=(-Math.random()*5).toFixed(2)+'s';const c=document.createElement('canvas');veilPaint(c,si);n.appendChild(c);l.appendChild(n);v.appendChild(l);});
   const m=document.createElement('div');m.className='vmsg';m.innerHTML='섬을 불러오는 중<i></i>';v.appendChild(m);}
 function veilIntro(tp,from,to){const v=$('#veil');if(!v)return;clearTimeout(W.veilT);clearInterval(W.veilDots);veilBuild(v);
   const t=$('#title'),cover=!t.hidden;v.className='on'+(cover?' inst':' open inst');void v.offsetWidth;v.classList.remove('inst');if(!cover)v.classList.remove('open');
