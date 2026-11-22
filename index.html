@@ -2544,16 +2544,20 @@ function ldPatch(){[THREE.GLTFLoader,THREE.ImageLoader,THREE.TextureLoader].forE
   L.prototype.load=function(url,onL,onP,onE){LDC.n++;LDC.t=performance.now();let d=0;const done=()=>{if(!d){d=1;LDC.n--;LDC.t=performance.now();}};
     return o.call(this,url,(...a)=>{try{return onL&&onL(...a);}finally{done();}},onP,(...a)=>{try{return onE&&onE(...a);}finally{done();}});};});}
 // mist layer: soft diagonal streaks (lower-left → upper-right) filling one side of a ragged diagonal edge; two layers overlap in the middle
-function veilPaint(c,side){const vw=innerWidth,vh=innerHeight,S=1.4;let k=.3;if(vw*vh*S*S*k*k>2.2e5)k=Math.sqrt(2.2e5/(vw*vh*S*S));
+// smoke-like mist (domain-warped noise: billows + curling wisps) filling one side of a ragged diagonal edge; two layers overlap in the middle
+function veilPaint(c,side){const vw=innerWidth,vh=innerHeight,S=1.4;let k=.42;if(vw*vh*S*S*k*k>1.6e5)k=Math.sqrt(1.6e5/(vw*vh*S*S));
   const W2=c.width=Math.max(8,Math.round(vw*S*k)),H2=c.height=Math.max(8,Math.round(vh*S*k));const x=c.getContext('2d'),img=x.createImageData(W2,H2),D=img.data;
-  const T=veilPaint.T||(veilPaint.T=(()=>{const t=new Float32Array(65536);for(let q=0;q<65536;q++)t[q]=Math.random();return t;})());const of=(Math.random()*256)|0;
-  const vn=(px,py)=>{const i=Math.floor(px),j=Math.floor(py),fx=px-i,fy=py-j,ux=fx*fx*(3-2*fx),uy=fy*fy*(3-2*fy);const i0=(i+of)&255,i1=(i0+1)&255,j0=(j&255)<<8,j1=((j+1)&255)<<8;const a=T[j0|i0],b=T[j0|i1],cc=T[j1|i0],d=T[j1|i1];return a+(b-a)*ux+(cc-a)*uy+(a-b-cc+d)*ux*uy;};
-  const fb=(px,py)=>vn(px,py)*.5+vn(px*2.1+17,py*2.1)*.27+vn(px*4.3+31,py*4.3)*.15+vn(px*8.7+53,py*8.7)*.08;
-  const ca=Math.cos(.5),sa=Math.sin(.5),asp=vw/vh;const jg=new Float32Array(H2);for(let j=0;j<H2;j++){const sy=(j/H2)*S-.2;jg[j]=(side?.43:.53)+.2*(sy-.5)+(vn(sy*3.2+side*9,5)-.5)*.16+(vn(sy*9+side*4,7)-.5)*.06;}
+  const T=veilPaint.T||(veilPaint.T=(()=>{const t=new Float32Array(65536);for(let q=0;q<65536;q++)t[q]=Math.random();return t;})());const of=(Math.random()*256)|0,og=(Math.random()*256)|0;
+  const vn=(px,py)=>{const i=Math.floor(px),j=Math.floor(py),fx=px-i,fy=py-j,ux=fx*fx*(3-2*fx),uy=fy*fy*(3-2*fy);const i0=(i+of)&255,i1=(i0+1)&255,j0=((j+og)&255)<<8,j1=((j+og+1)&255)<<8;const a=T[j0|i0],b=T[j0|i1],cc=T[j1|i0],d=T[j1|i1];return a+(b-a)*ux+(cc-a)*uy+(a-b-cc+d)*ux*uy;};
+  const fb=(px,py)=>vn(px,py)*.56+vn(px*2.03+17.1,py*2.03+3.3)*.25+vn(px*4.01+31.7,py*4.01+9.1)*.13+vn(px*8.1+53.3,py*8.1+1.7)*.06;
+  const asp=vw/vh;const jg=new Float32Array(H2);for(let j=0;j<H2;j++){const sy=(j/H2)*S-.2;jg[j]=(side?.35:.63)+.2*(sy-.5)+(vn(sy*3.2+side*9,5)-.5)*.14;}
   for(let j=0;j<H2;j++){const sy=(j/H2)*S-.2,xb=jg[j];for(let i=0;i<W2;i++){const sx=(i/W2)*S-.2;
-    const X=sx*asp;const u=X*ca-sy*sa,v=X*sa+sy*ca;const n=fb(u*1.1+3,v*7.5+40),n2=fb(u*.6+11,v*3.2+90);
-    let e=(side?sx-xb:xb-sx)/.11+(n-.5)*3.2+(n2-.5)*1.6;let a=Math.max(0,Math.min(1,(e+1)/2));a=a*a*(3-2*a);if(a<1)a*=.86+.14*n2;
-    const L=n*.65+n2*.35;const o=(j*W2+i)*4;D[o]=206+L*49;D[o+1]=216+L*39;D[o+2]=228+L*28;D[o+3]=a*255;}}
+    const px=sx*asp*1.5,py=sy*1.9;
+    const q1=fb(px,py),q2=fb(px+5.2,py+1.3);const r1=fb(px+1.9*q1+1.7,py+1.9*q2+9.2),r2=fb(px+1.9*q1+8.3,py+1.9*q2+2.8);
+    const d=fb(px+1.7*r1,py+1.7*r2);
+    const e=(side?sx-xb:xb-sx)/.1+(d-.5)*8+(r1-.5)*3;let a=Math.max(0,Math.min(1,(e+1.2)/2.4));a=a*a*(3-2*a);
+    const den=Math.max(0,Math.min(1,(d-.3)/.32));a*=Math.min(1,.45+den*1.1+Math.max(0,e-1.5)*.3);
+    const L=Math.pow(den,.7)*.85+r2*.15;const o=(j*W2+i)*4;D[o]=200+L*55;D[o+1]=209+L*46;D[o+2]=220+L*35;D[o+3]=a*255;}}
   x.putImageData(img,0,0);}
 function veilBuild(v){v.innerHTML='';const fg=document.createElement('div');fg.className='vfog';v.appendChild(fg);
   ['a','b'].forEach((cl,si)=>{const l=document.createElement('div');l.className='vl '+cl;const n=document.createElement('div');n.className='vin';n.style.animationDelay=(-Math.random()*5).toFixed(2)+'s';const c=document.createElement('canvas');veilPaint(c,si);n.appendChild(c);l.appendChild(n);v.appendChild(l);});
