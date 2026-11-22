@@ -1609,12 +1609,11 @@ html.phone.lbox body{top:var(--oy,0px)!important}
 #stage.intro-hide #maplbls{opacity:0!important;transition:none}
 #veil{position:fixed;inset:0;z-index:39;pointer-events:none;overflow:hidden;display:none;contain:strict}
 #veil.on{display:block;pointer-events:auto}#veil.open{pointer-events:none}
-#veil .vfog{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 55%,rgba(236,242,247,.75),rgba(216,226,236,.85));transition:opacity 1.7s ease .25s}
+#veil .vfog{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 55%,rgba(236,242,247,.8),rgba(216,226,236,.88));transition:opacity 1.5s ease .15s}
 #veil.open .vfog{opacity:0}
-#veil .vl{position:absolute;inset:-20%;will-change:transform;transition:transform 2.5s cubic-bezier(.58,.02,.24,1)}
-#veil .vl.b{transition-duration:2.2s}
+#veil .vl{position:absolute;inset:-20%;will-change:transform,opacity;transition:transform var(--d) cubic-bezier(.45,.03,.3,1) var(--dl),opacity var(--od) ease-in var(--odl)}
 #veil .vl canvas{position:absolute;inset:0;width:100%;height:100%}
-#veil.open .vl.a{transform:translate(-78%,24%)}#veil.open .vl.b{transform:translate(78%,-24%)}
+#veil.open .vl{transform:translate(var(--tx),var(--ty)) scale(var(--s));opacity:0}
 #veil.inst .vl,#veil.inst .vfog{transition:none!important}
 #veil .vin{position:absolute;inset:0;animation:vbr 5s ease-in-out infinite alternate}
 @keyframes vbr{from{transform:translate(-1.2%,.5%)}to{transform:translate(1.2%,-.5%)}}
@@ -2545,22 +2544,28 @@ function ldPatch(){[THREE.GLTFLoader,THREE.ImageLoader,THREE.TextureLoader].forE
     return o.call(this,url,(...a)=>{try{return onL&&onL(...a);}finally{done();}},onP,(...a)=>{try{return onE&&onE(...a);}finally{done();}});};});}
 // mist layer: soft diagonal streaks (lower-left → upper-right) filling one side of a ragged diagonal edge; two layers overlap in the middle
 // smoke-like mist (domain-warped noise: billows + curling wisps) filling one side of a ragged diagonal edge; two layers overlap in the middle
-function veilPaint(c,side){const vw=innerWidth,vh=innerHeight,S=1.4;let k=.42;if(vw*vh*S*S*k*k>1.6e5)k=Math.sqrt(1.6e5/(vw*vh*S*S));
+function veilPaint(c,side,off=0,am=1,sp=0,kq=1){const vw=innerWidth,vh=innerHeight,S=1.4;let k=.42;if(vw*vh*S*S*k*k>1.4e5)k=Math.sqrt(1.4e5/(vw*vh*S*S));k*=kq;
   const W2=c.width=Math.max(8,Math.round(vw*S*k)),H2=c.height=Math.max(8,Math.round(vh*S*k));const x=c.getContext('2d'),img=x.createImageData(W2,H2),D=img.data;
   const T=veilPaint.T||(veilPaint.T=(()=>{const t=new Float32Array(65536);for(let q=0;q<65536;q++)t[q]=Math.random();return t;})());const of=(Math.random()*256)|0,og=(Math.random()*256)|0;
   const vn=(px,py)=>{const i=Math.floor(px),j=Math.floor(py),fx=px-i,fy=py-j,ux=fx*fx*(3-2*fx),uy=fy*fy*(3-2*fy);const i0=(i+of)&255,i1=(i0+1)&255,j0=((j+og)&255)<<8,j1=((j+og+1)&255)<<8;const a=T[j0|i0],b=T[j0|i1],cc=T[j1|i0],d=T[j1|i1];return a+(b-a)*ux+(cc-a)*uy+(a-b-cc+d)*ux*uy;};
-  const fb=(px,py)=>vn(px,py)*.56+vn(px*2.03+17.1,py*2.03+3.3)*.25+vn(px*4.01+31.7,py*4.01+9.1)*.13+vn(px*8.1+53.3,py*8.1+1.7)*.06;
-  const asp=vw/vh;const jg=new Float32Array(H2);for(let j=0;j<H2;j++){const sy=(j/H2)*S-.2;jg[j]=(side?.35:.63)+.2*(sy-.5)+(vn(sy*3.2+side*9,5)-.5)*.14;}
+  const f2=(px,py)=>vn(px,py)*.68+vn(px*2.03+17.1,py*2.03+3.3)*.32;const fb=(px,py)=>vn(px,py)*.56+vn(px*2.03+17.1,py*2.03+3.3)*.25+vn(px*4.01+31.7,py*4.01+9.1)*.13+vn(px*8.1+53.3,py*8.1+1.7)*.06;
+  const asp=vw/vh;const jg=new Float32Array(H2);for(let j=0;j<H2;j++){const sy=(j/H2)*S-.2;jg[j]=(side?.35-off:.63+off)+.2*(sy-.5)+(vn(sy*3.2+side*9,5)-.5)*.14;}
   for(let j=0;j<H2;j++){const sy=(j/H2)*S-.2,xb=jg[j];for(let i=0;i<W2;i++){const sx=(i/W2)*S-.2;
     const px=sx*asp*1.5,py=sy*1.9;
-    const q1=fb(px,py),q2=fb(px+5.2,py+1.3);const r1=fb(px+1.9*q1+1.7,py+1.9*q2+9.2),r2=fb(px+1.9*q1+8.3,py+1.9*q2+2.8);
+    const q1=f2(px,py),q2=f2(px+5.2,py+1.3);const r1=f2(px+1.9*q1+1.7,py+1.9*q2+9.2),r2=f2(px+1.9*q1+8.3,py+1.9*q2+2.8);
     const d=fb(px+1.7*r1,py+1.7*r2);
     const e=(side?sx-xb:xb-sx)/.1+(d-.5)*8+(r1-.5)*3;let a=Math.max(0,Math.min(1,(e+1.2)/2.4));a=a*a*(3-2*a);
-    const den=Math.max(0,Math.min(1,(d-.3)/.32));a*=Math.min(1,.45+den*1.1+Math.max(0,e-1.5)*.3);
+    const den=Math.max(0,Math.min(1,(d-.3)/.32));a*=Math.min(1,.45+den*1.1+Math.max(0,e-1.5)*.3);if(sp)a*=Math.max(0,Math.min(1,(d-.42)/.2));a*=am;
     const L=Math.pow(den,.7)*.85+r2*.15;const o=(j*W2+i)*4;D[o]=200+L*55;D[o+1]=209+L*46;D[o+2]=220+L*35;D[o+3]=a*255;}}
   x.putImageData(img,0,0);}
-function veilBuild(v){v.innerHTML='';const fg=document.createElement('div');fg.className='vfog';v.appendChild(fg);
-  ['a','b'].forEach((cl,si)=>{const l=document.createElement('div');l.className='vl '+cl;const n=document.createElement('div');n.className='vin';n.style.animationDelay=(-Math.random()*5).toFixed(2)+'s';const c=document.createElement('canvas');veilPaint(c,si);n.appendChild(c);l.appendChild(n);v.appendChild(l);});
+// three depth layers per side: front wisps leave first and fastest, the back mass last; each thins out as it travels
+const VEILL=[{off:.12,am:.8,sp:1,d:2.0,dl:0,tr:100,od:1.0,odl:.1,s:1.3,kq:.75},{off:.03,am:.92,sp:0,d:2.4,dl:.28,tr:85,od:1.3,odl:.55,s:1.15,kq:.85},{off:-.14,am:1,sp:0,d:2.8,dl:.6,tr:70,od:1.6,odl:1.1,s:1.06,kq:1}];
+function veilBuild(v){v.innerHTML='';const fg=document.createElement('div');fg.className='vfog';v.appendChild(fg);const R=Math.random;
+  const todo=[];[2,1,0].forEach(li=>{const P=VEILL[li];[0,1].forEach(si=>{const l=document.createElement('div');l.className='vl';const an=(si?-1:1)*(.26+(R()-.5)*.16),tr=P.tr*(.92+R()*.16);
+    l.style.cssText=`--d:${P.d}s;--dl:${(P.dl+R()*.08).toFixed(2)}s;--od:${P.od}s;--odl:${P.odl}s;--s:${P.s};--tx:${(si?1:-1)*tr}%;--ty:${(an*tr).toFixed(1)}%`;
+    const n=document.createElement('div');n.className='vin';n.style.animationDelay=(-R()*5).toFixed(2)+'s';const c=document.createElement('canvas');n.appendChild(c);l.appendChild(n);v.appendChild(l);const job=()=>veilPaint(c,si,P.off,P.am,P.sp,P.kq);if(li===2)job();else todo.push(job);});});
+  // paint the inner layers a frame apart so the main thread never blocks for long (the back pair + fog already cover)
+  const nx=()=>{const j=todo.shift();if(!j)return;j();setTimeout(nx,16);};setTimeout(nx,16);
   const m=document.createElement('div');m.className='vmsg';m.innerHTML='섬을 불러오는 중<i></i>';v.appendChild(m);}
 function veilIntro(tp,from,to){const v=$('#veil');if(!v)return;clearTimeout(W.veilT);clearInterval(W.veilDots);veilBuild(v);
   const t=$('#title'),cover=!t.hidden;v.className='on'+(cover?' inst':' open inst');void v.offsetWidth;v.classList.remove('inst');if(!cover)v.classList.remove('open');
@@ -2572,7 +2577,7 @@ function veilIntro(tp,from,to){const v=$('#veil');if(!v)return;clearTimeout(W.ve
   const go=()=>{try{W.r.compile(W.scene,W.cam);}catch(e){}W.veilHold=false;PERF.shadow=true;PERF.dirty=true;
     requestAnimationFrame(()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{const n=performance.now();clearInterval(W.veilDots);v.classList.remove('busy');v.classList.add('open');
       if(W.introFX)W.introFX.t0=n+900;W.camAnim={sph:true,t0:n,dur:3400,tp,from,to};W.veilBan=W.veilBan??-1;setTimeout(()=>{const b=W.veilBan;W.veilBan=null;if(b>=0)try{turnBanner(b);}catch(e){}},1500);
-      W.veilT=setTimeout(()=>{v.className='';v.innerHTML='';},2700);})));};
+      W.veilT=setTimeout(()=>{v.className='';v.innerHTML='';},3300);})));};
   W.veilT=setTimeout(tick,100);}
 const ROBV2=/[?&]test=1/.test(location.search)&&!/[?&]rob=0/.test(location.search);
 function robWall(){const H=.5;const g=new THREE.CylinderGeometry(1,1,H,72,1,true);{const P=g.attributes.position;for(let k=0;k<P.count;k++){const x=P.getX(k),z=P.getZ(k),th=Math.atan2(x,z);let d=((th%(Math.PI/3))+Math.PI/3)%(Math.PI/3)-Math.PI/6;const hr=.92*.866/Math.cos(d),r=hr*.62+.85*.38;P.setXYZ(k,Math.sin(th)*r,P.getY(k),Math.cos(th)*r);}g.computeVertexNormals();}g.translate(0,H/2,0);
