@@ -1615,6 +1615,8 @@ html.phone.lbox body{top:var(--oy,0px)!important}
 #veil .vl canvas{position:absolute;inset:0;width:100%;height:100%}
 #veil.open .vl{transform:translate(var(--tx),var(--ty)) scale(var(--s));opacity:0}
 #veil.inst .vl,#veil.inst .vfog{transition:none!important}
+#veil.fadein{animation:vfin .4s ease both}@keyframes vfin{from{opacity:0}}
+#veil.gath .vl{transition:transform 1.15s cubic-bezier(.2,.6,.35,1) var(--gdl,0s),opacity .7s ease-out var(--gdl,0s)}#veil.gath .vfog{transition:opacity .9s ease .2s}
 #veil .vin{position:absolute;inset:0;animation:vbr 5s ease-in-out infinite alternate}
 @keyframes vbr{from{transform:translate(-1.2%,.5%)}to{transform:translate(1.2%,-.5%)}}
 #veil .vmsg{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:15px;letter-spacing:.06em;color:#5f7284;opacity:0;transition:opacity .5s;white-space:nowrap;text-shadow:0 1px 0 #fff}
@@ -2017,7 +2019,7 @@ html.phone body .emptyhand{font-size:11.5px!important;color:rgba(166,155,139,.72
     <div class="setwrap">
       <button id="setBtn" class="ib" aria-label="설정" aria-haspopup="true" aria-expanded="false" data-tip="설정"><img class="uico" src="assets/ui2/settings.webp" alt=""></button>
       <svg width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true"><defs><linearGradient id="ggs" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbe6b4"/><stop offset=".55" stop-color="#d9ac68"/><stop offset="1" stop-color="#a87a42"/></linearGradient></defs></svg><div id="setMenu" class="setmenu" hidden><div class="setdim" id="setDim"></div><nav class="setpanel" role="menu" aria-label="설정"><div class="sethead"><span>설정</span><button class="setx" id="setX" aria-label="닫기"></button></div>
-        <button id="newBtn" class="mi" role="menuitem">새 게임</button>
+        <button id="newBtn" class="mi" role="menuitem">새 게임</button><button id="homeBtn" class="mi" role="menuitem" hidden>메인으로 가기</button>
         <button id="rulesBtn" class="mi" role="menuitem">게임 방법</button>
         <button id="sndBtn" class="mi" role="menuitem">사운드</button>
         <button id="leaveBtn" class="mi" role="menuitem" hidden>방 나가기</button>
@@ -2567,13 +2569,17 @@ function veilBuild(v){v.innerHTML='';const fg=document.createElement('div');fg.c
   // paint the inner layers a frame apart so the main thread never blocks for long (the back pair + fog already cover)
   const nx=()=>{const j=todo.shift();if(!j)return;j();setTimeout(nx,16);};setTimeout(nx,16);
   const m=document.createElement('div');m.className='vmsg';m.innerHTML='섬을 불러오는 중<i></i>';v.appendChild(m);}
-function veilIntro(tp,from,to){const v=$('#veil');if(!v)return;clearTimeout(W.veilT);clearInterval(W.veilDots);veilBuild(v);
-  const t=$('#title'),cover=!t.hidden;v.className='on'+(cover?' inst':' open inst');void v.offsetWidth;v.classList.remove('inst');if(!cover)v.classList.remove('open');
+// new game in place: mist rolls in over the board (quicker than it leaves), then cb rebuilds the island behind it
+function veilGather(cb){const v=$('#veil');if(!v)return cb();clearTimeout(W.veilT);clearInterval(W.veilDots);veilBuild(v);v.className='on open inst gath';void v.offsetWidth;v.classList.remove('inst');v.classList.remove('open');
+  W.veilT=setTimeout(()=>{v.classList.remove('gath');W.veilShut=true;cb();},1250);}
+function veilIntro(tp,from,to){const v=$('#veil');if(!v)return;clearTimeout(W.veilT);clearInterval(W.veilDots);
+  const t=$('#title'),shut=W.veilShut&&v.classList.contains('on'),cover=shut||!t.hidden;W.veilShut=false;
+  if(!shut){veilBuild(v);v.className='on inst'+(cover?'':' fadein');void v.offsetWidth;v.classList.remove('inst');}
   try{introFXStart(performance.now()+1e9);}catch(e){}W.camAnim=null;W.veilHold=true;W.veilBan=-1;
   const t0=performance.now();let dots=0;
   W.veilDots=setInterval(()=>{dots=(dots+1)%4;const i=v.querySelector('.vmsg i');if(i)i.textContent='.'.repeat(dots);},380);
   const tick=()=>{const n=performance.now(),el=n-t0;if(el>1500)v.classList.add('busy');
-    if((LDC.n<=0&&n-LDC.t>450&&el>(cover?750:1700))||el>10000){go();return;}W.veilT=setTimeout(tick,100);};
+    if((LDC.n<=0&&n-LDC.t>450&&el>750)||el>10000){go();return;}W.veilT=setTimeout(tick,100);};
   const go=()=>{try{W.r.compile(W.scene,W.cam);}catch(e){}W.veilHold=false;PERF.shadow=true;PERF.dirty=true;
     requestAnimationFrame(()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{const n=performance.now();clearInterval(W.veilDots);v.classList.remove('busy');v.classList.add('open');
       if(W.introFX)W.introFX.t0=n+900;W.camAnim={sph:true,t0:n,dur:3400,tp,from,to};W.veilBan=W.veilBan??-1;setTimeout(()=>{const b=W.veilBan;W.veilBan=null;if(b>=0)try{turnBanner(b);}catch(e){}},1500);
@@ -4180,7 +4186,8 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '주사위 굴리기':()=>{if(S.phase==='setup')finishSetup();if(S.cur!==ME||S.rolled){S.cur=ME;S.rolled=false;S.pend=null;}roll(ME);update();},
     '승리 화면':()=>{if(S.phase==='setup')finishSetup();S.phase='over';S.winner=ME;S.pend=null;closeDialog();ui.modal=null;update();},
     '패배 화면':()=>{if(S.phase==='setup')finishSetup();S.phase='over';S.winner=1;S.pend=null;closeDialog();ui.modal=null;update();},
-    '시작 연출 다시':()=>{try{fitCam('now');camIntro();}catch(e){}},
+    '시작 연출 (첫 진입)':()=>{try{const v=$('#veil');clearTimeout(W.veilT);veilBuild(v);v.className='on inst';W.veilShut=true;fitCam('now');camIntro();}catch(e){console.error(e);}},
+    '시작 연출 (새 게임)':()=>{try{restartGame();}catch(e){console.error(e);}},
     '구름 켜기':()=>{const u=new URL(location.href);u.searchParams.delete('cloud');location.href=u;},
     '구름 끄기':()=>{const u=new URL(location.href);u.searchParams.set('cloud','0');location.href=u;},
     '주변 장식 켜기/끄기':()=>{const d=$('#deco');if(d){d.hidden=!d.hidden;document.documentElement.classList.toggle('nowood',d.hidden);return;}const u=new URL(location.href);u.searchParams.set('deco','1');location.href=u;},
@@ -4190,7 +4197,7 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '지붕: 텍스처 ↔ 셰이더':()=>{const u=new URL(location.href);u.searchParams.set('tx',TXM?'0':'1');location.href=u;},
   };
   const build=()=>{const p=document.createElement('div');p.id='tbench';p.innerHTML='<button class="tg">테스트 ▾</button><b>게임</b>';
-    const groups={'새 게임 (인트로 포함)':'게임','정착지 짓기':'건설','도적 이동':'연출','승리 화면':'결과','시작 연출 다시':'화면','색상 A: 빨강·파랑·노랑·초록':'색상 세트'};
+    const groups={'새 게임 (인트로 포함)':'게임','정착지 짓기':'건설','도적 이동':'연출','승리 화면':'결과','시작 연출 (첫 진입)':'화면','시작 연출 (새 게임)':'화면','색상 A: 빨강·파랑·노랑·초록':'색상 세트'};
     const FOLD={'숲 지형':1};let box=p;Object.keys(act).forEach(k=>{if(groups[k]&&groups[k]!=='게임'){if(FOLD[groups[k]]){const d=document.createElement('details');d.innerHTML='<summary>'+groups[k]+'</summary>';p.appendChild(d);box=d;}else{const t=document.createElement('b');t.textContent=groups[k];p.appendChild(t);box=p;}}const b=document.createElement('button');b.textContent=k;b.onclick=e=>{e.stopPropagation();try{act[k]();}catch(err){console.error(err);alert(err.message);}};box.appendChild(b);});
     p.querySelector('.tg').onclick=()=>p.classList.toggle('min');document.body.appendChild(p);};
   if(document.readyState==='complete')go();else addEventListener('load',go);})();
@@ -4239,7 +4246,7 @@ function beams(s){if(window.FXOFF&&FXOFF.includes('beams'))return;const cv=$('#t
 
 // settings menu icons in the header icon style (gold gradient stroke over a dark offset outline); preview: ?icons=2
 const SICO={
- newBtn:'<path d="M12 2.8 L19.8 7.3 L19.8 16.7 L12 21.2 L4.2 16.7 L4.2 7.3 Z"/><path d="M12 8.5 V15.5 M8.5 12 H15.5"/>',
+ homeBtn:'<path d="M3.5 11.5 L12 4 L20.5 11.5"/><path d="M6 9.5 V20 H18 V9.5"/><path d="M10 20 V14.5 H14 V20"/>',newBtn:'<path d="M12 2.8 L19.8 7.3 L19.8 16.7 L12 21.2 L4.2 16.7 L4.2 7.3 Z"/><path d="M12 8.5 V15.5 M8.5 12 H15.5"/>',
  rulesBtn:'<path d="M12 6.5 C9.5 4.8 6.5 4.6 3.5 5.2 V18.4 C6.5 17.8 9.5 18 12 19.7 C14.5 18 17.5 17.8 20.5 18.4 V5.2 C17.5 4.6 14.5 4.8 12 6.5 Z"/><path d="M12 6.5 V19.7"/>',
  sndBtn:'<path d="M4 9.5 H7.5 L12 5.5 V18.5 L7.5 14.5 H4 Z"/><path d="M15.5 9 C16.8 10.6 16.8 13.4 15.5 15 M18.2 6.6 C21 9.6 21 14.4 18.2 17.4"/>',
  leaveBtn:'<path d="M13.5 4 H6 V20 H13.5"/><path d="M10.5 12 H20.5 M17 8.5 L20.5 12 L17 15.5"/>',
@@ -4248,7 +4255,7 @@ const SICO={
  gfxBtn:'<path d="M6.5 5 H17.5 L21 9.5 L12 20 L3 9.5 Z"/><path d="M3 9.5 H21"/>',
  aiSpeed:'<path d="M6.5 3.5 H17.5 M6.5 20.5 H17.5"/><path d="M7.5 3.5 C7.5 8.5 12 9.5 12 12 C12 14.5 7.5 15.5 7.5 20.5 M16.5 3.5 C16.5 8.5 12 9.5 12 12 C12 14.5 16.5 15.5 16.5 20.5"/>'};
 function sicoSVG(k){const p=SICO[k];return `<svg class="sico" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g stroke="#3a2412" stroke-width="3.2" transform="translate(.7 .9)" opacity=".85">${p}</g><g stroke="url(#ggs)" stroke-width="2.2">${p}</g></svg>`;}
-function addSetIcons(){['newBtn','rulesBtn','sndBtn','leaveBtn','tipBtn','hintBtn','gfxBtn'].forEach(id=>{const b=document.getElementById(id);if(b&&!b.querySelector('.sico'))b.insertAdjacentHTML('afterbegin',sicoSVG(id));});
+function addSetIcons(){['newBtn','homeBtn','rulesBtn','sndBtn','leaveBtn','tipBtn','hintBtn','gfxBtn'].forEach(id=>{const b=document.getElementById(id);if(b&&!b.querySelector('.sico'))b.insertAdjacentHTML('afterbegin',sicoSVG(id));});
   const sp=document.querySelector('#setMenu .mrow');if(sp&&!sp.querySelector('.sico'))sp.insertAdjacentHTML('afterbegin',sicoSVG('aiSpeed'));document.documentElement.classList.add('sico-on');}
 (function(){const q=new URLSearchParams(location.search).get('fx')||'-sun,-beams';const off=q==='none'?['beams','dust','twinkle','noise','sun','shine']:q.split(',').filter(x=>x[0]==='-').map(x=>x.slice(1));
   const sel={beams:'.title .tbeams',dust:'.title .tmotes',twinkle:'.title .ttwk',noise:'.title .tnoise',sun:'.title .tsun',shine:'.title .tshine'};
@@ -4381,7 +4388,7 @@ $('#speedSeg').onclick=e=>{const b=e.target.closest('[data-sp]');if(!b)return;ui
  sb.onclick=e=>{e.stopPropagation();sb.blur();hideTip();setOpen(sm.hidden);};
  $('#setDim').onclick=$('#setX').onclick=()=>setOpen(false);
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!sm.hidden)setOpen(false);});
- sm.addEventListener('click',e=>{const b=e.target.closest('#newBtn,#rulesBtn,#leaveBtn,#sndBtn');if(b)setOpen(false);if(e.target.closest('#sndBtn'))showSound();});}
+ sm.addEventListener('click',e=>{const b=e.target.closest('#newBtn,#homeBtn,#rulesBtn,#leaveBtn,#sndBtn');if(b)setOpen(false);if(e.target.closest('#sndBtn'))showSound();});}
 const hintLabel=()=>{$('#hintBtn').setAttribute('aria-checked',ui.hints);$('#hintBtn').classList.toggle('active',ui.hints);};
 const gfxLabel=()=>{$('#gfxBtn').setAttribute('aria-checked',ui.gfx!=='low');$('#gfxBtn').classList.toggle('active',ui.gfx!=='low');$('#gfxBtn').dataset.tip='높음: 그림자 깊이, 빛 번짐, 원근 흐림, 색 보정을 켜요. 화면이 버벅이면 낮음으로 바꾸세요.';};
 $('#gfxBtn').style.display='none';$('#gfxBtn').onclick=()=>{ui.gfx=ui.gfx==='low'?'high':'low';saveUi();gfxLabel();invalidate(true);};gfxLabel();
@@ -4389,7 +4396,15 @@ const tipLabel=()=>{$('#tipBtn').setAttribute('aria-checked',ui.tips);$('#tipBtn
 $('#tipBtn').onclick=()=>{ui.tips=!ui.tips;saveUi();tipLabel();hideTip();if(!ui.tips)$('#toast').hidden=true;};tipLabel();
 $('#hintBtn').onclick=()=>{ui.hints=!ui.hints;saveUi();hintLabel();render();};hintLabel();
 $('#rulesBtn').onclick=()=>{clearTimeout(aiTimer);showRules(0);};
-$('#newBtn').onclick=()=>{if(window.NET&&NET.on)return MP.confirmLeave();openDialog(`<h3>새 게임을 시작할까요?</h3><p>진행 중인 게임은 끝나고, 첫 화면으로 돌아가요.</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">새 게임</button></div>`);
+// test: single play splits into 새 게임 (restart in place) and 메인으로 가기 (back to the title); multiplayer keeps only 나가기
+const MENU2=/[?&]test=1/.test(location.search);
+if(MENU2){$('#homeBtn').hidden=false;{const lb=$('#leaveBtn');[...lb.childNodes].forEach(n=>{if(n.nodeType===3&&n.textContent.trim())n.textContent='나가기';});}}
+function restartGame(){const go=()=>{clearTimeout(ui.rbT);ui.handTab='res';newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;ui.camFresh=true;closeModal();update();};
+  if(VEIL&&W.ok)veilGather(go);else go();}
+$('#homeBtn').onclick=()=>{if(window.NET&&NET.on)return MP.confirmLeave();openDialog(`<h3>메인으로 갈까요?</h3><p>진행 중인 게임은 끝나고, 첫 화면으로 돌아가요.</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">메인으로</button></div>`);
+  $('#cNo').onclick=()=>{closeDialog();};$('#cYes').onclick=()=>{closeDialog();closeModal();showStart();resetBehind();};};
+$('#newBtn').onclick=()=>{if(window.NET&&NET.on)return MP.confirmLeave();if(MENU2){openDialog(`<h3>새 게임을 시작할까요?</h3><p>진행 중인 게임은 끝나고, 새 섬에서 다시 시작해요.</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">새 게임</button></div>`);
+  $('#cNo').onclick=()=>{closeDialog();};$('#cYes').onclick=()=>{closeDialog();restartGame();};return;}openDialog(`<h3>새 게임을 시작할까요?</h3><p>진행 중인 게임은 끝나고, 첫 화면으로 돌아가요.</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">새 게임</button></div>`);
   $('#cNo').onclick=()=>{closeDialog();};$('#cYes').onclick=()=>{closeDialog();closeModal();showStart();resetBehind();};};
 
 // ---------- painted cards (canvas) ----------
@@ -4499,11 +4514,11 @@ const MP={db:null,subs:[],offSince:{},
   err(msg){openDialog(`<h3>연결 문제</h3><p>${msg}</p><div class="row"><button class="btn sub" id="mOk">확인</button></div>`);$('#mOk').onclick=()=>{closeDialog();if(NET.on)return;if(ui.modal!=='multi'){showTitle(true);showMulti(ui.mtab||'invite');}else{const m=$('#fMsg');if(m)m.textContent='';}};},
   // ---------- entry ----------
   openEntry(code){showTitle(true);showMulti('join',code);},
-  async create(){try{$('#mMsg')&&($('#mMsg').textContent='방을 만드는 중…');await this.init();
+  async create(){ui.mpTab='invite';try{$('#mMsg')&&($('#mMsg').textContent='방을 만드는 중…');await this.init();
       let code;for(let i=0;i<5;i++){code=this.code();const ex=await this.db.ref('rooms/'+code+'/meta').once('value');if(!ex.exists())break;}
       NET.room=code;await this.ref('meta').set({host:NET.uid,status:'lobby',n:Math.max(2,ui.n||4),diff:ui.diff||'normal',ai:0,created:firebase.database.ServerValue.TIMESTAMP});
       await this.enter();}catch(e){console.error(e);this.err('방을 만들지 못했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.');}},
-  async join(code){try{$('#mMsg')&&($('#mMsg').textContent='방에 들어가는 중…');await this.init();
+  async join(code){ui.mpTab='join';try{$('#mMsg')&&($('#mMsg').textContent='방에 들어가는 중…');await this.init();
       const m=(await this.db.ref('rooms/'+code+'/meta').once('value')).val();
       if(!m)return this.err(`<b>${code}</b> 방을 찾을 수 없어요. 코드를 다시 확인해 주세요.`);
       NET.room=code;
@@ -4525,7 +4540,7 @@ const MP={db:null,subs:[],offSince:{},
     this.sub(this.ref('members'),'value',sn=>{const pc=NET.members?Object.keys(NET.members).length:-1;const was=!!(NET.members&&NET.members[NET.uid]);NET.members=sn.val()||{};if(was&&!NET.members[NET.uid]&&!this.leaving&&NET.on){this.cleanup();closeModal();showStart();resetBehind();this.err('방장이 자리를 정리해서 대기실에서 나왔어요.');return;}{const nc=Object.keys(NET.members).length;if(pc>0&&nc>pc&&NET.meta&&NET.meta.status==='lobby')SND.sfx('join');}this.onMembers();if(NET.meta&&NET.meta.status==='lobby')this.drawLobby();});
     this.sub(this.ref('state'),'value',sn=>{const js=sn.val();if(!js)return;if(NET.isHost&&js===NET._last)return;this.applyState(js);});
     this.sub(this.ref('actions'),'child_added',sn=>{if(!NET.isHost)return;this.handleAction(sn.key,sn.val());});
-    $('#leaveBtn').hidden=false;$('#newBtn').hidden=true;},
+    $('#leaveBtn').hidden=false;$('#newBtn').hidden=true;$('#homeBtn').hidden=true;},
 
   presCount:0,presOn:false,
   async presence(){try{await this.init();if(!this.presOn){firebase.database().goOnline();this.presOn=true;const me=this.db.ref('presence/'+NET.uid);me.onDisconnect().remove();me.set({t:firebase.database.ServerValue.TIMESTAMP});
@@ -4534,7 +4549,7 @@ const MP={db:null,subs:[],offSince:{},
   drawCount(){document.querySelectorAll('.onl').forEach(el=>{const n=this.presCount,full=n>=MAX_ONLINE;el.innerHTML=`<i class="onl-dot${full?' full':''}"></i>접속 중 <b>${n}</b> / ${MAX_ONLINE}명${this.openRooms?` · 대기 중인 방 <b>${this.openRooms.length}</b>개`:''}${full?' · <span class="full">가득 찼어요</span>':''}`;});
     const full=this.presCount>=MAX_ONLINE;['#sGo','#sJoin','#qGo','#mJoin'].forEach(id=>{const b=$(id);if(b&&b.dataset.mp)b.disabled=full;});},
   offline(){if(this.presOn&&!NET.on){try{this.db.ref('presence/'+NET.uid).remove();firebase.database().goOffline();}catch(e){}this.presOn=false;}},
-  async quick(){try{$('#mMsg')&&($('#mMsg').textContent='빈자리를 찾는 중…');await this.init();
+  async quick(){ui.mpTab='quick';try{$('#mMsg')&&($('#mMsg').textContent='빈자리를 찾는 중…');await this.init();
       const v=(await this.db.ref('open').once('value')).val()||{};const now=Date.now();
       const cands=Object.entries(v).filter(([c,o])=>o&&o.count<o.n&&now-(o.t||0)<15*60000).sort((a,b)=>b[1].count-a[1].count);
       for(const [code] of cands){const m=(await this.db.ref('rooms/'+code+'/meta').once('value')).val();const ms=(await this.db.ref('rooms/'+code+'/members').once('value')).val()||{};
@@ -4620,10 +4635,10 @@ const MP={db:null,subs:[],offSince:{},
         const next=this.order().find(([u,v])=>u!==NET.uid&&v.online!==false);await this.ref('meta/host').set(next?next[0]:null);}
       await r.remove();
       if(!this.order().some(([u])=>u!==NET.uid))await this.ref().remove();}catch(e){console.error(e);}
-    this.cleanup();this.leaving=false;closeModal();showStart();resetBehind();
+    this.cleanup();this.leaving=false;closeModal();showStart();resetBehind();if(MENU2){showTitle(true);showMulti(ui.mpTab||'invite');}
     if(wasLobby&&others){openDialog(`<h3>방을 나갔어요</h3><div class="row"><button class="btn sub" id="mOk">확인</button></div>`);$('#mOk').onclick=closeDialog;}},
   cleanup(){this.unsubAll();NET.on=false;NET.isHost=false;NET.room=null;NET.members={};NET.meta=null;NET._last=null;this.offSince={};
-    $('#leaveBtn').hidden=true;$('#newBtn').hidden=false;try{history.replaceState(null,'',location.pathname);}catch(e){}}};
+    $('#leaveBtn').hidden=true;$('#newBtn').hidden=false;$('#homeBtn').hidden=!MENU2;try{history.replaceState(null,'',location.pathname);}catch(e){}}};
 setInterval(()=>{if(!NET.on)return;try{MP.hostTick();MP.pubTick();if(ui.modal==='lobby'&&NET.meta&&NET.meta.autoAt)MP.drawLobby();}catch(e){}},1000);
 $('#leaveBtn').onclick=()=>{if(NET.on)MP.confirmLeave();};
 {const q=new URLSearchParams(location.search).get('room');if(q&&MP_ENABLED){ui.invite=q.toUpperCase().slice(0,5);$('#tSingle').hidden=true;}}
