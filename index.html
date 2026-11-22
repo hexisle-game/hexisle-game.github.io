@@ -2009,7 +2009,7 @@ html.phone body .emptyhand{font-size:11.5px!important;color:rgba(166,155,139,.72
         <button id="sndBtn" class="mi" role="menuitem">사운드</button>
         <button id="leaveBtn" class="mi" role="menuitem" hidden>방 나가기</button>
         <button id="tipBtn" class="mi tg" role="menuitemcheckbox">툴팁</button>
-        <button id="hintBtn" class="mi tg" role="menuitemcheckbox">힌트</button>
+        <button id="hintBtn" class="mi tg" role="menuitemcheckbox" hidden style="display:none">힌트</button>
         <div class="msep"></div>
         <button id="gfxBtn" class="mi tg" role="menuitemcheckbox">고화질 그래픽</button>
         <div class="mi mrow"><span>AI 속도</span><span class="seg" id="speedSeg"><button data-sp="느림">느림</button><button data-sp="보통">보통</button><button data-sp="빠름">빠름</button></span></div>
@@ -3621,8 +3621,8 @@ function sync3D(){
       rb.userData.robPulse=1;}
     else if(!rmode&&rb.userData.robPulse){const fx=rb.getObjectByName('robfx');if(fx)rb.remove(fx);rb.traverse(o=>{if(o.isMesh&&o.material.emissive)o.material.emissiveIntensity=0;});delete rb.userData.robPulse;}}
   const T=targets();const tkey=[T.kind,T.v.join(','),T.e.join(','),T.h.join(','),ui.hints,PH.on].join('|');if(tkey===W.tkey)return;W.tkey=tkey;W.tgtG.clear();
-  const HINT=new Set();if(ui.hints&&(T.kind==='setupS'||T.kind==='settlement')&&T.v.length){const pr=prodOf(ME);[...T.v].sort((a,b)=>spotValue(b,ME,pr)-spotValue(a,ME,pr)).slice(0,T.v.length>4?3:1).forEach(v=>HINT.add(v));}
-  const RHINT=ui.hints&&T.kind==='robber'?robberHint():-1;
+  const HINT=new Set();if((T.kind==='setupS'||T.kind==='settlement')&&T.v.length){const pr=prodOf(ME);[...T.v].sort((a,b)=>spotValue(b,ME,pr)-spotValue(a,ME,pr)).slice(0,T.v.length>4?3:1).forEach(v=>HINT.add(v));}
+  const RHINT=-1;
   T.e.forEach(e=>{const E=G.edges[e],A=vc(E.a),B=vc(E.b);const dx=B.x-A.x,dz=B.z-A.z,L=Math.hypot(dx,dz);const k=new THREE.Group();k.position.set((A.x+B.x)/2,0,(A.z+B.z)/2);k.rotation.y=Math.atan2(dx,dz);
     {const d=decal('bar',0xffffff,.9,.16,L*.66,heightAt(k.position.x,k.position.z)+.04);d.rotation.y=Math.PI/2;d.scale.set(L*.7,1,PH.on?.28:.16);k.add(d);}k.add(part('box',HIT,[PH.on?.4:.26,.25,L*.7],[0,.1,0],{noShadow:true}));
     if(typeof TUT!=='undefined'&&TUT.on){const gh=roadPiece(ME,L*.72);ghostify(gh);k.add(gh);}
@@ -4123,7 +4123,6 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '패배 화면':()=>{if(S.phase==='setup')finishSetup();S.phase='over';S.winner=1;S.pend=null;closeDialog();ui.modal=null;update();},
     '시작 연출 다시':()=>{try{fitCam('now');camIntro();}catch(e){}},
     '구름 켜기':()=>{const u=new URL(location.href);u.searchParams.delete('cloud');location.href=u;},
-    '도적 힌트 보기':()=>{if(S.phase==='setup')finishSetup();ui.hints=true;S.cur=ME;S.rolled=true;S.pend={k:'robber'};update();},
     '구름 끄기':()=>{const u=new URL(location.href);u.searchParams.set('cloud','0');location.href=u;},
     '주변 장식 켜기/끄기':()=>{const d=$('#deco');if(d){d.hidden=!d.hidden;document.documentElement.classList.toggle('nowood',d.hidden);return;}const u=new URL(location.href);u.searchParams.set('deco','1');location.href=u;},
     '인원 2·3·4 바꾸기':()=>{ui.n=ui.n>=4?2:ui.n+1;startNew(false);},
