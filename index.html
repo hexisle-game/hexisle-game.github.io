@@ -1607,6 +1607,24 @@ html.lbox,html.lbox body{background:#000}
 html.phone.lbox body{top:var(--oy,0px)!important}
 #maplbls{transition:opacity .7s ease}
 #stage.intro-hide #maplbls{opacity:0!important;transition:none}
+#veil{position:fixed;inset:0;z-index:39;pointer-events:none;overflow:hidden;display:none;contain:strict}
+#veil.on{display:block;pointer-events:auto}#veil.open{pointer-events:none}
+#veil .vfog{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 55%,rgba(236,242,247,.82),rgba(214,225,235,.94));transition:opacity 2.4s ease .3s}
+#veil.open .vfog{opacity:0}
+#veil .vh{position:absolute;top:-12%;bottom:-12%;width:80%;will-change:transform;transition:transform 2.1s cubic-bezier(.62,.02,.22,1)}
+#veil .vL{left:-10%}#veil .vR{right:-10%;transform:scaleX(-1)}
+#veil .vf{transition-duration:1.7s;width:82%}
+#veil.open .vL{transform:translateX(-118%)}#veil.open .vR{transform:translateX(118%) scaleX(-1)}
+#veil.open .vf.vL{transform:translateX(-150%) scale(1.15)}#veil.open .vf.vR{transform:translateX(150%) scaleX(-1) scale(1.15)}
+#veil.inst .vh,#veil.inst .vfog{transition:none!important}
+#veil .vfill{position:absolute;left:0;top:0;bottom:0;width:80%;background:linear-gradient(180deg,#f4f7fa,#dfe7ee 70%,#d3dde7)}
+#veil .pf{position:absolute;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle at 42% 38%,#fff 0,#f5f8fb 34%,#dfe7ef 56%,rgba(223,231,239,0) 70%)}
+#veil .pf.dk{background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.9) 0,rgba(226,234,241,.85) 40%,rgba(205,217,228,0) 70%)}
+#veil .vin{position:absolute;inset:0;animation:vbr 5s ease-in-out infinite alternate}
+@keyframes vbr{from{transform:translateX(-1.2%)}to{transform:translateX(1.2%)}}
+#veil .vmsg{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:15px;letter-spacing:.06em;color:#5f7284;opacity:0;transition:opacity .5s;white-space:nowrap;text-shadow:0 1px 0 #fff}
+#veil.busy .vmsg{opacity:1}#veil.open .vmsg{opacity:0;transition-duration:.25s}
+#veil .vmsg i{display:inline-block;width:1.2em;text-align:left;font-style:normal}
 .sheet-frame.sheet-multi,.sheet-frame.sheet-lobby{--fbo:.35}.sheet-frame.sheet-multi{--fbo:.39}
 html.phone .sheet-frame.sheet-single{--fbo:.35}html.phone .sheet-frame.sheet-multi,html.phone .sheet-frame.sheet-lobby{--fbo:.4}
 
@@ -2047,7 +2065,7 @@ html.phone body .emptyhand{font-size:11.5px!important;color:rgba(166,155,139,.72
 <div id="tip" hidden></div><div id="pop" hidden></div>
 <div id="leftcol"></div>
 <div id="rotate" hidden><div class="rot-ic"></div><b>가로로 돌려 주세요</b><span>HexIsle은 휴대폰에서<br>가로 화면으로 플레이해요.</span></div>
-<div id="splash"><img id="spLogo" alt="HEXISLE"><p class="spnote">이 게임은 수익을 창출하지 않으며,<br>개인 목적으로만 제작되었습니다.</p><p class="sptap">화면을 탭 하여 시작</p><div class="spload"><i></i></div></div><div id="title" class="title" hidden><div class="tbg"></div><div class="tsun"></div><div class="tdim"></div><canvas class="tbeams" id="tBeams" width="640" height="360"></canvas><video class="ttwk" muted playsinline loop autoplay preload="auto" disablepictureinpicture aria-hidden="true" src="assets/fx/twinkle.mp4"></video><canvas class="tmotes" id="tMotes"></canvas><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 헥스아일 - 개척의 시대"><div class="tshine" id="tShine"></div><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
+<div id="splash"><img id="spLogo" alt="HEXISLE"><p class="spnote">이 게임은 수익을 창출하지 않으며,<br>개인 목적으로만 제작되었습니다.</p><p class="sptap">화면을 탭 하여 시작</p><div class="spload"><i></i></div></div><div id="veil" aria-hidden="true"></div><div id="title" class="title" hidden><div class="tbg"></div><div class="tsun"></div><div class="tdim"></div><canvas class="tbeams" id="tBeams" width="640" height="360"></canvas><video class="ttwk" muted playsinline loop autoplay preload="auto" disablepictureinpicture aria-hidden="true" src="assets/fx/twinkle.mp4"></video><canvas class="tmotes" id="tMotes"></canvas><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 헥스아일 - 개척의 시대"><div class="tshine" id="tShine"></div><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
 <div id="tut" hidden><div class="tblock" id="tBlock"></div><div class="tring" id="tRing" hidden></div><div class="tx" id="tX" hidden>✕</div><div class="tbub" id="tBub"></div><div class="tgest" id="tGest" hidden><i class="f1"></i><i class="f2"></i></div></div>
 <div id="dialog" class="overlay dlgov" hidden><div class="sheet sheet-dialog" id="dsheet"></div></div>
 <div id="modal" class="overlay" hidden><div class="sheet" id="sheet"></div><i class="mcrest" id="mcrest" aria-hidden="true"></i></div>
@@ -2489,6 +2507,7 @@ function init3D(){
   const el=$('#stage');
   if(!window.THREE||!THREE.OrbitControls){el.innerHTML='<div class="nogl">3D 그래픽 라이브러리를 불러오지 못했어요. 인터넷 연결을 확인하고 새로고침해 주세요.</div>';return false;}
   let r;try{r=new THREE.WebGLRenderer({antialias:true});}catch(e){el.innerHTML='<div class="nogl">이 브라우저에서는 3D(WebGL)를 쓸 수 없어요.</div>';return false;}
+  try{ldPatch();}catch(e){}
   initGeo();phUniforms();preloadP();
   r.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));r.shadowMap.enabled=true;r.shadowMap.type=THREE.PCFShadowMap;r.shadowMap.autoUpdate=false;r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=/[?&]test=1/.test(location.search)?1.1:1.0;
   el.prepend(r.domElement);
@@ -2518,8 +2537,44 @@ function init3D(){
 // game entry: start low, close and from the side, then swing round into the reset (top-down) view
 function camIntro(){if(!W.ok)return;const tp=W.ctl.target.clone(),off=W.cam.position.clone().sub(tp);const sp=new THREE.Spherical().setFromVector3(off);
   const from={r:Math.max(W.ctl.minDistance+.3,sp.radius*.4),phi:W.ctl.maxPolarAngle,theta:sp.theta-3.0};
-  W.cam.position.setFromSpherical(new THREE.Spherical(from.r,from.phi,from.theta)).add(tp);W.cam.lookAt(tp);W.ctl.update();try{introFXStart(performance.now()+350);}catch(e){}
+  W.cam.position.setFromSpherical(new THREE.Spherical(from.r,from.phi,from.theta)).add(tp);W.cam.lookAt(tp);W.ctl.update();
+  if(VEIL){veilIntro(tp,from,{r:sp.radius,phi:sp.phi,theta:sp.theta});return;}
+  try{introFXStart(performance.now()+350);}catch(e){}
   W.camAnim={sph:true,t0:performance.now()+350,dur:3000,tp,from,to:{r:sp.radius,phi:sp.phi,theta:sp.theta}};}
+// test: clouds cover the screen while the island finishes loading, then part left/right as the camera swings round
+const VEIL=/[?&]test=1/.test(location.search)&&!/[?&]veil=0/.test(location.search);
+const LDC={n:0,t:0};
+function ldPatch(){[THREE.GLTFLoader,THREE.ImageLoader,THREE.TextureLoader].forEach(L=>{if(!L||L.prototype._ldc)return;const o=L.prototype.load;L.prototype._ldc=1;
+  L.prototype.load=function(url,onL,onP,onE){LDC.n++;LDC.t=performance.now();let d=0;const done=()=>{if(!d){d=1;LDC.n--;LDC.t=performance.now();}};
+    return o.call(this,url,(...a)=>{try{return onL&&onL(...a);}finally{done();}},onP,(...a)=>{try{return onE&&onE(...a);}finally{done();}});};});}
+function veilPaint(c,front){const R=Math.random,k=.5,vw=innerWidth,vh=innerHeight;const w=c.width=Math.ceil(vw*(front?.82:.8)*k),h=c.height=Math.ceil(vh*1.24*k);const x=c.getContext('2d');
+  const puff=(px,py,r,a,col)=>{const g=x.createRadialGradient(px,py,0,px,py,r);g.addColorStop(0,`rgba(${col},${a})`);g.addColorStop(.45,`rgba(${col},${a*.9})`);g.addColorStop(.75,`rgba(${col},${a*.38})`);g.addColorStop(1,`rgba(${col},0)`);x.fillStyle=g;x.beginPath();x.arc(px,py,r,0,6.2832);x.fill();};
+  const U=Math.min(w,h);const xe=w*(front?.74:.7);const rr=a=>Math.min(U*a,w*.15);
+  if(!front){const g=x.createLinearGradient(0,0,0,h);g.addColorStop(0,'#f2f6f9');g.addColorStop(.6,'#e3eaf0');g.addColorStop(1,'#d5dfe8');x.fillStyle=g;x.fillRect(0,0,xe-w*.04,h);
+    for(let q=0;q<26;q++)puff(R()*(xe-w*.08),R()*h,rr(.12+R()*.2),.35,'200,213,226');
+    for(let q=0;q<30;q++)puff(R()*(xe-w*.08),R()*h,rr(.1+R()*.16),.55,'255,255,255');}
+  const n=Math.round(h/(U*(front?.1:.07)));
+  for(let pass=0;pass<2;pass++)for(let q=0;q<n;q++){const py=(q+R()*.8)/n*h,r=rr(front?.06+R()*.1:.08+R()*.12),px=xe-w*.05+R()*w*.1;
+    if(pass===0)puff(px+r*.08,py+r*.22,r*1.05,front?.4:.6,'196,210,224');else puff(px,py,r*.95,front?.75:.95,'255,255,255');}
+  for(let q=0;q<(front?10:18);q++){const py=R()*h,r=rr(.04+R()*.05),px=xe+R()*w*.1;puff(px,py+r*.2,r,.35,'200,213,226');puff(px,py,r*.9,.8,'252,253,255');}
+  c.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%';}
+function veilBuild(v){const R=Math.random;
+  const half=(cls,front)=>{const h=document.createElement('div');h.className='vh '+cls+(front?' vf':'');const n=document.createElement('div');n.className='vin';n.style.animationDelay=(-R()*5).toFixed(2)+'s';h.appendChild(n);const c=document.createElement('canvas');veilPaint(c,front);n.appendChild(c);return h;};
+  v.innerHTML='';const fg=document.createElement('div');fg.className='vfog';v.appendChild(fg);
+  v.appendChild(half('vL'));v.appendChild(half('vR'));v.appendChild(half('vL',1));v.appendChild(half('vR',1));
+  const m=document.createElement('div');m.className='vmsg';m.innerHTML='섬을 불러오는 중<i></i>';v.appendChild(m);}
+function veilIntro(tp,from,to){const v=$('#veil');if(!v)return;clearTimeout(W.veilT);clearInterval(W.veilDots);veilBuild(v);
+  const t=$('#title'),cover=!t.hidden;v.className='on'+(cover?' inst':' open inst');void v.offsetWidth;v.classList.remove('inst');if(!cover)v.classList.remove('open');
+  try{introFXStart(performance.now()+1e9);}catch(e){}W.camAnim=null;W.veilHold=true;W.veilBan=-1;
+  const t0=performance.now();let dots=0;
+  W.veilDots=setInterval(()=>{dots=(dots+1)%4;const i=v.querySelector('.vmsg i');if(i)i.textContent='.'.repeat(dots);},380);
+  const tick=()=>{const n=performance.now(),el=n-t0;if(el>1500)v.classList.add('busy');
+    if((LDC.n<=0&&n-LDC.t>450&&el>(cover?750:1700))||el>10000){go();return;}W.veilT=setTimeout(tick,100);};
+  const go=()=>{try{W.r.compile(W.scene,W.cam);}catch(e){}W.veilHold=false;PERF.shadow=true;PERF.dirty=true;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{const n=performance.now();clearInterval(W.veilDots);v.classList.remove('busy');v.classList.add('open');
+      if(W.introFX)W.introFX.t0=n+900;W.camAnim={sph:true,t0:n,dur:3400,tp,from,to};W.veilBan=W.veilBan??-1;setTimeout(()=>{const b=W.veilBan;W.veilBan=null;if(b>=0)try{turnBanner(b);}catch(e){}},1500);
+      W.veilT=setTimeout(()=>{v.className='';v.innerHTML='';},2700);})));};
+  W.veilT=setTimeout(tick,100);}
 const ROBV2=/[?&]test=1/.test(location.search)&&!/[?&]rob=0/.test(location.search);
 function robWall(){const H=.5;const g=new THREE.CylinderGeometry(1,1,H,72,1,true);{const P=g.attributes.position;for(let k=0;k<P.count;k++){const x=P.getX(k),z=P.getZ(k),th=Math.atan2(x,z);let d=((th%(Math.PI/3))+Math.PI/3)%(Math.PI/3)-Math.PI/6;const hr=.92*.866/Math.cos(d),r=hr*.62+.85*.38;P.setXYZ(k,Math.sin(th)*r,P.getY(k),Math.cos(th)*r);}g.computeVertexNormals();}g.translate(0,H/2,0);
   const m=new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:THREE.DoubleSide,uniforms:{uA:W.robA,uC:{value:new THREE.Color(0x9a0f0a)}},
@@ -3596,7 +3651,7 @@ function spawnDust(x,z,t0,small){if(!W.ok)return;const y=heightAt(x,z)+.04;const
 
 // ---- motion: short "whose turn" ribbon across the board ----
 function uiCol(c){if(!c)return c;const n=parseInt(c.slice(1),16);let r=(n>>16)&255,g=(n>>8)&255,b=n&255;const m=(r+g+b)/3;r=Math.round((r*.62+m*.38)*.82);g=Math.round((g*.62+m*.38)*.82);b=Math.round((b*.62+m*.38)*.82);return `rgb(${r},${g},${b})`;}
-function turnBanner(p){if(typeof TUT!=='undefined'&&TUT.on)return;let el=$('#turnBan');if(!el){el=document.createElement('div');el.id='turnBan';document.body.appendChild(el);}
+function turnBanner(p){if(typeof TUT!=='undefined'&&TUT.on)return;if(W.veilHold||W.veilBan!=null&&W.veilBan!==-2){W.veilBan=p;return;}let el=$('#turnBan');if(!el){el=document.createElement('div');el.id='turnBan';document.body.appendChild(el);}
   const pl=S.players[p];el.innerHTML='<i class="tbo l"></i>'+avHTML(pl,'avb')+(p===ME?`<b>내 차례</b>`:`<b><span style="color:${uiCol(pl.color)}">${pl.name}</span>의 차례</b>`)+'<i class="tbo r"></i>';el.classList.toggle('mine',p===ME);
   el.classList.remove('go');void el.offsetWidth;el.classList.add('go');}
 function sync3D(){
@@ -3670,7 +3725,7 @@ const PERF={born:performance.now(),dpr:Math.min(window.devicePixelRatio||1,2),ma
 ['pointerdown','pointermove','wheel','keydown','touchstart'].forEach(e=>addEventListener(e,()=>{PERF.act=performance.now();},{passive:true,capture:true}));
 function invalidate(shadow){PERF.dirty=true;PERF.act=performance.now();if(shadow)PERF.shadow=true;}
 function setDPR(v){PERF.dpr=v;W.r.setPixelRatio(v);if(W.comp)W.comp.setPixelRatio(v);fitCam(false);PERF.shadow=true;PERF.dirty=true;}
-function loop(t){requestAnimationFrame(loop);if(!W.ok||document.hidden)return;if(ui.splash||document.documentElement.classList.contains('on-title')){const n=performance.now();if(n-(W.titleR||0)<1000)return;W.titleR=n;PERF.dirty=true;}const s=t/1000;const moved=W.ctl.update();
+function loop(t){requestAnimationFrame(loop);if(!W.ok||document.hidden)return;if(W.veilHold)return;if(ui.splash||document.documentElement.classList.contains('on-title')){const n=performance.now();if(n-(W.titleR||0)<1000)return;W.titleR=n;PERF.dirty=true;}const s=t/1000;const moved=W.ctl.update();
   const now0=performance.now();if(W.windT){W.windT.value=now0/1000;if(W.windOn||W.pflags&&Object.keys(W.pflags).length)PERF.dirty=true;}if(W.flock)stepFlock(now0);stepFleet(now0);stepGulls(now0);stepClouds(now0);stepCoast(now0);if(W.codeGulls&&W.codeGulls.length){const t=now0/1000;W.codeGulls=W.codeGulls.filter(b=>{let o=b;while(o.parent)o=o.parent;return o===W.scene;});W.codeGulls.forEach((gg,j)=>{const f=Math.sin(t*7+j)*.75;gg.userData['w-1'].rotation.x=-f;gg.userData['w1'].rotation.x=f;gg.position.y=Math.sin(t*7+j+1.2)*.012;});PERF.dirty=true;}if(W.lhBeams&&W.lhBeams.length){W.lhBeams=W.lhBeams.filter(b=>{let o=b;while(o.parent)o=o.parent;return o===W.scene;});W.lhBeams.forEach((b,j)=>{b.rotation.y=now0/1000*.7+j*1.3;const f=.75+.25*Math.sin(now0/1000*2.2+j);b.userData.sp.scale.setScalar(.16*f);});PERF.dirty=true;}if(W.sheepMix&&W.sheepMix.length){W.sheepMix=W.sheepMix.filter(m=>{let o=m.getRoot();while(o&&o.parent)o=o.parent;return o===W.scene;});const dt=Math.min(.05,(now0-(W.sheepT||now0))/1000);W.sheepT=now0;W.sheepMix.forEach(m=>m.update(dt));PERF.dirty=true;}if(W.tractors&&W.tractors.length){W.tractors=W.tractors.filter(T=>{let o=T.k;while(o.parent)o=o.parent;return o===W.scene;});W.tractors.forEach(T=>{const a=T.a0+now0/1000*.16;const x=T.cx+Math.cos(a)*T.r,z=T.cz+Math.sin(a)*T.r;T.k.position.set(x,heightAt(x,z),z);T.k.rotation.y=-a;if(T.wh)T.wh.forEach(w=>{w.m.rotation.x=a*T.r/w.r;});});if(W.tractors.length)PERF.dirty=true;}if(ROBV2&&W.tileRT&&S&&S.board){const r=W.tileRT[S.board.robber];if(r)r.value=.28*W.robA.value;}{const rb=W.robber;if(rb&&rb.userData.lift>=0&&!rb.userData.move){const tk=W.tokens[rb.userData.lift]&&W.tokens[rb.userData.lift].parent;const by=((tk&&tk.userData.yFix)??heightAt(rb.position.x,rb.position.z))+.22;rb.position.y=by+Math.sin(now0/650)*.035;PERF.dirty=true;}}if(W.robber&&W.robber.userData.mixer){const t=now0/1000;W.robber.userData.mixer.update(Math.min(.05,t-(W.robber.userData.mt||t)));W.robber.userData.mt=t;}const robP=(W.robber&&(W.robber.userData.robPulse||W.robber.userData.mixer||W.robber.userData.glb));const anim=moved||W.camAnim||W.introFX||(W.wmMix&&W.wmMix.length)||DICE.list.length||W.tgtG.children.length||W.anim.size||robP;
   const ambientDue=now0-PERF.ambient>(now0-PERF.act>45000?600:PERF.dpr<PERF.max?140:80);
   if(!anim&&!PERF.dirty&&!ambientDue)return;
