@@ -2657,8 +2657,8 @@ vec3 terrainColor(vec3 wp,vec3 wn){
   gPert=vec3(0.);gShSoft=0.;
   if(va>.5){if(ty<1.5){c=forestC(p);gShSoft=.7*uBch;}else if(ty<2.5){c=clayC(p);gPert=tn(nRock,p*1.25)*.35;}else if(ty<3.5){c=pastureC(p);}else if(ty<4.5)c=uWG>.5?wheatG(p):fieldC(p);else if(ty<5.5){c=rockC(p,h,slope);gPert=tn(nRock,p*.95)*1.1;}else{c=sandC(p);gPert=tn(nDesert,p*1.1)*1.;}}
 
-  if(va>.5&&uBlendB>.5){vec2 rel=w-vec2(1.7320508*(gCell.x+gCell.y*.5),1.5*gCell.y);const vec2 n0=vec2(1.,0.),n1=vec2(.5,.8660254),n2=vec2(-.5,.8660254);float d0=dot(rel,n0),d1=dot(rel,n1),d2=dot(rel,n2);vec2 nd=n0*sign(d0);float m0=abs(d0);if(abs(d1)>m0){m0=abs(d1);nd=n1*sign(d1);}if(abs(d2)>m0){m0=abs(d2);nd=n2*sign(d2);}
-    float ed=.866*1.0-m0+(fbm3(p*3.)-.5)*.05;if(ed<.2){vec2 q=w+nd*(max(ed,0.)+.08);float t2,h2,v2;hexAt(q,t2,h2,v2);if(v2<.5||abs(t2-ty)>.5){vec3 c2;if(v2>.5)c2=tyCol(t2,p,h,slope);else{c2=grassC(p)*(1.03+.1*uBch);c2=mix(c2,sat(c2,.56)*1.1,uBch);}float m=.5*(1.-smoothstep(-.02,.2,ed));c=mix(c,c2,m);}}}
+  if(va>.5&&uBlendB>.5&&ty>1.5){vec2 rel=w-vec2(1.7320508*(gCell.x+gCell.y*.5),1.5*gCell.y);const vec2 n0=vec2(1.,0.),n1=vec2(.5,.8660254),n2=vec2(-.5,.8660254);float d0=dot(rel,n0),d1=dot(rel,n1),d2=dot(rel,n2);vec2 nd=n0*sign(d0);float m0=abs(d0);if(abs(d1)>m0){m0=abs(d1);nd=n1*sign(d1);}if(abs(d2)>m0){m0=abs(d2);nd=n2*sign(d2);}
+    float ed=.866*1.0-m0+(fbm3(p*3.)-.5)*.05;if(ed<.2){vec2 q=w+nd*(max(ed,0.)+.08);float t2,h2,v2;hexAt(q,t2,h2,v2);if((v2<.5||abs(t2-ty)>.5)&&!(v2>.5&&t2<1.5)){vec3 c2;if(v2>.5)c2=tyCol(t2,p,h,slope);else{c2=grassC(p)*(1.03+.1*uBch);c2=mix(c2,sat(c2,.56)*1.1,uBch);}float m=.5*(1.-smoothstep(-.02,.2,ed));c=mix(c,c2,m);}}}
   vec3 beach=sat(tx(tDesert,p*1.4),.6)*vec3(1.2,1.1,.92);
   c=mix(c,beach,smoothstep(mix(-.035,.0,uBch),mix(-.075,-.062,uBch),h+uBch*((fbm3(p*2.7)-.5)*.03+(fbm3(p*9.)-.5)*.008)));
   c=mix(c,vec3(.56,.49,.36),smoothstep(-.105,-.14,h));
@@ -3109,9 +3109,9 @@ function codeMine(H,railLen){const g=new THREE.Group();const r=seeded(4049);cons
   [[-.009,.019,-.016,.1],[.009,.019,-.015,-.1],[-.009,.019,.0,0],[.009,.019,.001,.05],[-.008,.019,.016,-.08],[.009,.019,.016,.12],[0,.029,-.008,1.3],[.002,.029,.01,1.5],[-.006,.037,0,.4]].forEach(([x,y,z,ry],k)=>C2.add(bk,k%2?br2:br,x,y,z,0,ry,0));C2.build(cart);return cart;};putCart(.125+ZO);g.userData.outerCart=putCart(zs[zs.length-1]-.03);
   return g;}
 function brickMines(g){if(!/[?&]test=1/.test(location.search))return;g.children.filter(o=>o.userData.mextra).forEach(o=>g.remove(o));const H=[];S.board.hexes.forEach((t,i)=>{if(t.res==='brick')H.push(i);});
-  H.slice(0,MINES.length).forEach((hi,k)=>{const D=MINES[k];const c=hc(hi);const e=(hi*2+k)%6;const ang=e*Math.PI/3;const ux=Math.cos(ang),uz=Math.sin(ang);const r=.52;const x=c.x+ux*r,z=c.z+uz*r;
+  H.forEach((hi,k)=>{const D=MINES[0];const c=hc(hi);const e=(hi*2+k)%6;const ang=e*Math.PI/3;const ux=Math.cos(ang),uz=Math.sin(ang);const r=.52;const x=c.x+ux*r,z=c.z+uz*r;
     const grp=new THREE.Group();grp.userData.keep=1;grp.userData.nomerge=1;grp.userData.mextra=1;grp.position.set(x,heightAt(x,z),z);grp.rotation.y=Math.atan2(ux,uz);g.add(grp);
-    const lb=coastLabel(D.code?'코드':D.f);lb.scale.set(D.code?.14:.1,.019,1);lb.position.set(0,.3,0);grp.add(lb);if(D.code){lb.position.y=.22;buildCodeMine(g,grp,hi,0);return;}
+    if(D.code){buildCodeMine(g,grp,hi,0);return;}const lb=coastLabel(D.f);lb.scale.set(.1,.019,1);lb.position.set(0,.3,0);grp.add(lb);
     glbLoad('mine_'+D.f,'assets/test/mine/'+D.f+'.glb',gl=>{if(!grp.parent)return;const m=gl.scene.clone(true);m.updateMatrixWorld(true);const bb=new THREE.Box3().setFromObject(m),sz=bb.getSize(new THREE.Vector3());const sc=D.w/Math.max(sz.x,sz.z);m.scale.setScalar(sc);m.position.set(-(bb.min.x+bb.max.x)/2*sc,-bb.min.y*sc-.01,-(bb.min.z+bb.max.z)/2*sc);
       m.traverse(o=>{if(!o.isMesh)return;o.castShadow=true;o.receiveShadow=true;if(!o.geometry.attributes.normal)o.geometry.computeVertexNormals();const mt=o.material.clone();mt.metalness=0;mt.roughness=Math.max(mt.roughness||0,.8);mt.envMapIntensity=.3;
         (D.mat||[]).forEach(([re,col])=>{if(re.test(mt.name||''))mt.color.set(col);});mt.color.multiplyScalar(D.br);
