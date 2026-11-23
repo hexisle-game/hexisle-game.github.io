@@ -2648,7 +2648,7 @@ function veilIntro(tp,from,to){const v=$('#veil');if(!v)return;clearTimeout(W.ve
     const prog=()=>{const lf=Math.max(0,LDC.fin-L0.fin),fr=lf+LDC.n>0?Math.min(1,lf/(lf+LDC.n)):1;bootProg(.08+.62*fr+.2*painted);};
     const tick=()=>{const n=performance.now(),el=n-t0;prog();
       if((painted>=1&&LDC.n<=0&&n-LDC.t>450&&el>600)||el>12000){go();return;}W.veilT=setTimeout(tick,80);};
-    const go=()=>{try{W.r.compile(W.scene,W.cam);}catch(e){}bootProg(.95);W.veilHold=false;PERF.shadow=true;PERF.dirty=true;
+    const go=()=>{if(PERFV&&W.batchRun&&!(W.batchInfo&&W.batchInfo.state==='완료'))W.batchRun('암전 중');try{W.r.compile(W.scene,W.cam);}catch(e){}bootProg(.95);W.veilHold=false;PERF.shadow=true;PERF.dirty=true;
       // a few real frames (shadows, first draw) still under the black, then lift it and part the mist as it brightens
       let k=0;const fr=()=>{if(++k<4){requestAnimationFrame(fr);return;}bootProg(1);
         setTimeout(()=>{bootOff();setTimeout(()=>{const n=performance.now();v.classList.add('open');
@@ -3496,7 +3496,11 @@ function placeLabels(){if(!W.labels)return;const st=$('#stage');const w=st.clien
 // (no custom shader, opaque) are merged into one mesh per material; originals are only hidden. Animated things are left alone.
 // The board used ~1400 draw calls a frame, which is what made desktop CPUs (Mac) stall.
 function scheduleBatch(){if(!PERFV)return;clearTimeout(W.batchT);const gen=W.batchGen=(W.batchGen||0)+1;const t0=performance.now();
-  const tick=()=>{if(gen!==W.batchGen)return;const n=performance.now();if((LDC.n<=0&&n-LDC.t>900&&n-t0>1500)||n-t0>20000){try{batchStatic();}catch(e){console.warn('batch',e);}return;}W.batchT=setTimeout(tick,300);};W.batchT=setTimeout(tick,600);}
+  W.batchInfo={state:'대기'};
+  const run=why=>{if(why==='재정리'&&W.batchFin===LDC.fin)return;try{batchStatic();W.batchFin=LDC.fin;W.batchInfo.why=why;}catch(e){W.batchInfo={state:'오류',err:String(e&&e.message||e).slice(0,60)};console.warn('batch',e);}};W.batchRun=run;
+  const tick=()=>{if(gen!==W.batchGen)return;const n=performance.now();if((LDC.n<=0&&n-LDC.t>900&&n-t0>1500)||n-t0>8000){run(n-t0>8000?'8초':'로딩완료');
+      // late arrivals (models that finish loading after the first pass) get folded in by one more pass a little later
+      W.batchT=setTimeout(()=>{if(gen===W.batchGen)run('재정리');},9000);return;}W.batchT=setTimeout(tick,300);};W.batchT=setTimeout(tick,600);}
 function batchStatic(){const root=W.staticG;if(!root||!THREE.BufferGeometryUtils)return;const DEF=THREE.Material.prototype.onBeforeCompile;
   root.children.filter(c=>c.userData.batched).forEach(c=>{root.remove(c);c.geometry.dispose();});root.traverse(o=>{if(o.userData.batchHid){o.visible=true;delete o.userData.batchHid;}});
   const anim=new Set(),add=o=>{if(o&&o.isObject3D)anim.add(o);};
@@ -3525,7 +3529,7 @@ function batchStatic(){const root=W.staticG;if(!root||!THREE.BufferGeometryUtils
     let mg=null;try{mg=THREE.BufferGeometryUtils.mergeBufferGeometries(geos,false);}catch(e){}geos.forEach(g=>g.dispose());if(!mg){fail++;return;}
     const mesh=new THREE.Mesh(mg,B.m);mesh.castShadow=B.o0.castShadow;mesh.receiveShadow=B.o0.receiveShadow;mesh.renderOrder=B.o0.renderOrder;if(B.o0.customDepthMaterial)mesh.customDepthMaterial=B.o0.customDepthMaterial;
     mesh.userData.batched=1;mesh.raycast=()=>{};root.add(mesh);B.list.forEach(o=>{o.visible=false;o.userData.batchHid=1;});merged++;hidden+=B.list.length;});
-  W.batchInfo={merged,hidden,fail};try{PERF.dirty=true;PERF.shadow=true;}catch(e){}}
+  W.batchInfo={state:'완료',merged,hidden,fail,pend:LDC.n};try{PERF.dirty=true;PERF.shadow=true;}catch(e){}}
 function buildStatic(){
   const key=JSON.stringify(S.board.hexes)+JSON.stringify(S.board.ports);if(key===W.boardKey)return;W.boardKey=key;W.prev=null;W.robberFrom=null;if(W.pieces){W.pieces.clear();}W.dynG.clear();W.pflags={};W.anim.clear();W.robber=null;W.tkey=null;
   W.staticG.clear();scheduleBatch();W.mills=[];W.wmMix=[];W.wmK=[];W.tokens=[];W.infoG.clear();makeEnv();if(W.labels){W.labels=W.labels.filter(L=>{if(L.keep)return true;L.el.remove();return false;});}
@@ -3845,7 +3849,7 @@ function invalidate(shadow){PERF.dirty=true;PERF.act=performance.now();if(shadow
 function perfHud(force){let el=$('#perfHud');if(el&&!force){el.remove();clearInterval(PERF.hudT);return;}if(!el){el=document.createElement('div');el.id='perfHud';el.style.cssText='position:fixed;left:8px;bottom:8px;z-index:9500;padding:6px 9px;background:rgba(0,0,0,.72);color:#9f9;font:11px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre;pointer-events:none;border:1px solid rgba(160,255,160,.3)';document.body.appendChild(el);}
   let gpu='?';try{const gl=W.r.getContext(),ext=gl.getExtension('WEBGL_debug_renderer_info');gpu=ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER);gpu=String(gpu).replace(/ANGLE \(|\)$/g,'').slice(0,48);}catch(e){}
   let n0=PERF.nR||0,t0=performance.now();clearInterval(PERF.hudT);PERF.hudT=setInterval(()=>{const n=PERF.nR||0,t=performance.now();const fps=(n-n0)*1000/(t-t0);n0=n;t0=t;const i=W.r.info.render,c=W.r.domElement;
-    el.textContent=`fps ${fps.toFixed(0)}  render ${(PERF.rms||0).toFixed(1)}ms\ncalls ${i.calls}  tris ${(i.triangles/1000).toFixed(0)}k\nres ${c.width}x${c.height} (${(c.width*c.height/1e6).toFixed(1)}M)  dpr ${PERF.dpr}/${(window.devicePixelRatio||1)}\n${gpu}`;},500);}
+    const bi=W.batchInfo||{};el.textContent=`fps ${fps.toFixed(0)}  render ${(PERF.rms||0).toFixed(1)}ms\ncalls ${i.calls}  tris ${(i.triangles/1000).toFixed(0)}k\nbatch ${PERFV?(bi.state||'-')+(bi.merged!=null?' '+bi.hidden+'→'+bi.merged:'')+(bi.why?' ('+bi.why+')':'')+(bi.err?' '+bi.err:''):'off'}  loading ${LDC.n}\nres ${c.width}x${c.height} (${(c.width*c.height/1e6).toFixed(1)}M)  dpr ${PERF.dpr}/${(window.devicePixelRatio||1)}\n${gpu}`;},500);}
 if(/[?&]perf=1/.test(location.search))setTimeout(()=>{try{perfHud(true);}catch(e){}},3000);
 function setDPR(v){PERF.dpr=v;W.r.setPixelRatio(v);if(W.comp)W.comp.setPixelRatio(v);fitCam(false);PERF.shadow=true;PERF.dirty=true;}
 function loop(t){requestAnimationFrame(loop);if(!W.ok||document.hidden)return;if(W.veilHold)return;if(ui.splash||document.documentElement.classList.contains('on-title')){const n=performance.now();if(n-(W.titleR||0)<1000)return;W.titleR=n;PERF.dirty=true;}const s=t/1000;const moved=W.ctl.update();
