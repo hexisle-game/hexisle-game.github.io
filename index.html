@@ -3908,7 +3908,8 @@ function loop(t){requestAnimationFrame(loop);if(!W.ok||document.hidden)return;if
   if(!anim&&!PERF.dirty&&!ambientDue)return;
   if(PERFV&&!anim&&now0-(PERF.lastR||0)<31)return;
   if(!anim&&!PERF.dirty)PERF.ambient=now0;
-  const movingObj=DICE.list.length||W.anim.size;if(movingObj)PERF.shadow=true;
+  // tokens dropping in during the entry move every frame: keep their shadows in step (a stale map briefly shadowed the token from its own old spot)
+  const dropping=W.introFX&&now0>=W.introFX.t0+900&&now0<=W.introFX.t0+900+W.introFX.tk.length*40+520;const movingObj=DICE.list.length||W.anim.size||dropping;if(movingObj)PERF.shadow=true;
   // test page: shadows re-rendered for ambient movers (boats, birds, carts) at most ~6x/s; player actions (pieces, dice) stay immediate
   if(PERF.shadow&&(movingObj||!PERFV||now0-(PERF.lastSh||0)>160)){W.r.shadowMap.needsUpdate=true;PERF.shadow=false;PERF.lastSh=now0;}PERF.dirty=false;
   if(W.waterTime)W.waterTime.value=(s*(SEA2?2.6:1))%2400;
