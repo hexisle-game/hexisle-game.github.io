@@ -2677,7 +2677,7 @@ function bootOn(slow){let b=$('#boot');if(!b){b=document.createElement('div');b.
   const im=b.querySelector('img');if(!im.src)im.src=window.LOGO_URL;
   if(b.classList.contains('on'))return 0;W.bootP=0;b.classList.add('on','inst');b.classList.toggle('slow',!!slow);void b.offsetWidth;b.classList.remove('inst');b.classList.add('vis');return slow?1300:380;}
 function bootProg(p){if(p>W.bootP)W.bootP=p;}
-function bootOff(){const b=$('#boot');if(!b)return;b.classList.remove('vis');clearTimeout(W.bootT);W.bootT=setTimeout(()=>b.classList.remove('on'),700);}
+function bootOff(){const b=$('#boot');if(!b)return;b.classList.remove('vis');clearTimeout(W.bootT);W.bootT=setTimeout(()=>b.classList.remove('on','slow'),700);}
 // new game in place: the (already painted) mist rolls back in while the screen darkens; without a painted set it simply fades to black
 function veilGather(){const v=$('#veil'),C=W.veilCache;if(!v||!C||C.key!==innerWidth+'x'+innerHeight)return false;clearTimeout(W.veilT);v.innerHTML='';C.nodes.forEach(n=>v.appendChild(n));
   v.className='on open inst gath';void v.offsetWidth;v.classList.remove('inst');v.classList.remove('open');return true;}
@@ -4235,12 +4235,12 @@ function showOver(){const order=S.players.map((_,i)=>i).sort((a,b)=>vp(b,true)-v
    <div class="box"><h1><img src="assets/result/${won?'victory':'gameover'}.webp" alt="${won?'VICTORY':'GAME OVER'}"></h1>
    <div class="sub">${won?'':`<b style="color:${muteCol(W2.color)}">${W2.name}</b>이(가) `}${S.turn}바퀴 만에 섬의 영주가 되었어요.</div>
    <div class="tbl">${order.map((i,k)=>{const p=S.players[i];const vc=p.dev.filter(d=>d.t==='vp').length;return `<div style="animation-delay:${2.1+k*.22}s"><span class="rk">${k+1}</span>${avHTML(p,'avr2')}<span class="nm">${p.name}${vc?` <small>(승점 카드 ${vc}장)</small>`:''}</span><b>${vp(i,true)}점</b></div>`;}).join('')}</div>
-   ${RECV?`<div class="rkgain">${won?'+'+(S.mp?3:({easy:1,normal:2,hard:3}[S.diff]||2))+'점 · 주간 9위 <em>▲2</em>':'점수 변동 없음 · 주간 9위'}</div>`:''}<div class="btns"><button class="btn" id="oClose">보드 보기</button>${S.mp?'<button class="btn" id="oLeave">나가기</button>':''}${RECV?'<button class="btn rkb" id="oRank">랭킹 보기</button>':''}<button class="btn sub" id="oNew">새 게임</button></div></div>`;
+   ${RECV?`<div class="rkgain">${won?'+'+(S.mp?3:({easy:1,normal:2,hard:3}[S.diff]||2))+'점 · 주간 9위 <em>▲2</em>':'점수 변동 없음 · 주간 9위'}</div>`:''}<div class="btns"><button class="btn" id="oClose">보드 보기</button>${S.mp?'<button class="btn" id="oLeave">나가기</button>':''}${RECV?'<button class="btn rkb" id="oRank">랭킹 보기</button>':''}<button class="btn sub" id="oNew">${S.mp?'완료':'새 게임'}</button></div></div>`;
   document.body.appendChild(el);
   if($('#oRank'))$('#oRank').onclick=()=>{showRecords(S.mp?'multi':'single','week');};
   $('#oClose').onclick=()=>{ui.modal='closed-over';el.classList.add('out');setTimeout(()=>el.remove(),450);};
   if($('#oLeave'))$('#oLeave').onclick=()=>{if(window.NET&&NET.on)MP.confirmLeave();};
-  $('#oNew').onclick=()=>{if(window.NET&&NET.on){if(NET.isHost)MP.ref('meta/status').set('lobby');else MP.toast('방장이 새 게임을 시작할 수 있어요.');return;}el.remove();ui.modal=null;startNew();};}
+  $('#oNew').onclick=()=>{if(window.NET&&NET.on){MP.ref('meta/status').set('lobby');return;}el.remove();ui.modal=null;startNew();};}
 function showTrade(tab){tab=tab||'bank';const me=S.players[ME];const rat=ratios(ME);
   const st={give:arguments[1]||null,get:null,pg:emptyRes(),pr:emptyRes(),resp:null};if(myOffer()){Object.assign(st.pg,S.offer.give);Object.assign(st.pr,S.offer.get);if(!arguments[0])tab='player';}
   const draw=()=>{let body='',foot='';
