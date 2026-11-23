@@ -118,9 +118,9 @@ auth.onAuthStateChanged(async u=>{if(sub){sub();sub=null;}
   $('#out').hidden=!u||u.isAnonymous;$('#who').textContent=u&&!u.isAnonymous?(u.displayName||''):'';
   if(!u||u.isAnonymous){gate(`<h2>관리자 로그인</h2><p>오류 신고는 관리자만 볼 수 있어요.<br>등록된 구글 계정으로 로그인해 주세요.</p><button class="btn pri" id="login">Google 계정으로 로그인</button>`);
     $('#login').onclick=()=>{const pv=new firebase.auth.GoogleAuthProvider();auth.signInWithPopup(pv).catch(e=>{if(/popup/i.test(e.code||''))auth.signInWithRedirect(pv);else gate(`<h2>로그인하지 못했어요</h2><p>${esc(e.code||e.message)}</p><button class="btn" onclick="location.reload()">다시 시도</button>`);});};return;}
-  let ok=false;try{ok=(await db.ref('admins/'+u.uid).get()).val()===true;}catch(e){}
-  if(!ok){gate(`<h2>관리자 등록이 필요해요</h2><p>이 계정은 아직 관리자로 등록되지 않았어요.</p>
-    <ol><li>Firebase 콘솔 → Realtime Database → <b>데이터</b> 탭</li><li>맨 위 항목 옆 <b>+</b>로 <b>admins</b> 항목을 만들고</li><li>그 아래에 이름은 아래 UID, 값은 <b>true</b>로 추가</li></ol>
+  // admin = whoever the database rules let read the feedback list (the rules name the admin's UID)
+  let ok=false;try{await db.ref('feedback').limitToLast(1).get();ok=true;}catch(e){}
+  if(!ok){gate(`<h2>관리자 등록이 필요해요</h2><p>이 계정은 아직 관리자로 등록되지 않았어요.<br>아래 UID를 복사해서 Firebase 보안 규칙의 <b>관리자_UID</b> 자리에 넣고 게시해 주세요.</p>
     <code id="uid">${esc(u.uid)}</code><button class="btn sm" id="cp">UID 복사</button>&nbsp;<button class="btn sm" onclick="location.reload()">다시 확인</button>`);
     $('#cp').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(u.uid).then(()=>toast('복사했어요'));};return;}
   start();});
