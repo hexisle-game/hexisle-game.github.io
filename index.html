@@ -632,8 +632,32 @@ header.top .tools .ib[hidden]{display:none}
 .setmenu .mi.tg[aria-checked=true]::after{background:#b8893a radial-gradient(circle at 25px 9px,#fff6e0 6px,transparent 6.5px)}
 .setmenu .msep{height:1px;margin:5px 4px;background:rgba(255,255,255,.12)}
 .setmenu .mrow{cursor:default}
+.setpanel .msep2{flex:none;height:0;border-top:1px solid rgba(233,196,122,.135)}html body .setpanel .msep2+.mi,html body .setpanel .msep2+.mi[hidden]+.mi,html body .setpanel .msep2+.mi[hidden]+.mi[hidden]+.mi{border-top:0!important}
+/* feedback popup, portrait phones (typing is easier upright) */
+html.fbp #rotate,html.fbp #tbench{display:none!important}
+html.fbp body .overlay{padding:0!important}
+html.fbp body .sheet.sheet-frame{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;padding:8px 18px 14px!important;border-radius:0!important}
+html.fbp .sheet-frame .fhead{padding:6px 52px 6px 0!important}
+html.fbp .sheet-frame .fhead h3{font-size:22px!important}
+html.fbp .sheet-frame .fbody{display:flex!important;flex-direction:column;padding-top:4px!important;min-height:0}
+html.fbp .sheet-frame .fleft{border:0!important;border-image:none!important;padding:0!important;overflow:visible;flex:none}
+html.fbp .sheet-feedback .mtabs{display:flex!important;flex-direction:row!important;gap:22px!important;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:0!important;margin:0 -18px 0 0}
+html.fbp .sheet-feedback .mtabs::-webkit-scrollbar{display:none}
+html.fbp .sheet-feedback .mtab{width:auto!important;flex:none;padding:10px 0!important;font-size:16px!important;white-space:nowrap;gap:4px!important}
+html.fbp .sheet-feedback .mtab .orn{width:14px;height:14px}
+html.fbp .sheet-frame .fright{padding:0!important;flex:1;min-height:0;overflow-y:auto}
+html.fbp .sheet-frame .frows{padding-top:12px!important;gap:14px!important}
+html.fbp .sheet-frame .flab{font-size:15px!important}
+html.fbp .sheet-feedback .fb-ta textarea{height:28vh;font-size:16px}
+html.fbp .sheet-feedback .fb-th,html.fbp .sheet-feedback .fb-add{width:72px;height:72px}
+html.fbp .sheet-feedback .fb-note{font-size:12px}
+html.fbp .sheet-frame .ffoot{flex-direction:column;justify-content:center;align-items:center;gap:10px;padding-top:14px}
+html.fbp .sheet-frame .ffoot .fhint{font-size:12.5px!important;text-align:center!important;line-height:1.5}
+html.fbp .sheet-feedback .fbn{display:block}
+html.fbp .sheet-frame .ffoot .btn{min-width:170px}
 /* feedback popup (test) */
-.sheet-feedback .fb-cat{display:block}
+.sheet-feedback .frow{padding-left:0!important;padding-right:0!important}
+.sheet-feedback .frow .flab{margin:0 0 4px!important;line-height:1.3}.sheet-feedback .fb-ta textarea{margin:0!important}
 .sheet-feedback .frows{display:flex;flex-direction:column;gap:10px}
 .sheet-feedback .frow.fb-ta,.sheet-feedback .frow.fb-img{display:block;height:auto!important;min-height:0}
 .sheet-feedback .fb-ta textarea{display:block;width:100%!important;max-width:none!important;height:150px;resize:none;line-height:1.55;font-size:15px}
@@ -649,7 +673,7 @@ html.phone .sheet-feedback .fb-ta textarea{height:92px;font-size:13px}
 html.phone .sheet-feedback .fb-th,html.phone .sheet-feedback .fb-add{width:58px;height:58px}
 html.phone .sheet-feedback .frows{gap:6px}
 
-html body .setpanel .mi.mrow{height:66px;padding-top:8px!important}html.phone body .setpanel .mi.mrow{height:52px}
+html body .setpanel .mi.mrow{height:62px;padding-top:4px!important}html.phone body .setpanel .mi.mrow{height:48px}
 .setmenu .seg{display:inline-flex;border:1px solid rgba(255,255,255,.18);border-radius:2px}
 .setmenu .seg button{padding:4px 9px;background:none;border:0;color:#a39c90;font:inherit;font-size:12.5px;cursor:pointer}
 .setmenu .seg button+button{border-left:1px solid rgba(255,255,255,.18)}
@@ -1593,7 +1617,7 @@ html body .stagebtns .tbtn[data-act="trade"]:disabled,html body .stagebtns .tbtn
 /* credits link: PC only, pinned to the bottom of the settings panel */
 .setpanel .credit-link{margin-top:auto;align-self:flex-start;margin-left:36px;padding:14px 0 0;background:none;border:0;font:inherit;font-size:12px;letter-spacing:.04em;color:#8f7f63;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .setpanel .credit-link:hover{color:#e9c47a}
-html.phone .setpanel .credit-link{display:none}
+html.phone .setpanel .credit-link{font-size:10px;margin-left:26px;padding-top:8px}
 .credits{text-align:left;font-size:14px;line-height:1.7;color:#e6dccb;margin:6px 4px 0}
 .credits a{color:#e9c47a}.credits b{color:#f3dfae}
 .credits .cmuted{color:#a8977a;font-size:12.5px;margin-top:12px!important}
@@ -2040,16 +2064,18 @@ html.phone body .emptyhand{font-size:11.5px!important;color:rgba(166,155,139,.72
     <div class="setwrap">
       <button id="setBtn" class="ib" aria-label="설정" aria-haspopup="true" aria-expanded="false" data-tip="설정"><img class="uico" src="assets/ui2/settings.webp" alt=""></button>
       <svg width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true"><defs><linearGradient id="ggs" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbe6b4"/><stop offset=".55" stop-color="#d9ac68"/><stop offset="1" stop-color="#a87a42"/></linearGradient></defs></svg><div id="setMenu" class="setmenu" hidden><div class="setdim" id="setDim"></div><nav class="setpanel" role="menu" aria-label="설정"><div class="sethead"><span>설정</span><button class="setx" id="setX" aria-label="닫기"></button></div>
-        <button id="newBtn" class="mi" role="menuitem">새 게임</button><button id="homeBtn" class="mi" role="menuitem" hidden>메인으로 가기</button>
         <button id="rulesBtn" class="mi" role="menuitem">게임 방법</button>
         <button id="sndBtn" class="mi" role="menuitem">사운드</button>
-        <button id="fbBtn" class="mi" role="menuitem" hidden>의견 보내기</button>
-        <button id="leaveBtn" class="mi" role="menuitem" hidden>방 나가기</button>
         <button id="tipBtn" class="mi tg" role="menuitemcheckbox">툴팁</button>
         <button id="hintBtn" class="mi tg" role="menuitemcheckbox" hidden style="display:none">힌트</button>
         <div class="msep"></div>
         <button id="gfxBtn" class="mi tg" role="menuitemcheckbox">고화질 그래픽</button>
         <div class="mi mrow"><span>AI 속도</span><span class="seg" id="speedSeg"><button data-sp="느림">느림</button><button data-sp="보통">보통</button><button data-sp="빠름">빠름</button></span></div>
+        <button id="fbBtn" class="mi" role="menuitem" hidden>의견 보내기</button>
+        <div class="msep2"></div>
+        <button id="newBtn" class="mi" role="menuitem">새 게임</button>
+        <button id="homeBtn" class="mi" role="menuitem" hidden>메인으로 가기</button>
+        <button id="leaveBtn" class="mi" role="menuitem" hidden>방 나가기</button>
         <button id="creditBtn" class="credit-link">Credits &amp; Licenses</button>
       </div>
     </div>
@@ -4247,7 +4273,7 @@ function bindCount(){if($('#col'))$('#col').onclick=e=>{const b=e.target.closest
   $('#dif').onclick=e=>{const b=e.target.closest('[data-d]');if(!b)return;ui.diff=b.dataset.d;saveUi();$('#dif').querySelectorAll('[data-d]').forEach(x=>x.classList.toggle('active',x.dataset.d===ui.diff));};}
 function migrate(){if(!S.n){S.n=S.players.length;S.order=[...Array(S.n).keys(),...[...Array(S.n).keys()].reverse()];}if(S.logSeq===undefined)S.logSeq=0;if(!S.diff)S.diff='normal';}
 // ---- title ambience: logo shine placement + light videos (flare on the sun, twinkles in the sky) ----
-function titleFx(){const lg=$('#tLogo'),sh=$('#tShine');const place=()=>{if(!lg.complete||!lg.naturalWidth)return;const r=lg.getBoundingClientRect(),pr=lg.offsetParent.getBoundingClientRect(),k=PH.on?PH.k:1;
+function titleFx(){const lg=$('#tLogo'),sh=$('#tShine');const place=()=>{if(!lg.complete||!lg.naturalWidth||!lg.offsetParent)return;const r=lg.getBoundingClientRect(),pr=lg.offsetParent.getBoundingClientRect(),k=PH.on?PH.k:1;
     Object.assign(sh.style,{left:lg.offsetLeft-lg.offsetWidth/2+'px',top:lg.offsetTop+'px',width:lg.offsetWidth+'px',height:lg.offsetHeight+'px'});const u=`url(${lg.src})`;if(sh.style.webkitMaskImage!==u){sh.style.webkitMaskImage=u;sh.style.maskImage=u;}};
   if(lg.complete)place();else lg.addEventListener('load',place,{once:true});if(!titleFx.rs){titleFx.rs=1;addEventListener('resize',()=>setTimeout(place,150));}
   document.querySelectorAll('#title video').forEach(v=>{if(v.classList.contains('ttwk'))v.playbackRate=.45;if(v.paused){const p=v.play();p&&p.catch&&p.catch(()=>{});}});
@@ -4442,17 +4468,19 @@ function fbShrink(file){return new Promise((res,rej)=>{const u=URL.createObjectU
   res(out);};im.onerror=()=>{URL.revokeObjectURL(u);rej(new Error('img'));};im.src=u;});}
 function fbInfo(){const g=(typeof S!=='undefined'&&S)?{phase:S.phase,turn:S.turn||0,players:(S.players||[]).length,mp:!!S.mp}:{};
   return {ua:navigator.userAgent.slice(0,300),scr:innerWidth+'x'+innerHeight+'@'+(devicePixelRatio||1),phone:document.documentElement.classList.contains('phone'),fs:!!(document.fullscreenElement||document.webkitFullscreenElement),ver:document.lastModified,url:location.pathname+location.search,lang:navigator.language,game:g};}
+const FBNOTE='<span class="fbn">기기·화면 정보가 함께 전송돼요.</span> <span class="fbn">개인 정보는 적지 말아 주세요.</span>';
+function fbMsg(t){const m=$('#fMsg');if(!m)return;if(t)m.textContent=t;else m.innerHTML=FBNOTE;}
 function showFeedback(){
   const left=`<div class="mtabs fb-cat">${FBCAT.map(([k,l])=>`<button class="mtab${k===FB.cat?' on':''}" data-c="${k}">${l}<img class="orn" src="${TITLEIMG.orn1}" alt=""></button>`).join('')}</div>`;
-  const ph={bug:'어떤 상황에서 어떤 문제가 생겼는지 적어 주세요.\n(예: 도로를 지으려고 눌렀는데 아무 반응이 없어요)',idea:'더 좋아졌으면 하는 점을 자유롭게 적어 주세요.',etc:'하고 싶은 말을 자유롭게 적어 주세요.'}[FB.cat];
+  const ph={bug:'어떤 상황에서 어떤 문제가 생겼는지 적어 주세요.\n(예: 도로를 지으려고 눌렀는데 아무 반응이 없어요)',idea:'더 좋아졌으면 하는 점을 자유롭게 적어 주세요.',etc:'기타 문의사항을 적어 주세요.'}[FB.cat];
   const right=`<div class="frow fb-ta"><div class="flab">내용 <span class="fb-cnt" id="fbCnt">${FB.text.length}/1000</span></div><textarea class="tin" id="fbText" maxlength="1000" placeholder="${ph}">${FB.text.replace(/</g,'&lt;')}</textarea></div>
-    <div class="frow fb-img"><div class="flab">사진 첨부 (최대 3장)</div><div class="fb-thumbs" id="fbThumbs"></div><p class="fb-note">기기·화면 정보가 함께 전송돼요. 개인 정보는 적지 말아 주세요.</p></div>`;
-  const foot=`<p class="fhint" id="fMsg"></p><button class="btn primary" id="fGo">보내기</button>`;
+    <div class="frow fb-img"><div class="flab">사진 첨부 (최대 3장)</div><div class="fb-thumbs" id="fbThumbs"></div></div>`;
+  const foot=`<p class="fhint" id="fMsg">${FBNOTE}</p><button class="btn primary" id="fGo">보내기</button>`;
   frame('feedback','의견 보내기','',left,right,foot);
   const thumbs=()=>{const t=$('#fbThumbs');if(!t)return;t.innerHTML=FB.imgs.map((d,i)=>`<div class="fb-th" style="background-image:url(${d})"><button data-i="${i}" aria-label="사진 빼기">×</button></div>`).join('')+(FB.imgs.length<3?`<button class="fb-add" id="fbAdd"><b>+</b>사진</button>`:'');
     t.querySelectorAll('.fb-th button').forEach(b=>b.onclick=()=>{FB.imgs.splice(+b.dataset.i,1);thumbs();});
     const a=$('#fbAdd');if(a)a.onclick=()=>{const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.multiple=true;inp.onchange=async()=>{const fs=[...inp.files].slice(0,3-FB.imgs.length);$('#fMsg').textContent=fs.length?'사진을 준비하는 중…':'';
-      for(const f of fs){try{FB.imgs.push(await fbShrink(f));}catch(e){$('#fMsg').textContent='읽을 수 없는 사진이 있어요.';}}if($('#fMsg').textContent==='사진을 준비하는 중…')$('#fMsg').textContent='';thumbs();};inp.click();};};
+      for(const f of fs){try{FB.imgs.push(await fbShrink(f));}catch(e){$('#fMsg').textContent='읽을 수 없는 사진이 있어요.';}}if($('#fMsg').textContent==='사진을 준비하는 중…')fbMsg();thumbs();};inp.click();};};
   thumbs();
   const ta=$('#fbText');ta.oninput=()=>{FB.text=ta.value;$('#fbCnt').textContent=ta.value.length+'/1000';};
   document.querySelectorAll('.fb-cat .mtab').forEach(b=>b.onclick=()=>{FB.text=ta.value;FB.cat=b.dataset.c;showFeedback();const sh=$('#sheet');sh.classList.remove('fin','fin2');void sh.offsetWidth;sh.classList.add('fin2');clearTimeout(ui.fin2T);ui.fin2T=setTimeout(()=>sh.classList.remove('fin2'),900);});
@@ -4466,7 +4494,8 @@ function showFeedback(){
       try{localStorage.setItem('fb-last',Date.now());}catch(e){}FB.text='';FB.imgs=[];
       closeModal();openDialog(`<h3>보내 주셔서 고마워요!</h3><p>남겨 주신 의견은 꼼꼼히 확인할게요.</p><div class="row"><button class="btn sub" id="fbOk">확인</button></div>`);$('#fbOk').onclick=closeDialog;}
     catch(e){console.warn('feedback',e);go.disabled=false;m.textContent='보내지 못했어요. 잠시 후 다시 시도해 주세요.';}};}
-$('#fbBtn').onclick=()=>showFeedback();
+$('#fbBtn').onclick=()=>{showFeedback();applyPhone();};
+{const _cm=closeModal;closeModal=function(){const was=ui.modal==='feedback';const r=_cm.apply(this,arguments);if(was)try{applyPhone();}catch(e){}return r;};}
 $('#homeBtn').onclick=()=>{if(window.NET&&NET.on)return MP.confirmLeave();openDialog(`<h3>메인으로 갈까요?</h3><p>진행 중인 게임은 끝나고, 첫 화면으로 돌아가요.</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">메인으로</button></div>`);
   $('#cNo').onclick=()=>{closeDialog();};$('#cYes').onclick=()=>{closeDialog();closeModal();showStart();resetBehind();};};
 $('#newBtn').onclick=()=>{if(window.NET&&NET.on)return MP.confirmLeave();if(MENU2){openDialog(`<h3>새 게임을 시작할까요?</h3><p>진행 중인 게임은 끝나고, 새 섬에서 다시 시작해요.</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">새 게임</button></div>`);
@@ -4511,7 +4540,7 @@ function evalMQ(txt,w,h){if(/prefers|hover|pointer|orientation/.test(txt))return
 
 (function(){if(!matchMedia('(hover:none)').matches)return;const strip=rules=>{for(let i=rules.length-1;i>=0;i--){const r=rules[i];if(r.cssRules&&!r.selectorText){strip(r.cssRules);continue;}if(!r.selectorText||r.selectorText.indexOf(':hover')<0)continue;const keep=r.selectorText.split(',').filter(x=>x.indexOf(':hover')<0);if(keep.length)r.selectorText=keep.join(',');else r.parentStyleSheet&&r.parentRule?r.parentRule.deleteRule(i):r.parentStyleSheet.deleteRule(i);}};for(const sh of document.styleSheets){try{strip(sh.cssRules);}catch(e){}}})();
 function applyPhone(){const coarse=matchMedia('(pointer:coarse)').matches;const small=Math.min(innerWidth,innerHeight)<700;const land=innerWidth>innerHeight;
-  const portraitBlock=coarse&&small&&!land;document.documentElement.classList.toggle('portrait-block',portraitBlock);$('#rotate').hidden=!portraitBlock;
+  const fbp=coarse&&small&&!land&&typeof ui!=='undefined'&&ui.modal==='feedback';document.documentElement.classList.toggle('fbp',fbp);const portraitBlock=coarse&&small&&!land&&!fbp;document.documentElement.classList.toggle('portrait-block',portraitBlock);$('#rotate').hidden=!portraitBlock;
   // tablets / unfolded foldables that can't fit the desktop HUD get the phone layout in a centred letterbox
   const lb=coarse&&!small&&(!(innerWidth>=1101&&innerHeight>=640)||innerWidth/innerHeight<1.6);
   const on=(coarse&&small&&land)||lb;const VH=440;const BH=lb?Math.min(innerHeight,Math.round(innerWidth/1.95)):innerHeight;const k=on?BH/VH:1;const vw=Math.round(innerWidth/k);const oy=lb?Math.round((innerHeight-BH)/2):0;
@@ -4527,7 +4556,7 @@ function alignBtns(){try{alignHeads();}catch(e){}if(document.documentElement.cla
 function fitChrome(){const h=document.querySelector('header.top');if(h)document.documentElement.style.setProperty('--chrome',(h.offsetHeight+16+40)+'px');
   {const tb=$('#turnbar'),sd=document.querySelector('.side'),st0=$('#stage');if(tb&&sd&&st0){if(HUDQ.matches){if(tb.parentNode!==st0)st0.appendChild(tb);}else if(tb.parentNode!==sd)sd.insertBefore(tb,sd.firstChild);}}
   const sb=$('#stagebtns'),tr=$('#tray'),st=$('#stage');if(sb&&tr&&st){if(HUDQ.matches){if(sb.parentNode!==tr)tr.appendChild(sb);}else if(sb.parentNode!==st)st.appendChild(sb);}
-  {const lc=$('#leftcol');for(const id of ['dicebox','coach','toast']){const e=$('#'+id);if(!e)continue;if(!e._home)e._home={p:e.parentNode,n:e.nextSibling};if(HUDQ.matches){if(e.parentNode!==lc)lc.appendChild(e);}else if(e.parentNode!==e._home.p)e._home.p.insertBefore(e,e._home.n);}}
+  {const lc=$('#leftcol');for(const id of ['dicebox','coach','toast']){const e=$('#'+id);if(!e)continue;if(!e._home)e._home={p:e.parentNode,n:e.nextSibling};if(HUDQ.matches){if(e.parentNode!==lc)lc.appendChild(e);}else if(e.parentNode!==e._home.p){const n=e._home.n;if(n&&n.parentNode===e._home.p)e._home.p.insertBefore(e,n);else e._home.p.appendChild(e);}}}
   if(tr)document.documentElement.style.setProperty('--trayH',(HUDQ.matches?tr.offsetHeight:0)+'px');
   alignBtns();
   if(sb)document.documentElement.style.setProperty('--sbH',(HUDQ.matches?sb.offsetHeight:0)+'px');
