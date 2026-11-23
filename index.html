@@ -632,6 +632,23 @@ header.top .tools .ib[hidden]{display:none}
 .setmenu .mi.tg[aria-checked=true]::after{background:#b8893a radial-gradient(circle at 25px 9px,#fff6e0 6px,transparent 6.5px)}
 .setmenu .msep{height:1px;margin:5px 4px;background:rgba(255,255,255,.12)}
 .setmenu .mrow{cursor:default}
+/* feedback popup (test) */
+.sheet-feedback .fb-cat{display:block}
+.sheet-feedback .frows{display:flex;flex-direction:column;gap:10px}
+.sheet-feedback .frow.fb-ta,.sheet-feedback .frow.fb-img{display:block;height:auto!important;min-height:0}
+.sheet-feedback .fb-ta textarea{display:block;width:100%!important;max-width:none!important;height:150px;resize:none;line-height:1.55;font-size:15px}
+.sheet-feedback .fb-cnt{float:right;font-size:12px;color:#8f7f63;font-weight:400}
+.sheet-feedback .fb-thumbs{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap}
+.sheet-feedback .fb-th{position:relative;width:84px;height:84px;border:1px solid rgba(233,196,122,.35);background:rgba(0,0,0,.35) center/cover no-repeat;border-radius:2px}
+.sheet-feedback .fb-th button{position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;border:1px solid rgba(233,196,122,.6);background:#2a1d12;color:#e9c47a;font-size:14px;line-height:1;cursor:pointer;padding:0}
+.sheet-feedback .fb-add{width:84px;height:84px;border:1px dashed rgba(233,196,122,.45);background:rgba(0,0,0,.2);color:#c9b48a;font:inherit;font-size:13px;line-height:1.35;cursor:pointer;border-radius:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.sheet-feedback .fb-add b{font-size:24px;font-weight:400;color:#e9c47a;line-height:1}
+.sheet-feedback .fb-add:hover{background:rgba(233,196,122,.08)}
+.sheet-feedback .fb-note{font-size:12.5px;color:#8f7f63;margin:2px 0 0}
+html.phone .sheet-feedback .fb-ta textarea{height:92px;font-size:13px}
+html.phone .sheet-feedback .fb-th,html.phone .sheet-feedback .fb-add{width:58px;height:58px}
+html.phone .sheet-feedback .frows{gap:6px}
+
 html body .setpanel .mi.mrow{height:66px;padding-top:8px!important}html.phone body .setpanel .mi.mrow{height:52px}
 .setmenu .seg{display:inline-flex;border:1px solid rgba(255,255,255,.18);border-radius:2px}
 .setmenu .seg button{padding:4px 9px;background:none;border:0;color:#a39c90;font:inherit;font-size:12.5px;cursor:pointer}
@@ -2026,6 +2043,7 @@ html.phone body .emptyhand{font-size:11.5px!important;color:rgba(166,155,139,.72
         <button id="newBtn" class="mi" role="menuitem">새 게임</button><button id="homeBtn" class="mi" role="menuitem" hidden>메인으로 가기</button>
         <button id="rulesBtn" class="mi" role="menuitem">게임 방법</button>
         <button id="sndBtn" class="mi" role="menuitem">사운드</button>
+        <button id="fbBtn" class="mi" role="menuitem" hidden>의견 보내기</button>
         <button id="leaveBtn" class="mi" role="menuitem" hidden>방 나가기</button>
         <button id="tipBtn" class="mi tg" role="menuitemcheckbox">툴팁</button>
         <button id="hintBtn" class="mi tg" role="menuitemcheckbox" hidden style="display:none">힌트</button>
@@ -4260,7 +4278,7 @@ function beams(s){if(window.FXOFF&&FXOFF.includes('beams'))return;const cv=$('#t
 
 // settings menu icons in the header icon style (gold gradient stroke over a dark offset outline); preview: ?icons=2
 const SICO={
- homeBtn:'<path d="M3.5 11.5 L12 4 L20.5 11.5"/><path d="M6 9.5 V20 H18 V9.5"/><path d="M10 20 V14.5 H14 V20"/>',newBtn:'<path d="M12 2.8 L19.8 7.3 L19.8 16.7 L12 21.2 L4.2 16.7 L4.2 7.3 Z"/><path d="M12 8.5 V15.5 M8.5 12 H15.5"/>',
+ fbBtn:'<rect x="3.5" y="6" width="17" height="12.5" rx="1.5"/><path d="M4 7.2 L12 13.2 L20 7.2"/>',homeBtn:'<path d="M3.5 11.5 L12 4 L20.5 11.5"/><path d="M6 9.5 V20 H18 V9.5"/><path d="M10 20 V14.5 H14 V20"/>',newBtn:'<path d="M12 2.8 L19.8 7.3 L19.8 16.7 L12 21.2 L4.2 16.7 L4.2 7.3 Z"/><path d="M12 8.5 V15.5 M8.5 12 H15.5"/>',
  rulesBtn:'<path d="M12 6.5 C9.5 4.8 6.5 4.6 3.5 5.2 V18.4 C6.5 17.8 9.5 18 12 19.7 C14.5 18 17.5 17.8 20.5 18.4 V5.2 C17.5 4.6 14.5 4.8 12 6.5 Z"/><path d="M12 6.5 V19.7"/>',
  sndBtn:'<path d="M4 9.5 H7.5 L12 5.5 V18.5 L7.5 14.5 H4 Z"/><path d="M15.5 9 C16.8 10.6 16.8 13.4 15.5 15 M18.2 6.6 C21 9.6 21 14.4 18.2 17.4"/>',
  leaveBtn:'<path d="M13.5 4 H6 V20 H13.5"/><path d="M10.5 12 H20.5 M17 8.5 L20.5 12 L17 15.5"/>',
@@ -4269,7 +4287,7 @@ const SICO={
  gfxBtn:'<path d="M6.5 5 H17.5 L21 9.5 L12 20 L3 9.5 Z"/><path d="M3 9.5 H21"/>',
  aiSpeed:'<path d="M6.5 3.5 H17.5 M6.5 20.5 H17.5"/><path d="M7.5 3.5 C7.5 8.5 12 9.5 12 12 C12 14.5 7.5 15.5 7.5 20.5 M16.5 3.5 C16.5 8.5 12 9.5 12 12 C12 14.5 16.5 15.5 16.5 20.5"/>'};
 function sicoSVG(k){const p=SICO[k];return `<svg class="sico" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g stroke="#3a2412" stroke-width="3.2" transform="translate(.7 .9)" opacity=".85">${p}</g><g stroke="url(#ggs)" stroke-width="2.2">${p}</g></svg>`;}
-function addSetIcons(){['newBtn','homeBtn','rulesBtn','sndBtn','leaveBtn','tipBtn','hintBtn','gfxBtn'].forEach(id=>{const b=document.getElementById(id);if(b&&!b.querySelector('.sico'))b.insertAdjacentHTML('afterbegin',sicoSVG(id));});
+function addSetIcons(){['newBtn','homeBtn','fbBtn','rulesBtn','sndBtn','leaveBtn','tipBtn','hintBtn','gfxBtn'].forEach(id=>{const b=document.getElementById(id);if(b&&!b.querySelector('.sico'))b.insertAdjacentHTML('afterbegin',sicoSVG(id));});
   const sp=document.querySelector('#setMenu .mrow');if(sp&&!sp.querySelector('.sico'))sp.insertAdjacentHTML('afterbegin',sicoSVG('aiSpeed'));document.documentElement.classList.add('sico-on');}
 (function(){const q=new URLSearchParams(location.search).get('fx')||'-sun,-beams';const off=q==='none'?['beams','dust','twinkle','noise','sun','shine']:q.split(',').filter(x=>x[0]==='-').map(x=>x.slice(1));
   const sel={beams:'.title .tbeams',dust:'.title .tmotes',twinkle:'.title .ttwk',noise:'.title .tnoise',sun:'.title .tsun',shine:'.title .tshine'};
@@ -4402,7 +4420,7 @@ $('#speedSeg').onclick=e=>{const b=e.target.closest('[data-sp]');if(!b)return;ui
  sb.onclick=e=>{e.stopPropagation();sb.blur();hideTip();setOpen(sm.hidden);};
  $('#setDim').onclick=$('#setX').onclick=()=>setOpen(false);
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!sm.hidden)setOpen(false);});
- sm.addEventListener('click',e=>{const b=e.target.closest('#newBtn,#homeBtn,#rulesBtn,#leaveBtn,#sndBtn');if(b)setOpen(false);if(e.target.closest('#sndBtn'))showSound();});}
+ sm.addEventListener('click',e=>{const b=e.target.closest('#newBtn,#homeBtn,#fbBtn,#rulesBtn,#leaveBtn,#sndBtn');if(b)setOpen(false);if(e.target.closest('#sndBtn'))showSound();});}
 const hintLabel=()=>{$('#hintBtn').setAttribute('aria-checked',ui.hints);$('#hintBtn').classList.toggle('active',ui.hints);};
 const gfxLabel=()=>{$('#gfxBtn').setAttribute('aria-checked',ui.gfx!=='low');$('#gfxBtn').classList.toggle('active',ui.gfx!=='low');$('#gfxBtn').dataset.tip='높음: 그림자 깊이, 빛 번짐, 원근 흐림, 색 보정을 켜요. 화면이 버벅이면 낮음으로 바꾸세요.';};
 $('#gfxBtn').style.display='none';$('#gfxBtn').onclick=()=>{ui.gfx=ui.gfx==='low'?'high':'low';saveUi();gfxLabel();invalidate(true);};gfxLabel();
@@ -4412,9 +4430,43 @@ $('#hintBtn').onclick=()=>{ui.hints=!ui.hints;saveUi();hintLabel();render();};hi
 $('#rulesBtn').onclick=()=>{clearTimeout(aiTimer);showRules(0);};
 // test: single play splits into 새 게임 (restart in place) and 메인으로 가기 (back to the title); multiplayer keeps only 나가기
 const MENU2=/[?&]test=1/.test(location.search);
-if(MENU2){$('#homeBtn').hidden=false;{const lb=$('#leaveBtn');[...lb.childNodes].forEach(n=>{if(n.nodeType===3&&n.textContent.trim())n.textContent='나가기';});}}
+if(MENU2){$('#homeBtn').hidden=false;$('#fbBtn').hidden=false;{const lb=$('#leaveBtn');[...lb.childNodes].forEach(n=>{if(n.nodeType===3&&n.textContent.trim())n.textContent='나가기';});}}
 function restartGame(){const go=()=>{clearTimeout(ui.rbT);ui.handTab='res';newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;ui.camFresh=true;closeModal();update();};
   if(VEIL&&W.ok)bootRun(go,1);else go();}
+// ---- feedback popup (test): category tabs, text, up to 3 images (shrunk to JPEG), device/game info; stored in Firebase RTDB ----
+const FB={cat:'bug',text:'',imgs:[]};
+const FBCAT=[['bug','오류 신고'],['idea','개선 의견'],['etc','기타']];
+function fbShrink(file){return new Promise((res,rej)=>{const u=URL.createObjectURL(file);const im=new Image();im.onload=()=>{URL.revokeObjectURL(u);let mx=1280,q=.82,out='';
+  for(let k=0;k<5;k++){const sc=Math.min(1,mx/Math.max(im.naturalWidth,im.naturalHeight));const c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.naturalWidth*sc));c.height=Math.max(1,Math.round(im.naturalHeight*sc));
+    const x=c.getContext('2d');x.fillStyle='#000';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);out=c.toDataURL('image/jpeg',q);if(out.length<450000)break;mx*=.8;q=Math.max(.55,q-.08);}
+  res(out);};im.onerror=()=>{URL.revokeObjectURL(u);rej(new Error('img'));};im.src=u;});}
+function fbInfo(){const g=(typeof S!=='undefined'&&S)?{phase:S.phase,turn:S.turn||0,players:(S.players||[]).length,mp:!!S.mp}:{};
+  return {ua:navigator.userAgent.slice(0,300),scr:innerWidth+'x'+innerHeight+'@'+(devicePixelRatio||1),phone:document.documentElement.classList.contains('phone'),fs:!!(document.fullscreenElement||document.webkitFullscreenElement),ver:document.lastModified,url:location.pathname+location.search,lang:navigator.language,game:g};}
+function showFeedback(){
+  const left=`<div class="mtabs fb-cat">${FBCAT.map(([k,l])=>`<button class="mtab${k===FB.cat?' on':''}" data-c="${k}">${l}<img class="orn" src="${TITLEIMG.orn1}" alt=""></button>`).join('')}</div>`;
+  const ph={bug:'어떤 상황에서 어떤 문제가 생겼는지 적어 주세요.\n(예: 도로를 지으려고 눌렀는데 아무 반응이 없어요)',idea:'더 좋아졌으면 하는 점을 자유롭게 적어 주세요.',etc:'하고 싶은 말을 자유롭게 적어 주세요.'}[FB.cat];
+  const right=`<div class="frow fb-ta"><div class="flab">내용 <span class="fb-cnt" id="fbCnt">${FB.text.length}/1000</span></div><textarea class="tin" id="fbText" maxlength="1000" placeholder="${ph}">${FB.text.replace(/</g,'&lt;')}</textarea></div>
+    <div class="frow fb-img"><div class="flab">사진 첨부 (최대 3장)</div><div class="fb-thumbs" id="fbThumbs"></div><p class="fb-note">기기·화면 정보가 함께 전송돼요. 개인 정보는 적지 말아 주세요.</p></div>`;
+  const foot=`<p class="fhint" id="fMsg"></p><button class="btn primary" id="fGo">보내기</button>`;
+  frame('feedback','의견 보내기','',left,right,foot);
+  const thumbs=()=>{const t=$('#fbThumbs');if(!t)return;t.innerHTML=FB.imgs.map((d,i)=>`<div class="fb-th" style="background-image:url(${d})"><button data-i="${i}" aria-label="사진 빼기">×</button></div>`).join('')+(FB.imgs.length<3?`<button class="fb-add" id="fbAdd"><b>+</b>사진</button>`:'');
+    t.querySelectorAll('.fb-th button').forEach(b=>b.onclick=()=>{FB.imgs.splice(+b.dataset.i,1);thumbs();});
+    const a=$('#fbAdd');if(a)a.onclick=()=>{const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.multiple=true;inp.onchange=async()=>{const fs=[...inp.files].slice(0,3-FB.imgs.length);$('#fMsg').textContent=fs.length?'사진을 준비하는 중…':'';
+      for(const f of fs){try{FB.imgs.push(await fbShrink(f));}catch(e){$('#fMsg').textContent='읽을 수 없는 사진이 있어요.';}}if($('#fMsg').textContent==='사진을 준비하는 중…')$('#fMsg').textContent='';thumbs();};inp.click();};};
+  thumbs();
+  const ta=$('#fbText');ta.oninput=()=>{FB.text=ta.value;$('#fbCnt').textContent=ta.value.length+'/1000';};
+  document.querySelectorAll('.fb-cat .mtab').forEach(b=>b.onclick=()=>{FB.text=ta.value;FB.cat=b.dataset.c;showFeedback();const sh=$('#sheet');sh.classList.remove('fin','fin2');void sh.offsetWidth;sh.classList.add('fin2');clearTimeout(ui.fin2T);ui.fin2T=setTimeout(()=>sh.classList.remove('fin2'),900);});
+  $('#fx').onclick=()=>{FB.text=ta.value;closeModal();};
+  $('#fGo').onclick=async()=>{const txt=ta.value.trim();const m=$('#fMsg');if(txt.length<5){m.textContent='내용을 조금 더 적어 주세요.';ta.focus();return;}
+    let last=0;try{last=+localStorage.getItem('fb-last')||0;}catch(e){}if(Date.now()-last<60000){m.textContent='잠시 후에 다시 보낼 수 있어요.';return;}
+    const go=$('#fGo');go.disabled=true;m.textContent='보내는 중…';
+    try{await MP.init();const r=MP.db.ref('feedback').push();const id=r.key;
+      for(let i=0;i<FB.imgs.length;i++)await MP.db.ref('feedbackImg/'+id+'/'+i).set(FB.imgs[i]);
+      await r.set({cat:FB.cat,text:txt,imgs:FB.imgs.length,nick:(ui.nick||'').slice(0,6),uid:NET.uid,t:firebase.database.ServerValue.TIMESTAMP,info:fbInfo()});
+      try{localStorage.setItem('fb-last',Date.now());}catch(e){}FB.text='';FB.imgs=[];
+      closeModal();openDialog(`<h3>보내 주셔서 고마워요!</h3><p>남겨 주신 의견은 꼼꼼히 확인할게요.</p><div class="row"><button class="btn sub" id="fbOk">확인</button></div>`);$('#fbOk').onclick=closeDialog;}
+    catch(e){console.warn('feedback',e);go.disabled=false;m.textContent='보내지 못했어요. 잠시 후 다시 시도해 주세요.';}};}
+$('#fbBtn').onclick=()=>showFeedback();
 $('#homeBtn').onclick=()=>{if(window.NET&&NET.on)return MP.confirmLeave();openDialog(`<h3>메인으로 갈까요?</h3><p>진행 중인 게임은 끝나고, 첫 화면으로 돌아가요.</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">메인으로</button></div>`);
   $('#cNo').onclick=()=>{closeDialog();};$('#cYes').onclick=()=>{closeDialog();closeModal();showStart();resetBehind();};};
 $('#newBtn').onclick=()=>{if(window.NET&&NET.on)return MP.confirmLeave();if(MENU2){openDialog(`<h3>새 게임을 시작할까요?</h3><p>진행 중인 게임은 끝나고, 새 섬에서 다시 시작해요.</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">새 게임</button></div>`);
