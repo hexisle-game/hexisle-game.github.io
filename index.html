@@ -699,6 +699,8 @@ html.phone .rc-cards{gap:8px;margin-bottom:10px}html.phone .rc-card{padding:8px 
 html.phone .rk-row{grid-template-columns:2.3em 32px 1fr auto;padding:5px 6px;gap:8px}html.phone .rk-row .av{width:30px;height:30px}html.phone .rk-row .nm,html.phone .rk-row .sc{font-size:13.5px}html.phone .rk-no{width:26px;height:26px;font-size:13px}
 html.phone .rc-recent li{padding:5px 0;font-size:12px}
 #result .rkgain{margin-top:14px;font-size:16px;font-weight:700;color:#f3d08a;text-shadow:0 2px 6px rgba(0,0,0,.8);opacity:0;animation:rsUp .7s ease-out 2.9s both}#result .rkgain em{font-style:normal;color:#9bd884;margin-left:2px}html.phone #result .rkgain{font-size:13px;margin-top:8px}
+/* lobby: random rooms have a fixed difficulty */
+.cnt.ro.locked .btn{opacity:.38!important;filter:grayscale(.4)}.cnt.ro.locked .btn::after,.cnt.ro.locked .btn::before{opacity:.5}.flab .lock{font-size:.72em;color:#a8977a;font-weight:400;margin-left:4px}
 /* feedback popup (test) */
 .sheet-feedback .ffoot{position:relative}
 .sheet-feedback .fb-toast{position:absolute;transform:translate(-50%,6px);padding:6px 16px;background:rgba(36,23,12,.9);border:1px solid rgba(233,196,122,.75);border-radius:2px;color:#f3e2bc;font-size:14px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .25s ease,transform .25s ease;z-index:5}
@@ -4512,14 +4514,14 @@ function readNick(){const v=($('#nick').value||'').trim().slice(0,6);const m=$('
 function showMulti(tab,code){tab=tab||'invite';ui.mtab=tab;const tabs=[['invite','초대하기'],['join','초대받기'],['quick','랜덤 참가']];
   const left=`<div class="mtabs">${tabs.map(([k,l])=>`<button class="mtab${k===tab?' on':''}" data-t="${k}">${l}<img class="orn" src="${TITLEIMG.orn1}" alt=""></button>`).join('')}</div>`;
   let right='',foot='';
-  if(tab==='invite'){right=nickRow()+segRow('fdif','난이도',DIFF.map(([k,l])=>[k,l]),ui.diff||'normal')+segRow('fcnt','인원 (최소 2 · 최대 4)',[[2,'2인'],[3,'3인'],[4,'4인']],ui.n||4);
+  if(tab==='invite'){right=nickRow()+segRow('fdif','난이도',DIFF.map(([k,l])=>[k,l]),ui.diff||'normal')+segRow('fcnt','인원 (최소 2 · 최대 4)',[[2,'2인'],[3,'3인'],[4,'4인']],ui.n||4)+segRow('fopen','랜덤 참가',[['0','허용 안 함'],['1','빈자리 허용']],ui.openRoom?'1':'0');
     foot=`<p class="fhint" id="fMsg">방을 만들면 초대 링크가 생겨요. 부족한 인원은 AI가 담당할 수 있어요.</p><button class="btn primary" id="fGo" data-mp="1">초대하기</button>`;}
   else if(tab==='join'){right=nickRow()+`<div class="frow"><div class="flab">방 코드</div><input class="tin code" id="mCode" maxlength="5" placeholder="ABCDE" value="${code||ui.pendCode||''}"></div>`;
     foot=`<p class="fhint" id="fMsg">${(code||ui.pendCode)?'초대받은 방 코드를 자동으로 입력했어요.':'초대받은 방 코드를 입력하세요.'}</p><button class="btn primary" id="fGo" data-mp="1">참가하기</button>`;}
   else{right=nickRow();foot=`<p class="fhint" id="fMsg">4인 · 보통 난이도로 진행돼요. 1분 안에 다 모이지 않으면 빈자리는 AI가 채워요.</p><button class="btn primary" id="fGo" data-mp="1">참가하기</button>`;}
   frame('multi','멀티 플레이','<p class="onl"></p>',left,right,foot);
   document.querySelectorAll('.mtab').forEach(b=>b.onclick=()=>{const v=$('#nick')&&$('#nick').value.trim();if(v){ui.nick=v.slice(0,6);}const c=$('#mCode')&&$('#mCode').value;if(c)ui.pendCode=c;showMulti(b.dataset.t);const sh=$('#sheet');sh.classList.remove('fin','fin2');void sh.offsetWidth;sh.classList.add('fin2');clearTimeout(ui.fin2T);ui.fin2T=setTimeout(()=>sh.classList.remove('fin2'),900);});
-  segBind('fdif',v=>{ui.diff=v;saveUi();});segBind('fcnt',v=>{ui.n=+v;saveUi();});
+  segBind('fdif',v=>{ui.diff=v;saveUi();});segBind('fcnt',v=>{ui.n=+v;saveUi();});segBind('fopen',v=>{ui.openRoom=v==='1';});
   $('#fx').onclick=()=>{closeModal();MP.offline();showTitle(true);};
   $('#fGo').onclick=()=>{if(!readNick())return;
     if(tab==='invite'){$('#fMsg').textContent='방을 만드는 중…';MP.create();}
@@ -4755,7 +4757,7 @@ const MP={db:null,subs:[],offSince:{},
   openEntry(code){showTitle(true);showMulti('join',code);},
   async create(){ui.mpTab='invite';try{$('#mMsg')&&($('#mMsg').textContent='방을 만드는 중…');await this.init();
       let code;for(let i=0;i<5;i++){code=this.code();const ex=await this.db.ref('rooms/'+code+'/meta').once('value');if(!ex.exists())break;}
-      NET.room=code;await this.ref('meta').set({host:NET.uid,status:'lobby',n:Math.max(2,ui.n||4),diff:ui.diff||'normal',ai:0,created:firebase.database.ServerValue.TIMESTAMP});
+      NET.room=code;await this.ref('meta').set({host:NET.uid,status:'lobby',n:Math.max(2,ui.n||4),diff:ui.diff||'normal',ai:0,open:!!ui.openRoom,created:firebase.database.ServerValue.TIMESTAMP});
       await this.enter();}catch(e){console.error(e);this.err('방을 만들지 못했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.');}},
   async join(code){ui.mpTab='join';try{$('#mMsg')&&($('#mMsg').textContent='방에 들어가는 중…');await this.init();
       const m=(await this.db.ref('rooms/'+code+'/meta').once('value')).val();
@@ -4792,15 +4794,17 @@ const MP={db:null,subs:[],offSince:{},
       const v=(await this.db.ref('open').once('value')).val()||{};const now=Date.now();
       const cands=Object.entries(v).filter(([c,o])=>o&&o.count<o.n&&now-(o.t||0)<15*60000).sort((a,b)=>b[1].count-a[1].count);
       for(const [code] of cands){const m=(await this.db.ref('rooms/'+code+'/meta').once('value')).val();const ms=(await this.db.ref('rooms/'+code+'/members').once('value')).val()||{};
-        if(m&&m.status==='lobby'&&Object.keys(ms).length<m.n){NET.room=code;await this.enter();return;}
+        if(m&&m.status==='lobby'&&(m.pub||m.open)&&Object.keys(ms).length+(m.pub?0:(m.ai||0))<m.n){NET.room=code;await this.enter();return;}
         this.db.ref('open/'+code).remove();}
       let code;for(let i=0;i<5;i++){code=this.code();const ex=await this.db.ref('rooms/'+code+'/meta').once('value');if(!ex.exists())break;}
       NET.room=code;await this.ref('meta').set({host:NET.uid,status:'lobby',n:4,diff:'normal',pub:true,created:firebase.database.ServerValue.TIMESTAMP});
       await this.enter();}catch(e){console.error(e);this.err('빈자리를 찾지 못했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.');}},
-  pubSync(){if(!NET.isHost||!NET.meta||!NET.meta.pub)return;const cnt=Object.keys(NET.members).length;const r=this.db.ref('open/'+NET.room);
-    const sig=NET.room+'|'+NET.meta.status+'|'+cnt+'|'+Math.floor(Date.now()/60000);if(sig!==this._pubSig){this._pubSig=sig;if(NET.meta.status==='lobby'&&cnt<NET.meta.n){r.set({count:cnt,n:NET.meta.n,t:Date.now()});r.onDisconnect().remove();}else r.remove();}
+  pubSync(){if(!NET.isHost||!NET.meta)return;const M=NET.meta,cnt=Object.keys(NET.members).length,ai=M.pub?0:(M.ai||0),used=cnt+ai;const r=this.db.ref('open/'+NET.room);
+    if(!M.pub&&!M.open){if(this._pubSig){this._pubSig=null;r.remove();}return;}
+    const sig=NET.room+'|'+M.status+'|'+used+'|'+Math.floor(Date.now()/60000);if(sig!==this._pubSig){this._pubSig=sig;if(M.status==='lobby'&&used<M.n){r.set({count:used,n:M.n,t:Date.now(),inv:M.pub?0:1});r.onDisconnect().remove();}else r.remove();}
+    if(!M.pub)return;
     if(NET.meta.status==='lobby'){if(cnt>=2&&!NET.meta.autoAt)this.ref('meta/autoAt').set(Date.now()+PUB_WAIT_MS);if(cnt<2&&NET.meta.autoAt)this.ref('meta/autoAt').remove();}},
-  pubTick(){if(!NET.on||!NET.isHost||!NET.meta||!NET.meta.pub||NET.meta.status!=='lobby')return;this.pubSync();const cnt=Object.keys(NET.members).length;
+  pubTick(){if(!NET.on||!NET.isHost||!NET.meta||NET.meta.status!=='lobby')return;this.pubSync();if(!NET.meta.pub)return;const cnt=Object.keys(NET.members).length;
     if(cnt>=NET.meta.n||(NET.meta.autoAt&&Date.now()>NET.meta.autoAt&&cnt>=2))this.start();},
   gone(){if(!NET.on||this.leaving)return;this.cleanup();this.err('방이 닫혔어요.');},
   // ---------- lobby ----------
@@ -4816,7 +4820,7 @@ const MP={db:null,subs:[],offSince:{},
     const hint=host?(full?'부족한 인원은 AI가 담당해요.':(M.pub?(cd!==null?`${cd}초 뒤에 자동으로 시작해요. 빈자리는 AI가 채워요.`:'다른 플레이어를 기다리고 있어요.'):'참가자를 기다리고 있어요. 바로 시작하려면 AI를 활성화해 주세요.')):(M.pub&&cd!==null?`${cd}초 뒤에 자동으로 시작해요.`:'방장이 시작하면 게임이 바로 시작돼요.');
     const left=`<div class="flab2">참가자(${ord.length}/${n})</div>${rows.join('')}`;
     const right=`<div class="frow"><div class="flab">방 코드</div><div class="rcode"><b>${NET.room}</b>${host&&!M.pub?'<button class="btn sub" id="lShare">초대</button>':''}</div></div>`+
-      (host&&!M.pub?segRow('ldif','난이도',DIFF.map(([k,l])=>[k,l]),M.diff):`<div class="frow"><div class="flab">난이도</div><div class="cnt ro">${DIFF.map(([k,l])=>`<button class="btn${M.diff===k?' active':''}" disabled>${l}</button>`).join('')}</div></div>`)+
+      (host&&!M.pub?segRow('ldif','난이도',DIFF.map(([k,l])=>[k,l]),M.diff):`<div class="frow"><div class="flab">난이도${M.pub?' <small class="lock">(랜덤 방은 보통 고정)</small>':''}</div><div class="cnt ro${M.pub?' locked':''}">${DIFF.map(([k,l])=>`<button class="btn${M.diff===k?' active':''}" disabled>${l}</button>`).join('')}</div></div>`)+(host&&!M.pub?segRow('lopen','랜덤 참가',[['0','허용 안 함'],['1','빈자리 허용']],M.open?'1':'0'):'')+
       charRow('lcol',mine.ch||myChar(),mine.color,takenCh,taken);
     const foot=`<p class="fhint" id="lMsg">${hint}</p>${host&&(full||M.pub&&ord.length>=2)?`<button class="btn primary" id="lStart">게임 시작</button>`:`<button class="btn primary" id="lWait" disabled>대기중</button>`}`;
     const html=`<button class="mclose mback" id="fx" aria-label="나가기"></button><div class="fhead"><h3>대기실</h3><p class="onl"></p></div><div class="fbody"><div class="fleft">${left}</div><div class="fright"><div class="frows">${right}</div><div class="ffoot">${foot}</div></div></div>`;
@@ -4826,7 +4830,7 @@ const MP={db:null,subs:[],offSince:{},
     if($('#lShare'))$('#lShare').onclick=async()=>{const t=`HexIsle 같이 해요! 방 코드 ${NET.room}`;try{if(navigator.share){await navigator.share({title:'HexIsle',text:t,url:link});return;}}catch(e){}
       try{await navigator.clipboard.writeText(link);$('#lMsg').textContent='초대 링크를 복사했어요. 카톡에 붙여 넣으세요.';}catch(e){$('#lMsg').textContent=link;}};
     charBind('lcol',c=>{ui.char=c;saveUi();this.setMine('ch',c);},c=>{this.ref('members/'+NET.uid+'/color').set(c);ui.color=c;saveUi();});
-    if(host){segBind('ldif',v=>this.ref('meta/diff').set(v));
+    if(host){segBind('ldif',v=>this.ref('meta/diff').set(v));segBind('lopen',v=>this.ref('meta/open').set(v==='1'));
       document.querySelectorAll('.aitg').forEach(b=>b.onclick=e=>{e.stopPropagation();const sl=this.aiSlots(n-ord.length,ai);const k=+b.dataset.slot;sl[k]=!sl[k];this.ref('meta/ai').set(sl.filter(Boolean).length);try{const r=this.ref('meta/aiPos').set(sl.map(x=>x?1:0).join(''));r&&r.catch&&r.catch(()=>{});}catch(x){}});
       if($('#lStart'))$('#lStart').onclick=()=>this.start();}},
   start(){hideTitle();const ord=this.order(),n=NET.meta.n;newGame(n,NET.meta.diff);
