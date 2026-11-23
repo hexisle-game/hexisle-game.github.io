@@ -634,7 +634,8 @@ header.top .tools .ib[hidden]{display:none}
 .setmenu .mrow{cursor:default}
 .setpanel .msep2{flex:none;height:0;margin:10px 0 10px 36px;border-top:1px solid rgba(233,196,122,.26)}html.phone .setpanel .msep2{margin:8.25px 0 8.25px 26px}
 html body nav.setpanel .seg::after{display:none!important}html body nav.setpanel .seg{margin-right:-2px}html.phone body nav.setpanel .seg{margin-right:-2.75px}
-html body nav.setpanel .seg button{padding-left:11px!important;padding-right:11px!important}html.phone body nav.setpanel .seg button{padding-left:10.6px!important;padding-right:10.6px!important}
+html body nav.setpanel .seg button{padding-left:10px!important;padding-right:10px!important}html.phone body nav.setpanel .seg button{padding-left:9.2px!important;padding-right:9.2px!important}
+html body nav.setpanel .mi{height:56px}html.phone body nav.setpanel .mi{height:41.25px}
 html body nav.setpanel .mi+.mi,html body nav.setpanel .msep+.mi{border-top-color:transparent!important;position:relative}
 html body .setpanel .mi+.mi::before,html body .setpanel .msep+.mi::before{content:"";position:absolute;left:36px;right:0;top:-1px;height:1px;background:rgba(233,196,122,.09);pointer-events:none}
 html.phone body .setpanel .mi+.mi::before,html.phone body .setpanel .msep+.mi::before{left:26px}
@@ -2079,7 +2080,7 @@ html.phone body .emptyhand{font-size:11.5px!important;color:rgba(166,155,139,.72
         <div class="msep"></div>
         <button id="gfxBtn" class="mi tg" role="menuitemcheckbox">고화질 그래픽</button>
         <div class="mi mrow"><span>AI 속도</span><span class="seg" id="speedSeg"><button data-sp="느림">느림</button><button data-sp="보통">보통</button><button data-sp="빠름">빠름</button></span></div>
-        <button id="fbBtn" class="mi" role="menuitem" hidden>의견 보내기</button>
+        <button id="fbBtn" class="mi" role="menuitem" hidden>오류 신고</button>
         <div class="msep2"></div>
         <button id="newBtn" class="mi" role="menuitem">새 게임</button>
         <button id="homeBtn" class="mi" role="menuitem" hidden>메인으로 가기</button>
@@ -4469,7 +4470,7 @@ function restartGame(){const go=()=>{clearTimeout(ui.rbT);ui.handTab='res';newGa
   if(VEIL&&W.ok)bootRun(go,1);else go();}
 // ---- feedback popup (test): category tabs, text, up to 3 images (shrunk to JPEG), device/game info; stored in Firebase RTDB ----
 const FB={cat:'bug',text:'',imgs:[]};
-const FBCAT=[['bug','오류 신고'],['idea','개선 의견'],['etc','기타']];
+const FBCAT=[['bug','오류'],['idea','개선 의견'],['etc','기타']];
 function fbShrink(file){return new Promise((res,rej)=>{const u=URL.createObjectURL(file);const im=new Image();im.onload=()=>{URL.revokeObjectURL(u);let mx=1280,q=.82,out='';
   for(let k=0;k<5;k++){const sc=Math.min(1,mx/Math.max(im.naturalWidth,im.naturalHeight));const c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.naturalWidth*sc));c.height=Math.max(1,Math.round(im.naturalHeight*sc));
     const x=c.getContext('2d');x.fillStyle='#000';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);out=c.toDataURL('image/jpeg',q);if(out.length<450000)break;mx*=.8;q=Math.max(.55,q-.08);}
@@ -4484,7 +4485,7 @@ function showFeedback(){
   const right=`<div class="frow fb-ta"><div class="flab">내용 <span class="fb-cnt" id="fbCnt">${FB.text.length}/1000</span></div><textarea class="tin" id="fbText" maxlength="1000" placeholder="${ph}">${FB.text.replace(/</g,'&lt;')}</textarea></div>
     <div class="frow fb-img"><div class="flab">사진 첨부 (최대 3장)</div><div class="fb-thumbs" id="fbThumbs"></div></div>`;
   const foot=`<p class="fhint" id="fMsg">${FBNOTE}</p><button class="btn primary" id="fGo">보내기</button>`;
-  frame('feedback','의견 보내기','',left,right,foot);
+  frame('feedback','오류 신고','',left,right,foot);
   const thumbs=()=>{const t=$('#fbThumbs');if(!t)return;t.innerHTML=FB.imgs.map((d,i)=>`<div class="fb-th" style="background-image:url(${d})"><button data-i="${i}" aria-label="사진 빼기">×</button></div>`).join('')+(FB.imgs.length<3?`<button class="fb-add" id="fbAdd"><b>+</b>사진</button>`:'');
     t.querySelectorAll('.fb-th button').forEach(b=>b.onclick=()=>{FB.imgs.splice(+b.dataset.i,1);thumbs();});
     const a=$('#fbAdd');if(a)a.onclick=()=>{const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.multiple=true;inp.onchange=async()=>{const fs=[...inp.files].slice(0,3-FB.imgs.length);$('#fMsg').textContent=fs.length?'사진을 준비하는 중…':'';
