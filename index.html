@@ -1406,7 +1406,7 @@ html body .tpick .tcell:disabled{box-shadow:none!important}
 #splash img{position:absolute;left:50%;top:46%;transform:translate(-50%,-66%);width:clamp(225px,30vw,375px);opacity:0;transition:opacity 1s ease;filter:drop-shadow(0 4px 10px rgba(0,0,0,.8))}
 #splash img.on{opacity:.92}
 #splash .spnote{position:absolute;left:0;right:0;bottom:calc(9% + 14px);margin:0;font-size:11px;line-height:1.6;color:#fff;opacity:.4;text-align:center;letter-spacing:.02em}
-#splash .sptap{position:absolute;left:0;right:0;text-align:center;bottom:9%;margin:0;font-size:13px;color:#e9c47a;opacity:.55;animation:sptap 2.4s ease-in-out infinite}
+#splash .sptap{position:absolute;left:0;right:0;text-align:center;bottom:calc(9% - 9px);margin:0;font-size:13px;color:#e9c47a;opacity:.55;animation:sptap 2.4s ease-in-out infinite}
 @keyframes sptap{50%{opacity:.18}}
 #splash.out{opacity:0;pointer-events:none}
 #splash:not(.ready)>*{opacity:0!important;transition:none}
@@ -4103,7 +4103,8 @@ function devPop(t){
 function render(){{const r=document.getElementById('result');if(r&&(!S||S.phase!=='over'))r.remove();}
   try{sndWatch();}catch(e){}
   renderBoard();
-  if(ui.camFresh&&typeof W!=='undefined'&&W.ok){ui.camFresh=false;try{fitCam('now');camIntro();}catch(e){}}
+  // the entry swing (and its loading screen) plays once per board, never again for the same island
+  if(ui.camFresh&&typeof W!=='undefined'&&W.ok){ui.camFresh=false;if(W.introKey!==W.boardKey){W.introKey=W.boardKey;try{fitCam('now');camIntro();}catch(e){}}else if($('#boot')&&$('#boot').classList.contains('on')&&!W.veilHold){try{bootOff();}catch(e){}}}
   $('#coach').innerHTML=coachText()+(S.mp&&S.phase!=='over'&&actor()!==null&&!S.players[actor()].ai?` <span class="cdwrap">· <i data-cd="dl"></i></span>`:'');
   const cp=S.players[S.cur];
   const rolledNow=S.rollId!==ui.shownRoll;ui.shownRoll=S.rollId;
@@ -4837,7 +4838,7 @@ const MP={db:null,subs:[],offSince:{},
     NET.isHost=true;ME=S.players.findIndex(p=>p.uid===NET.uid);ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;
     NET._last=null;closeModal();update();this.ref('meta/status').set('play');try{this.db.ref('open/'+NET.room).remove();}catch(e){}},
   // ---------- game sync ----------
-  applyState(js){let s;try{s=JSON.parse(js);}catch(e){return;}hideTitle();
+  applyState(js){let s;try{s=JSON.parse(js);}catch(e){return;}if(!this.shown||!$('#title').hidden){this.shown=1;hideTitle();}
     const prevNote=S&&S.note&&S.note.id;S=s;ME=S.players.findIndex(p=>p.uid===NET.uid);if(ME<0)ME=0;
     if(['lobby','mp'].includes(ui.modal))closeModal();
     if(S.note&&S.note.id!==prevNote&&S.note.by!==NET.uid)this.toast(S.note.t);
@@ -4875,9 +4876,9 @@ const MP={db:null,subs:[],offSince:{},
       if(!this.order().some(([u])=>u!==NET.uid))await this.ref().remove();}catch(e){console.error(e);}
     this.cleanup();this.leaving=false;closeModal();showStart();resetBehind();if(MENU2){showTitle(true);showMulti(ui.mpTab||'invite');}
     if(wasLobby&&others){openDialog(`<h3>방을 나갔어요</h3><div class="row"><button class="btn sub" id="mOk">확인</button></div>`);$('#mOk').onclick=closeDialog;}},
-  cleanup(){this.unsubAll();NET.on=false;NET.isHost=false;NET.room=null;NET.members={};NET.meta=null;NET._last=null;this.offSince={};
+  cleanup(){this.shown=0;this.unsubAll();NET.on=false;NET.isHost=false;NET.room=null;NET.members={};NET.meta=null;NET._last=null;this.offSince={};
     $('#leaveBtn').hidden=true;$('#newBtn').hidden=false;$('#homeBtn').hidden=!MENU2;try{history.replaceState(null,'',location.pathname);}catch(e){}}};
-setInterval(()=>{if(!NET.on)return;try{MP.hostTick();MP.pubTick();if(ui.modal==='lobby'&&NET.meta&&NET.meta.autoAt)MP.drawLobby();}catch(e){}},1000);
+setInterval(()=>{if(!NET.on)return;try{MP.hostTick();MP.pubTick();if(ui.modal==='lobby'&&NET.meta&&NET.meta.autoAt){const m=$('#lMsg'),cd=Math.max(0,Math.ceil((NET.meta.autoAt-Date.now())/1000));if(m&&/\d+초 뒤에/.test(m.textContent))m.textContent=m.textContent.replace(/\d+초 뒤에/,cd+'초 뒤에');else if(!m)MP.drawLobby();}}catch(e){}},1000);
 $('#leaveBtn').onclick=()=>{if(NET.on)MP.confirmLeave();};
 {const q=new URLSearchParams(location.search).get('room');if(q&&MP_ENABLED){ui.invite=q.toUpperCase().slice(0,5);$('#tSingle').hidden=true;}}
 
