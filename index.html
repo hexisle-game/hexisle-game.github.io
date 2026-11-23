@@ -2223,7 +2223,7 @@ function log(p,t,k,ex){S.logSeq=(S.logSeq||0)+1;S.log.push({p,t,k:k||'',ex,seq:S
 const NICK_A=['보라색','침착한','민트빛','자유로운','주황빛','졸린','용감한','수줍은','바쁜','느긋한','반짝이는','배고픈','엉뚱한','다정한','꼼꼼한','씩씩한','고요한','신난','하늘색','용감한'].filter((v,i,a)=>a.indexOf(v)===i);
 const NICK_B=CHARS.map(c=>c[1]);
 function aiNames(k,avoid){const out=[],used=new Set(avoid||[]);let guard=0;while(out.length<k&&guard++<5000){const a=NICK_A[rnd(NICK_A.length)],b=NICK_B[rnd(NICK_B.length)];if(used.has(a)||used.has(b))continue;if((a+' '+b).length>7)continue;used.add(a);used.add(b);out.push(a+' '+b);}return out;}
-function newGame(n,diff,cols){n=n||4;
+function newGame(n,diff,cols){n=n||4;try{if(typeof W!=='undefined')W.introKey=null;}catch(e){}
   const tiles=shuffle([...Array(4).fill('wood'),...Array(3).fill('brick'),...Array(4).fill('wool'),...Array(4).fill('grain'),...Array(3).fill('ore'),'desert']);
   let hexes;
   for(let t=0;t<1000;t++){
