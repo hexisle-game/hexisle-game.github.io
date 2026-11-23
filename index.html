@@ -632,24 +632,26 @@ header.top .tools .ib[hidden]{display:none}
 .setmenu .mi.tg[aria-checked=true]::after{background:#b8893a radial-gradient(circle at 25px 9px,#fff6e0 6px,transparent 6.5px)}
 .setmenu .msep{height:1px;margin:5px 4px;background:rgba(255,255,255,.12)}
 .setmenu .mrow{cursor:default}
-.setpanel .msep2{flex:none;height:0;border-top:1px solid rgba(233,196,122,.135)}html body .setpanel .msep2+.mi,html body .setpanel .msep2+.mi[hidden]+.mi,html body .setpanel .msep2+.mi[hidden]+.mi[hidden]+.mi{border-top:0!important}
+html body .setpanel .mi{height:52px}html.phone body .setpanel .mi{height:38.5px}
+.setpanel .msep2{flex:none;height:0;margin:8px 0;border-top:1px solid rgba(233,196,122,.26)}html.phone .setpanel .msep2{margin:5.5px 0}html body .setpanel .msep2+.mi,html body .setpanel .msep2+.mi[hidden]+.mi,html body .setpanel .msep2+.mi[hidden]+.mi[hidden]+.mi{border-top:0!important}
 /* feedback popup, portrait phones (typing is easier upright) */
 html.fbp #rotate,html.fbp #tbench{display:none!important}
+html.fbp,html.fbp body{max-width:none!important}
 html.fbp body .overlay{padding:0!important}
 html.fbp body .sheet.sheet-frame{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;padding:8px 18px 14px!important;border-radius:0!important}
 html.fbp .sheet-frame .fhead{padding:6px 52px 6px 0!important}
 html.fbp .sheet-frame .fhead h3{font-size:22px!important}
-html.fbp .sheet-frame .fbody{display:flex!important;flex-direction:column;padding-top:4px!important;min-height:0}
+html.fbp .sheet-frame .fbody{display:flex!important;flex-direction:column;padding-top:4px!important;min-height:0;overflow-y:auto;overflow-x:hidden;margin-right:-14px;padding-right:14px;scrollbar-width:thin;scrollbar-color:rgba(233,196,122,.35) transparent}
 html.fbp .sheet-frame .fleft{border:0!important;border-image:none!important;padding:0!important;overflow:visible;flex:none}
-html.fbp .sheet-feedback .mtabs{display:flex!important;flex-direction:row!important;gap:22px!important;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:0!important;margin:0 -18px 0 0}
+html.fbp .sheet-feedback .mtabs{display:flex!important;flex-direction:row!important;gap:6px!important;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:0!important;margin:0 -18px 0 0}
 html.fbp .sheet-feedback .mtabs::-webkit-scrollbar{display:none}
-html.fbp .sheet-feedback .mtab{width:auto!important;flex:none;padding:10px 0!important;font-size:16px!important;white-space:nowrap;gap:4px!important}
+html.fbp .sheet-feedback .mtab{width:auto!important;flex:none;padding:10px 12px 10px 16px!important;font-size:16px!important;white-space:nowrap;gap:4px!important}
 html.fbp .sheet-feedback .mtab .orn{width:14px;height:14px}
-html.fbp .sheet-frame .fright{padding:0!important;flex:1;min-height:0;overflow-y:auto}
+html.fbp .sheet-frame .fright{padding:0!important;flex:1 0 auto;min-height:0;overflow:visible}
 html.fbp .sheet-frame .frows{padding-top:12px!important;gap:14px!important}
 html.fbp .sheet-frame .flab{font-size:15px!important}
-html.fbp .sheet-feedback .fb-ta textarea{height:28vh;font-size:16px}
-html.fbp .sheet-feedback .fb-th,html.fbp .sheet-feedback .fb-add{width:72px;height:72px}
+html.fbp .sheet-feedback .fb-ta textarea{height:max(140px,calc(var(--vh) * .27))!important;font-size:16px!important}
+html.fbp .sheet-feedback .fb-th,html.fbp .sheet-feedback .fb-add{width:72px!important;height:72px!important}
 html.fbp .sheet-feedback .fb-note{font-size:12px}
 html.fbp .sheet-frame .ffoot{flex-direction:column;justify-content:center;align-items:center;gap:10px;padding-top:14px}
 html.fbp .sheet-frame .ffoot .fhint{font-size:12.5px!important;text-align:center!important;line-height:1.5}
@@ -673,7 +675,7 @@ html.phone .sheet-feedback .fb-ta textarea{height:92px;font-size:13px}
 html.phone .sheet-feedback .fb-th,html.phone .sheet-feedback .fb-add{width:58px;height:58px}
 html.phone .sheet-feedback .frows{gap:6px}
 
-html body .setpanel .mi.mrow{height:62px;padding-top:4px!important}html.phone body .setpanel .mi.mrow{height:48px}
+
 .setmenu .seg{display:inline-flex;border:1px solid rgba(255,255,255,.18);border-radius:2px}
 .setmenu .seg button{padding:4px 9px;background:none;border:0;color:#a39c90;font:inherit;font-size:12.5px;cursor:pointer}
 .setmenu .seg button+button{border-left:1px solid rgba(255,255,255,.18)}
@@ -4543,7 +4545,7 @@ function applyPhone(){const coarse=matchMedia('(pointer:coarse)').matches;const 
   const fbp=coarse&&small&&!land&&typeof ui!=='undefined'&&ui.modal==='feedback';document.documentElement.classList.toggle('fbp',fbp);const portraitBlock=coarse&&small&&!land&&!fbp;document.documentElement.classList.toggle('portrait-block',portraitBlock);$('#rotate').hidden=!portraitBlock;
   // tablets / unfolded foldables that can't fit the desktop HUD get the phone layout in a centred letterbox
   const lb=coarse&&!small&&(!(innerWidth>=1101&&innerHeight>=640)||innerWidth/innerHeight<1.6);
-  const on=(coarse&&small&&land)||lb;const VH=440;const BH=lb?Math.min(innerHeight,Math.round(innerWidth/1.95)):innerHeight;const k=on?BH/VH:1;const vw=Math.round(innerWidth/k);const oy=lb?Math.round((innerHeight-BH)/2):0;
+  const on=(coarse&&small&&land)||lb||fbp;const VH=fbp?Math.round(440*innerHeight/innerWidth):440;const BH=lb?Math.min(innerHeight,Math.round(innerWidth/1.95)):innerHeight;const k=on?BH/VH:1;const vw=Math.round(innerWidth/k);const oy=lb?Math.round((innerHeight-BH)/2):0;
   if(on===PH.on&&(!on||(Math.abs(k-PH.k)<.001&&vw===PH.vw&&oy===PH.oy)))return;PH.on=on;PH.k=k;PH.vw=vw;PH.vh=VH;PH.ox=0;PH.oy=oy;
   const root=document.documentElement;root.classList.toggle('phone',on);root.classList.toggle('lbox',lb);root.style.setProperty('--oy',oy+'px');root.style.setProperty('--k',k);root.style.setProperty('--vw',vw+'px');root.style.setProperty('--vh',VH+'px');
   for(const sh of document.styleSheets){let rules;try{rules=sh.cssRules;}catch(e){continue;}for(const r of rules){if(!r.media||r.type!==4)continue;
