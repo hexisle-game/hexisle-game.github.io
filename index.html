@@ -2972,6 +2972,10 @@ function dirtPath(x0,z0,x1,z1,beach){const N=18,w=.072;const dx=x1-x0,dz=z1-z0,L
   let mt=W.pathMat2;if(beach){mt=W.pathMatB||(W.pathMatB=W.pathMat2.clone());mt.userData.beach=1;mt.onBeforeCompile=W.pathMat2.onBeforeCompile;mt.customProgramCacheKey=W.pathMat2.customProgramCacheKey;}const me=new THREE.Mesh(g,mt);me.receiveShadow=true;me.renderOrder=2;return me;}
 // palms in small clumps on the outer island ring (outside resource tiles, away from ports)
 // lighter cast shadow: the depth pass drops ~30% of texels in an ordered pattern, so PCF reads a partial shadow
+// packed models (.dat): licence-restricted assets are shipped scrambled and decoded in memory, never as a plain .glb file
+function glbAny(url,ok,err){if(!/\.dat$/.test(url))return new THREE.GLTFLoader().load(url,ok,undefined,err);LDC.n++;LDC.tot++;LDC.t=performance.now();let d=0;const done=()=>{if(!d){d=1;LDC.n--;LDC.fin++;LDC.t=performance.now();}};
+  fetch(url).then(r=>{if(!r.ok)throw new Error(r.status);return r.arrayBuffer();}).then(buf=>{const u=new Uint8Array(buf);let x=0x2F6B3A91|0;for(let i=0;i<u.length;i++){x^=x<<13;x^=x>>>17;x^=x<<5;u[i]^=x&255;}
+    new THREE.GLTFLoader().parse(u.buffer,'',gl=>{done();ok(gl);},e=>{done();if(err)err(e);else console.warn('dat',e);});}).catch(e=>{done();if(err)err(e);else console.warn('dat',e);});}
 function liteShadowMat(map,at,th){W.lsm=W.lsm||{};const key=(map?map.uuid:'-')+at+'|'+(th||0);if(W.lsm[key])return W.lsm[key];const d=new THREE.MeshDepthMaterial({depthPacking:THREE.RGBADepthPacking,map:map||null,alphaTest:at||0,side:THREE.DoubleSide});
   d.onBeforeCompile=sh=>{sh.fragmentShader=sh.fragmentShader.replace('void main() {','float bayer4(vec2 p){p=mod(floor(p),4.);float b=0.;vec2 q=mod(p,2.);vec2 r=floor(p/2.);float a=q.x*2.+q.y;a=a==1.?2.:a==2.?3.:a==3.?1.:0.;float c=r.x*2.+r.y;c=c==1.?2.:c==2.?3.:c==3.?1.:0.;return (a*4.+c)/16.;}\nvoid main() {\n'+(th?'if(bayer4(gl_FragCoord.xy)<'+th.toFixed(3)+')discard;':'if(mod(floor(gl_FragCoord.x)+floor(gl_FragCoord.y),2.)<.5)discard;'));};d.customProgramCacheKey=()=>'lsm3'+(th||0);d.clone=function(){const c=THREE.MeshDepthMaterial.prototype.clone.call(this);c.onBeforeCompile=this.onBeforeCompile;c.customProgramCacheKey=this.customProgramCacheKey;c.clone=this.clone;return c;};return W.lsm[key]=d;}
 function palmRing(g){const b0=S.board;glbLoad('palm','assets/test/trees/palm.glb',gl=>{if(S.board!==b0)return;gl.scene.updateMatrixWorld(true);const V={};gl.scene.traverse(o=>{if(!o.isMesh)return;const k=(/_(\d)_/.exec(o.name)||[0,'0'])[1];(V[k]=V[k]||[]).push(o);});
@@ -3406,7 +3410,7 @@ vec3 e2grass(vec2 p){return e2sat(e2tx(tGrass,p*1.15),1.15)*vec3(1.02,1.06,.9)*1
 vec3 e2clay(vec2 p){float m=smoothstep(.35,.65,fbm(p*1.7+2.));vec3 c=mix(e2tx(tClay,p*1.25),e2tx(tClay,p*.83+.5)*vec3(.95,.72,.62)*1.15,m);c=e2sat(c,.78)*vec3(.98,.9,.86);c=mix(c,e2grass(p)*.9,smoothstep(.56,.72,fbm(p*2.2+3.))*.75);return c;}
 `;
 const MUD=/[?&]mud=0/.test(location.search)?undefined:'c';
-const MUDTILE={b:{f:'mud/a.glb',w:2.0,ys:.6,lift:.09,pb:[.42,.84],sat:'1.2',over:['.35','.6'],fl:[.34,.46],sk:'vec3(.98,.9,.86)',skb:'.85',pin:1,tint:'vec3(1.2,.86,.62)',gt:'tClay',gsat:.78}};
+const MUDTILE={b:{f:'mud/a.dat',w:2.0,ys:.6,lift:.09,pb:[.42,.84],sat:'1.2',over:['.35','.6'],fl:[.34,.46],sk:'vec3(.98,.9,.86)',skb:'.85',pin:1,tint:'vec3(1.2,.86,.62)',gt:'tClay',gsat:.78}};
 Object.assign(MUDTILE.b,{env:.18,edge2:1,rs:'1.35',stp:[.78,'1.35']});
 MUDTILE.c=Object.assign({},MUDTILE.b,{tint:'vec3(1.76,1.13,.87)',sat:0,rs:0,noRed:1});
 const WHEAT=false;
@@ -3480,7 +3484,7 @@ function mntTile(g,i,D,key){D=D||MNTTILE[MNT];key=key||MNT;const c=hc(i);const k
       if(lo<1e9&&!D.pin){const gy=k.position.y;w0.position.y-=Math.max(0,lo-gy);k.updateMatrixWorld(true);}}
     const b0=S.board;const setTok=()=>{if(S.board!==b0||!k.parent||!k.parent.parent)return;const tk=W.tokens[i]&&W.tokens[i].parent;if(!tk){setTimeout(setTok,60);return;}const rc=new THREE.Raycaster(new THREE.Vector3(c.x,5,c.z),new THREE.Vector3(0,-1,0));const hit=rc.intersectObject(m,true)[0];if(D.tokTop){const bb3=new THREE.Box3().setFromObject(m);tk.position.y=bb3.min.y+(bb3.max.y-bb3.min.y)*D.tokTop;}else if(hit){const rs=[];for(let q=0;q<10;q++){const a=q/10*6.2832;const rc2=new THREE.Raycaster(new THREE.Vector3(c.x+Math.cos(a)*.26,5,c.z+Math.sin(a)*.26),new THREE.Vector3(0,-1,0));const h2=rc2.intersectObject(m,true)[0];if(h2)rs.push(h2.point.y);}rs.sort((a,b)=>a-b);const med=rs.length?rs[Math.floor(rs.length*.15)]:hit.point.y;tk.position.y=Math.max(tk.position.y,Math.min(hit.point.y,med)-.012);}uTok.value=tk.position.y;tk.userData.yFix=tk.position.y;try{PERF.dirty=true;}catch(e){}};setTok();
     try{PERF.dirty=true;PERF.shadow=true;}catch(e){}};
-  if(R.g)put(R.g);else{R.cbs.push(put);if(R.cbs.length===1)new THREE.GLTFLoader().load('assets/test/'+D.f,gl=>{R.g=gl;R.cbs.splice(0).forEach(fn=>fn(gl));});}}
+  if(R.g)put(R.g);else{R.cbs.push(put);if(R.cbs.length===1)glbAny('assets/test/'+D.f,gl=>{R.g=gl;R.cbs.splice(0).forEach(fn=>fn(gl));});}}
 function windmill(g,x,z,s){if(WMV&&THREE.GLTFLoader){glbWindmill(g,x,z);return;}const y=heightAt(x,z);const k=new THREE.Group();k.position.set(x,y,z);k.scale.setScalar(s);
   const tw=new THREE.Mesh(new THREE.CylinderGeometry(.03,.045,.19,10),M(0xe6dcc6));tw.position.y=.095;tw.castShadow=true;k.add(tw);
   const rf=new THREE.Mesh(new THREE.ConeGeometry(.042,.06,10),M(0x6e3424));rf.position.y=.22;rf.castShadow=true;k.add(rf);
