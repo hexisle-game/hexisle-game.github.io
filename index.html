@@ -1408,6 +1408,7 @@ html body .tpick .tcell:disabled{box-shadow:none!important}
 #splash img{position:absolute;left:50%;top:46%;transform:translate(-50%,-66%);width:clamp(225px,30vw,375px);opacity:0;transition:opacity 1s ease;filter:drop-shadow(0 4px 10px rgba(0,0,0,.8))}
 #splash img.on{opacity:.92}
 #splash .spnote{position:absolute;left:0;right:0;bottom:calc(9% + 14px);margin:0;font-size:11px;line-height:1.6;color:#fff;opacity:.4;text-align:center;letter-spacing:.02em}
+#splash:not(.loading) .spnote{bottom:calc(9% + 30px)}
 #splash .sptap{position:absolute;left:0;right:0;text-align:center;bottom:calc(9% - 9px);margin:0;font-size:13px;color:#e9c47a;opacity:.55;animation:sptap 2.4s ease-in-out infinite}
 @keyframes sptap{50%{opacity:.18}}
 #splash.out{opacity:0;pointer-events:none}
@@ -1997,7 +1998,7 @@ html body .sheet-frame .swatches .sw.taken{opacity:.25}
 html.phone body .sheet-frame .swatches .sw{width:min(66%,78px)!important;height:36px!important}
 html body .sheet-lobby .lrow{padding:12px 2px!important}
 html.phone body .sheet-lobby .lrow{padding:9px 2px!important}
-.sheet-lobby .fleft{display:flex;flex-direction:column}.sheet-lobby .lopen{display:flex;align-items:center;gap:10px;margin-top:auto!important;padding:14px 2px 0 9px;border-top:1px solid rgba(233,196,122,.18);font-size:15px;color:#d8ccb6}.sheet-lobby .lopen .aitg{margin-left:auto}html.phone .sheet-lobby .lopen{padding-top:10px;font-size:14px}.sheet-lobby .fleft .lrow:last-of-type{margin-bottom:14px}
+.sheet-lobby .fleft{display:flex;flex-direction:column}.sheet-lobby .lopen{display:flex;align-items:center;gap:10px;margin-top:auto!important;padding:14px 2px 0 9px;border-top:1px solid rgba(233,196,122,.18);font-size:15px;color:#d8ccb6}.sheet-lobby .lopen .aitg{margin-left:auto}html.phone .sheet-lobby .lopen{padding-top:10px;font-size:14px;margin-bottom:11px}.sheet-lobby .fleft .lrow:last-of-type{margin-bottom:14px}
 html body .sheet-lobby .aitg{pointer-events:none}html body .sheet-lobby .aitg i,html body .sheet-lobby .aitg span{pointer-events:auto}html body .sheet-lobby .aitg{line-height:1}
 #tut{position:fixed;inset:0;z-index:64;pointer-events:none}
 #tut[hidden]{display:none}
