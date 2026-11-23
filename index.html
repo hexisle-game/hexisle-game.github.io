@@ -634,7 +634,7 @@ header.top .tools .ib[hidden]{display:none}
 .setmenu .mrow{cursor:default}
 .setpanel .msep2{flex:none;height:0;margin:10px 0 10px 36px;border-top:1px solid rgba(233,196,122,.26)}html.phone .setpanel .msep2{margin:8.25px 0 8.25px 26px}
 html body nav.setpanel .seg::after{display:none!important}html body nav.setpanel .seg{margin-right:-2px}html.phone body nav.setpanel .seg{margin-right:-2.75px}
-html body nav.setpanel .seg button{padding-left:10px!important;padding-right:10px!important}html.phone body nav.setpanel .seg button{padding-left:9.2px!important;padding-right:9.2px!important}
+html body nav.setpanel .seg button{padding-left:9px!important;padding-right:9px!important}html.phone body nav.setpanel .seg button{padding-left:7.8px!important;padding-right:7.8px!important}html body nav.setpanel .seg button:last-child{padding-right:0!important}
 html body nav.setpanel .mi{height:56px}html.phone body nav.setpanel .mi{height:41.25px}
 html body nav.setpanel .mi+.mi,html body nav.setpanel .msep+.mi{border-top-color:transparent!important;position:relative}
 html body .setpanel .mi+.mi::before,html body .setpanel .msep+.mi::before{content:"";position:absolute;left:36px;right:0;top:-1px;height:1px;background:rgba(233,196,122,.09);pointer-events:none}
@@ -4502,7 +4502,7 @@ function showFeedback(){
       await r.set({cat:FB.cat,text:txt,imgs:FB.imgs.length,nick:(ui.nick||'').slice(0,6),uid:NET.uid,t:firebase.database.ServerValue.TIMESTAMP,info:fbInfo()});
       try{localStorage.setItem('fb-last',Date.now());}catch(e){}FB.text='';FB.imgs=[];
       closeModal();openDialog(`<h3>보내 주셔서 고마워요!</h3><p>남겨 주신 의견은 꼼꼼히 확인할게요.</p><div class="row"><button class="btn sub" id="fbOk">확인</button></div>`);$('#fbOk').onclick=closeDialog;}
-    catch(e){console.warn('feedback',e);go.disabled=false;m.textContent='보내지 못했어요. 잠시 후 다시 시도해 주세요.';}};}
+    catch(e){console.warn('feedback',e);go.disabled=false;const pd=/permission/i.test((e&&(e.code||e.message))||'');m.textContent=pd?'보내지 못했어요. (저장 권한이 아직 열려 있지 않아요)':'보내지 못했어요. 잠시 후 다시 시도해 주세요.';}};}
 $('#fbBtn').onclick=()=>{showFeedback();applyPhone();};
 {const _cm=closeModal;closeModal=function(){const was=ui.modal==='feedback';const r=_cm.apply(this,arguments);if(was)try{applyPhone();}catch(e){}return r;};}
 $('#homeBtn').onclick=()=>{if(window.NET&&NET.on)return MP.confirmLeave();openDialog(`<h3>메인으로 갈까요?</h3><p>진행 중인 게임은 끝나고, 첫 화면으로 돌아가요.</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">메인으로</button></div>`);
