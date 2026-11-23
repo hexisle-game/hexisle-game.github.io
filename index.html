@@ -632,8 +632,12 @@ header.top .tools .ib[hidden]{display:none}
 .setmenu .mi.tg[aria-checked=true]::after{background:#b8893a radial-gradient(circle at 25px 9px,#fff6e0 6px,transparent 6.5px)}
 .setmenu .msep{height:1px;margin:5px 4px;background:rgba(255,255,255,.12)}
 .setmenu .mrow{cursor:default}
-html body .setpanel .mi{height:52px}html.phone body .setpanel .mi{height:38.5px}
-.setpanel .msep2{flex:none;height:0;margin:8px 0;border-top:1px solid rgba(233,196,122,.26)}html.phone .setpanel .msep2{margin:5.5px 0}html body .setpanel .msep2+.mi,html body .setpanel .msep2+.mi[hidden]+.mi,html body .setpanel .msep2+.mi[hidden]+.mi[hidden]+.mi{border-top:0!important}
+.setpanel .msep2{flex:none;height:0;margin:8px 0 8px 36px;border-top:1px solid rgba(233,196,122,.26)}html.phone .setpanel .msep2{margin:5.5px 0 5.5px 26px}
+html body nav.setpanel .mi+.mi,html body nav.setpanel .msep+.mi{border-top-color:transparent!important;position:relative}
+html body .setpanel .mi+.mi::before,html body .setpanel .msep+.mi::before{content:"";position:absolute;left:36px;right:0;top:-1px;height:1px;background:rgba(233,196,122,.09);pointer-events:none}
+html.phone body .setpanel .mi+.mi::before,html.phone body .setpanel .msep+.mi::before{left:26px}
+html body .setpanel .msep2+.mi[hidden]+.mi::before,html body .setpanel .msep2+.mi[hidden]+.mi[hidden]+.mi::before{display:none}
+.setpanel .setscroll{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:rgba(233,196,122,.35) transparent}html body .setpanel .msep2+.mi,html body .setpanel .msep2+.mi[hidden]+.mi,html body .setpanel .msep2+.mi[hidden]+.mi[hidden]+.mi{border-top:0!important}
 /* feedback popup, portrait phones (typing is easier upright) */
 html.fbp #rotate,html.fbp #tbench{display:none!important}
 html.fbp,html.fbp body{max-width:none!important}
@@ -641,7 +645,7 @@ html.fbp body .overlay{padding:0!important}
 html.fbp body .sheet.sheet-frame{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;padding:8px 18px 14px!important;border-radius:0!important}
 html.fbp .sheet-frame .fhead{padding:6px 52px 6px 0!important}
 html.fbp .sheet-frame .fhead h3{font-size:22px!important}
-html.fbp .sheet-frame .fbody{display:flex!important;flex-direction:column;padding-top:4px!important;min-height:0;overflow-y:auto;overflow-x:hidden;margin-right:-14px;padding-right:14px;scrollbar-width:thin;scrollbar-color:rgba(233,196,122,.35) transparent}
+html.fbp .sheet-frame .fbody{display:flex!important;flex-direction:column;padding-top:4px!important;min-height:0;overflow-y:auto;overflow-x:hidden;margin-right:-14px;padding-right:14px;scrollbar-width:thin;scrollbar-color:rgba(233,196,122,.35) transparent}.setpanel .setscroll>*{flex-shrink:0}
 html.fbp .sheet-frame .fleft{border:0!important;border-image:none!important;padding:0!important;overflow:visible;flex:none}
 html.fbp .sheet-feedback .mtabs{display:flex!important;flex-direction:row!important;gap:6px!important;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:0!important;margin:0 -18px 0 0}
 html.fbp .sheet-feedback .mtabs::-webkit-scrollbar{display:none}
@@ -2065,7 +2069,7 @@ html.phone body .emptyhand{font-size:11.5px!important;color:rgba(166,155,139,.72
     <button id="tExit" class="ib tut-only" hidden><svg class="gico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><defs><linearGradient id="gge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbe6b4"/><stop offset=".55" stop-color="#d9ac68"/><stop offset="1" stop-color="#a87a42"/></linearGradient></defs><g stroke="#3a2412" stroke-width="3.2" transform="translate(.7 .9)" opacity=".85"><path d="M14 4h4.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H14"/><path d="M10 8l-4 4 4 4M6 12h10"/></g><g stroke="url(#gge)" stroke-width="2.4"><path d="M14 4h4.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H14"/><path d="M10 8l-4 4 4 4M6 12h10"/></g></svg><span class="lb">나가기</span></button>
     <div class="setwrap">
       <button id="setBtn" class="ib" aria-label="설정" aria-haspopup="true" aria-expanded="false" data-tip="설정"><img class="uico" src="assets/ui2/settings.webp" alt=""></button>
-      <svg width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true"><defs><linearGradient id="ggs" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbe6b4"/><stop offset=".55" stop-color="#d9ac68"/><stop offset="1" stop-color="#a87a42"/></linearGradient></defs></svg><div id="setMenu" class="setmenu" hidden><div class="setdim" id="setDim"></div><nav class="setpanel" role="menu" aria-label="설정"><div class="sethead"><span>설정</span><button class="setx" id="setX" aria-label="닫기"></button></div>
+      <svg width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true"><defs><linearGradient id="ggs" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbe6b4"/><stop offset=".55" stop-color="#d9ac68"/><stop offset="1" stop-color="#a87a42"/></linearGradient></defs></svg><div id="setMenu" class="setmenu" hidden><div class="setdim" id="setDim"></div><nav class="setpanel" role="menu" aria-label="설정"><div class="sethead"><span>설정</span><button class="setx" id="setX" aria-label="닫기"></button></div><div class="setscroll">
         <button id="rulesBtn" class="mi" role="menuitem">게임 방법</button>
         <button id="sndBtn" class="mi" role="menuitem">사운드</button>
         <button id="tipBtn" class="mi tg" role="menuitemcheckbox">툴팁</button>
@@ -2078,7 +2082,7 @@ html.phone body .emptyhand{font-size:11.5px!important;color:rgba(166,155,139,.72
         <button id="newBtn" class="mi" role="menuitem">새 게임</button>
         <button id="homeBtn" class="mi" role="menuitem" hidden>메인으로 가기</button>
         <button id="leaveBtn" class="mi" role="menuitem" hidden>방 나가기</button>
-        <button id="creditBtn" class="credit-link">Credits &amp; Licenses</button>
+        <button id="creditBtn" class="credit-link">Credits &amp; Licenses</button></div>
       </div>
     </div>
   </div>
