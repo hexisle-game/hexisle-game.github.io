@@ -1311,10 +1311,10 @@ html body .tpick .tcell:disabled{box-shadow:none!important}
 @keyframes tbotIn{from{opacity:0}to{opacity:1}}
 
 /* splash: black screen + small logo; tap brightens into the title intro (music starts on the same tap) */
-#splash{position:fixed;inset:0;z-index:9999;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity 1.6s ease}
+#splash{position:fixed;inset:0;bottom:auto;height:100vh;height:100dvh;padding-bottom:calc(9vh + 40px);padding-bottom:calc(9dvh + 40px);box-sizing:border-box;z-index:9999;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity 1.6s ease}
 #splash img{width:clamp(225px,30vw,375px);opacity:0;transition:opacity 1s ease;filter:drop-shadow(0 4px 10px rgba(0,0,0,.8))}
 #splash img.on{opacity:.92}
-#splash .spnote{position:absolute;left:0;right:0;bottom:calc(9% + 14px);margin:0;font-size:11px;line-height:1.6;color:#fff;opacity:.22;text-align:center;letter-spacing:.02em}
+#splash .spnote{position:absolute;left:0;right:0;bottom:calc(9% + 14px);margin:0;font-size:11px;line-height:1.6;color:#fff;opacity:.4;text-align:center;letter-spacing:.02em}
 #splash .sptap{position:absolute;bottom:9%;margin:0;font-size:13px;color:#e9c47a;opacity:.55;animation:sptap 2.4s ease-in-out infinite}
 @keyframes sptap{50%{opacity:.18}}
 #splash.out{opacity:0;pointer-events:none}
@@ -1615,11 +1615,11 @@ html.phone.lbox body{top:var(--oy,0px)!important}
 #veil .vl canvas{position:absolute;inset:0;width:100%;height:100%}
 #veil.open .vl{transform:translate(var(--tx),var(--ty)) scale(var(--s));opacity:0}
 #veil.inst .vl,#veil.inst .vfog{transition:none!important}
-#boot{position:fixed;inset:0;z-index:9000;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:opacity .38s ease;pointer-events:auto}
+#boot{position:fixed;inset:0;bottom:auto;height:100vh;height:100dvh;padding-bottom:calc(9vh + 40px);padding-bottom:calc(9dvh + 40px);box-sizing:border-box;z-index:9000;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:opacity .38s ease;pointer-events:auto}
 #boot.on{display:flex}#boot.vis{opacity:1}#boot.on:not(.vis){transition:opacity .6s ease;pointer-events:none}#boot.inst{transition:none!important}#boot.slow.vis{transition:opacity 1.15s ease-in-out .05s}
 #veil.gath .vl{transition:transform 1.2s cubic-bezier(.2,.6,.35,1),opacity .8s ease-out}#veil.gath .vfog{transition:opacity 1s ease .15s}
 #boot img{width:clamp(225px,30vw,375px);opacity:.92;filter:drop-shadow(0 4px 10px rgba(0,0,0,.8))}
-#boot .bnote{position:absolute;left:0;right:0;bottom:calc(9% + 14px);margin:0;font-size:11px;line-height:1.6;color:#fff;opacity:.22;text-align:center;letter-spacing:.02em}
+#boot .bnote{position:absolute;left:0;right:0;bottom:calc(9% + 14px);margin:0;font-size:11px;line-height:1.6;color:#fff;opacity:.4;text-align:center;letter-spacing:.02em}
 #boot .bbar{position:absolute;bottom:9%;left:50%;width:120px;height:2px;margin-left:-60px;background:rgba(233,196,122,.15);overflow:hidden}
 #boot .bbar i{position:absolute;inset:0;width:40%;background:linear-gradient(90deg,transparent,#e9c47a,transparent);animation:spload 1.1s ease-in-out infinite}
 #veil .vin{position:absolute;inset:0;animation:vbr 5s ease-in-out infinite alternate}
