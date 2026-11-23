@@ -1616,11 +1616,12 @@ html.phone.lbox body{top:var(--oy,0px)!important}
 #veil.open .vl{transform:translate(var(--tx),var(--ty)) scale(var(--s));opacity:0}
 #veil.inst .vl,#veil.inst .vfog{transition:none!important}
 #boot{position:fixed;inset:0;z-index:9000;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:opacity .38s ease;pointer-events:auto}
-#boot.on{display:flex}#boot.vis{opacity:1}#boot.on:not(.vis){transition:opacity .6s ease;pointer-events:none}#boot.inst{transition:none!important}#boot.slow.vis{transition:opacity .95s ease-in .3s}
+#boot.on{display:flex}#boot.vis{opacity:1}#boot.on:not(.vis){transition:opacity .6s ease;pointer-events:none}#boot.inst{transition:none!important}#boot.slow.vis{transition:opacity 1.15s ease-in-out .05s}
 #veil.gath .vl{transition:transform 1.2s cubic-bezier(.2,.6,.35,1),opacity .8s ease-out}#veil.gath .vfog{transition:opacity 1s ease .15s}
 #boot img{width:clamp(150px,20vw,250px);opacity:.92;filter:drop-shadow(0 4px 10px rgba(0,0,0,.8))}
-#boot .bbar{width:120px;height:2px;margin-top:28px;background:rgba(233,196,122,.15);overflow:hidden}
-#boot .bbar i{display:block;height:100%;width:0;background:#e9c47a;transition:width .3s ease}
+#boot .bnote{margin:18px 0 0;font-size:11px;line-height:1.6;color:#fff;opacity:.22;text-align:center;letter-spacing:.02em}
+#boot .bbar{position:absolute;bottom:9%;left:50%;width:120px;height:2px;margin-left:-60px;background:rgba(233,196,122,.15);overflow:hidden}
+#boot .bbar i{position:absolute;inset:0;width:40%;background:linear-gradient(90deg,transparent,#e9c47a,transparent);animation:spload 1.1s ease-in-out infinite}
 #veil .vin{position:absolute;inset:0;animation:vbr 5s ease-in-out infinite alternate}
 @keyframes vbr{from{transform:translate(-1.2%,.5%)}to{transform:translate(1.2%,-.5%)}}
 .sheet-frame.sheet-multi,.sheet-frame.sheet-lobby{--fbo:.35}.sheet-frame.sheet-multi{--fbo:.39}
@@ -2572,10 +2573,10 @@ function veilBuild(v,onP){const key=innerWidth+'x'+innerHeight;const C=W.veilCac
     const n=document.createElement('div');n.className='vin';n.style.animationDelay=(-R()*5).toFixed(2)+'s';const c=document.createElement('canvas');n.appendChild(c);l.appendChild(n);v.appendChild(l);todo.push(()=>veilPaint(c,si,P.off,P.am,P.sp,P.kq));});});
   const N=todo.length;return new Promise(res=>{const nx=()=>{const j=todo.shift();if(!j){W.veilCache={key,nodes:[...v.childNodes]};return res();}j();if(onP)onP(1-todo.length/N);setTimeout(nx,0);};setTimeout(nx,0);});}
 // black boot screen (logo + progress bar): everything heavy happens behind it, then it fades up onto the mist, which parts at once
-function bootOn(slow){let b=$('#boot');if(!b){b=document.createElement('div');b.id='boot';b.innerHTML='<img alt="HEXISLE"><div class="bbar"><i></i></div>';document.body.appendChild(b);}
+function bootOn(slow){let b=$('#boot');if(!b){b=document.createElement('div');b.id='boot';b.innerHTML='<img alt="HEXISLE"><p class="bnote">섬을 불러오는 중입니다.</p><div class="bbar"><i></i></div>';document.body.appendChild(b);}
   const im=b.querySelector('img');if(!im.src)im.src=window.LOGO_URL;
-  if(b.classList.contains('on'))return 0;W.bootP=0;b.querySelector('.bbar i').style.width='0%';b.classList.add('on','inst');b.classList.toggle('slow',!!slow);void b.offsetWidth;b.classList.remove('inst');b.classList.add('vis');return slow?1300:380;}
-function bootProg(p){if(p<=W.bootP)return;W.bootP=p;const i=document.querySelector('#boot .bbar i');if(i)i.style.width=(p*100).toFixed(1)+'%';}
+  if(b.classList.contains('on'))return 0;W.bootP=0;b.classList.add('on','inst');b.classList.toggle('slow',!!slow);void b.offsetWidth;b.classList.remove('inst');b.classList.add('vis');return slow?1300:380;}
+function bootProg(p){if(p>W.bootP)W.bootP=p;}
 function bootOff(){const b=$('#boot');if(!b)return;b.classList.remove('vis');clearTimeout(W.bootT);W.bootT=setTimeout(()=>b.classList.remove('on'),700);}
 // new game in place: the (already painted) mist rolls back in while the screen darkens; without a painted set it simply fades to black
 function veilGather(){const v=$('#veil'),C=W.veilCache;if(!v||!C||C.key!==innerWidth+'x'+innerHeight)return false;clearTimeout(W.veilT);v.innerHTML='';C.nodes.forEach(n=>v.appendChild(n));
@@ -2584,7 +2585,7 @@ function bootRun(fn,gather){const d=bootOn(gather&&veilGather());W.booting=true;
 function veilIntro(tp,from,to){const v=$('#veil');if(!v)return;clearTimeout(W.veilT);
   try{introFXStart(performance.now()+1e9);}catch(e){}W.camAnim=null;W.veilHold=true;W.veilBan=-1;
   const run=()=>{const t0=performance.now(),L0={tot:LDC.tot,fin:LDC.fin};let painted=0;
-    v.className='on inst';veilBuild(v,p=>{painted=p;}).then(()=>{painted=1;});
+    v.className='on inst';void v.offsetWidth;v.classList.remove('inst');veilBuild(v,p=>{painted=p;}).then(()=>{painted=1;});
     const prog=()=>{const lf=Math.max(0,LDC.fin-L0.fin),fr=lf+LDC.n>0?Math.min(1,lf/(lf+LDC.n)):1;bootProg(.08+.62*fr+.2*painted);};
     const tick=()=>{const n=performance.now(),el=n-t0;prog();
       if((painted>=1&&LDC.n<=0&&n-LDC.t>450&&el>600)||el>12000){go();return;}W.veilT=setTimeout(tick,80);};
