@@ -3492,9 +3492,43 @@ const _lv=new THREE.Vector3();let LSC=1;
 function placeLabels(){if(!W.labels)return;const st=$('#stage');const w=st.clientWidth,h=st.clientHeight;{const d=W.cam.position.distanceTo(W.ctl.target);const ref=W.ctl.minDistance+(W.ctl.maxDistance-3.5-W.ctl.minDistance)*.5;LSC=Math.max(PH.on?.42:.62,Math.min(1.6,ref/d))*(PH.on?.82:1);}
   for(const L of W.labels){if(L.anchor){L.anchor.getWorldPosition(_lv);_lv.add(L.off.clone().multiplyScalar(L.anchor.scale.x));}else _lv.copy(L.pos);_lv.project(W.cam);
     if(_lv.z>1||_lv.z<-1){L.el.style.display='none';continue;}L.el.style.display='';L.el.style.transform=`translate(${((_lv.x+1)/2*w).toFixed(1)}px,${((1-_lv.y)/2*h).toFixed(1)}px) translate(-50%,-50%) scale(${LSC.toFixed(3)})`;}}
+// test page: static batching — once the island has finished loading, still meshes under W.staticG that share an identical plain material
+// (no custom shader, opaque) are merged into one mesh per material; originals are only hidden. Animated things are left alone.
+// The board used ~1400 draw calls a frame, which is what made desktop CPUs (Mac) stall.
+function scheduleBatch(){if(!PERFV)return;clearTimeout(W.batchT);const gen=W.batchGen=(W.batchGen||0)+1;const t0=performance.now();
+  const tick=()=>{if(gen!==W.batchGen)return;const n=performance.now();if((LDC.n<=0&&n-LDC.t>900&&n-t0>1500)||n-t0>20000){try{batchStatic();}catch(e){console.warn('batch',e);}return;}W.batchT=setTimeout(tick,300);};W.batchT=setTimeout(tick,600);}
+function batchStatic(){const root=W.staticG;if(!root||!THREE.BufferGeometryUtils)return;const DEF=THREE.Material.prototype.onBeforeCompile;
+  root.children.filter(c=>c.userData.batched).forEach(c=>{root.remove(c);c.geometry.dispose();});root.traverse(o=>{if(o.userData.batchHid){o.visible=true;delete o.userData.batchHid;}});
+  const anim=new Set(),add=o=>{if(o&&o.isObject3D)anim.add(o);};
+  (W.mills||[]).forEach(add);(W.dogs||[]).forEach(d=>add(d.wr));(W.tractors||[]).forEach(t=>add(t.k));(W.coastBob||[]).forEach(add);(W.lhBeams||[]).forEach(add);
+  (W.fleet||[]).forEach(f=>add(f&&(f.g||f.k||f)));(W.gulls||[]).forEach(g=>add(g&&(g.g||g)));(W.codeGulls||[]).forEach(add);(W.clouds||[]).forEach(add);(W.mines||[]).forEach(m=>add(m.userData.outerCart));
+  (W.sheepMix||[]).forEach(m=>{try{add(m.getRoot());}catch(e){}});(W.tokens||[]).forEach(t=>add(t&&t.parent));(W.wmK||[]).forEach(add);add(W.robber);
+  Object.values(W.pflags||{}).forEach(v=>{(Array.isArray(v)?v:[v]).forEach(x=>add(x&&(x.isObject3D?x:x.g)));});(W.flagDrop||[]).forEach(F=>(F.o||[]).forEach(add));
+  const isAnim=o=>{let q=o;while(q&&q!==root){if(anim.has(q)||q.userData.noBatch||q.userData.bob||q.userData.anim)return true;q=q.parent;}return false;};
+  root.updateMatrixWorld(true);const inv=new THREE.Matrix4().copy(root.matrixWorld).invert(),M=new THREE.Matrix4();const buckets=new Map();
+  root.traverseVisible(o=>{if(!o.isMesh||o.isSkinnedMesh||o.isInstancedMesh||o.userData.batched)return;const m=o.material,g=o.geometry;
+    // custom shader hooks are fine as long as they only touch the fragment stage (colour grading); anything that edits the vertex stage stays separate
+    const obc=m.onBeforeCompile!==DEF?String(m.onBeforeCompile):'';
+    if(Array.isArray(m)||/vertexShader|uniforms/.test(obc)||m.isShaderMaterial||(m.transparent&&!m.alphaTest)||!g||!g.attributes.position||g.morphAttributes&&Object.keys(g.morphAttributes).length)return;
+    if(o.matrixWorld.determinant()<=0||isAnim(o))return;
+    const k=[m.type,m.map&&m.map.source.uuid,m.normalMap&&m.normalMap.uuid,m.emissiveMap&&m.emissiveMap.uuid,m.color&&m.color.getHex(),m.emissive&&m.emissive.getHex(),m.emissiveIntensity,m.roughness,m.metalness,m.envMapIntensity,m.opacity,m.side,m.alphaTest,m.vertexColors,m.flatShading,m.fog,m.toneMapped,o.castShadow,o.receiveShadow,o.renderOrder,o.customDepthMaterial?o.customDepthMaterial.uuid:'',obc,m.customProgramCacheKey?m.customProgramCacheKey():''].join('|');
+    let B=buckets.get(k);if(!B)buckets.set(k,B={m,o0:o,list:[]});B.list.push(o);});
+  let merged=0,hidden=0;
+  // model files mix interleaved / normalized / 16-bit attributes; copy everything to plain Float32 so the merge never refuses
+  // copy to a plain, non-indexed Float32 geometry holding only what the material reads (position, normal, uv if mapped, colour if vertexColors)
+  const plain=(src,m)=>{const ix=src.index,N=ix?ix.count:src.attributes.position.count,at=i=>ix?ix.getX(i):i;const g=new THREE.BufferGeometry();
+    const needUV=!!(m.map||m.normalMap||m.roughnessMap||m.metalnessMap||m.emissiveMap||m.alphaMap||m.aoMap||m.bumpMap),needC=!!m.vertexColors;
+    const cp=(nm,sz,def)=>{const a=src.attributes[nm],arr=new Float32Array(N*sz);for(let i=0;i<N;i++){const v=at(i);for(let c=0;c<sz;c++)arr[i*sz+c]=a?(c===0?a.getX(v):c===1?a.getY(v):c===2?a.getZ(v):a.getW(v)):def;}g.setAttribute(nm,new THREE.BufferAttribute(arr,sz));};
+    cp('position',3,0);if(src.attributes.normal)cp('normal',3,0);else g.computeVertexNormals();if(needUV)cp('uv',2,0);if(needC)cp('color',src.attributes.color?src.attributes.color.itemSize:3,1);return g;};
+  let fail=0;
+  buckets.forEach(B=>{if(B.list.length<2)return;const geos=B.list.map(o=>{M.multiplyMatrices(inv,o.matrixWorld);const g=plain(o.geometry,B.m);g.applyMatrix4(M);return g;});
+    let mg=null;try{mg=THREE.BufferGeometryUtils.mergeBufferGeometries(geos,false);}catch(e){}geos.forEach(g=>g.dispose());if(!mg){fail++;return;}
+    const mesh=new THREE.Mesh(mg,B.m);mesh.castShadow=B.o0.castShadow;mesh.receiveShadow=B.o0.receiveShadow;mesh.renderOrder=B.o0.renderOrder;if(B.o0.customDepthMaterial)mesh.customDepthMaterial=B.o0.customDepthMaterial;
+    mesh.userData.batched=1;mesh.raycast=()=>{};root.add(mesh);B.list.forEach(o=>{o.visible=false;o.userData.batchHid=1;});merged++;hidden+=B.list.length;});
+  W.batchInfo={merged,hidden,fail};try{PERF.dirty=true;PERF.shadow=true;}catch(e){}}
 function buildStatic(){
   const key=JSON.stringify(S.board.hexes)+JSON.stringify(S.board.ports);if(key===W.boardKey)return;W.boardKey=key;W.prev=null;W.robberFrom=null;if(W.pieces){W.pieces.clear();}W.dynG.clear();W.pflags={};W.anim.clear();W.robber=null;W.tkey=null;
-  W.staticG.clear();W.mills=[];W.wmMix=[];W.wmK=[];W.tokens=[];W.infoG.clear();makeEnv();if(W.labels){W.labels=W.labels.filter(L=>{if(L.keep)return true;L.el.remove();return false;});}
+  W.staticG.clear();scheduleBatch();W.mills=[];W.wmMix=[];W.wmK=[];W.tokens=[];W.infoG.clear();makeEnv();if(W.labels){W.labels=W.labels.filter(L=>{if(L.keep)return true;L.el.remove();return false;});}
   const g=W.staticG;const rng=seeded(key.length+S.board.robber*13);
   const tg=new THREE.PlaneGeometry(15,15,220,220);tg.rotateX(-Math.PI/2);const tp=tg.attributes.position;
   for(let i=0;i<tp.count;i++)tp.setY(i,heightAt(tp.getX(i),tp.getZ(i)));tg.computeVertexNormals();
