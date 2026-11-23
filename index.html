@@ -1311,8 +1311,8 @@ html body .tpick .tcell:disabled{box-shadow:none!important}
 @keyframes tbotIn{from{opacity:0}to{opacity:1}}
 
 /* splash: black screen + small logo; tap brightens into the title intro (music starts on the same tap) */
-#splash{position:fixed;inset:0;z-index:9999;background:#000;display:grid;grid-template-rows:1fr calc(9% + 40px);justify-items:center;align-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity 1.6s ease}
-#splash img{grid-row:1;width:clamp(225px,30vw,375px);opacity:0;transition:opacity 1s ease;filter:drop-shadow(0 4px 10px rgba(0,0,0,.8))}
+#splash{position:fixed;inset:0;z-index:9999;background:#000;display:block;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity 1.6s ease}
+#splash img{position:absolute;left:50%;top:var(--logoY,46%);transform:translate(-50%,-50%);width:clamp(225px,30vw,375px);opacity:0;transition:opacity 1s ease;filter:drop-shadow(0 4px 10px rgba(0,0,0,.8))}
 #splash img.on{opacity:.92}
 #splash .spnote{position:absolute;left:0;right:0;bottom:calc(9% + 14px);margin:0;font-size:11px;line-height:1.6;color:#fff;opacity:.4;text-align:center;letter-spacing:.02em}
 #splash .sptap{position:absolute;bottom:9%;margin:0;font-size:13px;color:#e9c47a;opacity:.55;animation:sptap 2.4s ease-in-out infinite}
@@ -1616,9 +1616,9 @@ html.phone.lbox body{top:var(--oy,0px)!important}
 #veil.open .vl{transform:translate(var(--tx),var(--ty)) scale(var(--s));opacity:0}
 #veil.inst .vl,#veil.inst .vfog{transition:none!important}
 #boot{position:fixed;inset:0;z-index:9000;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:opacity .38s ease;pointer-events:auto}
-#boot.on{display:grid;grid-template-rows:1fr calc(9% + 40px);justify-items:center;align-items:center}#boot.vis{opacity:1}#boot.on:not(.vis){transition:opacity .6s ease;pointer-events:none}#boot.inst{transition:none!important}#boot.slow.vis{transition:opacity 1.15s ease-in-out .05s}
+#boot.on{display:block}#boot.vis{opacity:1}#boot.on:not(.vis){transition:opacity .6s ease;pointer-events:none}#boot.inst{transition:none!important}#boot.slow.vis{transition:opacity 1.15s ease-in-out .05s}
 #veil.gath .vl{transition:transform 1.2s cubic-bezier(.2,.6,.35,1),opacity .8s ease-out}#veil.gath .vfog{transition:opacity 1s ease .15s}
-#boot img{grid-row:1;width:clamp(225px,30vw,375px);opacity:.92;filter:drop-shadow(0 4px 10px rgba(0,0,0,.8))}
+#boot img{position:absolute;left:50%;top:var(--logoY,46%);transform:translate(-50%,-50%);width:clamp(225px,30vw,375px);opacity:.92;filter:drop-shadow(0 4px 10px rgba(0,0,0,.8))}
 #boot .bnote{position:absolute;left:0;right:0;bottom:calc(9% + 14px);margin:0;font-size:11px;line-height:1.6;color:#fff;opacity:.4;text-align:center;letter-spacing:.02em}
 #boot .bbar{position:absolute;bottom:9%;left:50%;width:120px;height:2px;margin-left:-60px;background:rgba(233,196,122,.15);overflow:hidden}
 #boot .bbar i{position:absolute;inset:0;width:40%;background:linear-gradient(90deg,transparent,#e9c47a,transparent);animation:spload 1.1s ease-in-out infinite}
@@ -4451,6 +4451,9 @@ function paintCard(res,label,dark){
   return toBlobURL(c.toDataURL('image/png'));}
 function buildCards(resOnly){RES.forEach(r=>CARDIMG[r]='assets/cards2/'+r+'.webp');if(!resOnly)Object.keys(DEVN).forEach(t=>CARDIMG[t]=paintCard(t,DEVN[t],true));}
 
+// splash / loading logo: centre it on the part of the screen that is really visible (browser bars, fullscreen), slightly above the middle
+function logoPos(){try{const vv=window.visualViewport;const top=vv?vv.offsetTop:0,h=vv?vv.height:innerHeight;document.documentElement.style.setProperty('--logoY',Math.round(top+h*.46)+'px');}catch(e){}}
+logoPos();addEventListener('resize',logoPos);try{visualViewport.addEventListener('resize',logoPos);visualViewport.addEventListener('scroll',logoPos);}catch(e){}document.addEventListener('fullscreenchange',()=>setTimeout(logoPos,60));document.addEventListener('webkitfullscreenchange',()=>setTimeout(logoPos,60));
 const PH={on:false,k:1,vw:0,vh:0,ox:0,oy:0,orig:new Map()};
 const HUDQ={get matches(){return PH.on||matchMedia('(min-width:1101px) and (min-height:640px)').matches;}};
 function evalMQ(txt,w,h){if(/prefers|hover|pointer|orientation/.test(txt))return null;return txt.split(',').some(part=>{let ok=true;part.replace(/\((min|max)-(width|height)\s*:\s*(\d+)px\)/g,(m,mm,d,v)=>{const x=d==='width'?w:h;v=+v;if(mm==='min'?x<v:x>v)ok=false;});return ok;});}
