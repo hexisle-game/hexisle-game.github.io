@@ -4362,9 +4362,14 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '주사위 굴리기':()=>{if(S.phase==='setup')finishSetup();if(S.cur!==ME||S.rolled){S.cur=ME;S.rolled=false;S.pend=null;}roll(ME);update();},
     '승리 화면':()=>{if(S.phase==='setup')finishSetup();S.phase='over';S.winner=ME;S.pend=null;closeDialog();ui.modal=null;update();},
     '패배 화면':()=>{if(S.phase==='setup')finishSetup();S.phase='over';S.winner=1;S.pend=null;closeDialog();ui.modal=null;update();},
+    '멀티 결과 화면':()=>{closeModal();S.mp=true;S.phase='over';S.winner=(ME+1)%S.players.length;S.pend=null;closeDialog();ui.modal=null;update();setTimeout(()=>{S.mp=false;},500);},
     '시작 연출 (첫 진입)':()=>{try{bootRun(()=>{fitCam('now');camIntro();});}catch(e){console.error(e);}},
     '시작 연출 (새 게임)':()=>{try{restartGame();}catch(e){console.error(e);}},
     '성능 표시':()=>perfHud(),
+    '기록: 내 기록':()=>{closeDialog();showRecords('me');},
+    '기록: 싱글 랭킹':()=>{closeDialog();showRecords('single','week');},
+    '기록: 멀티 랭킹':()=>{closeDialog();showRecords('multi','week');},
+    '첫 화면 (트로피 버튼)':()=>{closeModal();showTitle(true);},
     '구름 켜기':()=>{const u=new URL(location.href);u.searchParams.delete('cloud');location.href=u;},
     '구름 끄기':()=>{const u=new URL(location.href);u.searchParams.set('cloud','0');location.href=u;},
     '주변 장식 켜기/끄기':()=>{const d=$('#deco');if(d){d.hidden=!d.hidden;document.documentElement.classList.toggle('nowood',d.hidden);return;}const u=new URL(location.href);u.searchParams.set('deco','1');location.href=u;},
@@ -4374,8 +4379,8 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '지붕: 텍스처 ↔ 셰이더':()=>{const u=new URL(location.href);u.searchParams.set('tx',TXM?'0':'1');location.href=u;},
   };
   const build=()=>{const p=document.createElement('div');p.id='tbench';p.innerHTML='<button class="tg">테스트 ▾</button><b>게임</b>';
-    const groups={'새 게임 (인트로 포함)':'게임','정착지 짓기':'건설','도적 이동':'연출','승리 화면':'결과','시작 연출 (첫 진입)':'화면','시작 연출 (새 게임)':'화면','성능 표시':'화면','색상 A: 빨강·파랑·노랑·초록':'색상 세트'};
-    const FOLD={'숲 지형':1};let box=p;Object.keys(act).forEach(k=>{if(groups[k]&&groups[k]!=='게임'){if(FOLD[groups[k]]){const d=document.createElement('details');d.innerHTML='<summary>'+groups[k]+'</summary>';p.appendChild(d);box=d;}else{const t=document.createElement('b');t.textContent=groups[k];p.appendChild(t);box=p;}}const b=document.createElement('button');b.textContent=k;b.onclick=e=>{e.stopPropagation();try{act[k]();}catch(err){console.error(err);alert(err.message);}};box.appendChild(b);});
+    const groups={'새 게임 (인트로 포함)':'게임','정착지 짓기':'건설','도적 이동':'연출','승리 화면':'결과','시작 연출 (첫 진입)':'화면','시작 연출 (새 게임)':'화면','성능 표시':'화면','기록: 내 기록':'기록·랭킹','기록: 싱글 랭킹':'기록·랭킹','기록: 멀티 랭킹':'기록·랭킹','첫 화면 (트로피 버튼)':'기록·랭킹','멀티 결과 화면':'결과','색상 A: 빨강·파랑·노랑·초록':'색상 세트'};
+    const FOLD={'숲 지형':1};let box=p;Object.keys(act).forEach(k=>{if(groups[k]&&groups[k]!=='게임'&&groups[k]!==box._g){if(FOLD[groups[k]]){const d=document.createElement('details');d.innerHTML='<summary>'+groups[k]+'</summary>';p.appendChild(d);box=d;}else{const t=document.createElement('b');t.textContent=groups[k];p.appendChild(t);box=p;}box._g=groups[k];}const b=document.createElement('button');b.textContent=k;b.onclick=e=>{e.stopPropagation();try{act[k]();}catch(err){console.error(err);alert(err.message);}};box.appendChild(b);});
     p.querySelector('.tg').onclick=()=>p.classList.toggle('min');document.body.appendChild(p);};
   if(document.readyState==='complete')go();else addEventListener('load',go);})();
 
@@ -5019,7 +5024,7 @@ TUT.steps=[
  {t:'새 정착지 자리',b:'새 정착지는 <b>내 도로와 이어진</b> 꼭짓점에, 다른 건물과 두 칸 이상 떨어진 곳에 지어요.',at(){return {v:this.P.b};},enter(){this.steps[this.i].only={v:this.P.b};this.focus({v:this.P.b});},done(){return !!S.vb[this.P.b];}},
  {t:'발전 카드 사기',b:'<b>양모·곡물·광석</b> 1장씩으로 발전 카드를 살 수 있어요. 어떤 카드가 나올지는 몰라요!',at:{sel:'[data-act="dev"]'},enter(){this.zoomOut();this.topUp(COST.dev);const d=S.deck,i=d.lastIndexOf('knight');if(i>=0){[d[i],d[d.length-1]]=[d[d.length-1],d[i]];}},done(){return me0().dev.length>0;}},
  {t:'기사 카드!',b:'기사 카드를 뽑았어요. 기사는 도적을 옮기고 상대 카드를 1장 빼앗아요. 발전 카드는 <b>산 차례에는 쓸 수 없고</b> 다음 차례부터 써요. 카드를 누르면 설명을 볼 수 있어요.',at:()=>({sel:PH.on?'[data-htab="dev"]':'.tray-dev'}),next:true},
- {t:'교환하기',b:'부족한 자원은 교환으로 구해요. <b>교환</b>을 누르세요.',at:{sel:'[data-act="trade"]'},enter(){this.topUp({wood:3,brick:2});[1,2].forEach(p=>this.topUp({wood:2,brick:2,wool:2,grain:2,ore:2},p));},done(){return ui.modal==='trade';}},
+ {t:'교환하기',b:'부족한 자원은 교환으로 구해요. <b>교환</b>을 누르세요.',at:{sel:'[data-act="trade"]'},enter(){if(ui.handTab==='dev'){ui.handTab='res';try{render();}catch(e){}}this.topUp({wood:3,brick:2});[1,2].forEach(p=>this.topUp({wood:2,brick:2,wool:2,grain:2,ore:2},p));},done(){return ui.modal==='trade';}},
  {t:'AI와 교환',b:'은행에서는 같은 자원 4장을 원하는 1장으로 바꿔요(항구가 있으면 더 싸요). 이번엔 <b>플레이어</b> 탭을 눌러 보세요.',at:{sel:'.sheet-trade .mtab[data-t="player"]'},done(){return !!document.querySelector('.sheet-trade .mtab[data-t="player"].on');}},
  {t:'줄 것 고르기',b:'내가 줄 <b>목재</b>의 <b>+</b>를 눌러 1장으로 정하세요.',at:{sel:'#pg [data-k="wood"][data-d="1"]',pad:5},done(){const b=document.querySelector('#pg [data-k="wood"][data-d="1"]');return !!b&&+b.closest('.cell').querySelector('.v').textContent>=1;}},
  {t:'받을 것 고르기',b:'받고 싶은 <b>광석</b>의 <b>+</b>를 눌러 1장으로 정하세요.',at:{sel:'#pr [data-k="ore"][data-d="1"]',pad:5},done(){const b=document.querySelector('#pr [data-k="ore"][data-d="1"]');return !!b&&+b.closest('.cell').querySelector('.v').textContent>=1;}},
@@ -5033,7 +5038,7 @@ TUT.steps=[
  {t:'턴 종료',b:'좋아요! 턴을 넘겨 주세요.',at:{sel:'[data-act="end"]'},enter(){this.zoomOut();},done(){return S.cur!==0;}},
  {t:'AI들의 차례',b:'AI들이 차례를 진행하고 있어요.',ai:true,spot:'left',done(){return S.cur===0&&!S.rolled;}},
  {t:'주사위 7과 도적',b:'이번엔 <b>7</b>이 나와요! 7이 나오면 아무 땅도 생산하지 않고, <b>카드가 8장 이상인 사람은 절반을 버려요</b>. 주사위를 굴려 보세요.',at:{sel:'[data-act="roll"]'},enter(){this.topUp({wood:3,brick:3,wool:2,grain:2,ore:1});this.force7=true;},done(){return S.rolled;}},
- {t:'카드 버리기',b(){return `카드가 많아서 절반(<b>${S.pend&&S.pend.n||''}장</b>)을 버려야 해요. 내 자원카드에서 버릴 카드를 눌러 고르세요.`;},at:{sel:'#dIn',pad:6},done(){return !(S.pend&&S.pend.k==='discard')||document.querySelectorAll('#dOut [data-r]').length>=S.pend.n;}},
+ {t:'카드 버리기',b(){return `카드가 많아서 절반(<b>${S.pend&&S.pend.n||''}장</b>)을 버려야 해요. 내 자원카드에서 버릴 카드를 눌러 고르세요.`;},at:{sel:'#dc',pad:6},done(){return !(S.pend&&S.pend.k==='discard')||document.querySelectorAll('#dc .plc.on').length>=S.pend.n;}},
  {t:'버리기',b:'다 골랐으면 <b>버리기</b>를 누르세요.',at:{sel:'#dOk',pad:5},done(){return !(S.pend&&S.pend.k==='discard');}},
  {t:'도적 옮기기',b(){return `7을 굴린 사람은 <b>도적</b>을 옮겨요. 도적이 앉은 땅은 자원이 나오지 않아요. 빛나는 땅(AI의 건물이 있는 땅)을 누르세요.`;},at(){return {h:this.P.hexAI};},enter(){this.steps[this.i].only={h:this.P.hexAI};this.topUp({wool:1,grain:1},1);this.focus({h:this.P.hexAI},PH.on?6:8.5);},done(){return S.board.robber===this.P.hexAI;}},
  {t:'누구에게서 빼앗을까요?',b:'이 땅에는 여러 상대의 건물이 있어요. 카드를 빼앗을 상대를 고르세요.',at:{sel:'#sheet',pad:0},mini:true,done(){return !(S.pend&&S.pend.k==='steal');}},
