@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>HexIsle 관리자</title>
+<link rel="icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@300..900&display=swap">
+<style>
+:root{--bg:#17110b;--panel:#221911;--panel2:#2b2016;--line:rgba(233,196,122,.22);--line2:rgba(233,196,122,.45);--gold:#e9c47a;--gold2:#f3d08a;--ink:#efe5d2;--muted:#a69a85;--dim:#7d715f;--red:#c9493a;--green:#7fae6a;--blue:#7aa3c9}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hahmlet",system-ui,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:14px}
+body{min-height:100vh;background:radial-gradient(ellipse at 50% -10%,#3a2a19 0,var(--bg) 60%) fixed}
+button{font:inherit;color:inherit;cursor:pointer}
+.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:14px;padding:12px 20px;background:rgba(23,17,11,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.top h1{margin:0;font-size:18px;font-weight:800;color:var(--gold2);letter-spacing:.02em}
+.top h1 small{font-size:13px;font-weight:500;color:var(--muted);margin-left:8px}
+.top .sp{flex:1}
+.who{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40vw}
+.btn{padding:7px 14px;border:1px solid var(--line2);background:rgba(233,196,122,.06);color:var(--gold);border-radius:2px}
+.btn:hover{background:rgba(233,196,122,.14)}
+.btn.pri{background:linear-gradient(#a3281d,#7a1a12);border-color:#d9a44a;color:#fff3d6;font-weight:700}
+.btn.red{color:#f0a08f;border-color:rgba(240,120,100,.45)}
+.btn.sm{padding:4px 10px;font-size:12.5px}
+.gate{max-width:520px;margin:12vh auto;padding:28px 26px;background:var(--panel);border:1px solid var(--line2);border-radius:3px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.gate h2{margin:0 0 8px;color:var(--gold2);font-size:20px}
+.gate p{color:var(--muted);line-height:1.7;margin:8px 0 18px}
+.gate code{display:block;margin:10px auto 6px;padding:10px;background:#120d08;border:1px solid var(--line);color:var(--gold2);font-size:13px;word-break:break-all;user-select:all}
+.gate ol{text-align:left;color:var(--muted);line-height:1.8;padding-left:20px;margin:12px 0 18px}
+.wrap{display:grid;grid-template-columns:minmax(300px,400px) 1fr;height:calc(100vh - 57px)}
+.side{display:flex;flex-direction:column;border-right:1px solid var(--line);min-height:0}
+.tabs{display:flex;gap:2px;padding:10px 12px 0;overflow-x:auto;scrollbar-width:none}
+.tab{position:relative;padding:8px 12px 10px;background:none;border:0;color:var(--muted);font-weight:700;white-space:nowrap}
+.tab b{font-weight:500;font-size:12px;color:var(--dim);margin-left:4px}
+.tab.on{color:var(--gold2)}
+.tab.on::after{content:"";position:absolute;left:12%;right:12%;bottom:0;height:2px;background:linear-gradient(90deg,transparent,#f3d08a 25%,#fff0c0 50%,#f3d08a 75%,transparent)}
+.filt{display:flex;gap:6px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.chip{padding:4px 10px;border:1px solid var(--line);background:none;color:var(--muted);border-radius:20px;font-size:12.5px}
+.chip.on{border-color:var(--line2);color:var(--gold);background:rgba(233,196,122,.08)}
+.list{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(233,196,122,.3) transparent}
+.item{display:block;width:100%;text-align:left;padding:12px 14px 12px 16px;background:none;border:0;border-bottom:1px solid rgba(233,196,122,.08);position:relative}
+.item:hover{background:rgba(233,196,122,.04)}
+.item.sel{background:rgba(233,196,122,.09)}
+.item.sel::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold)}
+.item .r1{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.badge{font-size:11.5px;padding:1px 7px;border-radius:2px;border:1px solid;font-weight:700}
+.b-bug{color:#f0a08f;border-color:rgba(240,120,100,.45)}.b-idea{color:#b7d79e;border-color:rgba(160,210,130,.4)}.b-etc{color:#a9c4de;border-color:rgba(130,170,210,.4)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 6px rgba(233,196,122,.7)}
+.done .dot{display:none}
+.item .t{margin-left:auto;font-size:12px;color:var(--dim)}
+.item .tx{color:var(--ink);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-all}
+.item.done .tx{color:var(--muted)}
+.item .ph{font-size:12px;color:var(--dim)}
+.empty{padding:40px 20px;text-align:center;color:var(--dim)}
+.main{overflow-y:auto;min-height:0;padding:22px 28px 40px}
+.det{max-width:860px}
+.det .hd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.det .hd .t{color:var(--muted);font-size:13px}
+.det .acts{margin-left:auto;display:flex;gap:8px}
+.back{display:none}
+.txt{white-space:pre-wrap;word-break:break-word;line-height:1.75;font-size:15.5px;background:var(--panel);border:1px solid var(--line);padding:16px 18px;border-radius:2px}
+.sec{margin:22px 0 8px;color:var(--gold);font-size:13px;font-weight:700;letter-spacing:.04em}
+.imgs{display:flex;gap:10px;flex-wrap:wrap}
+.imgs button{padding:0;border:1px solid var(--line2);background:#000;width:150px;height:150px;border-radius:2px;overflow:hidden}
+.imgs img{width:100%;height:100%;object-fit:cover;display:block}
+.imgs .ld{width:150px;height:150px;border:1px dashed var(--line);display:grid;place-items:center;color:var(--dim);font-size:12px}
+table.meta{border-collapse:collapse;width:100%;font-size:13px}
+table.meta td{padding:7px 10px;border-bottom:1px solid rgba(233,196,122,.08);vertical-align:top;word-break:break-all}
+table.meta td:first-child{width:120px;color:var(--muted);white-space:nowrap}
+.ua{color:var(--dim);font-size:12px}
+.lb{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;padding:20px}
+.lb.on{display:flex}
+.lb img{max-width:100%;max-height:100%;border:1px solid var(--line2);box-shadow:0 10px 40px rgba(0,0,0,.6)}
+.lb .x{position:absolute;top:14px;right:16px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,10px);padding:8px 18px;background:rgba(36,23,12,.94);border:1px solid rgba(233,196,122,.75);color:#f3e2bc;border-radius:2px;opacity:0;transition:.25s;pointer-events:none;z-index:30}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:760px){
+  .top{padding:10px 14px}.who{display:none}
+  .wrap{grid-template-columns:1fr;height:auto}
+  .side{border-right:0}.list{overflow:visible}
+  .main{display:none;padding:16px 16px 40px}
+  body.detail .side{display:none}body.detail .main{display:block}
+  .back{display:inline-block}
+  .imgs button,.imgs .ld{width:calc(33.3% - 7px);height:auto;aspect-ratio:1}
+  table.meta td:first-child{width:76px}table.meta td{padding:7px 6px}
+}
+</style>
+</head>
+<body>
+<div class="top"><h1>HEXISLE<small>오류 신고 관리</small></h1><span class="sp"></span><span class="who" id="who"></span><button class="btn sm" id="out" hidden>로그아웃</button></div>
+<div id="app"></div>
+<div class="lb" id="lb"><button class="btn sm x" id="lbx">닫기</button><img id="lbimg" alt=""></div>
+<div class="toast" id="toast"></div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+const FB_CFG={apiKey:"AIzaSyDNN0_DWoBzcy2W4k59oa-kDRot-1h8VR0",authDomain:"hexisle-a4f78.firebaseapp.com",databaseURL:"https://hexisle-a4f78-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"hexisle-a4f78",storageBucket:"hexisle-a4f78.firebasestorage.app",messagingSenderId:"865054353768",appId:"1:865054353768:web:af2d3954f9fd067339cedd"};
+firebase.initializeApp(FB_CFG);const auth=firebase.auth(),db=firebase.database();
+const $=s=>document.querySelector(s),app=$('#app');
+const CAT={bug:['오류','b-bug'],idea:['개선 의견','b-idea'],etc:['기타','b-etc']};
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let ITEMS=[],SEL=null,TAB='all',ST='all',sub=null;
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1800);}
+function ago(t){if(!t)return '';const d=(Date.now()-t)/1000;if(d<60)return '방금';if(d<3600)return Math.floor(d/60)+'분 전';if(d<86400)return Math.floor(d/3600)+'시간 전';if(d<86400*7)return Math.floor(d/86400)+'일 전';return fmt(t).slice(0,10);}
+function fmt(t){if(!t)return '-';const d=new Date(t),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;}
+function device(ua){ua=ua||'';let os=/Android ([\d.]+)/.exec(ua)?'Android '+RegExp.$1:/iPhone|iPad/.test(ua)?('iOS '+((/OS ([\d_]+)/.exec(ua)||[0,''])[1]).replace(/_/g,'.')):/Windows NT/.test(ua)?'Windows':/Mac OS X/.test(ua)?'macOS':/Linux/.test(ua)?'Linux':'?';
+  const model=(/Android[^;]*;\s*([^;)]+?)\s*(?:Build|\))/.exec(ua)||[])[1];
+  const br=/SamsungBrowser\/([\d.]+)/.test(ua)?'삼성 인터넷 '+RegExp.$1.split('.')[0]:/Edg\/([\d.]+)/.test(ua)?'Edge '+RegExp.$1.split('.')[0]:/CriOS|Chrome\/([\d.]+)/.test(ua)?'Chrome '+((/Chrome\/([\d]+)/.exec(ua)||[0,''])[1]):/Firefox\/([\d.]+)/.test(ua)?'Firefox '+RegExp.$1.split('.')[0]:/Safari/.test(ua)?'Safari':'?';
+  return [os,model&&model!=='K'?model:'',br].filter(Boolean).join(' · ');}
+const PH={setup:'초기 배치',main:'본 게임',over:'게임 종료'};
+
+function gate(html){app.innerHTML=`<div class="gate">${html}</div>`;}
+auth.onAuthStateChanged(async u=>{if(sub){sub();sub=null;}
+  $('#out').hidden=!u||u.isAnonymous;$('#who').textContent=u&&!u.isAnonymous?(u.displayName||''):'';
+  if(!u||u.isAnonymous){gate(`<h2>관리자 로그인</h2><p>오류 신고는 관리자만 볼 수 있어요.<br>등록된 구글 계정으로 로그인해 주세요.</p><button class="btn pri" id="login">Google 계정으로 로그인</button>`);
+    $('#login').onclick=()=>{const pv=new firebase.auth.GoogleAuthProvider();auth.signInWithPopup(pv).catch(e=>{if(/popup/i.test(e.code||''))auth.signInWithRedirect(pv);else gate(`<h2>로그인하지 못했어요</h2><p>${esc(e.code||e.message)}</p><button class="btn" onclick="location.reload()">다시 시도</button>`);});};return;}
+  let ok=false;try{ok=(await db.ref('admins/'+u.uid).get()).val()===true;}catch(e){}
+  if(!ok){gate(`<h2>관리자 등록이 필요해요</h2><p>이 계정은 아직 관리자로 등록되지 않았어요.</p>
+    <ol><li>Firebase 콘솔 → Realtime Database → <b>데이터</b> 탭</li><li>맨 위 항목 옆 <b>+</b>로 <b>admins</b> 항목을 만들고</li><li>그 아래에 이름은 아래 UID, 값은 <b>true</b>로 추가</li></ol>
+    <code id="uid">${esc(u.uid)}</code><button class="btn sm" id="cp">UID 복사</button>&nbsp;<button class="btn sm" onclick="location.reload()">다시 확인</button>`);
+    $('#cp').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(u.uid).then(()=>toast('복사했어요'));};return;}
+  start();});
+$('#out').onclick=()=>auth.signOut();
+
+function start(){app.innerHTML=`<div class="wrap"><div class="side"><div class="tabs" id="tabs"></div><div class="filt" id="filt"></div><div class="list" id="list"></div></div><div class="main" id="main"><div class="empty">왼쪽에서 신고를 골라 주세요.</div></div></div>`;
+  const r=db.ref('feedback').orderByChild('t').limitToLast(500);
+  const fn=s=>{const v=s.val()||{};ITEMS=Object.keys(v).map(k=>({id:k,...v[k]})).sort((a,b)=>(b.t||0)-(a.t||0));draw();if(SEL)showDet(SEL,true);};
+  r.on('value',fn,e=>gate(`<h2>목록을 불러오지 못했어요</h2><p>${esc(e.code||e.message)}<br>보안 규칙에 관리자 읽기 권한이 있는지 확인해 주세요.</p>`));sub=()=>r.off('value',fn);}
+function draw(){const cnt=k=>ITEMS.filter(i=>k==='all'||i.cat===k).length;
+  $('#tabs').innerHTML=[['all','전체'],['bug','오류'],['idea','개선 의견'],['etc','기타']].map(([k,l])=>`<button class="tab${TAB===k?' on':''}" data-k="${k}">${l}<b>${cnt(k)}</b></button>`).join('');
+  $('#filt').innerHTML=[['all','전체'],['new','미확인'],['done','확인함']].map(([k,l])=>`<button class="chip${ST===k?' on':''}" data-s="${k}">${l}</button>`).join('');
+  document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{TAB=b.dataset.k;draw();});document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{ST=b.dataset.s;draw();});
+  const L=ITEMS.filter(i=>(TAB==='all'||i.cat===TAB)&&(ST==='all'||(ST==='done'?i.st==='done':i.st!=='done')));
+  $('#list').innerHTML=L.length?L.map(i=>{const c=CAT[i.cat]||CAT.etc;return `<button class="item${i.st==='done'?' done':''}${SEL===i.id?' sel':''}" data-id="${i.id}"><div class="r1"><span class="dot"></span><span class="badge ${c[1]}">${c[0]}</span>${i.imgs?`<span class="ph">사진 ${i.imgs}</span>`:''}<span class="t">${ago(i.t)}</span></div><div class="tx">${esc(i.text)}</div></button>`;}).join(''):`<div class="empty">해당하는 신고가 없어요.</div>`;
+  document.querySelectorAll('.item').forEach(b=>b.onclick=()=>showDet(b.dataset.id));}
+const IMGC={};
+function showDet(id,refresh){SEL=id;const i=ITEMS.find(x=>x.id===id);if(!refresh)draw();else document.querySelectorAll('.item').forEach(b=>b.classList.toggle('sel',b.dataset.id===id));
+  if(!i){$('#main').innerHTML='<div class="empty">삭제된 신고예요.</div>';return;}
+  document.body.classList.add('detail');const c=CAT[i.cat]||CAT.etc,f=i.info||{},g=f.game||{};
+  const rows=[['보낸 시각',fmt(i.t)],['닉네임',i.nick||'-'],['기기',device(f.ua)+`<div class="ua">${esc(f.ua||'')}</div>`],['화면',esc(f.scr||'-')+(f.phone?' · 폰 레이아웃':'')+(f.fs?' · 전체화면':'')],
+    ['게임 상황',g.phase?`${PH[g.phase]||esc(g.phase)} · ${g.turn||0}번째 차례 · ${g.players||'?'}인${g.mp?' · 멀티':' · 싱글'}`:'-'],['페이지',esc(f.url||'-')],['버전',esc(f.ver||'-')],['언어',esc(f.lang||'-')],['신고 ID',`<span class="ua">${esc(i.id)}</span>`]];
+  $('#main').innerHTML=`<div class="det"><div class="hd"><button class="btn sm back" id="bk">← 목록</button><span class="badge ${c[1]}">${c[0]}</span><span class="t">${fmt(i.t)} · ${ago(i.t)}</span>
+    <div class="acts"><button class="btn sm" id="st">${i.st==='done'?'미확인으로':'확인함으로'}</button><button class="btn sm red" id="del">삭제</button></div></div>
+    <div class="txt">${esc(i.text)}</div>${i.imgs?`<div class="sec">첨부 사진 ${i.imgs}장</div><div class="imgs" id="imgs">${Array.from({length:i.imgs},(_,k)=>`<div class="ld">불러오는 중…</div>`).join('')}</div>`:''}
+    <div class="sec">기기·게임 정보</div><table class="meta">${rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</table></div>`;
+  $('#bk').onclick=()=>{document.body.classList.remove('detail');SEL=null;draw();window.scrollTo(0,0);};
+  $('#st').onclick=()=>db.ref('feedback/'+id+'/st').set(i.st==='done'?null:'done').then(()=>toast(i.st==='done'?'미확인으로 바꿨어요':'확인함으로 표시했어요')).catch(e=>toast('실패: '+(e.code||e.message)));
+  $('#del').onclick=()=>{if(!confirm('이 신고를 삭제할까요? 첨부 사진도 함께 지워져요.'))return;Promise.all([db.ref('feedbackImg/'+id).remove(),db.ref('feedback/'+id).remove()]).then(()=>{SEL=null;document.body.classList.remove('detail');$('#main').innerHTML='<div class="empty">삭제했어요.</div>';toast('삭제했어요');}).catch(e=>toast('실패: '+(e.code||e.message)));};
+  if(i.imgs){const put=arr=>{const w=$('#imgs');if(!w||SEL!==id)return;w.innerHTML=arr.map((d,k)=>d?`<button data-k="${k}"><img src="${d}" alt="첨부 ${k+1}"></button>`:`<div class="ld">없음</div>`).join('');w.querySelectorAll('button').forEach(b=>b.onclick=()=>{$('#lbimg').src=arr[+b.dataset.k];$('#lb').classList.add('on');});};
+    if(IMGC[id])put(IMGC[id]);else db.ref('feedbackImg/'+id).get().then(s=>{const v=s.val()||{};const arr=Array.from({length:i.imgs},(_,k)=>v[k]||null);IMGC[id]=arr;put(arr);}).catch(()=>{const w=$('#imgs');if(w)w.innerHTML='<div class="ld">불러오지 못했어요</div>';});}}
+$('#lbx').onclick=$('#lb').onclick=e=>{if(e.target.id!=='lbimg')$('#lb').classList.remove('on');};
+addEventListener('keydown',e=>{if(e.key==='Escape')$('#lb').classList.remove('on');});
+</script>
+</body>
+</html>
