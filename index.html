@@ -1615,13 +1615,14 @@ html.phone.lbox body{top:var(--oy,0px)!important}
 #veil .vl canvas{position:absolute;inset:0;width:100%;height:100%}
 #veil.open .vl{transform:translate(var(--tx),var(--ty)) scale(var(--s));opacity:0}
 #veil.inst .vl,#veil.inst .vfog{transition:none!important}
-#veil.fadein{animation:vfin .4s ease both}@keyframes vfin{from{opacity:0}}
-#veil.gath .vl{transition:transform 1.15s cubic-bezier(.2,.6,.35,1) var(--gdl,0s),opacity .7s ease-out var(--gdl,0s)}#veil.gath .vfog{transition:opacity .9s ease .2s}
+#boot{position:fixed;inset:0;z-index:9000;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:opacity .38s ease;pointer-events:auto}
+#boot.on{display:flex}#boot.vis{opacity:1}#boot.on:not(.vis){transition:opacity .6s ease;pointer-events:none}#boot.inst{transition:none!important}#boot.slow.vis{transition:opacity .95s ease-in .3s}
+#veil.gath .vl{transition:transform 1.2s cubic-bezier(.2,.6,.35,1),opacity .8s ease-out}#veil.gath .vfog{transition:opacity 1s ease .15s}
+#boot img{width:clamp(150px,20vw,250px);opacity:.92;filter:drop-shadow(0 4px 10px rgba(0,0,0,.8))}
+#boot .bbar{width:120px;height:2px;margin-top:28px;background:rgba(233,196,122,.15);overflow:hidden}
+#boot .bbar i{display:block;height:100%;width:0;background:#e9c47a;transition:width .3s ease}
 #veil .vin{position:absolute;inset:0;animation:vbr 5s ease-in-out infinite alternate}
 @keyframes vbr{from{transform:translate(-1.2%,.5%)}to{transform:translate(1.2%,-.5%)}}
-#veil .vmsg{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:15px;letter-spacing:.06em;color:#5f7284;opacity:0;transition:opacity .5s;white-space:nowrap;text-shadow:0 1px 0 #fff}
-#veil.busy .vmsg{opacity:1}#veil.open .vmsg{opacity:0;transition-duration:.25s}
-#veil .vmsg i{display:inline-block;width:1.2em;text-align:left;font-style:normal}
 .sheet-frame.sheet-multi,.sheet-frame.sheet-lobby{--fbo:.35}.sheet-frame.sheet-multi{--fbo:.39}
 html.phone .sheet-frame.sheet-single{--fbo:.35}html.phone .sheet-frame.sheet-multi,html.phone .sheet-frame.sheet-lobby{--fbo:.4}
 
@@ -2535,14 +2536,14 @@ function init3D(){
 function camIntro(){if(!W.ok)return;const tp=W.ctl.target.clone(),off=W.cam.position.clone().sub(tp);const sp=new THREE.Spherical().setFromVector3(off);
   const from={r:Math.max(W.ctl.minDistance+.3,sp.radius*.4),phi:W.ctl.maxPolarAngle,theta:sp.theta-3.0};
   W.cam.position.setFromSpherical(new THREE.Spherical(from.r,from.phi,from.theta)).add(tp);W.cam.lookAt(tp);W.ctl.update();
-  if(VEIL){veilIntro(tp,from,{r:sp.radius,phi:sp.phi,theta:sp.theta});return;}
+  if(VEIL&&(W.booting||$('#title').hidden||($('#boot')&&$('#boot').classList.contains('on')))){veilIntro(tp,from,{r:sp.radius,phi:sp.phi,theta:sp.theta});return;}
   try{introFXStart(performance.now()+350);}catch(e){}
   W.camAnim={sph:true,t0:performance.now()+350,dur:3000,tp,from,to:{r:sp.radius,phi:sp.phi,theta:sp.theta}};}
 // test: clouds cover the screen while the island finishes loading, then part left/right as the camera swings round
 const VEIL=/[?&]test=1/.test(location.search)&&!/[?&]veil=0/.test(location.search);
-const LDC={n:0,t:0};
+const LDC={n:0,t:0,tot:0,fin:0};
 function ldPatch(){[THREE.GLTFLoader,THREE.ImageLoader,THREE.TextureLoader].forEach(L=>{if(!L||L.prototype._ldc)return;const o=L.prototype.load;L.prototype._ldc=1;
-  L.prototype.load=function(url,onL,onP,onE){LDC.n++;LDC.t=performance.now();let d=0;const done=()=>{if(!d){d=1;LDC.n--;LDC.t=performance.now();}};
+  L.prototype.load=function(url,onL,onP,onE){LDC.n++;LDC.tot++;LDC.t=performance.now();let d=0;const done=()=>{if(!d){d=1;LDC.n--;LDC.fin++;LDC.t=performance.now();}};
     return o.call(this,url,(...a)=>{try{return onL&&onL(...a);}finally{done();}},onP,(...a)=>{try{return onE&&onE(...a);}finally{done();}});};});}
 // mist layer: soft diagonal streaks (lower-left → upper-right) filling one side of a ragged diagonal edge; two layers overlap in the middle
 // smoke-like mist (domain-warped noise: billows + curling wisps) filling one side of a ragged diagonal edge; two layers overlap in the middle
@@ -2562,29 +2563,39 @@ function veilPaint(c,side,off=0,am=1,sp=0,kq=1){const vw=innerWidth,vh=innerHeig
   x.putImageData(img,0,0);}
 // three depth layers per side: front wisps leave first and fastest, the back mass last; each thins out as it travels
 const VEILL=[{off:.12,am:.8,sp:1,d:2.0,dl:0,tr:100,od:1.0,odl:.1,s:1.3,kq:.75},{off:.03,am:.92,sp:0,d:2.4,dl:.28,tr:85,od:1.3,odl:.55,s:1.15,kq:.85},{off:-.14,am:1,sp:0,d:2.8,dl:.6,tr:70,od:1.6,odl:1.1,s:1.06,kq:1}];
-function veilBuild(v){v.innerHTML='';const fg=document.createElement('div');fg.className='vfog';v.appendChild(fg);const R=Math.random;
+// paints all six layers in slices (resolves when done); the painted set is reused while the screen size stays the same
+function veilBuild(v,onP){const key=innerWidth+'x'+innerHeight;const C=W.veilCache;
+  if(C&&C.key===key){v.innerHTML='';C.nodes.forEach(n=>v.appendChild(n));if(onP)onP(1);return Promise.resolve();}
+  v.innerHTML='';const fg=document.createElement('div');fg.className='vfog';v.appendChild(fg);const R=Math.random;
   const todo=[];[2,1,0].forEach(li=>{const P=VEILL[li];[0,1].forEach(si=>{const l=document.createElement('div');l.className='vl';const an=(si?-1:1)*(.26+(R()-.5)*.16),tr=P.tr*(.92+R()*.16);
     l.style.cssText=`--d:${P.d}s;--dl:${(P.dl+R()*.08).toFixed(2)}s;--od:${P.od}s;--odl:${P.odl}s;--s:${P.s};--tx:${(si?1:-1)*tr}%;--ty:${(an*tr).toFixed(1)}%`;
-    const n=document.createElement('div');n.className='vin';n.style.animationDelay=(-R()*5).toFixed(2)+'s';const c=document.createElement('canvas');n.appendChild(c);l.appendChild(n);v.appendChild(l);const job=()=>veilPaint(c,si,P.off,P.am,P.sp,P.kq);if(li===2)job();else todo.push(job);});});
-  // paint the inner layers a frame apart so the main thread never blocks for long (the back pair + fog already cover)
-  const nx=()=>{const j=todo.shift();if(!j)return;j();setTimeout(nx,16);};setTimeout(nx,16);
-  const m=document.createElement('div');m.className='vmsg';m.innerHTML='섬을 불러오는 중<i></i>';v.appendChild(m);}
-// new game in place: mist rolls in over the board (quicker than it leaves), then cb rebuilds the island behind it
-function veilGather(cb){const v=$('#veil');if(!v)return cb();clearTimeout(W.veilT);clearInterval(W.veilDots);veilBuild(v);v.className='on open inst gath';void v.offsetWidth;v.classList.remove('inst');v.classList.remove('open');
-  W.veilT=setTimeout(()=>{v.classList.remove('gath');W.veilShut=true;cb();},1250);}
-function veilIntro(tp,from,to){const v=$('#veil');if(!v)return;clearTimeout(W.veilT);clearInterval(W.veilDots);
-  const t=$('#title'),shut=W.veilShut&&v.classList.contains('on'),cover=shut||!t.hidden;W.veilShut=false;
-  if(!shut){veilBuild(v);v.className='on inst'+(cover?'':' fadein');void v.offsetWidth;v.classList.remove('inst');}
+    const n=document.createElement('div');n.className='vin';n.style.animationDelay=(-R()*5).toFixed(2)+'s';const c=document.createElement('canvas');n.appendChild(c);l.appendChild(n);v.appendChild(l);todo.push(()=>veilPaint(c,si,P.off,P.am,P.sp,P.kq));});});
+  const N=todo.length;return new Promise(res=>{const nx=()=>{const j=todo.shift();if(!j){W.veilCache={key,nodes:[...v.childNodes]};return res();}j();if(onP)onP(1-todo.length/N);setTimeout(nx,0);};setTimeout(nx,0);});}
+// black boot screen (logo + progress bar): everything heavy happens behind it, then it fades up onto the mist, which parts at once
+function bootOn(slow){let b=$('#boot');if(!b){b=document.createElement('div');b.id='boot';b.innerHTML='<img alt="HEXISLE"><div class="bbar"><i></i></div>';document.body.appendChild(b);}
+  const im=b.querySelector('img');if(!im.src)im.src=window.LOGO_URL;
+  if(b.classList.contains('on'))return 0;W.bootP=0;b.querySelector('.bbar i').style.width='0%';b.classList.add('on','inst');b.classList.toggle('slow',!!slow);void b.offsetWidth;b.classList.remove('inst');b.classList.add('vis');return slow?1300:380;}
+function bootProg(p){if(p<=W.bootP)return;W.bootP=p;const i=document.querySelector('#boot .bbar i');if(i)i.style.width=(p*100).toFixed(1)+'%';}
+function bootOff(){const b=$('#boot');if(!b)return;b.classList.remove('vis');clearTimeout(W.bootT);W.bootT=setTimeout(()=>b.classList.remove('on'),700);}
+// new game in place: the (already painted) mist rolls back in while the screen darkens; without a painted set it simply fades to black
+function veilGather(){const v=$('#veil'),C=W.veilCache;if(!v||!C||C.key!==innerWidth+'x'+innerHeight)return false;clearTimeout(W.veilT);v.innerHTML='';C.nodes.forEach(n=>v.appendChild(n));
+  v.className='on open inst gath';void v.offsetWidth;v.classList.remove('inst');v.classList.remove('open');return true;}
+function bootRun(fn,gather){const d=bootOn(gather&&veilGather());W.booting=true;setTimeout(()=>{try{fn();}finally{W.booting=false;}},d);}
+function veilIntro(tp,from,to){const v=$('#veil');if(!v)return;clearTimeout(W.veilT);
   try{introFXStart(performance.now()+1e9);}catch(e){}W.camAnim=null;W.veilHold=true;W.veilBan=-1;
-  const t0=performance.now();let dots=0;
-  W.veilDots=setInterval(()=>{dots=(dots+1)%4;const i=v.querySelector('.vmsg i');if(i)i.textContent='.'.repeat(dots);},380);
-  const tick=()=>{const n=performance.now(),el=n-t0;if(el>1500)v.classList.add('busy');
-    if((LDC.n<=0&&n-LDC.t>450&&el>750)||el>10000){go();return;}W.veilT=setTimeout(tick,100);};
-  const go=()=>{try{W.r.compile(W.scene,W.cam);}catch(e){}W.veilHold=false;PERF.shadow=true;PERF.dirty=true;
-    requestAnimationFrame(()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{const n=performance.now();clearInterval(W.veilDots);v.classList.remove('busy');v.classList.add('open');
-      if(W.introFX)W.introFX.t0=n+900;W.camAnim={sph:true,t0:n,dur:3400,tp,from,to};W.veilBan=W.veilBan??-1;setTimeout(()=>{const b=W.veilBan;W.veilBan=null;if(b>=0)try{turnBanner(b);}catch(e){}},1500);
-      W.veilT=setTimeout(()=>{v.className='';v.innerHTML='';},3300);})));};
-  W.veilT=setTimeout(tick,100);}
+  const run=()=>{const t0=performance.now(),L0={tot:LDC.tot,fin:LDC.fin};let painted=0;
+    v.className='on inst';veilBuild(v,p=>{painted=p;}).then(()=>{painted=1;});
+    const prog=()=>{const lf=Math.max(0,LDC.fin-L0.fin),fr=lf+LDC.n>0?Math.min(1,lf/(lf+LDC.n)):1;bootProg(.08+.62*fr+.2*painted);};
+    const tick=()=>{const n=performance.now(),el=n-t0;prog();
+      if((painted>=1&&LDC.n<=0&&n-LDC.t>450&&el>600)||el>12000){go();return;}W.veilT=setTimeout(tick,80);};
+    const go=()=>{try{W.r.compile(W.scene,W.cam);}catch(e){}bootProg(.95);W.veilHold=false;PERF.shadow=true;PERF.dirty=true;
+      // a few real frames (shadows, first draw) still under the black, then lift it and part the mist as it brightens
+      let k=0;const fr=()=>{if(++k<4){requestAnimationFrame(fr);return;}bootProg(1);
+        setTimeout(()=>{bootOff();setTimeout(()=>{const n=performance.now();v.classList.add('open');
+          if(W.introFX)W.introFX.t0=n+900;W.camAnim={sph:true,t0:n,dur:3400,tp,from,to};W.veilBan=W.veilBan??-1;setTimeout(()=>{const b=W.veilBan;W.veilBan=null;if(b>=0)try{turnBanner(b);}catch(e){}},1500);
+          W.veilT=setTimeout(()=>{v.className='';v.innerHTML='';},3300);},220);},120);};requestAnimationFrame(fr);};
+    W.veilT=setTimeout(tick,0);};
+  const d=bootOn();if(d)W.veilT=setTimeout(run,d);else run();}
 const ROBV2=/[?&]test=1/.test(location.search)&&!/[?&]rob=0/.test(location.search);
 function robWall(){const H=.5;const g=new THREE.CylinderGeometry(1,1,H,72,1,true);{const P=g.attributes.position;for(let k=0;k<P.count;k++){const x=P.getX(k),z=P.getZ(k),th=Math.atan2(x,z);let d=((th%(Math.PI/3))+Math.PI/3)%(Math.PI/3)-Math.PI/6;const hr=.92*.866/Math.cos(d),r=hr*.62+.85*.38;P.setXYZ(k,Math.sin(th)*r,P.getY(k),Math.cos(th)*r);}g.computeVertexNormals();}g.translate(0,H/2,0);
   const m=new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:THREE.DoubleSide,uniforms:{uA:W.robA,uC:{value:new THREE.Color(0x9a0f0a)}},
@@ -4186,7 +4197,7 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '주사위 굴리기':()=>{if(S.phase==='setup')finishSetup();if(S.cur!==ME||S.rolled){S.cur=ME;S.rolled=false;S.pend=null;}roll(ME);update();},
     '승리 화면':()=>{if(S.phase==='setup')finishSetup();S.phase='over';S.winner=ME;S.pend=null;closeDialog();ui.modal=null;update();},
     '패배 화면':()=>{if(S.phase==='setup')finishSetup();S.phase='over';S.winner=1;S.pend=null;closeDialog();ui.modal=null;update();},
-    '시작 연출 (첫 진입)':()=>{try{const v=$('#veil');clearTimeout(W.veilT);veilBuild(v);v.className='on inst';W.veilShut=true;fitCam('now');camIntro();}catch(e){console.error(e);}},
+    '시작 연출 (첫 진입)':()=>{try{bootRun(()=>{fitCam('now');camIntro();});}catch(e){console.error(e);}},
     '시작 연출 (새 게임)':()=>{try{restartGame();}catch(e){console.error(e);}},
     '구름 켜기':()=>{const u=new URL(location.href);u.searchParams.delete('cloud');location.href=u;},
     '구름 끄기':()=>{const u=new URL(location.href);u.searchParams.set('cloud','0');location.href=u;},
@@ -4356,7 +4367,7 @@ function showMulti(tab,code){tab=tab||'invite';ui.mtab=tab;const tabs=[['invite'
   MP.presence();MP.drawCount();}
 function myCols(){const c=PCOL.includes(ui.color)?ui.color:PCOL[0];return [c,...PCOL_AI.filter(x=>x!==c)];}
 function resetBehind(){clearTimeout(ui.rbT);ui.rbT=setTimeout(()=>{if($('#title').hidden)return;newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;render();},950);}
-function startNew(withRules){clearTimeout(ui.rbT);ui.handTab='res';hideTitle();if(window.MP&&!NET.on)MP.offline();newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;closeModal();if(withRules)showRules(0,()=>update());else update();}
+function startNew(withRules){if(VEIL&&W.ok&&!W.booting){bootRun(()=>startNew(withRules));return;}clearTimeout(ui.rbT);ui.handTab='res';hideTitle();if(window.MP&&!NET.on)MP.offline();newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;closeModal();if(withRules)showRules(0,()=>update());else update();}
 
 // ---------- events ----------
 function onPick(pk){
@@ -4400,7 +4411,7 @@ $('#rulesBtn').onclick=()=>{clearTimeout(aiTimer);showRules(0);};
 const MENU2=/[?&]test=1/.test(location.search);
 if(MENU2){$('#homeBtn').hidden=false;{const lb=$('#leaveBtn');[...lb.childNodes].forEach(n=>{if(n.nodeType===3&&n.textContent.trim())n.textContent='나가기';});}}
 function restartGame(){const go=()=>{clearTimeout(ui.rbT);ui.handTab='res';newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;ui.camFresh=true;closeModal();update();};
-  if(VEIL&&W.ok)veilGather(go);else go();}
+  if(VEIL&&W.ok)bootRun(go,1);else go();}
 $('#homeBtn').onclick=()=>{if(window.NET&&NET.on)return MP.confirmLeave();openDialog(`<h3>메인으로 갈까요?</h3><p>진행 중인 게임은 끝나고, 첫 화면으로 돌아가요.</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">메인으로</button></div>`);
   $('#cNo').onclick=()=>{closeDialog();};$('#cYes').onclick=()=>{closeDialog();closeModal();showStart();resetBehind();};};
 $('#newBtn').onclick=()=>{if(window.NET&&NET.on)return MP.confirmLeave();if(MENU2){openDialog(`<h3>새 게임을 시작할까요?</h3><p>진행 중인 게임은 끝나고, 새 섬에서 다시 시작해요.</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">새 게임</button></div>`);
