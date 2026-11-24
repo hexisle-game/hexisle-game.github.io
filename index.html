@@ -1219,6 +1219,7 @@ html.phone #tut .tbub.tspot-bl p{font-size:11.5px;line-height:1.45}
 html.phone #tut .tbub.tspot-bl .tstep{display:none}
 html.in-tut header.top .tools{visibility:visible!important}
 html.in-tut:not(.tut-modal) header.top{z-index:66!important}
+html.veil-on.veil-on.veil-on body header.top.top{z-index:6!important}
 html.tut-modal header.top .tools{visibility:hidden!important}
 html.in-tut header.top .setwrap{display:none!important}
 html.in-tut header.top .tools>#fsBtn+#tExit::before,html.in-tut header.top .tools>.ib+#tExit::before{content:"";position:absolute;left:0;top:50%;height:13px;margin-top:-6.5px;border-left:1px solid rgba(255,255,255,.28)}
@@ -2685,7 +2686,7 @@ function bootRun(fn,gather){const d=bootOn(gather&&veilGather());W.booting=true;
 function veilIntro(tp,from,to){const v=$('#veil');if(!v)return;clearTimeout(W.veilT);
   try{introFXStart(performance.now()+1e9);}catch(e){}W.camAnim=null;W.veilHold=true;W.veilBan=-1;
   const run=()=>{const t0=performance.now(),L0={tot:LDC.tot,fin:LDC.fin};let painted=0;
-    v.className='on inst';void v.offsetWidth;v.classList.remove('inst');veilBuild(v,p=>{painted=p;}).then(()=>{painted=1;});
+    document.documentElement.classList.add('veil-on');v.className='on inst';void v.offsetWidth;v.classList.remove('inst');veilBuild(v,p=>{painted=p;}).then(()=>{painted=1;});
     const prog=()=>{const lf=Math.max(0,LDC.fin-L0.fin),fr=lf+LDC.n>0?Math.min(1,lf/(lf+LDC.n)):1;bootProg(.08+.62*fr+.2*painted);};
     const tick=()=>{const n=performance.now(),el=n-t0;prog();
       if((painted>=1&&LDC.n<=0&&n-LDC.t>450&&el>600)||el>12000){go();return;}W.veilT=setTimeout(tick,80);};
@@ -2694,7 +2695,7 @@ function veilIntro(tp,from,to){const v=$('#veil');if(!v)return;clearTimeout(W.ve
       let k=0;const fr=()=>{if(++k<4){requestAnimationFrame(fr);return;}bootProg(1);
         setTimeout(()=>{bootOff();setTimeout(()=>{const n=performance.now();v.classList.add('open');
           if(W.introFX)W.introFX.t0=n+900;W.camAnim={sph:true,t0:n,dur:3400,tp,from,to};W.veilBan=W.veilBan??-1;setTimeout(()=>{const b=W.veilBan;W.veilBan=null;if(b>=0)try{turnBanner(b);}catch(e){}},1500);
-          W.veilT=setTimeout(()=>{v.className='';v.innerHTML='';},3300);},220);},120);};requestAnimationFrame(fr);};
+          W.veilT=setTimeout(()=>{v.className='';v.innerHTML='';document.documentElement.classList.remove('veil-on');},3300);},220);},120);};requestAnimationFrame(fr);};
     W.veilT=setTimeout(tick,0);};
   const d=bootOn();if(d)W.veilT=setTimeout(run,d);else run();}
 const ROBV2=TF&&!/[?&]rob=0/.test(location.search);
@@ -4999,51 +5000,51 @@ addEventListener('touchend',e=>{if(!e.touches.length)TUT.ptrs.clear();},true);
 TUT.armCam=function(){this.c0=this.camSnap();this.camArmed=!this.ptrs.size;};
 TUT.camReady=function(){if(!this.camArmed){if(this.ptrs.size)return false;this.camArmed=true;this.c0=this.camSnap();return false;}return true;};
 TUT.steps=[
- {t:'헥스아일에 오신 걸 환영해요!',b:'직접 한 판을 따라 하면서 게임 방법을 익혀 볼게요. 상대는 AI 두 명이에요. 빛나는 곳만 누르면 돼요.',next:true},
- {t:'섬 돌려 보기',b:()=>PH.on?'한 손가락으로 화면을 끌어 섬을 <b>돌려</b> 보세요.':'마우스로 화면을 끌어 섬을 <b>돌려</b> 보세요.',at:{sel:'#stage',pad:0},pass:true,spot:'left',small:true,gest:'rot',enter(){this.c0=this.camSnap();},done(){const c=this.camSnap();return Math.abs(c.az-this.c0.az)>.35||Math.abs(c.po-this.c0.po)>.2;}},
- {t:'확대·축소',b:()=>PH.on?'두 손가락을 벌리거나 모아서 <b>확대·축소</b>해 보세요.':'마우스 휠을 굴려 <b>확대·축소</b>해 보세요.',at:{sel:'#stage',pad:0},pass:true,spot:'left',small:true,gest:'zoom',enter(){this.armCam();},done(){return this.camReady()&&Math.abs(this.camSnap().d-this.c0.d)>1.2;}},
- {t:'화면 옮기기',b:()=>PH.on?'두 손가락으로 함께 끌어 화면을 <b>옮겨</b> 보세요.':'마우스 <b>휠 버튼을 누른 채</b> 끌어 화면을 <b>옮겨</b> 보세요.',at:{sel:'#stage',pad:0},pass:true,spot:'left',small:true,gest:'pan',enter(){this.armCam();},done(){return this.camReady()&&this.camSnap().t.distanceTo(this.c0.t)>.5;},leave(){}},
- {t:'좋아요!',b:'시점이 헷갈리면 오른쪽 위 <b>시점 초기화</b>를 누르면 돼요. 이제 게임을 시작해 볼게요.',at:{sel:'#camReset',pad:6},next:true,leave(){this.zoomOut();}},
- {t:'첫 정착지 놓기',b:'정착지는 <b>땅의 꼭짓점</b>에만 지을 수 있어요. 꼭짓점에 닿은 땅들에서 자원이 나와요. 빛나는 꼭짓점을 누르세요.',at(){return {v:this.P.v1};},only:{},enter(){this.steps[this.i].only={v:this.P.v1};this.focus({v:this.P.v1});},done(){return !!S.vb[this.P.v1];}},
- {t:'도로 놓기',b:'도로는 <b>땅과 땅 사이의 변</b>에 놓아요. 방금 지은 정착지에 이어서 빛나는 곳을 누르세요.',at(){return {e:this.P.e1};},enter(){this.steps[this.i].only={e:this.P.e1};this.focus({e:this.P.e1});},done(){return S.eo[this.P.e1]===0;}},
- {t:'AI들의 차례',b:'AI들이 차례대로 첫 정착지와 도로를 놓고 있어요.',ai:true,spot:'left',enter(){this.zoomOut();},done(){return S.si>=3;}},
- {t:'두 번째 바퀴는 거꾸로!',b:`초기 배치 두 번째 바퀴는 <b>반대 순서</b>로 돌아요. 마지막 사람(${'졸린 고양이'})이 연달아 두 번 놓고, 처음 놓은 사람(나)은 맨 마지막에 놓아요. 먼저 고른 사람과 공평해지도록 하는 규칙이에요.`,next:true,spot:'left'},
- {t:'AI들의 두 번째 배치',b:'AI들이 두 번째 정착지를 놓고 있어요.',ai:true,spot:'left',done(){return S.si>=5&&S.sub==='settlement';}},
- {t:'여기는 지을 수 없어요',b:'정착지는 다른 건물과 <b>최소 두 칸</b> 떨어져야 해요. 도로 한 칸 거리인 바로 옆 꼭짓점에는 지을 수 없어요.',at(){return {v:this.P.a};},x:true,next:true,enter(){this.focus({v:this.P.a});}},
- {t:'두 번째 정착지 놓기',b:'두 번째 정착지는 <b>닿은 땅의 자원을 1장씩 바로</b> 받아요. 빛나는 꼭짓점을 누르세요.',at(){return {v:this.P.v2};},enter(){this.steps[this.i].only={v:this.P.v2};this.focus({v:this.P.v2});},done(){return !!S.vb[this.P.v2];}},
+ {t:'헥스아일에 오신 걸 환영해요!',b:'직접 한 판을 따라 하면서 게임 방법을 익혀 볼게요.<br>빛나는 곳만 누르면 돼요.',next:true},
+ {t:'섬 돌려 보기',b:()=>PH.on?'한 손가락으로<br>섬을 <b>돌려</b> 보세요.':'마우스로 화면을 끌어 섬을 <b>돌려</b> 보세요.',at:{sel:'#stage',pad:0},pass:true,spot:'left',small:true,gest:'rot',enter(){this.c0=this.camSnap();},done(){const c=this.camSnap();return Math.abs(c.az-this.c0.az)>.35||Math.abs(c.po-this.c0.po)>.2;}},
+ {t:'확대·축소',b:()=>PH.on?'두 손가락을 벌리거나 모아서<br><b>확대·축소</b>해 보세요.':'마우스 휠을 굴려 <b>확대·축소</b>해 보세요.',at:{sel:'#stage',pad:0},pass:true,spot:'left',small:true,gest:'zoom',enter(){this.armCam();},done(){return this.camReady()&&Math.abs(this.camSnap().d-this.c0.d)>1.2;}},
+ {t:'화면 옮기기',b:()=>PH.on?'두 손가락을 함께 끌어<br>화면을 <b>옮겨</b> 보세요.':'마우스 <b>휠 버튼을 누른 채</b> 끌어 화면을 <b>옮겨</b> 보세요.',at:{sel:'#stage',pad:0},pass:true,spot:'left',small:true,gest:'pan',enter(){this.armCam();},done(){return this.camReady()&&this.camSnap().t.distanceTo(this.c0.t)>.5;},leave(){}},
+ {t:'시점 초기화',b:'시점이 헷갈리면 <b>시점 초기화</b>를 누르면 돼요.',at:{sel:'#camReset',pad:6},enter(){this._cr=false;const b=$('#camReset');if(b)b.addEventListener('click',()=>{this._cr=true;},{once:true});},done(){return this._cr;},leave(){this.zoomOut();}},
+ {t:'첫 정착지 놓기',b:'정착지는 <b>땅의 꼭짓점</b>에만 지을 수 있어요.<br>정착지에 닿은 땅들에서 자원이 나와요.<br>빛나는 곳을 누르세요.',at(){return {v:this.P.v1};},only:{},enter(){this.steps[this.i].only={v:this.P.v1};this.focus({v:this.P.v1});},done(){return !!S.vb[this.P.v1];}},
+ {t:'도로 놓기',b:'도로는 <b>땅과 땅 사이</b>에 놓아요.<br>빛나는 곳을 누르세요.',at(){return {e:this.P.e1};},enter(){this.steps[this.i].only={e:this.P.e1};this.focus({e:this.P.e1});},done(){return S.eo[this.P.e1]===0;}},
+ {t:'AI들의 차례',b:'차례대로 첫 정착지와 도로를 놓고 있어요.',ai:true,spot:'left',enter(){this.zoomOut();},done(){return S.si>=3;}},
+ {t:'두 번째 바퀴는 거꾸로!',b:'초기 배치 두 번째 바퀴는 <b>반대 순서</b>로 돌아요.<br>마지막 사람이 연달아 두 번 놓고,<br>처음 놓은 사람은 맨 마지막에 놓아요.<br>먼저 고른 사람과 공평해지도록 하는 규칙이에요.',next:true,spot:'left'},
+ {t:'AI들의 두 번째 배치',b:'두 번째 정착지를 놓고 있어요.',ai:true,spot:'left',done(){return S.si>=5&&S.sub==='settlement';}},
+ {t:'여기는 지을 수 없어요',b:'정착지는 다른 건물과 <b>최소 두 칸</b> 떨어져야 해요.<br>도로 한 칸 거리에는 지을 수 없어요.',at(){return {v:this.P.a};},x:true,next:true,enter(){this.focus({v:this.P.a});}},
+ {t:'두 번째 정착지 놓기',b:'두 번째 정착지는 <b>닿은 땅의 자원을 1장씩 바로</b> 받아요.<br>빛나는 곳을 누르세요.',at(){return {v:this.P.v2};},enter(){this.steps[this.i].only={v:this.P.v2};this.focus({v:this.P.v2});},done(){return !!S.vb[this.P.v2];}},
  {t:'두 번째 도로 놓기',b:'이 정착지에도 도로를 하나 이어 주세요.',at(){return {e:this.P.e2};},enter(){this.steps[this.i].only={e:this.P.e2};this.focus({e:this.P.e2});},done(){return S.eo[this.P.e2]===0;}},
- {t:'첫 자원을 받았어요',b:'두 번째 정착지에 닿은 땅마다 자원 카드를 1장씩 받았어요. 이제 본 게임이 시작돼요!',at:{sel:'.tray-hand'},next:true,enter(){this.zoomOut();}},
+ {t:'첫 자원을 받았어요',b:'<b>두 번째 정착지에 닿은 땅</b>마다 자원 카드를 1장씩 받았어요.<br>이제 본 게임이 시작돼요!',at:{sel:'.tray-hand'},next:true,enter(){this.zoomOut();}},
  {t:'주사위 굴리기',b:'내 차례는 항상 <b>주사위 굴리기</b>로 시작해요.',at:{sel:'[data-act="roll"]'},done(){return S.cur===0&&S.rolled;}},
- {t:'자원 생산',b(){return `주사위 합은 <b>${S.dice?S.dice[0]+S.dice[1]:''}</b>이에요. 숫자 ${S.dice?S.dice[0]+S.dice[1]:''}이 적힌 땅에 닿아 있는 정착지가 자원을 받아요. 다른 사람이 굴려도 내 땅이면 받아요!`;},at:{sel:'.tray-hand'},next:true},
- {t:'도로 건설',b:'자원이 모였어요. <b>도로</b>를 눌러 건설 모드를 켜세요. 도로는 목재 1 + 벽돌 1이 들어요.',at:{sel:'[data-act="road"]'},enter(){this.topUp(COST.road);},done(){return ui.mode==='road';}},
- {t:'도로 잇기',b:'도로는 <b>내 도로나 건물에 이어서만</b> 지을 수 있어요. 빛나는 곳을 누르세요.',at(){return {e:this.P.e3};},enter(){this.steps[this.i].only={e:this.P.e3};this.focus({e:this.P.e3});},done(){return S.eo[this.P.e3]===0;}},
+ {t:'주사위 합과 같은 숫자 땅의 자원을 받았어요',b(){return `주사위 합은 <b>${S.dice?S.dice[0]+S.dice[1]:''}</b>이에요. 숫자 ${S.dice?S.dice[0]+S.dice[1]:''}이 적힌 땅에 닿아 있는 정착지가 자원을 받아요.<br>다른 사람이 굴려도 내 땅이면 받을 수 있어요.`;},at:{sel:'.tray-hand'},next:true,enter(){const n=S.dice?S.dice[0]+S.dice[1]:0;const mine=Object.keys(S.vb).filter(v=>S.vb[v]&&S.vb[v].o===0).map(Number);const h=S.board.hexes.findIndex((t,i)=>t.num===n&&i!==S.board.robber&&G.hexes[i].v.some(x=>mine.includes(x)));if(h>=0)this.focus({h},PH.on?6:8.5);},leave(){this.zoomOut();}},
+ {t:'도로 건설',b:'자원이 모였어요. <b>도로</b>를 눌러 건설 모드를 켜세요.<br>도로는 목재 1 + 벽돌 1이 들어요.',at:{sel:'[data-act="road"]'},enter(){this.topUp(COST.road);},done(){return ui.mode==='road';}},
+ {t:'도로 잇기',b:'도로는 <b>내 도로나 건물에 이어서만</b> 지을 수 있어요.<br>빛나는 곳을 누르세요.',at(){return {e:this.P.e3};},enter(){this.steps[this.i].only={e:this.P.e3};this.focus({e:this.P.e3});},done(){return S.eo[this.P.e3]===0;}},
  {t:'턴 종료',b:'할 일을 다 했으면 <b>턴 종료</b>를 눌러 다음 사람에게 넘겨요.',at:{sel:'[data-act="end"]'},enter(){this.zoomOut();},done(){return S.cur!==0;}},
- {t:'AI들의 차례',b:'AI들이 주사위를 굴리고 있어요. 이때도 내 땅의 숫자가 나오면 자원을 받아요.',ai:true,spot:'left',done(){return S.cur===0&&!S.rolled;}},
+ {t:'AI들의 차례',b:'AI들이 주사위를 굴리고 있어요.<br>이때도 내 땅의 숫자가 나오면 자원을 받아요.',ai:true,spot:'left',done(){return S.cur===0&&!S.rolled;}},
  {t:'다시 내 차례',b:'주사위를 굴려 주세요.',at:{sel:'[data-act="roll"]'},done(){return S.rolled;}},
- {t:'정착지 짓기',b:'정착지는 <b>목재·벽돌·양모·곡물</b> 1장씩으로 지어요. 짓기만 해도 1점! <b>정착지</b>를 누르세요.',at:{sel:'[data-act="settlement"]'},enter(){this.topUp(COST.settlement);},done(){return ui.mode==='settlement';}},
- {t:'새 정착지 자리',b:'새 정착지는 <b>내 도로와 이어진</b> 꼭짓점에, 다른 건물과 두 칸 이상 떨어진 곳에 지어요.',at(){return {v:this.P.b};},enter(){this.steps[this.i].only={v:this.P.b};this.focus({v:this.P.b});},done(){return !!S.vb[this.P.b];}},
- {t:'발전 카드 사기',b:'<b>양모·곡물·광석</b> 1장씩으로 발전 카드를 살 수 있어요. 어떤 카드가 나올지는 몰라요!',at:{sel:'[data-act="dev"]'},enter(){this.zoomOut();this.topUp(COST.dev);const d=S.deck,i=d.lastIndexOf('knight');if(i>=0){[d[i],d[d.length-1]]=[d[d.length-1],d[i]];}},done(){return me0().dev.length>0;}},
- {t:'기사 카드!',b:'기사 카드를 뽑았어요. 기사는 도적을 옮기고 상대 카드를 1장 빼앗아요. 발전 카드는 <b>산 차례에는 쓸 수 없고</b> 다음 차례부터 써요. 카드를 누르면 설명을 볼 수 있어요.',at:()=>({sel:PH.on?'[data-htab="dev"]':'.tray-dev'}),next:true},
+ {t:'정착지 짓기',b:'정착지는 <b>목재·벽돌·양모·곡물</b> 1장씩으로 지어요.<br>짓기만 해도 1점! <b>정착지</b>를 누르세요.',at:{sel:'[data-act="settlement"]'},enter(){this.topUp(COST.settlement);},done(){return ui.mode==='settlement';}},
+ {t:'새 정착지 자리',b:'새 정착지는 <b>내 도로와 이어진</b> 꼭짓점,<br>다른 건물과 두 칸 이상 떨어진 곳에 지어요.',at(){return {v:this.P.b};},enter(){this.steps[this.i].only={v:this.P.b};this.focus({v:this.P.b});},done(){return !!S.vb[this.P.b];}},
+ {t:'발전 카드 사기',b:'<b>양모·곡물·광석</b> 1장씩으로 발전 카드를 살 수 있어요.<br>어떤 카드가 나올지는 몰라요.',at:{sel:'[data-act="dev"]'},enter(){this.zoomOut();this.topUp(COST.dev);const d=S.deck,i=d.lastIndexOf('knight');if(i>=0){[d[i],d[d.length-1]]=[d[d.length-1],d[i]];}},done(){return me0().dev.length>0;}},
+ {t:'기사 카드를 뽑았어요',b:'기사는 도적을 옮기고 상대 카드를 1장 빼앗아요.<br>발전 카드는 <b>산 차례에는 쓸 수 없고</b> 다음 차례부터 써요.<br>카드를 누르면 설명을 볼 수 있어요.',at:()=>({sel:PH.on?'[data-htab="dev"]':'.tray-dev'}),next:true},
  {t:'교환하기',b:'부족한 자원은 교환으로 구해요. <b>교환</b>을 누르세요.',at:{sel:'[data-act="trade"]'},enter(){if(ui.handTab==='dev'){ui.handTab='res';try{render();}catch(e){}}this.topUp({wood:3,brick:2});[1,2].forEach(p=>this.topUp({wood:2,brick:2,wool:2,grain:2,ore:2},p));},done(){return ui.modal==='trade';}},
- {t:'AI와 교환',b:'은행에서는 같은 자원 4장을 원하는 1장으로 바꿔요(항구가 있으면 더 싸요). 이번엔 <b>플레이어</b> 탭을 눌러 보세요.',at:{sel:'.sheet-trade .mtab[data-t="player"]'},done(){return !!document.querySelector('.sheet-trade .mtab[data-t="player"].on');}},
- {t:'줄 것 고르기',b:'내가 줄 <b>목재</b>의 <b>+</b>를 눌러 1장으로 정하세요.',at:{sel:'#pg [data-k="wood"][data-d="1"]',pad:5},done(){const b=document.querySelector('#pg [data-k="wood"][data-d="1"]');return !!b&&+b.closest('.cell').querySelector('.v').textContent>=1;}},
- {t:'받을 것 고르기',b:'받고 싶은 <b>광석</b>의 <b>+</b>를 눌러 1장으로 정하세요.',at:{sel:'#pr [data-k="ore"][data-d="1"]',pad:5},done(){const b=document.querySelector('#pr [data-k="ore"][data-d="1"]');return !!b&&+b.closest('.cell').querySelector('.v').textContent>=1;}},
- {t:'제안하기',b:'<b>제안하기</b>를 누르세요. AI가 바로 답해 줘요.',at:{sel:'#tp',pad:5},done(){return !!myOffer();}},
+ {t:'은행·항구와 교환',b:'은행에서는 같은 자원 4장을 원하는 1장으로 바꿔요. (항구가 있으면 더 저렴해요.)<br>이번엔 <b>플레이어</b> 탭을 눌러 보세요.',at:{sel:'.sheet-trade .mtab[data-t="player"]'},done(){return !!document.querySelector('.sheet-trade .mtab[data-t="player"].on');}},
+ {t:'플레이어와 교환',b:'내가 줄 자원을 골라요.<br>목재의 <b>+를 눌러</b> 1장으로 정하세요.',at:{sel:'#pg [data-k="wood"][data-d="1"]',pad:5},done(){const b=document.querySelector('#pg [data-k="wood"][data-d="1"]');return !!b&&+b.closest('.cell').querySelector('.v').textContent>=1;}},
+ {t:'받고 싶은 자원을 골라요',b:'광석의 <b>+를 눌러</b> 1장으로 정하세요.',at:{sel:'#pr [data-k="ore"][data-d="1"]',pad:5},done(){const b=document.querySelector('#pr [data-k="ore"][data-d="1"]');return !!b&&+b.closest('.cell').querySelector('.v').textContent>=1;}},
+ {t:'제안하기',b:'<b>제안하기</b>를 누르세요. AI는 바로 답해 줘요.<br>사람은 제안을 확인한 뒤 답해 줘요.',at:{sel:'#tp',pad:5},done(){return !!myOffer();}},
  {t:'거래하기',b:'수락한 AI 옆 <b>거래</b>를 누르면 교환이 끝나요.',at:{sel:'[data-deal]',pad:5},done(){return this.traded;}},
  {t:'턴 종료',b:'교환 완료! 턴을 넘겨 주세요.',at:{sel:'[data-act="end"]'},enter(){closeModal();},done(){return S.cur!==0;}},
- {t:'AI들의 차례',b:'AI들이 차례를 진행하고 있어요.',ai:true,spot:'left',done(){return S.cur===0&&!S.rolled;}},
+ {t:'AI들의 차례',b:'차례를 진행하고 있어요.',ai:true,spot:'left',done(){return S.cur===0&&!S.rolled;}},
  {t:'주사위 굴리기',b:'주사위를 굴려 주세요.',at:{sel:'[data-act="roll"]'},done(){return S.rolled;}},
  {t:'도시로 업그레이드',b:'도시는 <b>곡물 2 + 광석 3</b>으로 정착지를 업그레이드해요. 자원을 <b>2장씩</b> 받고 점수도 2점이에요. <b>도시</b>를 누르세요.',at:{sel:'[data-act="city"]'},enter(){this.topUp(COST.city);},done(){return ui.mode==='city';}},
  {t:'업그레이드할 정착지',b:'첫 정착지를 도시로 바꿔 볼게요.',at(){return {v:this.P.v1};},enter(){this.steps[this.i].only={v:this.P.v1};this.focus({v:this.P.v1});},done(){return !!(S.vb[this.P.v1]&&S.vb[this.P.v1].c);}},
  {t:'턴 종료',b:'좋아요! 턴을 넘겨 주세요.',at:{sel:'[data-act="end"]'},enter(){this.zoomOut();},done(){return S.cur!==0;}},
- {t:'AI들의 차례',b:'AI들이 차례를 진행하고 있어요.',ai:true,spot:'left',done(){return S.cur===0&&!S.rolled;}},
- {t:'주사위 7과 도적',b:'이번엔 <b>7</b>이 나와요! 7이 나오면 아무 땅도 생산하지 않고, <b>카드가 8장 이상인 사람은 절반을 버려요</b>. 주사위를 굴려 보세요.',at:{sel:'[data-act="roll"]'},enter(){this.topUp({wood:3,brick:3,wool:2,grain:2,ore:1});this.force7=true;},done(){return S.rolled;}},
- {t:'카드 버리기',b(){return `카드가 많아서 절반(<b>${S.pend&&S.pend.n||''}장</b>)을 버려야 해요. 내 자원카드에서 버릴 카드를 눌러 고르세요.`;},at:{sel:'#dc',pad:6},done(){return !(S.pend&&S.pend.k==='discard')||document.querySelectorAll('#dc .plc.on').length>=S.pend.n;}},
+ {t:'AI들의 차례',b:'차례를 진행하고 있어요.',ai:true,spot:'left',done(){return S.cur===0&&!S.rolled;}},
+ {t:'주사위 7과 도적',b:'이번엔 <b>7</b>이 나올 거예요. 7이 나오면<br><b>카드가 8장 이상인 사람은 절반을 버려야 해요.</b><br>주사위를 굴려 보세요.',at:{sel:'[data-act="roll"]'},enter(){this.topUp({wood:3,brick:3,wool:2,grain:2,ore:1});this.force7=true;},done(){return S.rolled;}},
+ {t:'카드 버리기',b(){return `카드가 많아서 절반(<b>${S.pend&&S.pend.n||''}장</b>)을 버려야 해요.<br>내 자원카드에서 버릴 카드를 눌러 고르세요.`;},at:{sel:'#dc',pad:6},done(){return !(S.pend&&S.pend.k==='discard')||document.querySelectorAll('#dc .plc.on').length>=S.pend.n;}},
  {t:'버리기',b:'다 골랐으면 <b>버리기</b>를 누르세요.',at:{sel:'#dOk',pad:5},done(){return !(S.pend&&S.pend.k==='discard');}},
- {t:'도적 옮기기',b(){return `7을 굴린 사람은 <b>도적</b>을 옮겨요. 도적이 앉은 땅은 자원이 나오지 않아요. 빛나는 땅(AI의 건물이 있는 땅)을 누르세요.`;},at(){return {h:this.P.hexAI};},enter(){this.steps[this.i].only={h:this.P.hexAI};this.topUp({wool:1,grain:1},1);this.focus({h:this.P.hexAI},PH.on?6:8.5);},done(){return S.board.robber===this.P.hexAI;}},
- {t:'누구에게서 빼앗을까요?',b:'이 땅에는 여러 상대의 건물이 있어요. 카드를 빼앗을 상대를 고르세요.',at:{sel:'#sheet',pad:0},mini:true,done(){return !(S.pend&&S.pend.k==='steal');}},
- {t:'카드를 빼앗았어요',enter(){this.zoomOut();},b(){const L=S.lastSteal;return `도적을 옮긴 사람은 그 땅에 건물이 있는 상대의 카드 1장을 무작위로 가져와요. ${L?nameOf(L.q)+'에게서 <b>'+RN[L.r]+'</b> 1장을':'카드 1장을'} 가져왔어요. 기사 카드를 써도 똑같이 도적을 옮길 수 있어요.`;},next:true},
- {t:'보너스 점수',b:'끊기지 않은 도로가 <b>5칸 이상</b>이면서 가장 긴 사람은 <b>최장 교역로 +2점</b>, 기사 카드를 <b>3장 이상</b> 가장 많이 쓴 사람은 <b>최강 기사단 +2점</b>을 받아요. 상대가 도로를 먼저 깔면 길이 막힐 수 있으니 서두르세요!',next:true},
+ {t:'도적 옮기기',b(){return `<b>도적</b>을 옮겨요.<br><b>도적이 앉은 땅은 자원이 나오지 않아요.</b><br>빛나는 땅을 누르세요.`;},at(){return {h:this.P.hexAI};},enter(){this.steps[this.i].only={h:this.P.hexAI};this.topUp({wool:1,grain:1},1);this.focus({h:this.P.hexAI},PH.on?6:8.5);},done(){return S.board.robber===this.P.hexAI;}},
+ {t:'카드 1장을 빼앗을 수 있어요',b:'도적이 앉은 땅에 건물이 있는 상대 한 명을 고르세요.',at:{sel:'#sheet',pad:0},mini:true,done(){return !(S.pend&&S.pend.k==='steal');}},
+ {t:'카드를 빼앗았어요',enter(){this.zoomOut();},b(){return `도적을 옮기고 카드 1장을 무작위로 가져왔어요.<br>기사 카드를 써도 똑같이 도적을 옮길 수 있어요.`;},next:true},
+ {t:'보너스 점수',b:'끊기지 않은 도로가 <b>5칸 이상</b>이면서<br>가장 긴 사람은 <b>최장 교역로 +2점</b>,<br>기사 카드를 <b>3장 이상</b> 가장 많이 쓴 사람은<br><b>최강 기사단 +2점</b>을 받아요.',next:true},
  {t:'튜토리얼 완료!',b:'',popup:true,enter(){this.done();}}];
 $('#tExit').onclick=e=>{e.stopPropagation();openDialog(`<h3>튜토리얼을 그만할까요?</h3><p>첫 화면으로 돌아가요.</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">그만하기</button></div>`);$('#cNo').onclick=closeDialog;$('#cYes').onclick=()=>{closeDialog();TUT.exit(false);};};
 setInterval(()=>{try{TUT.tick();}catch(e){console.error(e);}},150);
