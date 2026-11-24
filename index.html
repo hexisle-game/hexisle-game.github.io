@@ -3900,7 +3900,7 @@ const PERF={born:performance.now(),dpr:Math.min(window.devicePixelRatio||1,2),ma
 ['pointerdown','pointermove','wheel','keydown','touchstart'].forEach(e=>addEventListener(e,()=>{PERF.act=performance.now();},{passive:true,capture:true}));
 function invalidate(shadow){PERF.dirty=true;PERF.act=performance.now();if(shadow)PERF.shadow=true;}
 // performance readout (?perf=1 or the test menu): rendered fps, render-call ms, draw calls, triangles, resolution, GPU
-function perfHud(force){let el=$('#perfHud');if(el&&!force){el.remove();clearInterval(PERF.hudT);return;}if(!el){el=document.createElement('div');el.id='perfHud';el.style.cssText='position:fixed;left:8px;bottom:8px;z-index:9500;padding:6px 9px;background:rgba(0,0,0,.72);color:#9f9;font:11px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre;pointer-events:none;border:1px solid rgba(160,255,160,.3)';el.innerHTML='<div class="pxt"></div><div style="display:flex;gap:6px;margin-top:4px;pointer-events:auto"><button id="pxC" style="font:inherit;padding:2px 8px;background:#173;color:#cfc;border:1px solid #5a5;cursor:pointer">복사</button><button id="pxB" style="font:inherit;padding:2px 8px;background:#331;color:#ffd;border:1px solid #aa5;cursor:pointer">자동 측정</button></div>';document.body.appendChild(el);el.querySelector('#pxC').onclick=e=>{e.stopPropagation();pxCopy('[HexIsle 성능]\n'+pxInfo()+'\n'+el.querySelector('.pxt').textContent,e.target);};el.querySelector('#pxB').onclick=e=>{e.stopPropagation();pxBench();};}
+function perfHud(force){let el=$('#perfHud');if(el&&!force){el.remove();clearInterval(PERF.hudT);PERF.hudOff=1;return;}if(!el&&!force&&PERF.hudOff)PERF.hudOff=0;if(!el){el=document.createElement('div');el.id='perfHud';el.style.cssText='position:fixed;left:8px;bottom:8px;z-index:9500;padding:6px 9px;background:rgba(0,0,0,.72);color:#9f9;font:11px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre;pointer-events:none;border:1px solid rgba(160,255,160,.3)';el.innerHTML='<div class="pxt"></div><div style="display:flex;gap:6px;margin-top:4px;pointer-events:auto"><button id="pxC" style="font:inherit;padding:2px 8px;background:#173;color:#cfc;border:1px solid #5a5;cursor:pointer">복사</button><button id="pxB" style="font:inherit;padding:2px 8px;background:#331;color:#ffd;border:1px solid #aa5;cursor:pointer">자동 측정</button><button id="pxX" style="font:inherit;padding:2px 8px;background:#311;color:#fcc;border:1px solid #a55;cursor:pointer">닫기</button></div>';document.body.appendChild(el);el.querySelector('#pxC').onclick=e=>{e.stopPropagation();pxCopy('[HexIsle 성능]\n'+pxInfo()+'\n'+el.querySelector('.pxt').textContent,e.target);};el.querySelector('#pxB').onclick=e=>{e.stopPropagation();pxBench();};el.querySelector('#pxX').onclick=e=>{e.stopPropagation();perfHud();};}
   let gpu='?';try{const gl=W.r.getContext(),ext=gl.getExtension('WEBGL_debug_renderer_info');gpu=ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER);gpu=String(gpu).replace(/ANGLE \(|\)$/g,'').slice(0,48);}catch(e){}
   let n0=PERF.nR||0,t0=performance.now();clearInterval(PERF.hudT);PERF.hudT=setInterval(()=>{const n=PERF.nR||0,t=performance.now();const fps=(n-n0)*1000/(t-t0);n0=n;t0=t;const i=W.r.info.render,c=W.r.domElement;
     const bi=W.batchInfo||{};const offs=['shadow','water','trees','movers','deco'].map(k=>PXL[k]+(PX[k]?' OFF':' ON')).join(' · ')+' · 해상도 '+(PX.dpr1?'1배':'기본');el.querySelector('.pxt').textContent=`${el.dataset.bench?el.dataset.bench+'\n':''}fps ${fps.toFixed(0)}  render ${(PERF.rms||0).toFixed(1)}ms\ncalls ${i.calls}  tris ${(i.triangles/1000).toFixed(0)}k\nbatch ${PERFV?(bi.state||'-')+(bi.merged!=null?' '+bi.hidden+'→'+bi.merged:'')+(bi.why?' ('+bi.why+')':'')+(bi.err?' '+bi.err:''):'off'}  loading ${LDC.n}\n${offs}\nres ${c.width}x${c.height} (${(c.width*c.height/1e6).toFixed(1)}M)  dpr ${PERF.dpr}/${(window.devicePixelRatio||1)}\n${gpu}`;},500);}
@@ -3919,7 +3919,7 @@ function pxSet(k,on){PX[k]=on;const vis=(o,v)=>{if(o)o.visible=v;};const DEF=THR
 function pxInfo(){let gpu='?';try{const gl=W.r.getContext(),ext=gl.getExtension('WEBGL_debug_renderer_info');gpu=String(ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER)).replace(/ANGLE \(|\)$/g,'');}catch(e){}
   const c=W.r.domElement,i=W.r.info.render;return `기기: ${navigator.userAgent.replace(/^Mozilla\/5\.0 /,'').slice(0,120)}\nGPU: ${gpu}\n화면: ${innerWidth}x${innerHeight} @${devicePixelRatio||1} · 렌더 ${c.width}x${c.height} (dpr ${PERF.dpr}) · 호출 ${i.calls} · 삼각형 ${(i.triangles/1000).toFixed(0)}k`;}
 async function pxBench(){if(PERF.benchOn)return;PERF.benchOn=1;const w=ms=>new Promise(r=>setTimeout(r,ms));const steps=[['기본',null],['그림자 끔','shadow'],['바다 끔','water'],['나무·숲 끔','trees'],['움직이는 장식 끔','movers'],['섬 위 장식 전부 끔','deco'],['해상도 1배','dpr1'],['기본(다시)',null]];
-  Object.keys(PX).forEach(k=>{if(PX[k]&&PXL[k])pxSet(k,false);});if(!$('#perfHud'))perfHud();PERF.force=true;const rows=[];const hud=$('#perfHud');
+  Object.keys(PX).forEach(k=>{if(PX[k]&&PXL[k])pxSet(k,false);});if(!$('#perfHud')&&!PERF.hudOff)perfHud(true);PERF.force=true;const rows=[];const hud=$('#perfHud');
   for(let si=0;si<steps.length;si++){const [lab,k]=steps[si];if(k)pxSet(k,true);if(hud)hud.dataset.bench=`측정 중 ${si+1}/${steps.length}: ${lab}`;await w(1500);PERF.bench={r:0,n:0,f:0,lt:0};await w(5000);const B=PERF.bench;PERF.bench=null;
     const fr=B.n>1?B.f/(B.n-1):0;rows.push(`${lab.padEnd(12,' ')}  프레임 ${fr.toFixed(1)}ms (${fr?(1000/fr).toFixed(0):'-'}fps) · render ${(B.n?B.r/B.n:0).toFixed(1)}ms · 호출 ${W.r.info.render.calls}`);if(k)pxSet(k,false);await w(400);}
   PERF.force=false;PERF.benchOn=0;if(hud)delete hud.dataset.bench;const txt=`[HexIsle 성능 측정]\n${pxInfo()}\n\n${rows.join('\n')}`;
@@ -4395,12 +4395,12 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '시작 연출 (새 게임)':()=>{try{restartGame();}catch(e){console.error(e);}},
     '성능 표시':()=>perfHud(),
     '성능 자동 측정':()=>pxBench(),
-    '실험: 그림자 끄기/켜기':()=>{if(!$('#perfHud'))perfHud();pxSet('shadow',!PX.shadow);},
-    '실험: 바다 끄기/켜기':()=>{if(!$('#perfHud'))perfHud();pxSet('water',!PX.water);},
-    '실험: 나무·숲 끄기/켜기':()=>{if(!$('#perfHud'))perfHud();pxSet('trees',!PX.trees);},
-    '실험: 움직이는 장식 끄기/켜기':()=>{if(!$('#perfHud'))perfHud();pxSet('movers',!PX.movers);},
-    '실험: 섬 위 장식 전부 끄기/켜기':()=>{if(!$('#perfHud'))perfHud();pxSet('deco',!PX.deco);},
-    '실험: 해상도 1배/원래':()=>{if(!$('#perfHud'))perfHud();pxSet('dpr1',!PX.dpr1);},
+    '실험: 그림자 끄기/켜기':()=>{if(!$('#perfHud')&&!PERF.hudOff)perfHud(true);pxSet('shadow',!PX.shadow);},
+    '실험: 바다 끄기/켜기':()=>{if(!$('#perfHud')&&!PERF.hudOff)perfHud(true);pxSet('water',!PX.water);},
+    '실험: 나무·숲 끄기/켜기':()=>{if(!$('#perfHud')&&!PERF.hudOff)perfHud(true);pxSet('trees',!PX.trees);},
+    '실험: 움직이는 장식 끄기/켜기':()=>{if(!$('#perfHud')&&!PERF.hudOff)perfHud(true);pxSet('movers',!PX.movers);},
+    '실험: 섬 위 장식 전부 끄기/켜기':()=>{if(!$('#perfHud')&&!PERF.hudOff)perfHud(true);pxSet('deco',!PX.deco);},
+    '실험: 해상도 1배/원래':()=>{if(!$('#perfHud')&&!PERF.hudOff)perfHud(true);pxSet('dpr1',!PX.dpr1);},
     '기록: 내 기록':()=>{closeDialog();showRecords('me');},
     '기록: 싱글 랭킹':()=>{closeDialog();showRecords('single','week');},
     '기록: 멀티 랭킹':()=>{closeDialog();showRecords('multi','week');},
