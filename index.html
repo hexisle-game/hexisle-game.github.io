@@ -666,14 +666,14 @@ html.fbp .sheet-frame .ffoot .fhint{font-size:12.5px!important;text-align:center
 html.fbp .sheet-feedback .fbn{display:block}
 html.fbp .sheet-frame .ffoot .btn{min-width:170px}
 /* records & ranking (test) */
-.ttro{position:absolute;top:64px;right:64px;z-index:6;width:52px;height:52px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(233,196,122,.55);background:radial-gradient(circle at 50% 35%,rgba(70,48,24,.85),rgba(22,14,7,.9));box-shadow:0 4px 14px rgba(0,0,0,.55),inset 0 0 0 3px rgba(0,0,0,.35);cursor:pointer;opacity:0;transition:opacity .6s ease .3s,transform .15s}
-.ttro:hover{transform:scale(1.06)}#title:not(.intro) .ttro{opacity:1}html.phone .ttro{width:44px;height:44px;top:calc(40px / var(--k,1));right:calc(40px / var(--k,1))}html.phone .ttro svg{width:22px;height:22px}
+.ttro{position:absolute;top:60px;right:60px;z-index:6;width:52px;height:52px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(233,196,122,.55);background:radial-gradient(circle at 50% 35%,rgba(70,48,24,.85),rgba(22,14,7,.9));box-shadow:0 4px 14px rgba(0,0,0,.55),inset 0 0 0 3px rgba(0,0,0,.35);cursor:pointer;opacity:0;transition:opacity .6s ease .3s,transform .15s}
+.ttro:hover{transform:scale(1.06)}#title:not(.intro) .ttro{opacity:1}html.phone .ttro{width:44px;height:44px;top:calc(36px / var(--k,1));right:calc(36px / var(--k,1))}html.phone .ttro svg{width:22px;height:22px}
 .sheet-records .fright{min-height:0}.sheet-records .frows{flex:1;min-height:0;gap:0!important;padding-top:6px!important}
 .rc-scroll{flex:1;min-height:0;overflow-y:auto;padding-right:6px;scrollbar-width:thin;scrollbar-color:rgba(233,196,122,.35) transparent}
 .rc-me{display:flex;align-items:center;gap:14px;padding:10px 0 24px 12px}.rc-me .av{width:54px;height:54px;flex:none}
 .rc-me .nm{font-size:22px;font-weight:800;color:#f3dfae}.rc-me .sub{font-size:13px;color:#a8977a;margin-top:2px}.rc-me .rcbtn{margin-left:auto;flex:none;padding:8px 16px;background:linear-gradient(180deg,#5a3d20,#3a2714);border:1px solid #c9a35a;border-radius:3px;color:#f3e2bc;font:inherit;font-size:14px;font-weight:700;box-shadow:inset 0 1px 0 rgba(255,235,190,.25),0 2px 6px rgba(0,0,0,.45);cursor:pointer}.rc-me .rcbtn:hover{filter:brightness(1.1)}html.phone .rc-me .rcbtn{font-size:12.5px;padding:6px 12px}
 .rc-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-.rc-card{border:1px solid rgba(233,196,122,.22);background:rgba(0,0,0,.22);padding:20px 22px;border-radius:2px}
+.rc-card{border:1px solid rgba(233,196,122,.22);background:rgba(0,0,0,.22);padding:16px 18px;border-radius:2px}
 .rc-card h4{margin:0 0 2px;font-size:14px;color:#e9c47a;letter-spacing:.04em}.rc-card .big{display:flex;gap:30px;flex-wrap:wrap;margin-top:14px}
 .rc-card .big div{display:flex;flex-direction:column-reverse}.rc-card .big b{font-size:36px;color:#f3e2bc;line-height:1.05}.rc-card .big span{font-size:12px;color:#a8977a;margin-bottom:2px}
 .rc-card .rank{margin-top:0;font-size:13px;color:#c9b48a}.rc-card .rank b{color:#ffe6a8}
@@ -695,7 +695,7 @@ html.fbp .sheet-frame .ffoot .btn{min-width:170px}
 .rk-mine{position:sticky;bottom:0;margin-top:6px;background:rgba(30,20,11,.96)}
 .rk-gap{text-align:center;color:#7d715f;font-size:12px;padding:4px 0}
 .rc-demo{font-size:12px!important;color:#8f7f63!important}
-html.phone .rc-cards{gap:8px;margin-bottom:10px}html.phone .rc-card{padding:calc(20px / var(--k,1))}html.phone .rc-card .big b{font-size:30px}html.phone .rc-card .big{gap:24px;margin-top:10px}html.phone .rc-me .av{width:42px;height:42px}html.phone .rc-me .nm{font-size:18px}html.phone .rc-me{padding-bottom:18px}
+html.phone .rc-cards{gap:8px;margin-bottom:10px}html.phone .rc-card{padding:calc(16px / var(--k,1))}html.phone .rc-card .big b{font-size:30px}html.phone .rc-card .big{gap:24px;margin-top:10px}html.phone .rc-me .av{width:42px;height:42px}html.phone .rc-me .nm{font-size:18px}html.phone .rc-me{padding-bottom:18px}
 html.phone .rk-row{grid-template-columns:2.3em 32px 1fr auto;padding:5px 6px;gap:8px}html.phone .rk-row .av{width:30px;height:30px}html.phone .rk-row .nm,html.phone .rk-row .sc{font-size:13.5px}html.phone .rk-no{width:26px;height:26px;font-size:13px}
 html.phone .rc-recent li{padding:5px 0;font-size:12px}
 #result .rkgain{margin-top:14px;font-size:16px;font-weight:700;color:#f3d08a;text-shadow:0 2px 6px rgba(0,0,0,.8);opacity:0;animation:rsUp .7s ease-out 2.9s both}#result .rkgain em{font-style:normal;color:#9bd884;margin-left:2px}html.phone #result .rkgain{font-size:13px;margin-top:8px}
@@ -703,6 +703,7 @@ html.phone .rc-recent li{padding:5px 0;font-size:12px}
 .cnt.ro.locked .btn{opacity:.38!important;filter:grayscale(.4)}.cnt.ro.locked .btn::after,.cnt.ro.locked .btn::before{opacity:.5}.flab .lock{font-size:.72em;color:#a8977a;font-weight:400;margin-left:4px}
 .pxrep{text-align:left;font:12px/1.55 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-all;background:rgba(0,0,0,.35);border:1px solid rgba(233,196,122,.25);padding:10px 12px;max-height:50vh;overflow:auto;color:#e6dccb}
 .btx{position:relative;top:-1.5px}html.phone .btx{top:calc(-1.5px / var(--k,1))}
+.dlg-reg .regnick{margin:14px auto 4px;max-width:320px;text-align:left}.dlg-reg .regnick .tin{width:100%;text-align:center;font-size:20px;margin:0}.dlg-reg .rnok{margin:6px 0 0!important;color:#9bd884;font-size:14px;text-align:center}.dlg-reg .ferr{text-align:center;margin-top:6px!important}.dlg-reg .rnbig{font-size:26px;font-weight:800;color:#f3dfae;margin:10px 0 6px}html.phone .dlg-reg .rnbig{font-size:20px}html.phone .dlg-reg .regnick .tin{font-size:16px}
 /* feedback popup (test) */
 .sheet-feedback .ffoot{position:relative}
 .sheet-feedback .fb-toast{position:absolute;transform:translate(-50%,6px);padding:6px 16px;background:rgba(36,23,12,.9);border:1px solid rgba(233,196,122,.75);border-radius:2px;color:#f3e2bc;font-size:14px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .25s ease,transform .25s ease;z-index:5}
@@ -4690,7 +4691,7 @@ function showRecords(tab,per){tab=tab||'me';per=per||ui.rkPer||'week';ui.rkPer=p
   if(tab==='me'){const pct=(w,g)=>g?Math.round(w/g*100):0;const card=(t,m,extra)=>`<div class="rc-card"><h4>${t}</h4><div class="rank">주간 <b>${m.rankW}위</b> · 전체 <b>${m.rankA}위</b></div><div class="big"><div><b>${m.games}</b><span>판수</span></div><div><b>${m.wins}</b><span>${extra}</span></div><div><b>${pct(m.wins,m.games)}%</b><span>승률</span></div><div><b>${m.pts}</b><span>점수</span></div></div></div>`;
     const dl={easy:'쉬움',normal:'보통',hard:'어려움'};const DIF=Object.entries(M.single.diff).map(([k,[w,g]])=>`<div class="rc-diff"><span>${dl[k]}</span><div class="rc-bar"><i style="width:${pct(w,g)}%"></i></div><span>${w}승 / ${g}판</span></div>`).join('');
     const RC=RCDEMO.recent.map(g=>{const dt=new Date(g.t);return `<li><span class="d">${dt.getMonth()+1}.${dt.getDate()}</span><span>${g.mp?`멀티 · ${g.n}인`:`싱글 · ${dl[g.diff]}`}</span><span class="rc-res ${g.won?'w':'l'}">${g.won?'승리':g.mp?g.rank+'등':'패배'}</span><span class="pt">${g.pt?'+'+g.pt:'-'}</span></li>`;}).join('');
-    right=`<div class="rc-scroll"><div class="rc-me">${avHTML({ch:myChar(),color:RCRING},'')}<div><div class="nm">${(ui.nick||defNick()).replace(/</g,'&lt;')}</div><div class="sub">고정 닉네임을 등록하면 랭킹에 올라가요</div></div><button class="rcbtn" id="rcReg">닉네임 등록</button></div>
+    right=`<div class="rc-scroll"><div class="rc-me">${avHTML({ch:myChar(),color:RCRING},'')}<div><div class="nm">${(ui.regNick||ui.nick||defNick()).replace(/</g,'&lt;')}</div><div class="sub">${ui.regNick?'랭킹에 참여 중이에요':'고정 닉네임을 등록하면 랭킹에 올라가요'}</div></div><button class="rcbtn" id="rcReg">${ui.regNick?'닉네임 변경':'닉네임 등록'}</button></div>
       <div class="rc-cards">${card('싱글',M.single,'승리')}${card('멀티',M.multi,'1등')}</div><div class="rc-sec">싱글 난이도별</div>${DIF}<div class="rc-sec" style="margin-top:26px">최근 게임</div><ul class="rc-recent">${RC}</ul></div>`;}
   else{const L=RCDEMO[tab][per];const me=rcMeEntry(tab,per);const top=L.slice(0,30);
     const list=top.map((e,i)=>rkRow(e,i+1)).join('')+(me.rank>30?'':'');
@@ -4699,8 +4700,28 @@ function showRecords(tab,per){tab=tab||'me';per=per||ui.rkPer||'week';ui.rkPer=p
   const foot=`<p class="fhint rc-demo">미리보기용 예시 기록이에요. 서버 연결 후 실제 기록이 표시돼요.</p>`;
   frame('records','기록','',left,right,foot);
   document.querySelectorAll('.sheet-records .mtab').forEach(b=>b.onclick=()=>{showRecords(b.dataset.t);const sh=$('#sheet');sh.classList.remove('fin','fin2');void sh.offsetWidth;sh.classList.add('fin2');clearTimeout(ui.fin2T);ui.fin2T=setTimeout(()=>sh.classList.remove('fin2'),900);});
-  segBind('rkPer',v=>showRecords(tab,v));const rg=$('#rcReg');if(rg)rg.onclick=()=>{const m=document.querySelector('.sheet-records .rc-demo');if(m)m.textContent='닉네임 등록은 서버 연결 후 사용할 수 있어요.';};
+  segBind('rkPer',v=>showRecords(tab,v));const rg=$('#rcReg');if(rg)rg.onclick=()=>showRegNick(()=>showRecords('me'));
   $('#fx').onclick=()=>{closeModal();if(!$('#title').hidden)showTitle(true);};}
+// nickname registration flow (preview: the uniqueness check and storage are mocked until the ranking server exists)
+function showRegNick(back){const change=!!ui.regNick;const cur=(ui.regNick||ui.nick||defNick()).replace(/"/g,'');
+  openDialog(`<h3>${change?'닉네임 변경':'닉네임 등록'}</h3><p>${change?'랭킹에 표시될 닉네임을 바꿔요.':'랭킹에 표시될 나만의 닉네임을 정해요.'}<br><span class="muted">다른 사람과 같은 닉네임은 쓸 수 없어요.</span></p>
+    <div class="regnick"><input class="tin" id="rnIn" maxlength="6" placeholder="최대 6자" value="${cur}"><p class="ferr" id="rnErr" hidden></p><p class="rnok" id="rnOk" hidden></p></div>
+    <div class="row"><button class="btn" id="rnNo">취소</button><button class="btn sub" id="rnGo">${change?'변경하기':'등록하기'}</button></div>`,'dlg-reg');
+  const inp=$('#rnIn'),err=$('#rnErr'),ok=$('#rnOk');
+  const taken=new Set([...RCDEMO.single.all,...RCDEMO.multi.all].map(e=>e.name));
+  const check=()=>{const v=inp.value.trim();err.hidden=true;ok.hidden=true;inp.classList.remove('err');
+    const bad=t=>{err.textContent=t;err.hidden=false;inp.classList.add('err');return false;};
+    if(!v)return bad('닉네임을 입력해 주세요.');if(v.length<2)return bad('2자 이상 입력해 주세요.');if(nickBad(v))return bad('사용할 수 없는 닉네임이에요.');
+    if(v!==ui.regNick&&taken.has(v))return bad('이미 다른 사람이 쓰고 있는 닉네임이에요.');ok.textContent='사용할 수 있는 닉네임이에요.';ok.hidden=false;return v;};
+  inp.oninput=()=>{clearTimeout(inp._t);inp._t=setTimeout(check,350);};setTimeout(()=>{try{inp.focus();inp.select();}catch(e){}},80);
+  $('#rnNo').onclick=()=>{closeDialog();};
+  $('#rnGo').onclick=()=>{const v=check();if(!v)return;
+    openDialog(`<h3>${change?'이 닉네임으로 바꿀까요?':'이 닉네임으로 등록할까요?'}</h3><p class="rnbig">${v.replace(/</g,'&lt;')}</p><p class="muted">${change?'바꾸면 랭킹에 새 닉네임으로 표시돼요.':'등록하면 이 기기의 게임 기록이 이 닉네임으로 랭킹에 올라가요.'}</p>
+      <div class="row"><button class="btn" id="rnBack">다시 입력</button><button class="btn sub" id="rnYes">${change?'변경':'등록'}</button></div>`,'dlg-reg');
+    $('#rnBack').onclick=()=>showRegNick(back);
+    $('#rnYes').onclick=()=>{ui.regNick=v;ui.nick=v;try{saveUi();}catch(e){}
+      openDialog(`<h3>${change?'닉네임을 바꿨어요':'등록 완료!'}</h3><p class="rnbig">${v.replace(/</g,'&lt;')}</p><p class="muted">이제 게임을 마칠 때마다 점수가 랭킹에 반영돼요.<br>(미리보기라 실제 서버에는 아직 저장되지 않아요.)</p><div class="row"><button class="btn sub" id="rnDone">확인</button></div>`,'dlg-reg');
+      $('#rnDone').onclick=()=>{closeDialog();if(back)back();};};};}
 if(RECV){const tb=$('#tTrophy');tb.hidden=false;tb.onclick=e=>{e.stopPropagation();showRecords('me');};}
 $('#homeBtn').onclick=()=>{if(window.NET&&NET.on)return MP.confirmLeave();openDialog(`<h3>메인으로 갈까요?</h3><p>진행 중인 게임은 끝나고, 첫 화면으로 돌아가요.</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">메인으로</button></div>`);
   $('#cNo').onclick=()=>{closeDialog();};$('#cYes').onclick=()=>{closeDialog();closeModal();showStart();resetBehind();};};
