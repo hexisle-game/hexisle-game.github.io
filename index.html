@@ -3586,7 +3586,7 @@ function buildStatic(){
   for(let i=0;i<tp.count;i++)tp.setY(i,heightAt(tp.getX(i),tp.getZ(i)));tg.computeVertexNormals();
   const terr=new THREE.Mesh(tg,terrainMaterial());terr.receiveShadow=true;terr.castShadow=false;terr.userData.keep=1;g.add(terr);
   W.waterTime=W.waterTime||{value:0};
-  const water=new THREE.Mesh(new THREE.PlaneGeometry(90,90,SEA2?220:1,SEA2?220:1).rotateX(-Math.PI/2),waterMaterial());water.position.y=SEA;water.receiveShadow=true;water.renderOrder=1;water.userData.keep=1;g.add(water);
+  const water=new THREE.Mesh(new THREE.PlaneGeometry(90,90,SEA2?220:1,SEA2?220:1).rotateX(-Math.PI/2),waterMaterial());water.position.y=SEA;water.receiveShadow=true;water.renderOrder=1;water.userData.keep=1;g.add(water);W.waterMesh=water;W.terrMesh=terr;
   const portAngles=S.board.ports.map(pt=>{const E=G.edges[pt.e],A=vc(E.a),B=vc(E.b);return Math.atan2((A.z+B.z)/2,(A.x+B.x)/2);});
   buildForest(g,rng,portAngles);if(TF){shipLineup(g);gullLineup(g);palmRing(g);cloudLayer(g);}
   const deco=new THREE.Group();g.add(deco);
@@ -3902,8 +3902,19 @@ function invalidate(shadow){PERF.dirty=true;PERF.act=performance.now();if(shadow
 function perfHud(force){let el=$('#perfHud');if(el&&!force){el.remove();clearInterval(PERF.hudT);return;}if(!el){el=document.createElement('div');el.id='perfHud';el.style.cssText='position:fixed;left:8px;bottom:8px;z-index:9500;padding:6px 9px;background:rgba(0,0,0,.72);color:#9f9;font:11px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre;pointer-events:none;border:1px solid rgba(160,255,160,.3)';document.body.appendChild(el);}
   let gpu='?';try{const gl=W.r.getContext(),ext=gl.getExtension('WEBGL_debug_renderer_info');gpu=ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER);gpu=String(gpu).replace(/ANGLE \(|\)$/g,'').slice(0,48);}catch(e){}
   let n0=PERF.nR||0,t0=performance.now();clearInterval(PERF.hudT);PERF.hudT=setInterval(()=>{const n=PERF.nR||0,t=performance.now();const fps=(n-n0)*1000/(t-t0);n0=n;t0=t;const i=W.r.info.render,c=W.r.domElement;
-    const bi=W.batchInfo||{};el.textContent=`fps ${fps.toFixed(0)}  render ${(PERF.rms||0).toFixed(1)}ms\ncalls ${i.calls}  tris ${(i.triangles/1000).toFixed(0)}k\nbatch ${PERFV?(bi.state||'-')+(bi.merged!=null?' '+bi.hidden+'→'+bi.merged:'')+(bi.why?' ('+bi.why+')':'')+(bi.err?' '+bi.err:''):'off'}  loading ${LDC.n}\nres ${c.width}x${c.height} (${(c.width*c.height/1e6).toFixed(1)}M)  dpr ${PERF.dpr}/${(window.devicePixelRatio||1)}\n${gpu}`;},500);}
+    const bi=W.batchInfo||{};el.textContent=`fps ${fps.toFixed(0)}  render ${(PERF.rms||0).toFixed(1)}ms\ncalls ${i.calls}  tris ${(i.triangles/1000).toFixed(0)}k\nbatch ${PERFV?(bi.state||'-')+(bi.merged!=null?' '+bi.hidden+'→'+bi.merged:'')+(bi.why?' ('+bi.why+')':'')+(bi.err?' '+bi.err:''):'off'}  loading ${LDC.n}${Object.keys(PX).filter(k=>PX[k]&&PXL[k]).length?'\noff: '+Object.keys(PX).filter(k=>PX[k]&&PXL[k]).map(k=>PXL[k]).join(', '):''}\nres ${c.width}x${c.height} (${(c.width*c.height/1e6).toFixed(1)}M)  dpr ${PERF.dpr}/${(window.devicePixelRatio||1)}\n${gpu}`;},500);}
 if(/[?&]perf=1/.test(location.search))setTimeout(()=>{try{perfHud(true);}catch(e){}},3000);
+// ---- performance experiments (test menu): switch parts of the scene off at runtime and read the render time in the perf readout ----
+const PX={};
+function pxSet(k,on){PX[k]=on;const vis=(o,v)=>{if(o)o.visible=v;};const DEF=THREE.Material.prototype.onBeforeCompile;
+  if(k==='shadow'){W.r.shadowMap.enabled=!on;W.scene.traverse(o=>{if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.needsUpdate=true);});PERF.shadow=true;}
+  if(k==='water')vis(W.waterMesh,!on);
+  if(k==='trees')W.staticG.traverse(o=>{if(o.isMesh&&o.material&&!Array.isArray(o.material)&&o.material.onBeforeCompile!==DEF&&/uWT/.test(String(o.material.onBeforeCompile))){if(on){o.userData.pxHid=o.visible;o.visible=false;}else if(o.userData.pxHid!==undefined){o.visible=o.userData.pxHid;delete o.userData.pxHid;}}});
+  if(k==='movers'){[...(W.dogs||[]).map(d=>d.wr),...(W.fleet||[]).map(f=>f.wr),...(W.gulls||[]).map(g=>g.wr||g),...(W.tractors||[]).map(t=>t.k),...(W.clouds||[]),...(W.coastBob||[]),...(W.sheepMix||[]).map(m=>{try{return m.getRoot();}catch(e){return null;}})].forEach(o=>{if(!o)return;if(on){o.userData.pxV=o.visible;o.visible=false;}else if(o.userData.pxV!==undefined){o.visible=o.userData.pxV;delete o.userData.pxV;}});}
+  if(k==='deco'){const m=[];W.staticG.children.forEach(c=>{if(c!==W.waterMesh&&c!==W.terrMesh&&!c.userData.batched)m.push(c);});m.forEach(o=>{if(on){o.userData.pxD=o.visible;o.visible=false;}else if(o.userData.pxD!==undefined){o.visible=o.userData.pxD;delete o.userData.pxD;}});}
+  if(k==='dpr1'){if(on){PX.dprPrev=PERF.dpr;PERF.max=1;setDPR(1);}else{try{phoneDPR();}catch(e){setDPR(PX.dprPrev||1);}}}
+  PERF.dirty=true;try{toast&&0;}catch(e){}}
+const PXL={shadow:'그림자',water:'바다',trees:'나무·숲',movers:'움직이는 장식',deco:'섬 위 모든 장식',dpr1:'해상도 1배'};
 function setDPR(v){PERF.dpr=v;W.r.setPixelRatio(v);if(W.comp)W.comp.setPixelRatio(v);fitCam(false);PERF.dirty=true;}
 function loop(t){requestAnimationFrame(loop);if(!W.ok||document.hidden)return;if(W.veilHold)return;if(ui.splash||document.documentElement.classList.contains('on-title')){const n=performance.now();if(n-(W.titleR||0)<1000)return;W.titleR=n;PERF.dirty=true;}const s=t/1000;const moved=W.ctl.update();
   const now0=performance.now();if(W.windT){W.windT.value=now0/1000;if(W.windOn||W.pflags&&Object.keys(W.pflags).length)PERF.dirty=true;}if(W.flock)stepFlock(now0);stepFleet(now0);stepGulls(now0);stepClouds(now0);stepCoast(now0);if(W.codeGulls&&W.codeGulls.length){const t=now0/1000;W.codeGulls=W.codeGulls.filter(b=>{let o=b;while(o.parent)o=o.parent;return o===W.scene;});W.codeGulls.forEach((gg,j)=>{const f=Math.sin(t*7+j)*.75;gg.userData['w-1'].rotation.x=-f;gg.userData['w1'].rotation.x=f;gg.position.y=Math.sin(t*7+j+1.2)*.012;});PERF.dirty=true;}if(W.lhBeams&&W.lhBeams.length){W.lhBeams=W.lhBeams.filter(b=>{let o=b;while(o.parent)o=o.parent;return o===W.scene;});W.lhBeams.forEach((b,j)=>{b.rotation.y=now0/1000*.7+j*1.3;const f=.75+.25*Math.sin(now0/1000*2.2+j);b.userData.sp.scale.setScalar(.16*f);});PERF.dirty=true;}if(W.sheepMix&&W.sheepMix.length){W.sheepMix=W.sheepMix.filter(m=>{let o=m.getRoot();while(o&&o.parent)o=o.parent;return o===W.scene;});const dt=Math.min(.05,(now0-(W.sheepT||now0))/1000);W.sheepT=now0;W.sheepMix.forEach(m=>m.update(dt));PERF.dirty=true;}if(W.tractors&&W.tractors.length){W.tractors=W.tractors.filter(T=>{let o=T.k;while(o.parent)o=o.parent;return o===W.scene;});W.tractors.forEach(T=>{const a=T.a0+now0/1000*.16;const x=T.cx+Math.cos(a)*T.r,z=T.cz+Math.sin(a)*T.r;T.k.position.set(x,heightAt(x,z),z);T.k.rotation.y=-a;if(T.wh)T.wh.forEach(w=>{w.m.rotation.x=a*T.r/w.r;});});if(W.tractors.length)PERF.dirty=true;}if(ROBV2&&W.tileRT&&S&&S.board){const r=W.tileRT[S.board.robber];if(r)r.value=.28*W.robA.value;}{const rb=W.robber;if(rb&&rb.userData.lift>=0&&!rb.userData.move){const tk=W.tokens[rb.userData.lift]&&W.tokens[rb.userData.lift].parent;const by=((tk&&tk.userData.yFix)??heightAt(rb.position.x,rb.position.z))+.22;rb.position.y=by+Math.sin(now0/650)*.035;PERF.dirty=true;}}if(W.robber&&W.robber.userData.mixer){const t=now0/1000;W.robber.userData.mixer.update(Math.min(.05,t-(W.robber.userData.mt||t)));W.robber.userData.mt=t;}const robP=(W.robber&&(W.robber.userData.robPulse||W.robber.userData.mixer||W.robber.userData.glb));const anim=moved||W.camAnim||W.introFX||(W.wmMix&&W.wmMix.length)||DICE.list.length||W.tgtG.children.length||W.anim.size||robP;
@@ -4369,6 +4380,12 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '시작 연출 (첫 진입)':()=>{try{bootRun(()=>{fitCam('now');camIntro();});}catch(e){console.error(e);}},
     '시작 연출 (새 게임)':()=>{try{restartGame();}catch(e){console.error(e);}},
     '성능 표시':()=>perfHud(),
+    '실험: 그림자 끄기/켜기':()=>{if(!$('#perfHud'))perfHud();pxSet('shadow',!PX.shadow);},
+    '실험: 바다 끄기/켜기':()=>{if(!$('#perfHud'))perfHud();pxSet('water',!PX.water);},
+    '실험: 나무·숲 끄기/켜기':()=>{if(!$('#perfHud'))perfHud();pxSet('trees',!PX.trees);},
+    '실험: 움직이는 장식 끄기/켜기':()=>{if(!$('#perfHud'))perfHud();pxSet('movers',!PX.movers);},
+    '실험: 섬 위 장식 전부 끄기/켜기':()=>{if(!$('#perfHud'))perfHud();pxSet('deco',!PX.deco);},
+    '실험: 해상도 1배/원래':()=>{if(!$('#perfHud'))perfHud();pxSet('dpr1',!PX.dpr1);},
     '기록: 내 기록':()=>{closeDialog();showRecords('me');},
     '기록: 싱글 랭킹':()=>{closeDialog();showRecords('single','week');},
     '기록: 멀티 랭킹':()=>{closeDialog();showRecords('multi','week');},
@@ -4382,7 +4399,7 @@ addEventListener('resize',()=>setTimeout(fitRules,80));
     '지붕: 텍스처 ↔ 셰이더':()=>{const u=new URL(location.href);u.searchParams.set('tx',TXM?'0':'1');location.href=u;},
   };
   const build=()=>{const p=document.createElement('div');p.id='tbench';p.innerHTML='<button class="tg">테스트 ▾</button><b>게임</b>';
-    const groups={'새 게임 (인트로 포함)':'게임','정착지 짓기':'건설','도적 이동':'연출','승리 화면':'결과','시작 연출 (첫 진입)':'화면','시작 연출 (새 게임)':'화면','성능 표시':'화면','기록: 내 기록':'기록·랭킹','기록: 싱글 랭킹':'기록·랭킹','기록: 멀티 랭킹':'기록·랭킹','첫 화면 (트로피 버튼)':'기록·랭킹','멀티 결과 화면':'결과','색상 A: 빨강·파랑·노랑·초록':'색상 세트'};
+    const groups={'새 게임 (인트로 포함)':'게임','정착지 짓기':'건설','도적 이동':'연출','승리 화면':'결과','시작 연출 (첫 진입)':'화면','시작 연출 (새 게임)':'화면','성능 표시':'성능 실험','실험: 그림자 끄기/켜기':'성능 실험','실험: 바다 끄기/켜기':'성능 실험','실험: 나무·숲 끄기/켜기':'성능 실험','실험: 움직이는 장식 끄기/켜기':'성능 실험','실험: 섬 위 장식 전부 끄기/켜기':'성능 실험','실험: 해상도 1배/원래':'성능 실험','기록: 내 기록':'기록·랭킹','기록: 싱글 랭킹':'기록·랭킹','기록: 멀티 랭킹':'기록·랭킹','첫 화면 (트로피 버튼)':'기록·랭킹','멀티 결과 화면':'결과','색상 A: 빨강·파랑·노랑·초록':'색상 세트'};
     const FOLD={'숲 지형':1};let box=p;Object.keys(act).forEach(k=>{if(groups[k]&&groups[k]!=='게임'&&groups[k]!==box._g){if(FOLD[groups[k]]){const d=document.createElement('details');d.innerHTML='<summary>'+groups[k]+'</summary>';p.appendChild(d);box=d;}else{const t=document.createElement('b');t.textContent=groups[k];p.appendChild(t);box=p;}box._g=groups[k];}const b=document.createElement('button');b.textContent=k;b.onclick=e=>{e.stopPropagation();try{act[k]();}catch(err){console.error(err);alert(err.message);}};box.appendChild(b);});
     p.querySelector('.tg').onclick=()=>p.classList.toggle('min');document.body.appendChild(p);};
   if(document.readyState==='complete')go();else addEventListener('load',go);})();
