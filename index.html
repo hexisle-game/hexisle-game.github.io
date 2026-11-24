@@ -667,16 +667,16 @@ html.fbp .sheet-feedback .fbn{display:block}
 html.fbp .sheet-frame .ffoot .btn{min-width:170px}
 /* records & ranking (test) */
 .ttro{position:absolute;top:64px;right:64px;z-index:6;width:52px;height:52px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(233,196,122,.55);background:radial-gradient(circle at 50% 35%,rgba(70,48,24,.85),rgba(22,14,7,.9));box-shadow:0 4px 14px rgba(0,0,0,.55),inset 0 0 0 3px rgba(0,0,0,.35);cursor:pointer;opacity:0;transition:opacity .6s ease .3s,transform .15s}
-.ttro:hover{transform:scale(1.06)}#title:not(.intro) .ttro{opacity:1}html.phone .ttro{width:44px;height:44px;top:calc(48px / var(--k,1));right:calc(48px / var(--k,1))}html.phone .ttro svg{width:22px;height:22px}
+.ttro:hover{transform:scale(1.06)}#title:not(.intro) .ttro{opacity:1}html.phone .ttro{width:44px;height:44px;top:calc(40px / var(--k,1));right:calc(40px / var(--k,1))}html.phone .ttro svg{width:22px;height:22px}
 .sheet-records .fright{min-height:0}.sheet-records .frows{flex:1;min-height:0;gap:0!important;padding-top:6px!important}
 .rc-scroll{flex:1;min-height:0;overflow-y:auto;padding-right:6px;scrollbar-width:thin;scrollbar-color:rgba(233,196,122,.35) transparent}
-.rc-me{display:flex;align-items:center;gap:14px;padding:10px 0 14px 12px}.rc-me .av{width:54px;height:54px;flex:none}
+.rc-me{display:flex;align-items:center;gap:14px;padding:10px 0 24px 12px}.rc-me .av{width:54px;height:54px;flex:none}
 .rc-me .nm{font-size:22px;font-weight:800;color:#f3dfae}.rc-me .sub{font-size:13px;color:#a8977a;margin-top:2px}.rc-me .rcbtn{margin-left:auto;flex:none;padding:8px 16px;background:linear-gradient(180deg,#5a3d20,#3a2714);border:1px solid #c9a35a;border-radius:3px;color:#f3e2bc;font:inherit;font-size:14px;font-weight:700;box-shadow:inset 0 1px 0 rgba(255,235,190,.25),0 2px 6px rgba(0,0,0,.45);cursor:pointer}.rc-me .rcbtn:hover{filter:brightness(1.1)}html.phone .rc-me .rcbtn{font-size:12.5px;padding:6px 12px}
 .rc-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-.rc-card{border:1px solid rgba(233,196,122,.22);background:rgba(0,0,0,.22);padding:12px 14px;border-radius:2px}
-.rc-card h4{margin:0 0 8px;font-size:14px;color:#e9c47a;letter-spacing:.04em}.rc-card .big{display:flex;gap:16px;flex-wrap:wrap}
-.rc-card .big div{display:flex;flex-direction:column-reverse}.rc-card .big b{font-size:44px;color:#f3e2bc;line-height:1.05}.rc-card .big span{font-size:12px;color:#a8977a;margin-bottom:2px}
-.rc-card .rank{margin-top:8px;font-size:13px;color:#c9b48a}.rc-card .rank b{color:#ffe6a8}
+.rc-card{border:1px solid rgba(233,196,122,.22);background:rgba(0,0,0,.22);padding:20px 22px;border-radius:2px}
+.rc-card h4{margin:0 0 2px;font-size:14px;color:#e9c47a;letter-spacing:.04em}.rc-card .big{display:flex;gap:30px;flex-wrap:wrap;margin-top:14px}
+.rc-card .big div{display:flex;flex-direction:column-reverse}.rc-card .big b{font-size:36px;color:#f3e2bc;line-height:1.05}.rc-card .big span{font-size:12px;color:#a8977a;margin-bottom:2px}
+.rc-card .rank{margin-top:0;font-size:13px;color:#c9b48a}.rc-card .rank b{color:#ffe6a8}
 .rc-sec{margin:20px 0 8px;font-size:13.5px;color:#e9c47a;letter-spacing:.04em}
 .rc-diff{display:grid;grid-template-columns:3.6em 1fr 5.6em;align-items:center;gap:10px;font-size:13px;color:#d8ccb6;margin:5px 0}
 .rc-bar{height:8px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden}.rc-bar i{display:block;height:100%;background:linear-gradient(90deg,#b8893a,#f3d08a);border-radius:4px}
@@ -695,7 +695,7 @@ html.fbp .sheet-frame .ffoot .btn{min-width:170px}
 .rk-mine{position:sticky;bottom:0;margin-top:6px;background:rgba(30,20,11,.96)}
 .rk-gap{text-align:center;color:#7d715f;font-size:12px;padding:4px 0}
 .rc-demo{font-size:12px!important;color:#8f7f63!important}
-html.phone .rc-cards{gap:8px;margin-bottom:10px}html.phone .rc-card{padding:8px 10px}html.phone .rc-card .big b{font-size:36px}html.phone .rc-me .av{width:42px;height:42px}html.phone .rc-me .nm{font-size:18px}html.phone .rc-me{padding-bottom:8px}
+html.phone .rc-cards{gap:8px;margin-bottom:10px}html.phone .rc-card{padding:calc(20px / var(--k,1))}html.phone .rc-card .big b{font-size:30px}html.phone .rc-card .big{gap:24px;margin-top:10px}html.phone .rc-me .av{width:42px;height:42px}html.phone .rc-me .nm{font-size:18px}html.phone .rc-me{padding-bottom:18px}
 html.phone .rk-row{grid-template-columns:2.3em 32px 1fr auto;padding:5px 6px;gap:8px}html.phone .rk-row .av{width:30px;height:30px}html.phone .rk-row .nm,html.phone .rk-row .sc{font-size:13.5px}html.phone .rk-no{width:26px;height:26px;font-size:13px}
 html.phone .rc-recent li{padding:5px 0;font-size:12px}
 #result .rkgain{margin-top:14px;font-size:16px;font-weight:700;color:#f3d08a;text-shadow:0 2px 6px rgba(0,0,0,.8);opacity:0;animation:rsUp .7s ease-out 2.9s both}#result .rkgain em{font-style:normal;color:#9bd884;margin-left:2px}html.phone #result .rkgain{font-size:13px;margin-top:8px}
@@ -4675,22 +4675,22 @@ function showFeedback(){
 $('#fbBtn').onclick=()=>{showFeedback();applyPhone();};
 {const _cm=closeModal;closeModal=function(){const was=ui.modal==='feedback';const r=_cm.apply(this,arguments);if(was)try{applyPhone();}catch(e){}return r;};}
 // ---- records & ranking popup (test page preview; sample data until it is wired to the server) ----
-const RECV=/[?&]test=1/.test(location.search);
+const RECV=/[?&]test=1/.test(location.search);const RCRING='#c9a35a';
 const RCDEMO=(()=>{let sd=7;const r=()=>{sd=(sd*16807)%2147483647;return sd/2147483647;};const names=[];const used=new Set();while(names.length<40){const n=NICK_A[Math.floor(r()*NICK_A.length)]+' '+NICK_B[Math.floor(r()*NICK_B.length)];if(n.length<=7&&!used.has(n)){used.add(n);names.push(n);}}
   const mk=(top)=>names.filter(n=>n!==(ui.nick||defNick())).map((n,i)=>({name:n,ch:CHARS[Math.floor(r()*CHARS.length)][0],color:PCOL[Math.floor(r()*PCOL.length)],score:Math.max(1,Math.round(top*Math.pow(.93,i)*(.95+r()*.1))),games:Math.round(8+r()*60)})).sort((a,b)=>b.score-a.score);
   const recent=[];const D=['easy','normal','hard'];for(let k=0;k<10;k++){const mp=r()<.3,w=r()<.5;recent.push({mp,diff:D[Math.floor(r()*3)],n:mp?2+Math.floor(r()*3):4,won:w,rank:w?1:2+Math.floor(r()*3),pt:mp?(w?3:(r()<.4?1:0)):(w?1+Math.floor(r()*3):0),t:Date.now()-k*86400000*(.4+r())});}
   return {single:{week:mk(48),all:mk(420)},multi:{week:mk(30),all:mk(260)},me:{single:{games:31,wins:17,pts:46,week:18,rankW:9,rankA:23,diff:{easy:[6,7],normal:[8,15],hard:[3,9]}},multi:{games:12,wins:4,pts:19,week:7,rankW:14,rankA:31}},recent};})();
 function rcMeEntry(mode,per){const me=RCDEMO.me[mode];return {name:(ui.nick||defNick()),ch:myChar(),color:ui.color||PCOL[0],score:per==='week'?me.week:me.pts,rank:per==='week'?me.rankW:me.rankA,me:1};}
-function rkRow(e,rank){return `<li class="rk-row${rank<=3?' m'+rank:''}${e.me?' me':''}"><span class="rk-no">${rank}</span>${avHTML(e,'')}<span class="nm">${e.name.replace(/</g,'&lt;')}</span><span class="sc">${e.score}<small>점</small></span></li>`;}
+function rkRow(e,rank){return `<li class="rk-row${rank<=3?' m'+rank:''}${e.me?' me':''}"><span class="rk-no">${rank}</span>${avHTML({ch:e.ch,color:RCRING},'')}<span class="nm">${e.name.replace(/</g,'&lt;')}</span><span class="sc">${e.score}<small>점</small></span></li>`;}
 function weekLeft(){const n=new Date(),d=(8-n.getDay())%7||7,nx=new Date(n.getFullYear(),n.getMonth(),n.getDate()+d);const h=Math.max(0,Math.round((nx-n)/3600000));return h>=24?`${Math.floor(h/24)}일 ${h%24}시간 남음`:`${h}시간 남음`;}
 function showRecords(tab,per){tab=tab||'me';per=per||ui.rkPer||'week';ui.rkPer=per;ui.rcTab=tab;
   const tabs=[['me','내 기록'],['single','싱글 랭킹'],['multi','멀티 랭킹']];
   const left=`<div class="mtabs">${tabs.map(([k,l])=>`<button class="mtab${k===tab?' on':''}" data-t="${k}">${l}<img class="orn" src="${TITLEIMG.orn1}" alt=""></button>`).join('')}</div>`;
   let right='';const M=RCDEMO.me;
-  if(tab==='me'){const pct=(w,g)=>g?Math.round(w/g*100):0;const card=(t,m,extra)=>`<div class="rc-card"><h4>${t}</h4><div class="big"><div><b>${m.games}</b><span>판수</span></div><div><b>${m.wins}</b><span>${extra}</span></div><div><b>${pct(m.wins,m.games)}%</b><span>승률</span></div><div><b>${m.pts}</b><span>점수</span></div></div><div class="rank">주간 <b>${m.rankW}위</b> · 전체 <b>${m.rankA}위</b></div></div>`;
+  if(tab==='me'){const pct=(w,g)=>g?Math.round(w/g*100):0;const card=(t,m,extra)=>`<div class="rc-card"><h4>${t}</h4><div class="rank">주간 <b>${m.rankW}위</b> · 전체 <b>${m.rankA}위</b></div><div class="big"><div><b>${m.games}</b><span>판수</span></div><div><b>${m.wins}</b><span>${extra}</span></div><div><b>${pct(m.wins,m.games)}%</b><span>승률</span></div><div><b>${m.pts}</b><span>점수</span></div></div></div>`;
     const dl={easy:'쉬움',normal:'보통',hard:'어려움'};const DIF=Object.entries(M.single.diff).map(([k,[w,g]])=>`<div class="rc-diff"><span>${dl[k]}</span><div class="rc-bar"><i style="width:${pct(w,g)}%"></i></div><span>${w}승 / ${g}판</span></div>`).join('');
     const RC=RCDEMO.recent.map(g=>{const dt=new Date(g.t);return `<li><span class="d">${dt.getMonth()+1}.${dt.getDate()}</span><span>${g.mp?`멀티 · ${g.n}인`:`싱글 · ${dl[g.diff]}`}</span><span class="rc-res ${g.won?'w':'l'}">${g.won?'승리':g.mp?g.rank+'등':'패배'}</span><span class="pt">${g.pt?'+'+g.pt:'-'}</span></li>`;}).join('');
-    right=`<div class="rc-scroll"><div class="rc-me">${avHTML({ch:myChar(),color:ui.color||PCOL[0]},'')}<div><div class="nm">${(ui.nick||defNick()).replace(/</g,'&lt;')}</div><div class="sub">고정 닉네임을 등록하면 랭킹에 올라가요</div></div><button class="rcbtn" id="rcReg">닉네임 등록</button></div>
+    right=`<div class="rc-scroll"><div class="rc-me">${avHTML({ch:myChar(),color:RCRING},'')}<div><div class="nm">${(ui.nick||defNick()).replace(/</g,'&lt;')}</div><div class="sub">고정 닉네임을 등록하면 랭킹에 올라가요</div></div><button class="rcbtn" id="rcReg">닉네임 등록</button></div>
       <div class="rc-cards">${card('싱글',M.single,'승리')}${card('멀티',M.multi,'1등')}</div><div class="rc-sec">싱글 난이도별</div>${DIF}<div class="rc-sec" style="margin-top:26px">최근 게임</div><ul class="rc-recent">${RC}</ul></div>`;}
   else{const L=RCDEMO[tab][per];const me=rcMeEntry(tab,per);const top=L.slice(0,30);
     const list=top.map((e,i)=>rkRow(e,i+1)).join('')+(me.rank>30?'':'');
