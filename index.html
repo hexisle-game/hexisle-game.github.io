@@ -703,7 +703,7 @@ html.phone .rc-recent li{padding:5px 0;font-size:12px}
 .cnt.ro.locked .btn{opacity:.38!important;filter:grayscale(.4)}.cnt.ro.locked .btn::after,.cnt.ro.locked .btn::before{opacity:.5}.flab .lock{font-size:.72em;color:#a8977a;font-weight:400;margin-left:4px}
 .pxrep{text-align:left;font:12px/1.55 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-all;background:rgba(0,0,0,.35);border:1px solid rgba(233,196,122,.25);padding:10px 12px;max-height:50vh;overflow:auto;color:#e6dccb}
 .btx{position:relative;top:-1.5px}html.phone .btx{top:calc(-1.5px / var(--k,1))}
-.dlg-reg .regnick{margin:14px auto 4px;max-width:320px;text-align:left}.dlg-reg .regnick .tin{width:100%;text-align:center;font-size:20px;margin:0}.dlg-reg .rnok{margin:6px 0 0!important;color:#9bd884;font-size:14px;text-align:center}.dlg-reg .ferr{text-align:center;margin-top:6px!important}.dlg-reg .rnbig{font-size:26px;font-weight:800;color:#f3dfae;margin:10px 0 6px}html.phone .dlg-reg .rnbig{font-size:20px}html.phone .dlg-reg .regnick .tin{font-size:16px}
+.dlg-reg .regnick{margin:14px auto 4px;max-width:320px;text-align:left}.dlg-reg .regnick .tin{width:100%;text-align:center;font-size:20px;margin:0}.dlg-reg .rnok{margin:6px 0 0!important;color:#9bd884;font-size:14px;text-align:center}.dlg-reg .ferr{text-align:center;margin-top:6px!important}.dlg-reg .rnbig{font-size:26px;font-weight:800;color:#fff;margin:10px 0 2px}.dlg-reg .rnsm{font-size:.86em;margin-top:0!important}html.phone .dlg-reg .rnbig{font-size:20px}html.phone .dlg-reg .regnick .tin{font-size:16px}
 /* feedback popup (test) */
 .sheet-feedback .ffoot{position:relative}
 .sheet-feedback .fb-toast{position:absolute;transform:translate(-50%,6px);padding:6px 16px;background:rgba(36,23,12,.9);border:1px solid rgba(233,196,122,.75);border-radius:2px;color:#f3e2bc;font-size:14px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .25s ease,transform .25s ease;z-index:5}
@@ -1183,7 +1183,7 @@ html.phone body .sheet-frame .frow{height:48px}
 html.phone body .sheet-single .frows{padding-top:14px!important}
 html body .sheet-frame .rcode{height:100%;box-sizing:border-box;padding-top:0;padding-bottom:0}
 .nickrow{height:auto!important;min-height:78px!important}
-.nickcell{display:flex;flex-direction:column;gap:6px}
+.nickcell{display:flex;flex-direction:column;gap:6px}.nickline{display:flex;gap:10px;align-items:center}.nickline .tin{flex:1;min-width:0}.nickline .tin[readonly]{opacity:.85}.nickline .rcbtn{flex:none;padding:8px 14px;background:linear-gradient(180deg,#5a3d20,#3a2714);border:1px solid #c9a35a;border-radius:3px;color:#f3e2bc;font:inherit;font-size:14px;font-weight:700;box-shadow:inset 0 1px 0 rgba(255,235,190,.25),0 2px 6px rgba(0,0,0,.45);cursor:pointer;white-space:nowrap}html.phone .nickline .rcbtn{font-size:12.5px;padding:6px 10px}
 .ferr{margin:0!important;color:#ff9c86!important;font-size:14px!important}
 .tin.err{border-color:#d0573f!important;box-shadow:0 0 0 2px rgba(208,87,63,.25)}
 html.phone .nickrow{min-height:48px!important}
@@ -4279,7 +4279,7 @@ function showOver(){const order=S.players.map((_,i)=>i).sort((a,b)=>vp(b,true)-v
    <div class="box"><h1><img src="assets/result/${won?'victory':'gameover'}.webp" alt="${won?'VICTORY':'GAME OVER'}"></h1>
    <div class="sub">${won?'':`<b style="color:${muteCol(W2.color)}">${W2.name}</b>이(가) `}${S.turn}바퀴 만에 섬의 영주가 되었어요.</div>
    <div class="tbl">${order.map((i,k)=>{const p=S.players[i];const vc=p.dev.filter(d=>d.t==='vp').length;return `<div style="animation-delay:${2.1+k*.22}s"><span class="rk">${k+1}</span>${avHTML(p,'avr2')}<span class="nm">${p.name}${vc?` <small>(승점 카드 ${vc}장)</small>`:''}</span><b>${vp(i,true)}점</b></div>`;}).join('')}</div>
-   ${RECV?`<div class="rkgain">${won?'+'+(S.mp?3:({easy:1,normal:2,hard:3}[S.diff]||2))+'점 · 주간 9위 <em>▲2</em>':'점수 변동 없음 · 주간 9위'}</div>`:''}<div class="btns"><button class="btn" id="oClose">보드 보기</button>${RECV?'<button class="btn rkb" id="oRank">랭킹 보기</button>':''}${S.mp?'<button class="btn" id="oLeave">나가기</button>':''}<button class="btn sub" id="oNew">${S.mp?'확인':'새 게임'}</button></div></div>`;
+   ${RECV?`<div class="rkgain">${won?'+'+(S.mp?3:({easy:1,normal:2,hard:3}[S.diff]||2))+'점 · 주간 9위 <em>▲2</em>':'점수 변동 없음 · 주간 9위'}</div>`:''}<div class="btns"><button class="btn" id="oClose">보드 보기</button>${RECV&&!S.mp?'<button class="btn rkb" id="oRank">랭킹 보기</button>':''}${S.mp?'<button class="btn" id="oLeave">나가기</button>':''}<button class="btn sub" id="oNew">${S.mp?'확인':'새 게임'}</button></div></div>`;
   document.body.appendChild(el);
   if($('#oRank'))$('#oRank').onclick=()=>{showRecords(S.mp?'multi':'single','week');};
   $('#oClose').onclick=()=>{ui.modal='closed-over';el.classList.add('out');setTimeout(()=>el.remove(),450);};
@@ -4569,7 +4569,7 @@ function showSingle(){if(window.MP&&!NET.on)MP.offline();
   charBind('fcol',c=>{ui.char=c;saveUi();},c=>{ui.color=c;saveUi();});segBind('fdif',v=>{ui.diff=v;saveUi();});segBind('fcnt',v=>{ui.n=+v;saveUi();});
   $('#fx').onclick=()=>{closeModal();showTitle(true);};$('#fGo').onclick=()=>{startNew();};}
 function defNick(){if(!ui.defNick){let n='';for(let k=0;k<20&&!n;k++){const c=aiNames(1)[0];if(c.length<=6)n=c;}ui.defNick=n||'육각왕';}return ui.defNick;}
-const nickRow=()=>`<div class="frow nickrow"><div class="flab">내 닉네임 <span class="muted">(최대 6자)</span></div><div class="nickcell"><input class="tin" id="nick" maxlength="6" placeholder="예: 육각왕" value="${(ui.nick||defNick()).replace(/"/g,'')}"><p class="ferr" id="nErr" hidden></p></div></div>`;
+const nickRow=()=>`<div class="frow nickrow"><div class="flab">내 닉네임 <span class="muted">(최대 6자)</span></div><div class="nickcell"><div class="nickline"><input class="tin" id="nick" maxlength="6" placeholder="예: 육각왕" value="${(ui.regNick||ui.nick||defNick()).replace(/"/g,'')}"${ui.regNick?' readonly':''}>${typeof RECV!=='undefined'&&RECV?`<button class="rcbtn" id="nickReg" type="button">${ui.regNick?'닉네임 수정':'닉네임 등록'}</button>`:''}</div><p class="ferr" id="nErr" hidden></p></div></div>`;
 function readNick(){const v=($('#nick').value||'').trim().slice(0,6);const m=$('#nErr');const bad=t=>{m.textContent=t;m.hidden=false;$('#nick').classList.add('err');$('#nick').focus();return false;};
   if(!v)return bad('닉네임을 입력해 주세요.');if(nickBad(v))return bad('사용할 수 없는 닉네임이에요. 다른 닉네임을 입력해 주세요.');m.hidden=true;$('#nick').classList.remove('err');ui.nick=v;saveUi();return true;}
 function showMulti(tab,code){tab=tab||'invite';ui.mtab=tab;const tabs=[['invite','초대하기'],['join','초대받기'],['quick','랜덤 참가']];
@@ -4588,6 +4588,7 @@ function showMulti(tab,code){tab=tab||'invite';ui.mtab=tab;const tabs=[['invite'
     if(tab==='invite'){$('#fMsg').textContent='방을 만드는 중…';MP.create();}
     else if(tab==='join'){const cd=$('#mCode').value.trim().toUpperCase();if(cd.length<4){$('#fMsg').textContent='방 코드를 확인해 주세요.';return;}ui.pendCode='';$('#fMsg').textContent='방에 들어가는 중…';MP.join(cd);}
     else{$('#fMsg').textContent='빈자리를 찾는 중…';MP.quick();}};
+  {const nb=$('#nickReg');if(nb)nb.onclick=e=>{e.stopPropagation();const v=$('#nick')&&$('#nick').value.trim();if(v&&!ui.regNick)ui.nick=v.slice(0,6);showRegNick(()=>showMulti(tab));};}
   MP.presence();MP.drawCount();}
 function myCols(){const c=PCOL.includes(ui.color)?ui.color:PCOL[0];return [c,...PCOL_AI.filter(x=>x!==c)];}
 function resetBehind(){clearTimeout(ui.rbT);ui.rbT=setTimeout(()=>{if($('#title').hidden)return;newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;render();},950);}
@@ -4691,7 +4692,7 @@ function showRecords(tab,per){tab=tab||'me';per=per||ui.rkPer||'week';ui.rkPer=p
   if(tab==='me'){const pct=(w,g)=>g?Math.round(w/g*100):0;const card=(t,m,extra)=>`<div class="rc-card"><h4>${t}</h4><div class="rank">주간 <b>${m.rankW}위</b> · 전체 <b>${m.rankA}위</b></div><div class="big"><div><b>${m.games}</b><span>판수</span></div><div><b>${m.wins}</b><span>${extra}</span></div><div><b>${pct(m.wins,m.games)}%</b><span>승률</span></div><div><b>${m.pts}</b><span>점수</span></div></div></div>`;
     const dl={easy:'쉬움',normal:'보통',hard:'어려움'};const DIF=Object.entries(M.single.diff).map(([k,[w,g]])=>`<div class="rc-diff"><span>${dl[k]}</span><div class="rc-bar"><i style="width:${pct(w,g)}%"></i></div><span>${w}승 / ${g}판</span></div>`).join('');
     const RC=RCDEMO.recent.map(g=>{const dt=new Date(g.t);return `<li><span class="d">${dt.getMonth()+1}.${dt.getDate()}</span><span>${g.mp?`멀티 · ${g.n}인`:`싱글 · ${dl[g.diff]}`}</span><span class="rc-res ${g.won?'w':'l'}">${g.won?'승리':g.mp?g.rank+'등':'패배'}</span><span class="pt">${g.pt?'+'+g.pt:'-'}</span></li>`;}).join('');
-    right=`<div class="rc-scroll"><div class="rc-me">${avHTML({ch:myChar(),color:RCRING},'')}<div><div class="nm">${(ui.regNick||ui.nick||defNick()).replace(/</g,'&lt;')}</div><div class="sub">${ui.regNick?'랭킹에 참여 중이에요':'고정 닉네임을 등록하면 랭킹에 올라가요'}</div></div><button class="rcbtn" id="rcReg">${ui.regNick?'닉네임 변경':'닉네임 등록'}</button></div>
+    right=`<div class="rc-scroll"><div class="rc-me">${avHTML({ch:myChar(),color:RCRING},'')}<div><div class="nm">${(ui.regNick||ui.nick||defNick()).replace(/</g,'&lt;')}</div><div class="sub">${ui.regNick?'랭킹에 참여 중이에요':'고정 닉네임을 등록하면 랭킹에 올라가요'}</div></div><button class="rcbtn" id="rcReg">${ui.regNick?'닉네임 수정':'닉네임 등록'}</button></div>
       <div class="rc-cards">${card('싱글',M.single,'승리')}${card('멀티',M.multi,'1등')}</div><div class="rc-sec">싱글 난이도별</div>${DIF}<div class="rc-sec" style="margin-top:26px">최근 게임</div><ul class="rc-recent">${RC}</ul></div>`;}
   else{const L=RCDEMO[tab][per];const me=rcMeEntry(tab,per);const top=L.slice(0,30);
     const list=top.map((e,i)=>rkRow(e,i+1)).join('')+(me.rank>30?'':'');
@@ -4704,9 +4705,9 @@ function showRecords(tab,per){tab=tab||'me';per=per||ui.rkPer||'week';ui.rkPer=p
   $('#fx').onclick=()=>{closeModal();if(!$('#title').hidden)showTitle(true);};}
 // nickname registration flow (preview: the uniqueness check and storage are mocked until the ranking server exists)
 function showRegNick(back){const change=!!ui.regNick;const cur=(ui.regNick||ui.nick||defNick()).replace(/"/g,'');
-  openDialog(`<h3>${change?'닉네임 변경':'닉네임 등록'}</h3><p>${change?'랭킹에 표시될 닉네임을 바꿔요.':'랭킹에 표시될 나만의 닉네임을 정해요.'}<br><span class="muted">다른 사람과 같은 닉네임은 쓸 수 없어요.</span></p>
+  openDialog(`<h3>${change?'닉네임 수정':'닉네임 등록'}</h3><p>${change?'랭킹에 표시될 닉네임을 바꿔요.':'랭킹에 표시될 나만의 닉네임을 정해요.'}<br><span class="muted">다른 사람과 같은 닉네임은 쓸 수 없어요.</span></p>
     <div class="regnick"><input class="tin" id="rnIn" maxlength="6" placeholder="최대 6자" value="${cur}"><p class="ferr" id="rnErr" hidden></p><p class="rnok" id="rnOk" hidden></p></div>
-    <div class="row"><button class="btn" id="rnNo">취소</button><button class="btn sub" id="rnGo">${change?'변경하기':'등록하기'}</button></div>`,'dlg-reg');
+    <div class="row"><button class="btn" id="rnNo">취소</button><button class="btn sub" id="rnGo">${change?'수정하기':'등록하기'}</button></div>`,'dlg-reg');
   const inp=$('#rnIn'),err=$('#rnErr'),ok=$('#rnOk');
   const taken=new Set([...RCDEMO.single.all,...RCDEMO.multi.all].map(e=>e.name));
   const check=()=>{const v=inp.value.trim();err.hidden=true;ok.hidden=true;inp.classList.remove('err');
@@ -4716,11 +4717,11 @@ function showRegNick(back){const change=!!ui.regNick;const cur=(ui.regNick||ui.n
   inp.oninput=()=>{clearTimeout(inp._t);inp._t=setTimeout(check,350);};setTimeout(()=>{try{inp.focus();inp.select();}catch(e){}},80);
   $('#rnNo').onclick=()=>{closeDialog();};
   $('#rnGo').onclick=()=>{const v=check();if(!v)return;
-    openDialog(`<h3>${change?'이 닉네임으로 바꿀까요?':'이 닉네임으로 등록할까요?'}</h3><p class="rnbig">${v.replace(/</g,'&lt;')}</p><p class="muted">${change?'바꾸면 랭킹에 새 닉네임으로 표시돼요.':'등록하면 이 기기의 게임 기록이 이 닉네임으로 랭킹에 올라가요.'}</p>
-      <div class="row"><button class="btn" id="rnBack">다시 입력</button><button class="btn sub" id="rnYes">${change?'변경':'등록'}</button></div>`,'dlg-reg');
+    openDialog(`<h3>${change?'이 닉네임으로 수정할까요?':'이 닉네임으로 등록할까요?'}</h3><p class="rnbig">${v.replace(/</g,'&lt;')}</p><p class="muted rnsm">${change?'바꾸면 랭킹에 새 닉네임으로 표시돼요.':'등록하면 이 기기의 게임 기록이<br>이 닉네임으로 랭킹에 올라가요.'}</p>
+      <div class="row"><button class="btn" id="rnBack">다시 입력</button><button class="btn sub" id="rnYes">${change?'수정':'등록'}</button></div>`,'dlg-reg');
     $('#rnBack').onclick=()=>showRegNick(back);
     $('#rnYes').onclick=()=>{ui.regNick=v;ui.nick=v;try{saveUi();}catch(e){}
-      openDialog(`<h3>${change?'닉네임을 바꿨어요':'등록 완료!'}</h3><p class="rnbig">${v.replace(/</g,'&lt;')}</p><p class="muted">이제 게임을 마칠 때마다 점수가 랭킹에 반영돼요.<br>(미리보기라 실제 서버에는 아직 저장되지 않아요.)</p><div class="row"><button class="btn sub" id="rnDone">확인</button></div>`,'dlg-reg');
+      openDialog(`<h3>${change?'닉네임을 수정했어요':'등록 완료!'}</h3><p class="rnbig">${v.replace(/</g,'&lt;')}</p><p class="muted rnsm">이제 게임을 마칠 때마다 점수가 랭킹에 반영돼요.<br>(미리보기라 실제 서버에는 아직 저장되지 않아요.)</p><div class="row"><button class="btn sub" id="rnDone">확인</button></div>`,'dlg-reg');
       $('#rnDone').onclick=()=>{closeDialog();if(back)back();};};};}
 if(RECV){const tb=$('#tTrophy');tb.hidden=false;tb.onclick=e=>{e.stopPropagation();showRecords('me');};}
 $('#homeBtn').onclick=()=>{if(window.NET&&NET.on)return MP.confirmLeave();openDialog(`<h3>메인으로 갈까요?</h3><p>진행 중인 게임은 끝나고, 첫 화면으로 돌아가요.</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">메인으로</button></div>`);
