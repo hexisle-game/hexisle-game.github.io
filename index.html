@@ -1070,7 +1070,7 @@ html body .pl .bdgs{grid-column:2;display:flex;flex-wrap:wrap;gap:4px;margin:-5p
 html body .pl .vp{grid-row:1/4}
 html body .pl .meta{grid-row:3}
 html body .pl .bdgs .badge{font-size:10.5px;padding:1px 6px}
-.bld .lft{display:none}
+.bld .lft{display:inline;font-weight:500;color:#cdbf9f;margin-left:2px;font-size:.9em}
 html.phone .bld .lft{display:inline;font-weight:500;color:#cdbf9f;margin-left:2px;font-size:.9em}
 .stealnote{margin-top:6px;font-size:.92em;color:#f3d08a}
 .drow{display:flex;align-items:flex-end;gap:18px}
@@ -4295,12 +4295,12 @@ function showOver(){const order=S.players.map((_,i)=>i).sort((a,b)=>vp(b,true)-v
    <div class="box"><h1><img src="assets/result/${won?'victory':'gameover'}.webp" alt="${won?'VICTORY':'GAME OVER'}"></h1>
    <div class="sub">${won?'':`<b style="color:${muteCol(W2.color)}">${W2.name}</b>이(가) `}${S.turn}바퀴 만에 섬의 영주가 되었어요.</div>
    <div class="tbl">${order.map((i,k)=>{const p=S.players[i];const vc=p.dev.filter(d=>d.t==='vp').length;return `<div style="animation-delay:${2.1+k*.22}s"><span class="rk">${k+1}</span>${avHTML(p,'avr2')}<span class="nm">${p.name}${vc?` <small>(승점 카드 ${vc}장)</small>`:''}</span><b>${vp(i,true)}점</b></div>`;}).join('')}</div>
-   ${RECV&&!S.tut?'<div class="rkgain">&nbsp;</div>':''}<div class="btns"><button class="btn" id="oClose">보드 보기</button>${RECV&&!S.mp?'<button class="btn rkb" id="oRank">랭킹 보기</button>':''}${S.mp?'<button class="btn" id="oLeave">나가기</button>':''}<button class="btn sub" id="oNew">${S.mp?'확인':'새 게임'}</button></div></div>`;
+   ${RECV&&!S.tut?'<div class="rkgain">&nbsp;</div>':''}<div class="btns"><button class="btn" id="oClose">보드 보기</button>${RECV&&!S.mp?'<button class="btn rkb" id="oRank">랭킹 보기</button>':''}${S.mp?'<button class="btn" id="oLeave">나가기</button>':''}<button class="btn sub" id="oNew">${S.mp?'확인':'완료'}</button></div></div>`;
   document.body.appendChild(el);try{rkGainLine(el);}catch(e){console.warn(e);}
   if($('#oRank'))$('#oRank').onclick=()=>{showRecords(S.mp?'multi':'single','week');};
   $('#oClose').onclick=()=>{ui.modal='closed-over';el.classList.add('out');setTimeout(()=>el.remove(),450);};
   if($('#oLeave'))$('#oLeave').onclick=()=>{if(window.NET&&NET.on)MP.confirmLeave();};
-  $('#oNew').onclick=()=>{if(window.NET&&NET.on){MP.ref('meta/status').set('lobby');return;}el.remove();ui.modal=null;startNew();};}
+  $('#oNew').onclick=()=>{if(window.NET&&NET.on){MP.ref('meta/status').set('lobby');return;}el.classList.add('out');setTimeout(()=>el.remove(),450);ui.modal=null;showStart();resetBehind();showSingle();};}
 function showTrade(tab){tab=tab||'bank';const me=S.players[ME];const rat=ratios(ME);
   const st={give:arguments[1]||null,get:null,pg:emptyRes(),pr:emptyRes(),resp:null};if(myOffer()){Object.assign(st.pg,S.offer.give);Object.assign(st.pr,S.offer.get);if(!arguments[0])tab='player';}
   const draw=()=>{let body='',foot='';
