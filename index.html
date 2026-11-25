@@ -671,7 +671,11 @@ html.fbp .sheet-frame .ffoot .btn{min-width:170px}
 .sheet-records .fright{min-height:0}.sheet-records .frows{flex:1;min-height:0;gap:0!important;padding-top:6px!important}
 .rc-scroll{flex:1;min-height:0;overflow-y:auto;padding-right:6px;scrollbar-width:thin;scrollbar-color:rgba(233,196,122,.35) transparent}
 .rc-me{display:flex;align-items:center;gap:14px;padding:10px 0 24px 12px}.rc-me .av{width:54px;height:54px;flex:none}
-.rc-me .nm{font-size:22px;font-weight:800;color:#f3dfae}.rc-me .sub{font-size:13px;color:#a8977a;margin-top:2px}.rc-me .rcbtn{margin-left:auto;flex:none;padding:8px 16px;background:linear-gradient(180deg,#5a3d20,#3a2714);border:1px solid #c9a35a;border-radius:3px;color:#f3e2bc;font:inherit;font-size:14px;font-weight:700;box-shadow:inset 0 1px 0 rgba(255,235,190,.25),0 2px 6px rgba(0,0,0,.45);cursor:pointer}.rc-me .rcbtn:hover{filter:brightness(1.1)}html.phone .rc-me .rcbtn{font-size:12.5px;padding:6px 12px}
+.rc-me .nm{font-size:22px;font-weight:800;color:#f3dfae}.rc-me .sub{font-size:13px;color:#a8977a;margin-top:2px}.rc-me .rcbtn{margin-left:auto;flex:none;padding:8px 16px;background:linear-gradient(180deg,#5a3d20,#3a2714);border:1px solid #c9a35a;border-radius:3px;color:#f3e2bc;font:inherit;font-size:14px;font-weight:700;box-shadow:inset 0 1px 0 rgba(255,235,190,.25),0 2px 6px rgba(0,0,0,.45);cursor:pointer}.rc-me .rcbtn:hover{filter:brightness(1.1)}
+.rk-msg{list-style:none;padding:34px 10px;text-align:center;color:#a8977a;font-size:13.5px;line-height:1.7}
+.rc-recent li.rc-empty{display:block;text-align:center;color:#a8977a;padding:16px 0}
+.rk-row.rk-unreg{grid-template-columns:40px 1fr auto}.rk-row.rk-unreg .nm{color:#c8b89a;font-size:13px;white-space:normal}.rk-row.rk-unreg .rcbtn{margin:0}
+#result .rkgain a{color:#f3d08a;text-decoration:underline;text-underline-offset:3px;pointer-events:auto}html.phone .rc-me .rcbtn{font-size:12.5px;padding:6px 12px}
 .rc-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
 .rc-card{border:1px solid rgba(233,196,122,.22);background:rgba(0,0,0,.22);padding:16px 18px;border-radius:2px}
 .rc-card h4{margin:0 0 2px;font-size:14px;color:#e9c47a;letter-spacing:.04em}.rc-card .big{display:flex;gap:30px;flex-wrap:wrap;margin-top:14px}
@@ -2241,7 +2245,7 @@ function newGame(n,diff,cols){n=n||4;try{if(typeof W!=='undefined')W.introKey=nu
   const ptypes=shuffle(['any','any','any','any','wood','brick','wool','grain','ore']);
   const gaps=[3,3,4,3,3,4,3,3,4];let idx=rnd(30);const ports=[];
   ptypes.forEach((t,i)=>{ports.push({e:G.coast[idx%30],t});idx+=gaps[i];});
-  S={board:{hexes,robber:hexes.findIndex(h=>h.res==='desert'),ports},
+  S={gid:Date.now().toString(36)+Math.random().toString(36).slice(2,6),board:{hexes,robber:hexes.findIndex(h=>h.res==='desert'),ports},
     players:['나',...aiNames(n-1,[CHN[myChar()]])].map((name,i)=>({name,ch:i===0?myChar():charOf(name),color:(cols||PCOL_AI)[i],ai:i!==0,res:emptyRes(),dev:[],knights:0})),
     vb:Array(G.verts.length).fill(null),eo:Array(G.edges.length).fill(-1),
     bank:{wood:19,brick:19,wool:19,grain:19,ore:19},
@@ -2514,8 +2518,8 @@ const $=s=>document.querySelector(s);
 const KEY='windisle-save-v1';try{localStorage.removeItem(KEY);}catch(e){}
 const ui={mode:null,speed:'느림',hints:true,tips:false,n:4,diff:'normal',gfx:'low',modal:null,shownRoll:0};
 const DELAY={'느림':1100,'보통':600,'빠름':180};
-try{const st=JSON.parse(localStorage.getItem('windisle-ui')||'{}');if(st.speed)ui.speed=st.speed;if(st.hints===false)ui.hints=false;if(st.tips===false)ui.tips=false;if(st.n)ui.n=st.n;if(st.diff)ui.diff=st.diff;ui.gfx='low';if(st.char)ui.char=st.char;if(st.color)ui.color=st.color;if(st.nick)ui.nick=st.nick;}catch(e){}
-function saveUi(){try{localStorage.setItem('windisle-ui',JSON.stringify({speed:ui.speed,hints:ui.hints,tips:ui.tips,n:ui.n,diff:ui.diff,gfx:ui.gfx,color:ui.color,nick:ui.nick,char:ui.char}));}catch(e){}}
+try{const st=JSON.parse(localStorage.getItem('windisle-ui')||'{}');if(st.speed)ui.speed=st.speed;if(st.hints===false)ui.hints=false;if(st.tips===false)ui.tips=false;if(st.n)ui.n=st.n;if(st.diff)ui.diff=st.diff;ui.gfx='low';if(st.char)ui.char=st.char;if(st.regNick)ui.regNick=st.regNick;if(st.color)ui.color=st.color;if(st.nick)ui.nick=st.nick;}catch(e){}
+function saveUi(){try{localStorage.setItem('windisle-ui',JSON.stringify({speed:ui.speed,hints:ui.hints,tips:ui.tips,n:ui.n,diff:ui.diff,gfx:ui.gfx,color:ui.color,nick:ui.nick,char:ui.char,regNick:ui.regNick||undefined}));}catch(e){}}
 function save(){return;try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 function loadSave(){return null;try{const s=JSON.parse(localStorage.getItem(KEY)||'null');return s&&s.phase&&s.phase!=='over'?s:null;}catch(e){return null;}}
 
@@ -3836,8 +3840,12 @@ function turnBanner(p){if(typeof TUT!=='undefined'&&TUT.on)return;if(W.veilHold|
   const pl=S.players[p];el.innerHTML='<i class="tbo l"></i>'+avHTML(pl,'avb')+(p===ME?`<b>내 차례</b>`:`<b><span style="color:${uiCol(pl.color)}">${pl.name}</span>의 차례</b>`)+'<i class="tbo r"></i>';el.classList.toggle('mine',p===ME);
   el.classList.remove('go');void el.offsetWidth;el.classList.add('go');}
 function sync3D(){
-  if(!W.ok)return;invalidate(true);buildStatic();
+  if(!W.ok)return;
   const lastSum=S.dice&&S.phase==='main'&&S.rolled?S.dice[0]+S.dice[1]:0;
+  // nothing on the island changed (timer ticks, chat, other players' cards, repeated network states): skip the full redraw + shadow pass
+  {let T0;try{T0=targets();}catch(e){T0={};}const sig=JSON.stringify([S.board.hexes,S.board.ports,S.eo,S.vb,S.board.robber,lastSum,S.players.map(p=>p.color),T0.kind,T0.v,T0.e,T0.h,ui.hints,PH.on,typeof TUT!=='undefined'&&TUT.on]);
+    if(sig===W.sig3&&W.pieces)return;W.sig3=sig;}
+  invalidate(true);buildStatic();
   W.tokens.forEach((sp,i)=>{if(!sp)return;const n=S.board.hexes[i].num;sp.material.map=tokenTex(n,n===lastSum);sp.material.opacity=i===S.board.robber?.4:1;sp.material.needsUpdate=true;});
   const now=performance.now();const first=W.prev===null;W.pieces=W.pieces||new Map();const want=new Map();
   S.eo.forEach((o,e)=>{if(o>=0)want.set('e'+e+':'+o+S.players[o].color,()=>{const E=G.edges[e],A=vc(E.a),B=vc(E.b);const dx=B.x-A.x,dz=B.z-A.z,L=Math.hypot(dx,dz);
@@ -4279,8 +4287,8 @@ function showOver(){const order=S.players.map((_,i)=>i).sort((a,b)=>vp(b,true)-v
    <div class="box"><h1><img src="assets/result/${won?'victory':'gameover'}.webp" alt="${won?'VICTORY':'GAME OVER'}"></h1>
    <div class="sub">${won?'':`<b style="color:${muteCol(W2.color)}">${W2.name}</b>이(가) `}${S.turn}바퀴 만에 섬의 영주가 되었어요.</div>
    <div class="tbl">${order.map((i,k)=>{const p=S.players[i];const vc=p.dev.filter(d=>d.t==='vp').length;return `<div style="animation-delay:${2.1+k*.22}s"><span class="rk">${k+1}</span>${avHTML(p,'avr2')}<span class="nm">${p.name}${vc?` <small>(승점 카드 ${vc}장)</small>`:''}</span><b>${vp(i,true)}점</b></div>`;}).join('')}</div>
-   ${RECV?`<div class="rkgain">${won?'+'+(S.mp?3:({easy:1,normal:2,hard:3}[S.diff]||2))+'점 · 주간 9위 <em>▲2</em>':'점수 변동 없음 · 주간 9위'}</div>`:''}<div class="btns"><button class="btn" id="oClose">보드 보기</button>${RECV&&!S.mp?'<button class="btn rkb" id="oRank">랭킹 보기</button>':''}${S.mp?'<button class="btn" id="oLeave">나가기</button>':''}<button class="btn sub" id="oNew">${S.mp?'확인':'새 게임'}</button></div></div>`;
-  document.body.appendChild(el);
+   ${RECV&&!S.tut?'<div class="rkgain">&nbsp;</div>':''}<div class="btns"><button class="btn" id="oClose">보드 보기</button>${RECV&&!S.mp?'<button class="btn rkb" id="oRank">랭킹 보기</button>':''}${S.mp?'<button class="btn" id="oLeave">나가기</button>':''}<button class="btn sub" id="oNew">${S.mp?'확인':'새 게임'}</button></div></div>`;
+  document.body.appendChild(el);try{rkGainLine(el);}catch(e){console.warn(e);}
   if($('#oRank'))$('#oRank').onclick=()=>{showRecords(S.mp?'multi':'single','week');};
   $('#oClose').onclick=()=>{ui.modal='closed-over';el.classList.add('out');setTimeout(()=>el.remove(),450);};
   if($('#oLeave'))$('#oLeave').onclick=()=>{if(window.NET&&NET.on)MP.confirmLeave();};
@@ -4676,53 +4684,113 @@ function showFeedback(){
     catch(e){console.warn('feedback',e);go.disabled=false;const pd=/permission/i.test((e&&(e.code||e.message))||'');m.textContent=pd?'보내지 못했어요. (저장 권한이 아직 열려 있지 않아요)':'보내지 못했어요. 잠시 후 다시 시도해 주세요.';}};}
 $('#fbBtn').onclick=()=>{showFeedback();applyPhone();};
 {const _cm=closeModal;closeModal=function(){const was=ui.modal==='feedback';const r=_cm.apply(this,arguments);if(was)try{applyPhone();}catch(e){}return r;};}
-// ---- records & ranking popup (test page preview; sample data until it is wired to the server) ----
-const RECV=/[?&]test=1/.test(location.search);const RCRING='#c9a35a';
-const RCDEMO=(()=>{let sd=7;const r=()=>{sd=(sd*16807)%2147483647;return sd/2147483647;};const names=[];const used=new Set();while(names.length<40){const n=NICK_A[Math.floor(r()*NICK_A.length)]+' '+NICK_B[Math.floor(r()*NICK_B.length)];if(n.length<=7&&!used.has(n)){used.add(n);names.push(n);}}
-  const mk=(top)=>names.filter(n=>n!==(ui.nick||defNick())).map((n,i)=>({name:n,ch:CHARS[Math.floor(r()*CHARS.length)][0],color:PCOL[Math.floor(r()*PCOL.length)],score:Math.max(1,Math.round(top*Math.pow(.93,i)*(.95+r()*.1))),games:Math.round(8+r()*60)})).sort((a,b)=>b.score-a.score);
-  const recent=[];const D=['easy','normal','hard'];for(let k=0;k<10;k++){const mp=r()<.3,w=r()<.5;recent.push({mp,diff:D[Math.floor(r()*3)],n:mp?2+Math.floor(r()*3):4,won:w,rank:w?1:2+Math.floor(r()*3),pt:mp?(w?3:(r()<.4?1:0)):(w?1+Math.floor(r()*3):0),t:Date.now()-k*86400000*(.4+r())});}
-  return {single:{week:mk(48),all:mk(420)},multi:{week:mk(30),all:mk(260)},me:{single:{games:31,wins:17,pts:46,week:18,rankW:9,rankA:23,diff:{easy:[6,7],normal:[8,15],hard:[3,9]}},multi:{games:12,wins:4,pts:19,week:7,rankW:14,rankA:31}},recent};})();
-function rcMeEntry(mode,per){const me=RCDEMO.me[mode];return {name:(ui.nick||defNick()),ch:myChar(),color:ui.color||PCOL[0],score:per==='week'?me.week:me.pts,rank:per==='week'?me.rankW:me.rankA,me:1};}
-function rkRow(e,rank){return `<li class="rk-row${rank<=3?' m'+rank:''}${e.me?' me':''}"><span class="rk-no">${rank}</span>${avHTML({ch:e.ch,color:RCRING},'')}<span class="nm">${e.name.replace(/</g,'&lt;')}</span><span class="sc">${e.score}<small>점</small></span></li>`;}
-function weekLeft(){const n=new Date(),d=(8-n.getDay())%7||7,nx=new Date(n.getFullYear(),n.getMonth(),n.getDate()+d);const h=Math.max(0,Math.round((nx-n)/3600000));return h>=24?`${Math.floor(h/24)}일 ${h%24}시간 남음`:`${h}시간 남음`;}
-function showRecords(tab,per){tab=tab||'me';per=per||ui.rkPer||'week';ui.rkPer=per;ui.rcTab=tab;
+// ---- records & ranking ----
+// Personal stats live on this device (localStorage) and are mirrored to Firebase: stats/{uid}.
+// Rankings only list players with a registered nickname: rank/{all|w<week>}/{s|m}/{uid} = {p,nick,ch}. Unique names: nicks/{name} = uid.
+const RECV=true;const RCRING='#c9a35a';
+const rkTO=(pr,ms)=>Promise.race([(pr.catch(()=>{}),pr),new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),ms||10000))]);
+const RK={K:'hexisle-rec',cache:{},
+  async conn(){await rkTO(MP.init(),9000);clearTimeout(this.offT);try{if(!MP.presOn)firebase.database().goOnline();}catch(e){}
+    this.offT=setTimeout(()=>{if(!NET.on&&!MP.presOn)try{firebase.database().goOffline();}catch(e){}},15000);},
+  wk(){const d=new Date(Date.now()+9*3600000);const dow=(d.getUTCDay()+6)%7;const m=new Date(Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()-dow));return m.toISOString().slice(0,10).replace(/-/g,'');},
+  blank(){return {s:{g:0,w:0,p:0,d:{easy:[0,0],normal:[0,0],hard:[0,0]}},m:{g:0,w:0,p:0},wk:{id:'',s:0,m:0},recent:[],done:[]};},
+  load(){if(this.L)return this.L;let L=null;try{L=JSON.parse(localStorage.getItem(this.K)||'null');}catch(e){}this.L=Object.assign(this.blank(),L||{});
+    if(this.L.wk.id!==this.wk())this.L.wk={id:this.wk(),s:0,m:0};return this.L;},
+  save(){try{localStorage.setItem(this.K,JSON.stringify(this.L));}catch(e){}},
+  pts(mode,per){const L=this.load();return per==='week'?(L.wk[mode]||0):L[mode].p;},
+  per(per){return per==='week'?'w'+this.wk():'all';},
+  // mirror local stats + ranking entries to the server (whole-record writes, so a failed push is simply retried later)
+  async push(){const L=this.load();await RK.conn();const uid=NET.uid,db=MP.db;
+    const ops=[db.ref('stats/'+uid).set({nick:ui.regNick||null,ch:myChar(),s:L.s,m:L.m,wk:L.wk,recent:L.recent.slice(0,10),t:firebase.database.ServerValue.TIMESTAMP})];
+    if(ui.regNick)for(const m of ['s','m'])for(const per of ['week','all']){const p=this.pts(m,per);if(p>0)ops.push(db.ref(`rank/${this.per(per)}/${m}/${uid}`).set({p,nick:ui.regNick,ch:myChar()}));}
+    await Promise.all(ops);this.L.dirty=false;this.save();this.cache={};},
+  // count of registered players strictly above me, +1
+  async rank(mode,per){const p=this.pts(mode,per);if(!ui.regNick||p<=0)return null;await RK.conn();
+    const sn=await MP.db.ref(`rank/${this.per(per)}/${mode}`).orderByChild('p').startAt(p+1).limitToFirst(999).once('value');return sn.numChildren()+1;},
+  async list(mode,per){const key=mode+per;const c=this.cache[key];if(c&&Date.now()-c.t<60000)return c.v;await RK.conn();
+    const sn=await MP.db.ref(`rank/${this.per(per)}/${mode}`).orderByChild('p').limitToLast(30).once('value');const v=[];
+    sn.forEach(ch=>{const e=ch.val();if(e&&e.nick)v.push({uid:ch.key,name:String(e.nick).slice(0,6),ch:e.ch,score:e.p|0});});v.sort((a,b)=>b.score-a.score);
+    this.cache[key]={t:Date.now(),v};return v;},
+  // called once per finished game; returns the points earned
+  record(){if(!S||S.tut||S.phase!=='over')return null;const L=this.load();const gid=S.gid||('t'+S.turn+S.players.map(p=>vp(S.players.indexOf(p),true)).join(''));
+    if(L.done.includes(gid))return L.last&&L.last.gid===gid?L.last:null;
+    const order=S.players.map((_,i)=>i).sort((a,b)=>vp(b,true)-vp(a,true));const rank=order.indexOf(ME)+1;const won=S.winner===ME;const mp=!!S.mp;
+    let pt=0;if(mp)pt=rank===1?3:rank===2?1:0;else if(won)pt={easy:1,normal:2,hard:3}[S.diff]||2;
+    const tooShort=S.turn<5;if(tooShort)pt=0;
+    const k=mp?'m':'s';const st=L[k];st.g++;if(rank===1)st.w++;st.p+=pt;if(!mp){const d=st.d[S.diff]||(st.d[S.diff]=[0,0]);d[1]++;if(won)d[0]++;}
+    if(L.wk.id!==this.wk())L.wk={id:this.wk(),s:0,m:0};L.wk[k]+=pt;
+    L.recent.unshift({t:Date.now(),mp,diff:S.diff,n:S.players.length,won,rank,pt});L.recent=L.recent.slice(0,10);
+    L.done.unshift(gid);L.done=L.done.slice(0,30);L.last={gid,pt,mp};L.dirty=true;this.save();
+    this.push().catch(e=>console.warn('rec push',e));return L.last;},
+  async flush(){const L=this.load();if(L.dirty)try{await this.push();}catch(e){}}
+};
+function rcMeEntry(mode,per,rank){return {name:(ui.regNick||ui.nick||defNick()),ch:myChar(),score:RK.pts(mode,per),rank,me:1};}
+function rkRow(e,rank){return `<li class="rk-row${rank&&rank<=3?' m'+rank:''}${e.me?' me':''}"><span class="rk-no">${rank||'-'}</span>${avHTML({ch:e.ch&&CHN[e.ch]?e.ch:CHARS[0][0],color:RCRING},'')}<span class="nm">${String(e.name).replace(/</g,'&lt;')}</span><span class="sc">${e.score}<small>점</small></span></li>`;}
+function weekLeft(){const n=Date.now()+9*3600000,d=new Date(n),dow=(d.getUTCDay()+6)%7;const nx=Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()-dow+7);const h=Math.max(0,Math.round((nx-n)/3600000));return h>=24?`${Math.floor(h/24)}일 ${h%24}시간 남음`:`${h}시간 남음`;}
+// async values used by the records screen; re-render the same tab when they arrive
+function rcAsync(key,fn){const c=RK.cache['_'+key];if(c&&Date.now()-c.t<60000)return c;RK.cache['_'+key]={t:Date.now(),wait:1};
+  rkTO(fn(),12000).then(v=>{RK.cache['_'+key]={t:Date.now(),v};},()=>{RK.cache['_'+key]={t:Date.now()-50000,err:1};}).then(()=>{if(ui.modal==='records')showRecords(ui.rcTab,ui.rkPer,true);});return RK.cache['_'+key];}
+function showRecords(tab,per,keep){tab=tab||'me';per=per||ui.rkPer||'week';ui.rkPer=per;ui.rcTab=tab;RK.flush();
+  const sc=keep&&$('.sheet-records .rc-scroll');const scTop=sc?sc.scrollTop:0;
   const tabs=[['me','내 기록'],['single','싱글 랭킹'],['multi','멀티 랭킹']];
   const left=`<div class="mtabs">${tabs.map(([k,l])=>`<button class="mtab${k===tab?' on':''}" data-t="${k}">${l}<img class="orn" src="${TITLEIMG.orn1}" alt=""></button>`).join('')}</div>`;
-  let right='';const M=RCDEMO.me;
-  if(tab==='me'){const pct=(w,g)=>g?Math.round(w/g*100):0;const card=(t,m,extra)=>`<div class="rc-card"><h4>${t}</h4><div class="rank">주간 <b>${m.rankW}위</b> · 전체 <b>${m.rankA}위</b></div><div class="big"><div><b>${m.games}</b><span>판수</span></div><div><b>${m.wins}</b><span>${extra}</span></div><div><b>${pct(m.wins,m.games)}%</b><span>승률</span></div><div><b>${m.pts}</b><span>점수</span></div></div></div>`;
-    const dl={easy:'쉬움',normal:'보통',hard:'어려움'};const DIF=Object.entries(M.single.diff).map(([k,[w,g]])=>`<div class="rc-diff"><span>${dl[k]}</span><div class="rc-bar"><i style="width:${pct(w,g)}%"></i></div><span>${w}승 / ${g}판</span></div>`).join('');
-    const RC=RCDEMO.recent.map(g=>{const dt=new Date(g.t);return `<li><span class="d">${dt.getMonth()+1}.${dt.getDate()}</span><span>${g.mp?`멀티 · ${g.n}인`:`싱글 · ${dl[g.diff]}`}</span><span class="rc-res ${g.won?'w':'l'}">${g.won?'승리':g.mp?g.rank+'등':'패배'}</span><span class="pt">${g.pt?'+'+g.pt:'-'}</span></li>`;}).join('');
-    right=`<div class="rc-scroll"><div class="rc-me">${avHTML({ch:myChar(),color:RCRING},'')}<div><div class="nm">${(ui.regNick||ui.nick||defNick()).replace(/</g,'&lt;')}</div><div class="sub">${ui.regNick?'랭킹에 참여 중이에요':'고정 닉네임을 등록하면 랭킹에 올라가요'}</div></div><button class="rcbtn" id="rcReg">${ui.regNick?'닉네임 수정':'닉네임 등록'}</button></div>
-      <div class="rc-cards">${card('싱글',M.single,'승리')}${card('멀티',M.multi,'1등')}</div><div class="rc-sec">싱글 난이도별</div>${DIF}<div class="rc-sec" style="margin-top:26px">최근 게임</div><ul class="rc-recent">${RC}</ul></div>`;}
-  else{const L=RCDEMO[tab][per];const me=rcMeEntry(tab,per);const top=L.slice(0,30);
-    const list=top.map((e,i)=>rkRow(e,i+1)).join('')+(me.rank>30?'':'');
+  let right='',foot='';const L=RK.load();let err=false;
+  const rkTxt=(m,per)=>{if(!ui.regNick)return '-';if(RK.pts(m,per)<=0)return '-';const r=rcAsync('r'+m+per,()=>RK.rank(m,per));if(r.err)err=true;return r.wait?'…':r.v?r.v+'위':'-';};
+  if(tab==='me'){const pct=(w,g)=>g?Math.round(w/g*100):0;
+    const card=(t,k,extra)=>{const m=L[k];return `<div class="rc-card"><h4>${t}</h4><div class="rank">주간 <b>${rkTxt(k,'week')}</b> · 전체 <b>${rkTxt(k,'all')}</b></div><div class="big"><div><b>${m.g}</b><span>판수</span></div><div><b>${m.w}</b><span>${extra}</span></div><div><b>${pct(m.w,m.g)}%</b><span>승률</span></div><div><b>${m.p}</b><span>점수</span></div></div></div>`;};
+    const dl={easy:'쉬움',normal:'보통',hard:'어려움'};const DIF=['easy','normal','hard'].map(k=>{const [w,g]=L.s.d[k]||[0,0];return `<div class="rc-diff"><span>${dl[k]}</span><div class="rc-bar"><i style="width:${pct(w,g)}%"></i></div><span>${w}승 / ${g}판</span></div>`;}).join('');
+    const RC=L.recent.length?L.recent.map(g=>{const dt=new Date(g.t);return `<li><span class="d">${dt.getMonth()+1}.${dt.getDate()}</span><span>${g.mp?`멀티 · ${g.n}인`:`싱글 · ${dl[g.diff]||''}`}</span><span class="rc-res ${g.won||g.rank===1?'w':'l'}">${g.mp?(g.rank===1?'1등':g.rank+'등'):(g.won?'승리':'패배')}</span><span class="pt">${g.pt?'+'+g.pt:'-'}</span></li>`;}).join(''):'<li class="rc-empty">아직 끝까지 마친 게임이 없어요.</li>';
+    right=`<div class="rc-scroll"><div class="rc-me">${avHTML({ch:myChar(),color:RCRING},'')}<div><div class="nm">${(ui.regNick||ui.nick||defNick()).replace(/</g,'&lt;')}</div><div class="sub">${ui.regNick?'랭킹에 참여 중이에요':'닉네임을 등록하면 랭킹에 올라가요'}</div></div><button class="rcbtn" id="rcReg">${ui.regNick?'닉네임 수정':'닉네임 등록'}</button></div>
+      <div class="rc-cards">${card('싱글','s','승리')}${card('멀티','m','1등')}</div><div class="rc-sec">싱글 난이도별</div>${DIF}<div class="rc-sec" style="margin-top:26px">최근 게임</div><ul class="rc-recent">${RC}</ul></div>`;}
+  else{const m=tab==='single'?'s':'m';const r=rcAsync('l'+m+per,()=>RK.list(m,per));const rr=ui.regNick&&RK.pts(m,per)>0?rcAsync('r'+m+per,()=>RK.rank(m,per)):{v:null};
+    let list;if(r.wait)list='<li class="rk-msg">랭킹을 불러오는 중이에요…</li>';else if(r.err){list='<li class="rk-msg">랭킹을 불러오지 못했어요.<br>잠시 후 다시 열어 주세요.</li>';}
+    else{const v=r.v.map(e=>e.uid===NET.uid?{...e,me:1}:e);let k=0,prev=null;list=v.length?v.map((e,i)=>{if(e.score!==prev){k=i+1;prev=e.score;}return rkRow(e,k);}).join(''):`<li class="rk-msg">${per==='week'?'이번 주':'아직'} 랭킹에 오른 사람이 없어요.<br>첫 번째 주인공이 되어 보세요!</li>`;}
+    const me=rcMeEntry(m,per,rr.v||null);
+    const mine=ui.regNick?rkRow(me,rr.wait?'…':me.rank):`<li class="rk-row me rk-unreg">${avHTML({ch:myChar(),color:RCRING},'')}<span class="nm">닉네임을 등록하면 랭킹에 올라가요</span><button class="rcbtn" id="rkReg">등록</button></li>`;
     right=`<div class="rk-top"><div class="cnt" id="rkPer"><button class="btn${per==='week'?' active':''}" data-v="week">주간</button><button class="btn${per==='all'?' active':''}" data-v="all">전체</button></div><span class="rk-reset">${per==='week'?'매주 월요일 0시 초기화 · '+weekLeft():(tab==='single'?'승리 시 쉬움 1 · 보통 2 · 어려움 3점':'1등 3점 · 2등 1점')}</span></div>
-      <div class="rc-scroll"><ol class="rk-list">${list}</ol><ol class="rk-list rk-mine">${rkRow(me,me.rank)}</ol></div>`;}
-  const foot=`<p class="fhint rc-demo">미리보기용 예시 기록이에요. 서버 연결 후 실제 기록이 표시돼요.</p>`;
-  frame('records','기록','',left,right,foot);
+      <div class="rc-scroll"><ol class="rk-list">${list}</ol><ol class="rk-list rk-mine">${mine}</ol></div>`;}
+  if(err)foot=`<p class="fhint">서버에 연결하지 못해 순위를 표시하지 못했어요.</p>`;
+  frame('records','기록','',left,right,foot);if(keep){const n=$('.sheet-records .rc-scroll');if(n)n.scrollTop=scTop;}
   document.querySelectorAll('.sheet-records .mtab').forEach(b=>b.onclick=()=>{showRecords(b.dataset.t);const sh=$('#sheet');sh.classList.remove('fin','fin2');void sh.offsetWidth;sh.classList.add('fin2');clearTimeout(ui.fin2T);ui.fin2T=setTimeout(()=>sh.classList.remove('fin2'),900);});
-  segBind('rkPer',v=>showRecords(tab,v));const rg=$('#rcReg');if(rg)rg.onclick=()=>showRegNick(()=>showRecords('me'));
+  segBind('rkPer',v=>showRecords(tab,v));for(const id of ['#rcReg','#rkReg']){const rg=$(id);if(rg)rg.onclick=()=>showRegNick(()=>showRecords(tab,per));}
   $('#fx').onclick=()=>{closeModal();if(!$('#title').hidden)showTitle(true);};}
-// nickname registration flow (preview: the uniqueness check and storage are mocked until the ranking server exists)
+// nickname registration: names are unique across players (nicks/{name} holds the owner's uid)
+async function nickFree(v){await RK.conn();const sn=await MP.db.ref('nicks/'+encodeURIComponent(v).replace(/\./g,'%2E')).once('value');return !sn.exists()||sn.val()===NET.uid;}
+async function nickClaim(v,old){await RK.conn();const key=n=>'nicks/'+encodeURIComponent(n).replace(/\./g,'%2E');
+  const r=await MP.db.ref(key(v)).transaction(cur=>cur===null||cur===NET.uid?NET.uid:undefined);if(!r.committed)return false;
+  if(old&&old!==v){try{await MP.db.ref(key(old)).remove();}catch(e){}
+    for(const per of ['all','w'+RK.wk()])for(const m of ['s','m'])try{await MP.db.ref(`rank/${per}/${m}/${NET.uid}`).remove();}catch(e){}}
+  return true;}
 function showRegNick(back){const change=!!ui.regNick;const cur=(ui.regNick||ui.nick||defNick()).replace(/"/g,'');
   openDialog(`<h3>${change?'닉네임 수정':'닉네임 등록'}</h3><p>${change?'랭킹에 표시될 닉네임을 바꿔요.':'랭킹에 표시될 나만의 닉네임을 정해요.'}<br><span class="muted">다른 사람과 같은 닉네임은 쓸 수 없어요.</span></p>
     <div class="regnick"><input class="tin" id="rnIn" maxlength="6" placeholder="최대 6자" value="${cur}"><p class="ferr" id="rnErr" hidden></p><p class="rnok" id="rnOk" hidden></p></div>
     <div class="row"><button class="btn" id="rnNo">취소</button><button class="btn sub" id="rnGo">${change?'수정하기':'등록하기'}</button></div>`,'dlg-reg');
-  const inp=$('#rnIn'),err=$('#rnErr'),ok=$('#rnOk');
-  const taken=new Set([...RCDEMO.single.all,...RCDEMO.multi.all].map(e=>e.name));
-  const check=()=>{const v=inp.value.trim();err.hidden=true;ok.hidden=true;inp.classList.remove('err');
-    const bad=t=>{err.textContent=t;err.hidden=false;inp.classList.add('err');return false;};
-    if(!v)return bad('닉네임을 입력해 주세요.');if(v.length<2)return bad('2자 이상 입력해 주세요.');if(nickBad(v))return bad('사용할 수 없는 닉네임이에요.');
-    if(v!==ui.regNick&&taken.has(v))return bad('이미 다른 사람이 쓰고 있는 닉네임이에요.');ok.textContent='사용할 수 있는 닉네임이에요.';ok.hidden=false;return v;};
-  inp.oninput=()=>{clearTimeout(inp._t);inp._t=setTimeout(check,350);};setTimeout(()=>{try{inp.focus();inp.select();}catch(e){}},80);
+  const inp=$('#rnIn'),err=$('#rnErr'),ok=$('#rnOk');let seq=0;
+  const bad=t=>{err.textContent=t;err.hidden=false;ok.hidden=true;inp.classList.add('err');return false;};
+  const local=()=>{const v=inp.value.trim();err.hidden=true;ok.hidden=true;inp.classList.remove('err');
+    if(!v)return bad('닉네임을 입력해 주세요.');if(v.length<2)return bad('2자 이상 입력해 주세요.');if(nickBad(v)||/[\/\[\]#$.]/.test(v))return bad('사용할 수 없는 닉네임이에요.');return v;};
+  const check=async()=>{const v=local();if(!v)return false;if(v===ui.regNick){ok.textContent='지금 쓰고 있는 닉네임이에요.';ok.hidden=false;return v;}const my=++seq;
+    let free;try{free=await rkTO(nickFree(v),12000);}catch(e){if(my===seq)bad('서버에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.');return false;}
+    if(my!==seq)return false;if(!free)return bad('이미 다른 사람이 쓰고 있는 닉네임이에요.');ok.textContent='사용할 수 있는 닉네임이에요.';ok.hidden=false;return v;};
+  inp.oninput=()=>{clearTimeout(inp._t);inp._t=setTimeout(check,400);};setTimeout(()=>{try{inp.focus();inp.select();}catch(e){}},80);
   $('#rnNo').onclick=()=>{closeDialog();};
-  $('#rnGo').onclick=()=>{const v=check();if(!v)return;
+  $('#rnGo').onclick=async()=>{const go=$('#rnGo');go.disabled=true;const v=await check();go.disabled=false;if(!v||!$('#rnIn'))return;
+    if(v===ui.regNick){closeDialog();if(back)back();return;}
     openDialog(`<h3>${change?'이 닉네임으로 수정할까요?':'이 닉네임으로 등록할까요?'}</h3><p class="rnbig">${v.replace(/</g,'&lt;')}</p><p class="muted rnsm">${change?'바꾸면 랭킹에 새 닉네임으로 표시돼요.':'등록하면 이 기기의 게임 기록이<br>이 닉네임으로 랭킹에 올라가요.'}</p>
       <div class="row"><button class="btn" id="rnBack">다시 입력</button><button class="btn sub" id="rnYes">${change?'수정':'등록'}</button></div>`,'dlg-reg');
     $('#rnBack').onclick=()=>showRegNick(back);
-    $('#rnYes').onclick=()=>{ui.regNick=v;ui.nick=v;try{saveUi();}catch(e){}
-      openDialog(`<h3>${change?'닉네임을 수정했어요':'등록 완료!'}</h3><p class="rnbig">${v.replace(/</g,'&lt;')}</p><p class="muted rnsm">이제 게임을 마칠 때마다 점수가 랭킹에 반영돼요.<br>(미리보기라 실제 서버에는 아직 저장되지 않아요.)</p><div class="row"><button class="btn sub" id="rnDone">확인</button></div>`,'dlg-reg');
+    $('#rnYes').onclick=async()=>{const y=$('#rnYes');y.disabled=true;y.textContent='저장 중…';let okc=false;
+      try{okc=await rkTO(nickClaim(v,ui.regNick),15000);}catch(e){okc=null;}
+      if(!okc){openDialog(`<h3>${okc===false?'이미 쓰고 있는 닉네임이에요':'저장하지 못했어요'}</h3><p>${okc===false?'방금 다른 사람이 먼저 등록했어요.<br>다른 닉네임을 골라 주세요.':'서버에 연결하지 못했어요.<br>잠시 후 다시 시도해 주세요.'}</p><div class="row"><button class="btn sub" id="rnRe">다시 입력</button></div>`,'dlg-reg');$('#rnRe').onclick=()=>showRegNick(back);return;}
+      ui.regNick=v;ui.nick=v;try{saveUi();}catch(e){}RK.load().dirty=true;RK.save();RK.cache={};RK.push().catch(()=>{});
+      openDialog(`<h3>${change?'닉네임을 수정했어요':'등록 완료!'}</h3><p class="rnbig">${v.replace(/</g,'&lt;')}</p><p class="muted rnsm">이제 게임을 마칠 때마다 점수가 랭킹에 반영돼요.</p><div class="row"><button class="btn sub" id="rnDone">확인</button></div>`,'dlg-reg');
       $('#rnDone').onclick=()=>{closeDialog();if(back)back();};};};}
+// result screen line: points earned and the weekly rank
+function rkGainLine(el){const box=el.querySelector('.rkgain');if(!box)return;const r=RK.record();if(!r){box.remove();return;}const m=r.mp?'m':'s';
+  const head=r.pt?`+${r.pt}점`:'점수 변동 없음';
+  if(!ui.regNick){box.innerHTML=`${head} · <a href="#" id="rkGo">닉네임을 등록하면 랭킹에 올라가요</a>`;$('#rkGo').onclick=e=>{e.preventDefault();showRegNick(()=>{closeDialog();rkGainLine(el);});};return;}
+  if(RK.pts(m,'week')<=0){box.textContent=head;return;}
+  box.textContent=head+' · 주간 순위 확인 중…';rkTO(RK.push(),12000).catch(()=>{}).then(()=>rkTO(RK.rank(m,'week'),10000)).then(k=>{box.textContent=k?`${head} · 주간 ${k}위`:head;},()=>{box.textContent=head;});}
 if(RECV){const tb=$('#tTrophy');tb.hidden=false;tb.onclick=e=>{e.stopPropagation();showRecords('me');};}
 $('#homeBtn').onclick=()=>{if(window.NET&&NET.on)return MP.confirmLeave();openDialog(`<h3>메인으로 갈까요?</h3><p>진행 중인 게임은 끝나고, 첫 화면으로 돌아가요.</p><div class="row"><button class="btn" id="cNo">계속하기</button><button class="btn sub" id="cYes">메인으로</button></div>`);
   $('#cNo').onclick=()=>{closeDialog();};$('#cYes').onclick=()=>{closeDialog();closeModal();showStart();resetBehind();};};
