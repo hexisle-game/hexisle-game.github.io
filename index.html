@@ -1690,19 +1690,19 @@ html.phone .credits .crlist li{font-size:12px;padding:5px 0}
 /* ===== table dressing around the board ===== */
 #deco{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 
-#deco .cur{top:0;height:90vh;aspect-ratio:800/1169;background-image:url(assets/deco/curtain.webp);background-position:left top}
-#deco .cur.l{left:-3vh}
-#deco .cur.r{right:-3vh;transform:scaleX(-1)}
-#deco .ml{left:-4vh;bottom:24vh;height:58vh;aspect-ratio:700/1120;background-image:url(assets/deco/ml.webp)}
-#deco .mr{right:-2vh;bottom:22vh;height:64vh;aspect-ratio:600/1037;background-image:url(assets/deco/mr.webp);transform:scaleX(-1)}
-#deco .bl{left:-3vh;bottom:-4vh;height:60vh;aspect-ratio:1000/821;background-image:url(assets/deco/bl.webp);background-position:left bottom}
-#deco .br{right:-3vh;bottom:-4vh;height:54vh;aspect-ratio:1000/582;background-image:url(assets/deco/br.webp);background-position:right bottom}
+
+
+
+
+
+
+
 #deco .dvig{position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 34%,#fff 26%,#6a7aa0 52%,#1c2644 74%,#05080f 100%);mix-blend-mode:multiply}
-#deco .plank{left:0;right:0;bottom:0;height:calc(var(--trayH,0px) + 3vh);min-height:22vh;background:url(assets/deco/plank.webp) left top/auto 200% repeat-x;box-shadow:0 -6px 18px rgba(0,0,0,.6);z-index:2}
-#deco .dvig{z-index:1}#deco .bl,#deco .br{z-index:3}
-html.phone #deco .cur{height:86vh}
-html.phone #deco .ml{height:54vh}html.phone #deco .mr{height:60vh}
-html.phone #deco .bl{height:56vh}html.phone #deco .br{height:50vh}
+
+#deco .dvig{z-index:1}
+
+
+
 
 
 /* setup / lobby: faint illustration under the leather — single: harbour painting, multi: galleon engraving, lobby: sea chart */
@@ -4448,7 +4448,7 @@ function showCredits(){openDialog(`<h3>Credits &amp; Licenses</h3><div class="cr
   <p class="cmuted">배경음악·효과음·영상: Pixabay (Pixabay Content License)<br>첫 화면 반짝임 입자: Kenney Particle Pack (CC0)<br>글꼴: Hahmlet (SIL Open Font License) · 3D 엔진: three.js (MIT)</p></div><div class="row"><button class="btn sub" id="crOk">확인</button></div>`,'dlg-cr');$('#crOk').onclick=closeDialog;}
 
 // table dressing around the sea: curtains, valance and corner props, darkened behind the UI (pointer-transparent)
-{const q=location.search,r=document.documentElement.style;let m=/[?&]fbs=([1-4])/.exec(q);if(m)r.setProperty('--fbgC',`url(assets/fbg/C${m[1]}.webp)`);if(/[?&]fbm=2/.test(q))r.setProperty('--fbgA','url(assets/fbg/A2.webp)');}
+
 
 // wood panel / side art follow the tab baseline
 function placeWood(){const d=document.getElementById('deco');if(!d||!d.classList.contains('v2'))return;document.documentElement.classList.add('has-deco2');const t=document.querySelector('#handHead .htabs');const st=document.getElementById('stage');if(!t||!st||!t.offsetParent)return;
