@@ -1,0 +1,32 @@
+/* HexIsle - PC only (html:not(.phone)). Edit PC layout here; mobile never loads these rules into effect. */
+@media (min-width:1101px) and (min-height:640px){html:not(.phone) .side{top:84px!important}}
+@media (min-width:1101px) and (min-height:640px){html:not(.phone) .side .panel h2{margin-bottom:6px!important}}
+@media (min-width:1101px) and (min-height:640px) and (max-height:900px){html:not(.phone) .side{top:76px!important}}
+html:not(.phone) .side .pl.cur{background:rgba(0,0,0,.3)!important}
+html:not(.phone) header.top h1.logo{font-size:39px}
+html:not(.phone) .sheet-start .cnt{gap:10px}
+html:not(.phone) .sheet-start .cnt .btn{font-size:18px;padding:14px 16px;min-width:0}
+html:not(.phone) .sheet-rules .steps li{margin-bottom:8px}
+html:not(.phone) .sheet-rules .row{padding-top:20px}
+html:not(.phone) .sheet-rules .row .btn{font-size:16px;padding:12px 26px}
+html:not(.phone) .sheet-start .cnt .btn{gap:6px}
+html:not(.phone) body .sheet.sheet-start{padding-top:22px!important}
+html:not(.phone) body .sheet-trade h3,html:not(.phone) body .sheet-over h3,html:not(.phone) body .sheet-confirm h3{margin-top:14px}
+html:not(.phone) body .sheet-start #dif{margin-bottom:20px!important}
+html:not(.phone) body .sheet.sheet-start #cnt.cnt{margin-bottom:34px!important}
+html:not(.phone) body .sheet.sheet-start #dif.cnt{margin-bottom:40px!important}
+html:not(.phone) body .sheet.sheet-start .cnt .btn{font-size:22px!important;padding:10px 12px 14px!important}
+html:not(.phone) body .sheet.sheet-start .cnt .btn small{font-size:14px!important}
+html:not(.phone) body .sheet.sheet-setup #cnt.cnt{margin-bottom:52px!important}
+html:not(.phone) body .sheet.sheet-setup .colrow{margin:0 0 52px!important}
+html:not(.phone) body .sheet.sheet-setup #dif.cnt{margin-bottom:60px!important}
+html:not(.phone) .sheet-frame .flab{font-size:18px}
+html:not(.phone) .sheet-frame .fhint{font-size:16px!important}
+html:not(.phone) .rtxt p{font-size:18.5px}
+html:not(.phone) .icols.devc p{font-size:16.5px}
+html:not(.phone) .ihd b{font-size:26px}
+html:not(.phone).sico-on .setpanel .mi{gap:10px!important}
+html:not(.phone) body .pl .bdgs{grid-row:3!important;margin:4px 0 1px!important}
+html:not(.phone) body .pl .bdgs:empty{display:none}
+html.has-deco2:not(.phone) body #hand{zoom:.9}
+html:not(.phone) .sheet-lobby .lopen{margin-bottom:17px}

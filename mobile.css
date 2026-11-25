@@ -1,0 +1,229 @@
+/* HexIsle - mobile only (html.phone). Edit phone layout here; PC never matches these rules. */
+html.phone .pl .vp{grid-row:1}
+html.phone .tray{padding-top:26px!important}
+html.phone .stagebtns .tbtn{min-width:0!important}
+html.phone .stagebtns .tbtn.primary{min-width:140px!important}
+html.phone .tray-dev{min-width:130px}
+html.phone.has-deco2 body #dicebox,html.phone.has-deco2 body #coach{translate:32px 0}
+html.phone #leftcol>.toast .ex{display:none}
+html.phone .builds{grid-template-columns:repeat(4,72px)!important}
+html.phone .bld b{font-size:12.5px}
+html.phone .sheet p,html.phone .sheet li{font-size:16px}
+html.phone .cnt small{font-size:13px}
+html.phone .tray{padding-right:250px!important}
+html.phone .side{top:50px!important}
+html.phone html body header.top .tools>.btn{padding:4px 10px!important;font-size:13px!important}
+html.phone .step .cell .b{gap:4px}
+html.phone .sheet-discard h3{margin-bottom:4px}
+html.phone .sheet-discard p{margin-bottom:6px}
+html.phone body nav.setpanel .seg{margin-right:-2.75px}
+html.phone body .setpanel .mi+.mi::before,html.phone body .setpanel .msep+.mi::before{left:26px}
+html.phone .rc-me{padding-bottom:18px}
+html.phone .rc-recent li{padding:5px 0;font-size:12px}
+html.phone .dlg-reg .regnick .tin{font-size:16px}
+html.phone .setpanel{min-width:260px}
+html.phone .setpanel .mi{font-size:17px!important}
+html.phone header.top h1.logo{font-size:26px}
+html.phone .dicebox .sum{font-size:44px!important}
+html.phone .dicebox{gap:12px!important}
+html.phone .sheet-trade .tinfo{margin-top:8px;padding-top:8px}
+html.phone .setpanel .mi{height:44px;padding:0 26px!important}
+html.phone .sheet-start .cnt .btn{gap:4px}
+html.phone body .sheet .row .btn{min-width:110px}
+html.phone body .sheet .row .btn{min-height:46px!important}
+html.phone body header.top h1.logoimg{width:128px!important}
+html.phone body .bld b{margin-top:4px}
+html.phone body .bld .mini,html.phone body .bld .cost{margin-top:3px}
+html.phone body .pick button .pr{font-size:10.5px}
+html.phone body .tray-act>.tray-h{margin-bottom:6px!important}
+html.phone body .tray-act #actions{padding-bottom:4px}
+html.phone body .tray-hand #hand .crow{padding-top:6px!important}
+html.phone body #handHead{margin-bottom:2px!important}
+html.phone header.top .tools .ib .gico{width:24px;height:24px}
+html.phone body .sheet-start #cnt{margin-bottom:16px!important}
+html.phone body .sheet-start #dif{margin-bottom:16px!important}
+html.phone .dicebox .sum.sumimg img{height:38px!important}
+html.phone body .sheet-trade h3{display:inline-block;margin:0 14px 6px 0!important;vertical-align:middle}
+html.phone body .sheet-trade .resp .btn.sub{border-width:7px 9px!important;border-image-width:7px 9px!important;padding:2px 8px!important;font-size:13px!important;margin-left:auto}
+html.phone body .sheet.sheet-start{align-content:center}
+html.phone body .sheet-start .cnt small{font-size:12.5px!important}
+html.phone body .sheet .btn,html.phone body .stagebtns .tbtn{padding-bottom:3px!important}
+html.phone .swatches .sw{width:28px;height:28px}
+html.phone body .sheet.sheet-start.sheet-start{padding-top:34px!important}
+html.phone body .sheet.sheet-start .colrow{margin:0 0 10px}
+html.phone body .sheet.sheet-start #cnt.cnt{margin-bottom:12px!important}
+html.phone body .sheet.sheet-start #dif.cnt{margin-bottom:16px!important}
+html.phone .bld .lft{display:inline;font-weight:500;color:#cdbf9f;margin-left:2px;font-size:.9em}
+html.phone body .sheet.sheet-setup #cnt.cnt{margin-bottom:22px!important}
+html.phone body .sheet.sheet-setup .colrow{margin:0 0 20px!important}
+html.phone body .sheet.sheet-setup #dif.cnt{margin-bottom:26px!important}
+html.phone .title .tlogo{width:300px;top:4%}
+html.phone .title .tbot{bottom:5%}
+html.phone .title .ttap{font-size:16px}
+html.phone .title .tmenu{gap:8px;padding:0 80px}
+html.phone .title .tm{height:52px;font-size:16px;border-width:8px 10px;border-image-width:8px 10px}
+html.phone .sheet-frame .fhead{padding:2px 56px 6px 4px}
+html.phone .sheet-frame .fright{padding:2px 2px 0 22px}
+html.phone .sheet-frame .frows{gap:14px;padding-top:4px}
+html.phone .sheet-frame .frow{grid-template-columns:150px 1fr;min-height:36px;gap:10px}
+html.phone .sheet-frame .lrow{padding:6px 2px}
+html.phone .title .tbg{top:12%!important;bottom:-40%!important}
+html.phone .sheet-dialog .row .btn{min-width:120px!important;min-height:42px!important}
+html.phone body .sheet-single .frows{padding-top:14px!important}
+html.phone .nickline .rcbtn{font-size:12.5px;padding:6px 10px}
+html.phone .nickrow{min-height:48px!important}
+html.phone .ferr{font-size:12px!important}
+html.phone .sheet-dialog .dorn{width:49px!important;margin-left:-24.5px!important;top:-42px!important}
+html.phone .qi{width:26px!important;height:26px!important;font-size:15px!important}
+html.phone .sheet-trade .tbody .pick,html.phone .sheet-trade .tbody .step{margin:2px 0 6px}
+html.phone .sheet-trade .tbody .tinfo{display:none}
+html.phone #dialog{padding:30px 20px 10px!important}
+html.phone .sheet-trade .tbody .pick,html.phone .sheet-trade .tbody .step{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important}
+html.phone .sheet-trade .tbody .pick button{min-height:38px!important}
+html.phone .sheet-trade .tbody .step .cell{padding:4px 8px!important}
+html.phone .sheet-trade .tbody .step .cell button{width:26px!important;height:26px!important}
+html.phone .sheet-trade .mtabs .mtab{font-size:15px}
+html.phone body .sheet.sheet-dialog{padding-top:10px!important;padding-bottom:14px!important}
+html.phone #tut .tbub.tspot-bl{padding:10px 10px 8px}
+html.phone #tut .tbub.tspot-bl h4{font-size:14px;margin-bottom:2px}
+html.phone #tut .tbub.tspot-bl .tstep{display:none}
+html.phone .rtxt h4{margin-bottom:8px}
+html.phone .tpick{gap:6px!important;margin:3px 0 10px!important}
+html.phone body .tpick .tcell{min-height:46px;padding:4px 8px!important;gap:6px}
+html.phone .tr1 .btn{min-width:80px!important;min-height:34px!important}
+html.phone #tut .tbub.tsmall{width:min(250px,36%)!important;padding:10px 12px 8px!important}
+html.phone #tut .tbub.tsmall h4{font-size:15px}
+html.phone #tut .tbub.tsmall p{font-size:12.5px}
+html.phone body .sheet-trade .tbody .tpick,html.phone body .sheet-trade .tbody .step{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+html.phone body .sheet-trade .tbody .step .cell{gap:2px!important;padding:3px 4px!important}
+html.phone body .sheet-trade .tbody .step .cell .b{gap:2px!important}
+html.phone body .sheet-trade .tbody .step .cell .v{margin-left:3px!important}
+html.phone body .sheet-trade .tbody .tpick .tcell .ricon{display:none}
+html.phone body .sheet-trade .tbody .tpick .tcell{padding:4px 7px!important}
+html.phone body .sheet-trade .fright{padding-left:14px!important}
+html.phone .sheet-frame.sheet-trade .fbody{grid-template-columns:20% 1fr}
+html.phone body .sheet-frame .fbody{padding-top:14px}
+html.phone body .sheet-frame .frows,html.phone body .sheet-single .frows{padding-top:10px!important}
+html.phone body .sheet-frame .fleft{padding-top:6px!important}
+html.phone .sheet-frame .fhead h3{font-size:28px!important}
+html.phone .sheet-frame .flab{font-size:16px}
+html.phone .sheet-frame .frow .tin{font-size:17px;padding:9px 12px}
+html.phone body .sheet-frame .cnt .btn{font-size:17px!important}
+html.phone .sheet-frame .ffoot .btn{min-width:170px!important;min-height:54px!important;font-size:18px!important}
+html.phone .sheet-frame .fhint{font-size:14px!important}
+html.phone .sheet-frame .lrow{font-size:17px}
+html.phone .rcode b{font-size:28px}
+html.phone .sheet-frame .onl{font-size:13.5px!important}
+html.phone .ihd b{font-size:20px}
+html.phone .ihd small{font-size:13px}
+html.phone .icol .ic-card{width:34px}
+html.phone .icols.devc p{font-size:13.5px}
+html.phone .icols.devc small{font-size:12.5px}
+html.phone .rtxt h4{font-size:23px}
+html.phone .rtxt p{font-size:15px}
+html.phone body .tpick .tcell b{font-size:16px}
+html.phone body .tpick .tcell small{font-size:12px}
+html.phone body .sheet-trade .step .cell>div:first-child{font-size:14px!important}
+html.phone body .sheet-trade .step .cell .v{font-size:16px!important}
+html.phone .sheet-trade .label{font-size:14px}
+html.phone body .title .tbg{left:-8%!important;right:-8%!important;top:5%!important;bottom:-18%!important;background-position:center 40%!important}
+html.phone .sheet-rules .rbody{gap:22px;padding:0}
+html.phone .sheet-rules .rtxt{padding-right:46px}
+html.phone .sheet-rules .rlab{font-size:12.5px}
+html.phone .sheet-rules .rh{font-size:21px!important;margin-bottom:24px!important}
+html.phone .sheet-rules .ffoot .btn{min-width:92px!important;min-height:44px!important;font-size:15px!important}
+html.phone body .sheet-frame.sheet-rules{padding-top:4px!important}
+html.phone body .sheet-trade .tpick .tcell .ricon{width:20px;height:20px}
+html.phone body .setpanel .mi,html.phone body .setmenu .setpanel .mi span{font-size:14px!important}
+html.phone .dlg-over .oart{height:92px;margin-bottom:0}
+html.phone .dlg-over>p{font-size:13px!important;margin-bottom:2px!important}
+html.phone .dlg-over .oscores{gap:4px;margin-top:6px}
+html.phone .dlg-over .oscores>div{padding:3px 12px;font-size:14px}
+html.phone .dlg-over .oscores b{font-size:15px}
+html.phone .dlg-over .row{margin-top:10px!important}
+html.phone .dlg-over .row .btn{min-height:42px!important}
+html.phone body .pl .av.avp{width:22px!important;height:22px!important;margin:4px}
+html.phone .dlg-over .oscores .av.avr{width:24px;height:24px;box-shadow:0 0 0 5px var(--c),0 0 0 7px rgba(0,0,0,.55)}
+html.phone #turnBan .av.avb{width:40px;height:40px;box-shadow:0 0 0 7px var(--c),0 0 0 9px rgba(0,0,0,.55)}
+html.phone .chrow .elab{font-size:13px}
+html.phone .chrow .cstrip .av[data-c]:not(.on){width:28px;height:28px}
+html.phone .devshow span{font-size:16px}
+html.phone body .pl .bdgs .badge.bimg img{height:13px}
+html.phone #turnBan .tbo{width:22px;height:22px;margin:0 12px}
+html.phone .hexglow.hl{width:120px;height:120px;margin:-60px 0 0 -60px}
+html.phone .icols:not(.devc) .ccards .ic-card[alt="목재"]+.ic-card[alt="목재"],html.phone .icols:not(.devc) .ccards .ic-card[alt="벽돌"]+.ic-card[alt="벽돌"],html.phone .icols:not(.devc) .ccards .ic-card[alt="양모"]+.ic-card[alt="양모"],html.phone .icols:not(.devc) .ccards .ic-card[alt="곡물"]+.ic-card[alt="곡물"],html.phone .icols:not(.devc) .ccards .ic-card[alt="광석"]+.ic-card[alt="광석"]{margin-left:-15px!important}
+html.phone body #result .btns .btn{padding-top:calc(2px / var(--k,1))!important;padding-bottom:calc(2px / var(--k,1))!important}
+html.phone #result .box{justify-content:flex-start;padding-top:48px}
+html.phone #result h1 img{width:317px;max-width:none}
+html.phone #result .sub{font-size:12px}
+html.phone #result .tbl{margin-top:40px;width:420px;max-width:none;padding:4px 40px}
+html.phone #result .tbl>div{font-size:12px;padding:5px 14px}
+html.phone #result .tbl .av.avr2{width:14px;height:14px;box-shadow:0 0 0 3.5px var(--c),0 0 0 5px rgba(0,0,0,.55)}
+html.phone #result .btns{position:absolute;left:0;right:0;bottom:18px;justify-content:center;margin:0}
+html.phone #result .btns .btn{font-size:13.2px!important;min-width:8.5em;padding-top:calc(var(--bp,4px)*1.1);padding-bottom:calc(var(--bp,4px)*1.1)}
+html.phone.sico-on .setpanel .mi .sico{width:18px;height:18px}
+html.phone.sico-on .setpanel .mi{gap:6px!important}
+html.phone .setpanel .credit-link{font-size:10px;margin-left:26px;padding-top:8px}
+html.phone .credits .crlist li{font-size:12px;padding:5px 0}
+html.phone .sheet-frame.sheet-single{--fbo:.35}
+html.phone .sheet-frame.sheet-multi,html.phone .sheet-frame.sheet-lobby{--fbo:.4}
+html.phone body #handHead .htab{font-size:12px!important}
+html.phone body .bld .pimg img{max-height:var(--bpH,60px)!important}
+html.phone.has-deco2 body header.top .tools .gico{width:24px;height:24px}
+html.phone body .stagebtns .tbtn{min-width:0!important}
+html.phone body .stagebtns .tbtn.primary{min-width:0!important}
+html.phone body .bld b{font-size:9.6px!important}
+html.phone.has-deco2 body .tray-act{justify-content:center!important;padding-bottom:0!important}
+html.phone.has-deco2 body .tray-act #actions{padding-bottom:0!important;margin-top:auto;margin-bottom:auto}
+html.phone.has-deco2{--barH:calc(var(--vh) * .3)}
+html.phone.has-deco2 body #handHead{transform:translateY(-100%) translateY(4px)!important}
+html.phone.has-deco2 body .tray #stagebtns{transform:scale(.9);transform-origin:right center}
+html.phone.has-deco2{--barOff:8px}
+html.phone.has-deco2 body .tray{bottom:-8px!important}
+html.phone.has-deco2 body .side{top:var(--hdB,80px)!important}
+html.phone.has-deco2 body #players .pl:first-child{margin-top:0!important}
+html.phone.has-deco2 body #players .pl>.av{box-shadow:0 0 0 3px var(--c),0 0 0 5px rgba(0,0,0,.55)!important}
+html.phone.has-deco2 body #players .pl>.nm{font-size:calc(var(--nmF,12px) - 1px)!important}
+html.phone.has-deco2 body #hand{zoom:1.05;transform:translateY(-4px)}
+html.phone .sheet-info .ibld{width:56px!important;height:67px!important}
+html.phone body .sheet.sheet-info{transform:none!important}
+html.phone body .sheet-info .ifoot{right:18px;bottom:12px}
+html.phone body .sheet-info .ibody{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:4px 0 46px!important;margin:0!important;overflow:hidden}
+html.phone body .sheet-info .ibody .icols{zoom:.86}
+html.phone.has-deco2 body .coach{padding-left:18px!important}
+html.phone body .sheet-info .itip{padding:0 14px!important}
+html.phone.has-deco2 body #leftcol #coach{padding-left:10px!important}
+html.phone.has-deco2 body header.top .tools{gap:14px!important}
+html.phone.has-deco2 body #players .pl>.av{width:14px!important;height:14px!important}
+html.phone.has-deco2 body #players .pl>.vp{font-size:17px!important}
+html.phone.has-deco2 body .bld .pimg{transform:translateY(-4px)}
+html.phone .sheet-info .itip{font-size:13.5px!important}
+html.phone body .sheet-frame .frow{grid-template-columns:168px 1fr!important;padding-left:28px}
+html.phone body .ihd b{font-size:23px!important}
+html.phone body .ihd small{font-size:14.5px!important}
+html.phone body .isum{font-size:14.5px!important}
+html.phone body .icols.devc p{font-size:14px!important;line-height:1.5}
+html.phone body .icols.devc small{font-size:13.5px!important}
+html.phone body .isub{font-size:14.5px!important}
+html.phone body .sheet-frame .swatches .sw{width:min(66%,78px)!important;height:36px!important}
+html.phone body .sheet-lobby .lrow{padding:9px 2px!important}
+html.phone .sheet-lobby .lopen{padding-top:10px;font-size:14px;margin-bottom:8px}
+html.phone #tut .tbub{width:min(360px,calc(100% - 20px));padding:16px 16px 12px}
+html.phone #tut .tbub.tmini{width:min(520px,calc(100% - 20px));padding:12px 14px 10px}
+html.phone #tut .tbub h4{font-size:17px;margin-bottom:4px}
+html.phone #tut .tbub p{font-size:13.5px;line-height:1.55}
+html.phone #tut .tnext{height:38px;min-width:96px;font-size:14px}
+html.phone #tut .trow{margin-top:8px}
+html.phone .sndbox{gap:14px;margin-top:12px}
+html.phone .sndl{font-size:15px}
+html.phone .sndrow{grid-template-columns:70px 1fr 60px;gap:12px}
+html.phone body .dlg-snd .sndrow{grid-template-columns:auto 150px 60px;gap:12px}
+html.phone body .sheet.sheet-dialog.cardpick{width:calc(100vw - 40px)!important;max-width:none!important}
+html.phone .cardpick .plcards{--cw:min(112px,calc(100cqw / 7.6))}
+html.phone #pop .muted.rhold{font-size:11px}
+html.phone.has-deco2 body .builds .bld:nth-child(2){transform:translateX(-4px)}
+html.phone.has-deco2 body .builds .bld:nth-child(3){transform:translateX(-8px)}
+html.phone.has-deco2 body .builds .bld:nth-child(4){transform:translateX(-12px)}
+html.phone.has-deco2 body .tray-act{transform:translate(72px,-8px)!important}
+html.phone.has-deco2 body .tray-act::before{top:calc(12% + 20px)!important;bottom:12%!important;left:-6px!important}
+html.phone body .emptyhand{font-size:11.5px!important;color:rgba(166,155,139,.72)!important}
