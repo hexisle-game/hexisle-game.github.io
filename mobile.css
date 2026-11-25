@@ -227,3 +227,4 @@ html.phone.has-deco2 body .builds .bld:nth-child(4){transform:translateX(-12px)}
 html.phone.has-deco2 body .tray-act{transform:translate(72px,-8px)!important}
 html.phone.has-deco2 body .tray-act::before{top:calc(12% + 20px)!important;bottom:12%!important;left:-6px!important}
 html.phone body .emptyhand{font-size:11.5px!important;color:rgba(166,155,139,.72)!important}
+html.phone #gfxRow{display:none}
