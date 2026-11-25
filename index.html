@@ -2869,7 +2869,7 @@ function hexDataTex(){const d=new Uint8Array(8*8*4);const code={wood:1,brick:2,w
   G.hexes.forEach((h,i)=>{const o=((h.r+3)*8+(h.q+3))*4;d[o]=code[S.board.hexes[i].res];d[o+1]=255;d[o+3]=255;});
   const t=new THREE.DataTexture(d,8,8,THREE.RGBAFormat);t.magFilter=t.minFilter=THREE.NearestFilter;t.needsUpdate=true;return t;}
 // fast terrain (test page): same value-noise-from-texture trick as the sea (cubic fade kept)
-const TFAST=/[?&]test=1/.test(location.search)&&!/[?&]tfast=0/.test(location.search);
+const TFAST=/[?&]tfast=1/.test(location.search);
 let GLSL_TERRAIN_FAST=null;
 function terrainMaterial(){if(TFAST&&!GLSL_TERRAIN_FAST)GLSL_TERRAIN_FAST=GLSL_TERRAIN.replace('float vn(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);return mix(mix(h21(i),h21(i+vec2(1,0)),u.x),mix(h21(i+vec2(0,1)),h21(i+vec2(1,1)),u.x),u.y);}','uniform sampler2D uVN;float vn(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);return texture2D(uVN,(i+u+.5)/256.).r;}');const m=new THREE.MeshStandardMaterial({roughness:.95,metalness:0,envMapIntensity:.18});const ht=hexDataTex();
   m.onBeforeCompile=sh=>{sh.uniforms.uHex={value:ht};sh.uniforms.uRob=W.robU;sh.uniforms.uWG={value:WHEAT?1:0};sh.uniforms.uBch={value:TF?1:0};sh.uniforms.uBlendB={value:TF?1:0};sh.uniforms.uWGV={value:WGV};sh.uniforms.tWG={value:null};sh.uniforms.uRobFill=W.robFill=W.robFill||{value:0};sh.uniforms.uRobA=W.robA;W.waterTime=W.waterTime||{value:0};sh.uniforms.uTimeT=W.waterTime;Object.assign(sh.uniforms,phUniforms());sh.fragmentShader=sh.fragmentShader.replace('#include <lights_fragment_begin>',THREE.ShaderChunk.lights_fragment_begin.replace(/\? getShadow\(([^;]*?)\) : 1\.0;/g,'? mix(1.0,getShadow($1),1.0-gShSoft) : 1.0;'));
@@ -3908,7 +3908,7 @@ function stepDice(now){DICE.list=DICE.list.filter(d=>{const p=Math.min(1,Math.ma
   const res=new THREE.Quaternion().setFromAxisAngle(d.axis,d.spin*Math.pow(1-p,2));d.m.quaternion.copy(d.qt).premultiply(res);
   const after=now-(d.t0+d.dur);if(after>650){const k=Math.max(0,1-(after-650)/180);d.m.scale.setScalar((PH.on?1.26:1.08)*k);if(k<=0){W.scene.remove(d.m);return false;}}return true;});}
 // test page: perf budget — at most ~3.2M rendered pixels (a Retina laptop otherwise draws 5M+), and idle scenes (only wind/water/animals moving) at ~30fps
-const PERFV=TF&&!/[?&]perfv=0/.test(location.search);const PERF_BUDGET=3.2e6;
+const PERFV=TF&&!/[?&]perfv=0/.test(location.search);const PERF_BUDGET=(+(/[?&]pxb=([\d.]+)/.exec(location.search)||[])[1]||2.4)*1e6;
 const PERF={born:performance.now(),dpr:Math.min(window.devicePixelRatio||1,2),max:Math.min(window.devicePixelRatio||1,2),last:0,ambient:0,samples:[],dirty:true,shadow:true,lastLow:0,act:performance.now()};
 ['pointerdown','pointermove','wheel','keydown','touchstart'].forEach(e=>addEventListener(e,()=>{PERF.act=performance.now();},{passive:true,capture:true}));
 function invalidate(shadow){PERF.dirty=true;PERF.act=performance.now();if(shadow)PERF.shadow=true;}
@@ -4776,7 +4776,7 @@ function applyPhone(){const coarse=matchMedia('(pointer:coarse)').matches;const 
   for(const sh of document.styleSheets){let rules;try{rules=sh.cssRules;}catch(e){continue;}for(const r of rules){if(!r.media||r.type!==4)continue;
     if(!PH.orig.has(r))PH.orig.set(r,r.media.mediaText);const o=PH.orig.get(r);if(!on){r.media.mediaText=o;continue;}const v=evalMQ(o,Math.max(vw,1280),720);if(v===null)continue;r.media.mediaText=v?'all':'not all';}}
   phoneDPR();}
-function phoneDPR(){if(typeof W==='undefined'||!W.ok)return;let v=Math.min(window.devicePixelRatio||1,2)*(PH.on?Math.max(PH.k,.7):1);if(PERFV){const px=innerWidth*innerHeight;v=Math.max(1,Math.min(v,Math.sqrt(PERF_BUDGET/px)));v=Math.round(v*100)/100;}try{PERF.max=v;PERF.samples=[];setDPR(v);}catch(e){W.r.setPixelRatio(v);}}
+function phoneDPR(){if(typeof W==='undefined'||!W.ok)return;let v=Math.min(window.devicePixelRatio||1,2)*(PH.on?Math.max(PH.k,.7):1);if(PERFV){const px=innerWidth*innerHeight;v=Math.max(.75,Math.min(v,Math.sqrt(PERF_BUDGET/px)));v=Math.round(v*100)/100;}try{PERF.max=v;PERF.samples=[];setDPR(v);}catch(e){W.r.setPixelRatio(v);}}
 addEventListener('resize',()=>{applyPhone();setTimeout(applyPhone,350);setTimeout(()=>{fitChrome();if(S)render();},60);});applyPhone();
 function alignHeads(){const hh=$('#handHead'),ah=document.querySelector('.tray-act>.tray-h');if(!hh||!ah)return;ah.style.marginBottom='';if(!PH.on)return;const k=PH.k||1;const d=(ah.getBoundingClientRect().top-hh.getBoundingClientRect().top)/k;ah.style.setProperty('margin-bottom',Math.max(-16,6+d)+'px','important');}
 function alignBtns(){try{alignHeads();}catch(e){}if(document.documentElement.classList.contains('has-deco2')){const sb0=$('#stagebtns');if(sb0)sb0.style.removeProperty('bottom');return;}const sb=$('#stagebtns'),bd=document.querySelector('.builds');if(!sb||!bd)return;if(!HUDQ.matches||PH.on){sb.style.bottom='';return;}const r=bd.getBoundingClientRect();if(!r.height)return;const c=r.top+r.height/2;sb.style.setProperty('bottom',Math.max(12,innerHeight-c-sb.offsetHeight/2)+'px','important');}
