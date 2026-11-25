@@ -4577,9 +4577,9 @@ function showSingle(){if(window.MP&&!NET.on)MP.offline();
   charBind('fcol',c=>{ui.char=c;saveUi();},c=>{ui.color=c;saveUi();});segBind('fdif',v=>{ui.diff=v;saveUi();});segBind('fcnt',v=>{ui.n=+v;saveUi();});
   $('#fx').onclick=()=>{closeModal();showTitle(true);};$('#fGo').onclick=()=>{startNew();};}
 function defNick(){if(!ui.defNick){let n='';for(let k=0;k<20&&!n;k++){const c=aiNames(1)[0];if(c.length<=6)n=c;}ui.defNick=n||'육각왕';}return ui.defNick;}
-const nickRow=()=>`<div class="frow nickrow"><div class="flab">내 닉네임 <span class="muted">(최대 6자)</span></div><div class="nickcell"><div class="nickline"><input class="tin" id="nick" maxlength="6" placeholder="예: 육각왕" value="${(ui.regNick||ui.nick||defNick()).replace(/"/g,'')}"${ui.regNick?' readonly':''}>${typeof RECV!=='undefined'&&RECV?`<button class="rcbtn" id="nickReg" type="button">${ui.regNick?'닉네임 수정':'닉네임 등록'}</button>`:''}</div><p class="ferr" id="nErr" hidden></p></div></div>`;
-function readNick(){const v=($('#nick').value||'').trim().slice(0,6);const m=$('#nErr');const bad=t=>{m.textContent=t;m.hidden=false;$('#nick').classList.add('err');$('#nick').focus();return false;};
-  if(!v)return bad('닉네임을 입력해 주세요.');if(nickBad(v))return bad('사용할 수 없는 닉네임이에요. 다른 닉네임을 입력해 주세요.');m.hidden=true;$('#nick').classList.remove('err');ui.nick=v;saveUi();return true;}
+const nickRow=()=>`<div class="frow nickrow"><div class="flab">내 닉네임 <span class="muted">(최대 6자)</span></div><div class="nickcell"><div class="nickline"><input class="tin" id="nick" maxlength="20" placeholder="예: 육각왕" value="${(ui.regNick||ui.nick||defNick()).replace(/"/g,'')}"${ui.regNick?' readonly':''}>${typeof RECV!=='undefined'&&RECV?`<button class="rcbtn" id="nickReg" type="button">${ui.regNick?'닉네임 수정':'닉네임 등록'}</button>`:''}</div><p class="ferr" id="nErr" hidden></p></div></div>`;
+function readNick(){const v=($('#nick').value||'').trim();const m=$('#nErr');const bad=t=>{m.textContent=t;m.hidden=false;$('#nick').classList.add('err');$('#nick').focus();return false;};
+  if(!v)return bad('닉네임을 입력해 주세요.');if(v.length>6)return bad(`닉네임은 6자까지만 쓸 수 있어요. (지금 ${v.length}자)`);if(nickBad(v))return bad('사용할 수 없는 닉네임이에요. 다른 닉네임을 입력해 주세요.');m.hidden=true;$('#nick').classList.remove('err');ui.nick=v;saveUi();return true;}
 function showMulti(tab,code){tab=tab||'invite';ui.mtab=tab;const tabs=[['invite','초대하기'],['join','초대받기'],['quick','랜덤 참가']];
   const left=`<div class="mtabs">${tabs.map(([k,l])=>`<button class="mtab${k===tab?' on':''}" data-t="${k}">${l}<img class="orn" src="${TITLEIMG.orn1}" alt=""></button>`).join('')}</div>`;
   let right='',foot='';
@@ -4589,14 +4589,15 @@ function showMulti(tab,code){tab=tab||'invite';ui.mtab=tab;const tabs=[['invite'
     foot=`<p class="fhint" id="fMsg">${(code||ui.pendCode)?'초대받은 방 코드를 자동으로 입력했어요.':'초대받은 방 코드를 입력하세요.'}</p><button class="btn primary" id="fGo" data-mp="1">참가하기</button>`;}
   else{right=nickRow();foot=`<p class="fhint" id="fMsg"></p><button class="btn primary" id="fGo" data-mp="1">참가하기</button>`;}
   frame('multi','멀티 플레이','<p class="onl"></p>',left,right,foot);
-  document.querySelectorAll('.mtab').forEach(b=>b.onclick=()=>{const v=$('#nick')&&$('#nick').value.trim();if(v){ui.nick=v.slice(0,6);}const c=$('#mCode')&&$('#mCode').value;if(c)ui.pendCode=c;showMulti(b.dataset.t);const sh=$('#sheet');sh.classList.remove('fin','fin2');void sh.offsetWidth;sh.classList.add('fin2');clearTimeout(ui.fin2T);ui.fin2T=setTimeout(()=>sh.classList.remove('fin2'),900);});
+  document.querySelectorAll('.mtab').forEach(b=>b.onclick=()=>{const v=$('#nick')&&$('#nick').value.trim();if(v&&v.length<=6){ui.nick=v;}const c=$('#mCode')&&$('#mCode').value;if(c)ui.pendCode=c;showMulti(b.dataset.t);const sh=$('#sheet');sh.classList.remove('fin','fin2');void sh.offsetWidth;sh.classList.add('fin2');clearTimeout(ui.fin2T);ui.fin2T=setTimeout(()=>sh.classList.remove('fin2'),900);});
   segBind('fdif',v=>{ui.diff=v;saveUi();});segBind('fcnt',v=>{ui.n=+v;saveUi();});
   $('#fx').onclick=()=>{closeModal();MP.offline();showTitle(true);};
   $('#fGo').onclick=()=>{if(!readNick())return;
     if(tab==='invite'){$('#fMsg').textContent='방을 만드는 중…';MP.create();}
     else if(tab==='join'){const cd=$('#mCode').value.trim().toUpperCase();if(cd.length<4){$('#fMsg').textContent='방 코드를 확인해 주세요.';return;}ui.pendCode='';$('#fMsg').textContent='방에 들어가는 중…';MP.join(cd);}
     else{$('#fMsg').textContent='빈자리를 찾는 중…';MP.quick();}};
-  {const nb=$('#nickReg');if(nb)nb.onclick=e=>{e.stopPropagation();const v=$('#nick')&&$('#nick').value.trim();if(v&&!ui.regNick)ui.nick=v.slice(0,6);showRegNick(()=>showMulti(tab));};}
+  {const ni=$('#nick');if(ni&&!ni.readOnly)ni.addEventListener('input',()=>{const v=ni.value.trim(),m=$('#nErr');if(v.length>6){m.textContent=`닉네임은 6자까지만 쓸 수 있어요. (지금 ${v.length}자)`;m.hidden=false;ni.classList.add('err');}else if(ni.classList.contains('err')){m.hidden=true;ni.classList.remove('err');}});}
+  {const nb=$('#nickReg');if(nb)nb.onclick=e=>{e.stopPropagation();const v=$('#nick')&&$('#nick').value.trim();if(v&&!ui.regNick)ui.nick=v;showRegNick(()=>showMulti(tab));};}
   MP.presence();MP.drawCount();}
 function myCols(){const c=PCOL.includes(ui.color)?ui.color:PCOL[0];return [c,...PCOL_AI.filter(x=>x!==c)];}
 function resetBehind(){clearTimeout(ui.rbT);ui.rbT=setTimeout(()=>{if($('#title').hidden)return;newGame(ui.n,ui.diff,myCols());ui.prevRes=undefined;ui.mode=null;ui.shownRoll=0;ui.seenSeq=undefined;render();},950);}
@@ -4762,17 +4763,17 @@ async function nickClaim(v,old){await RK.conn();const key=n=>'nicks/'+encodeURIC
     for(const per of ['all','w'+RK.wk()])for(const m of ['s','m'])try{await MP.db.ref(`rank/${per}/${m}/${NET.uid}`).remove();}catch(e){}}
   return true;}
 function showRegNick(back){const change=!!ui.regNick;const cur=(ui.regNick||ui.nick||defNick()).replace(/"/g,'');
-  openDialog(`<h3>${change?'닉네임 수정':'닉네임 등록'}</h3><p>${change?'랭킹에 표시될 닉네임을 바꿔요.':'랭킹에 표시될 나만의 닉네임을 정해요.'}<br><span class="muted">다른 사람과 같은 닉네임은 쓸 수 없어요.</span></p>
-    <div class="regnick"><input class="tin" id="rnIn" maxlength="6" placeholder="최대 6자" value="${cur}"><p class="ferr" id="rnErr" hidden></p><p class="rnok" id="rnOk" hidden></p></div>
+  openDialog(`<h3>${change?'닉네임 수정':'닉네임 등록'}</h3><p>${change?'랭킹에 표시될 닉네임을 바꿔요.':'랭킹에 표시될 나만의 닉네임을 정해요.'}<br><span class="muted">2~6자로 정할 수 있고, 다른 사람과 같은 닉네임은 쓸 수 없어요.</span></p>
+    <div class="regnick"><input class="tin" id="rnIn" maxlength="20" placeholder="2~6자" value="${cur}"><p class="ferr" id="rnErr" hidden></p><p class="rnok" id="rnOk" hidden></p></div>
     <div class="row"><button class="btn" id="rnNo">취소</button><button class="btn sub" id="rnGo">${change?'수정하기':'등록하기'}</button></div>`,'dlg-reg');
   const inp=$('#rnIn'),err=$('#rnErr'),ok=$('#rnOk');let seq=0;
   const bad=t=>{err.textContent=t;err.hidden=false;ok.hidden=true;inp.classList.add('err');return false;};
   const local=()=>{const v=inp.value.trim();err.hidden=true;ok.hidden=true;inp.classList.remove('err');
-    if(!v)return bad('닉네임을 입력해 주세요.');if(v.length<2)return bad('2자 이상 입력해 주세요.');if(nickBad(v)||/[\/\[\]#$.]/.test(v))return bad('사용할 수 없는 닉네임이에요.');return v;};
+    if(!v)return bad('닉네임을 입력해 주세요.');if(v.length>6)return bad(`6자까지만 쓸 수 있어요. (지금 ${v.length}자)`);if(v.length<2)return bad('2자 이상 입력해 주세요.');if(nickBad(v)||/[\/\[\]#$.]/.test(v))return bad('사용할 수 없는 닉네임이에요.');return v;};
   const check=async()=>{const v=local();if(!v)return false;if(v===ui.regNick){ok.textContent='지금 쓰고 있는 닉네임이에요.';ok.hidden=false;return v;}const my=++seq;
     let free;try{free=await rkTO(nickFree(v),12000);}catch(e){if(my===seq)bad('서버에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.');return false;}
     if(my!==seq)return false;if(!free)return bad('이미 다른 사람이 쓰고 있는 닉네임이에요.');ok.textContent='사용할 수 있는 닉네임이에요.';ok.hidden=false;return v;};
-  inp.oninput=()=>{clearTimeout(inp._t);inp._t=setTimeout(check,400);};setTimeout(()=>{try{inp.focus();inp.select();}catch(e){}},80);
+  inp.oninput=()=>{clearTimeout(inp._t);seq++;if(inp.value.trim().length>6){local();return;}err.hidden=true;inp.classList.remove('err');inp._t=setTimeout(check,400);};setTimeout(()=>{try{inp.focus();inp.select();}catch(e){}},80);if(cur.length>6)local();
   $('#rnNo').onclick=()=>{closeDialog();};
   $('#rnGo').onclick=async()=>{const go=$('#rnGo');go.disabled=true;const v=await check();go.disabled=false;if(!v||!$('#rnIn'))return;
     if(v===ui.regNick){closeDialog();if(back)back();return;}
