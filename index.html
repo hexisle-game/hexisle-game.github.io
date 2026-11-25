@@ -672,6 +672,10 @@ html.fbp .sheet-frame .ffoot .btn{min-width:170px}
 .rc-scroll{flex:1;min-height:0;overflow-y:auto;padding-right:6px;scrollbar-width:thin;scrollbar-color:rgba(233,196,122,.35) transparent}
 .rc-me{display:flex;align-items:center;gap:14px;padding:10px 0 24px 12px}.rc-me .av{width:54px;height:54px;flex:none}
 .rc-me .nm{font-size:22px;font-weight:800;color:#f3dfae}.rc-me .sub{font-size:13px;color:#a8977a;margin-top:2px}.rc-me .rcbtn{margin-left:auto;flex:none;padding:8px 16px;background:linear-gradient(180deg,#5a3d20,#3a2714);border:1px solid #c9a35a;border-radius:3px;color:#f3e2bc;font:inherit;font-size:14px;font-weight:700;box-shadow:inset 0 1px 0 rgba(255,235,190,.25),0 2px 6px rgba(0,0,0,.45);cursor:pointer}.rc-me .rcbtn:hover{filter:brightness(1.1)}
+/* nickname hint lines keep their space while empty, so the input never shifts */
+.regnick{display:grid}.regnick .ferr,.regnick .rnok{grid-row:2;grid-column:1;margin:6px 0 0!important;min-height:1.5em;line-height:1.5}
+html body .regnick .ferr[hidden],html body .regnick .rnok[hidden],html body .nickcell #nErr[hidden]{display:block!important;visibility:hidden}
+.nickcell #nErr{min-height:1.5em;line-height:1.5}
 .rk-msg{list-style:none;padding:34px 10px;text-align:center;color:#a8977a;font-size:13.5px;line-height:1.7}
 .rc-recent li.rc-empty{display:block;text-align:center;color:#a8977a;padding:16px 0}
 .rk-row.rk-unreg{grid-template-columns:40px 1fr auto}.rk-row.rk-unreg .nm{color:#c8b89a;font-size:13px;white-space:normal}.rk-row.rk-unreg .rcbtn{margin:0}
