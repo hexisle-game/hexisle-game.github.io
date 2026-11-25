@@ -2603,9 +2603,9 @@ function house(g,x,z,w,d,h,roofCol,ry,wall){const k=new THREE.Group();k.position
 const TOKS=(/[?&]tok=([ABC0])/.exec(location.search)||[0,'A'])[1].replace('0','');let TOKI=null;
 const TOKSIDE={A:[0x6e5222,0xb8913e],B:[0x3a2416,0x5a3b25],C:[0x6e5222,0xb8913e]}[TOKS]||[0x5e4428,0xcbb488];
 if(TOKS){TOKI=new Image();TOKI.onload=()=>{for(const k in TEX)if(/^\d+:/.test(k))delete TEX[k];try{W.tokens.forEach((sp,i)=>{if(!sp)return;sp.material.map=tokenTex(S.board.hexes[i].num,false);sp.material.needsUpdate=true;});}catch(e){}};TOKI.src=`assets/tok/${TOKS}.webp`;}
-function tokenTex(n,hit){const k=n+':'+hit;if(TEX[k])return TEX[k];const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');x.scale(2,2);
+function tokenTex(n,hit){const k=n+':'+hit;if(TEX[k])return TEX[k];const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d');x.scale(4,4);
   if(TOKI&&TOKI.complete&&TOKI.naturalWidth){if(hit){x.beginPath();x.arc(64,64,63,0,7);x.fillStyle='rgba(255,214,102,.95)';x.fill();}const R=hit?55:63.5;x.filter='brightness(.8) contrast(1.25) saturate(1.15)';x.drawImage(TOKI,64-R,64-R,R*2,R*2);x.filter='none';
-    const hot=n===6||n===8;x.fillStyle=hot?'#9e160d':'#1a1108';x.shadowColor='rgba(255,246,220,.55)';x.shadowOffsetY=1;x.font=`900 ${hot?66:60}px "Hahmlet",serif`;x.textAlign='center';x.textBaseline='middle';x.fillText(String(n),64,59);x.shadowColor='transparent';
+    const hot=n===6||n===8;x.fillStyle=hot?'#9e160d':'#1a1108';x.shadowColor='rgba(255,246,220,.45)';x.shadowOffsetY=1.5;x.font=`900 ${hot?66:60}px "Hahmlet",serif`;x.textAlign='center';x.textBaseline='middle';x.fillText(String(n),64,59);x.shadowColor='transparent';
     {const p=pips(n);for(let i=0;i<p;i++){x.beginPath();x.arc(64+(i-(p-1)/2)*6.5,91,2.2,0,7);x.fill();}}
     const t=new THREE.CanvasTexture(c);t.anisotropy=16;return TEX[k]=t;}
   if(hit){x.beginPath();x.arc(64,64,62,0,7);x.fillStyle='rgba(255,214,102,.95)';x.fill();}
@@ -3684,16 +3684,19 @@ function basePlate(k,o,r){if(BP2)r*=.96;k.add(part('cyl16',pc3(o)===0xff2a1a?(ba
 function tintRoof(m,col){m.updateMatrixWorld(true);const bb=new THREE.Box3().setFromObject(m),y0=bb.min.y,hh=Math.max(1e-6,bb.max.y-y0);const v=new THREE.Vector3();
   m.traverse(c=>{if(!c.isMesh)return;const g=c.geometry;if(!g.userData.aH){const p=g.attributes.position,a=new Float32Array(p.count);for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i).applyMatrix4(c.matrixWorld);a[i]=(v.y-y0)/hh;}g.setAttribute('aH',new THREE.BufferAttribute(a,1));g.userData.aH=1;
       if(g.index){const I=g.index.array,keep=[];for(let t=0;t<I.length;t+=3){const A=a[I[t]],B=a[I[t+1]],C=a[I[t+2]];if(Math.max(A,B,C)<FLOORH)continue;keep.push(I[t],I[t+1],I[t+2]);}g.setIndex(keep);}}
-    {const nm={0xff2a1a:'red',0x3a8cff:'blue',0x2fa548:'green',0xf5c400:'yellow'}[new THREE.Color(col).getHex()];
-     if(TXM&&nm&&c.material.map){const mt=c.material;TXC[nm]=TXC[nm]||new Promise(res=>new THREE.ImageLoader().load(`assets/test/tex/${nm}.jpg`,res));
-       TXC[nm].then(img=>{let t=TXT[nm];if(!t){t=TXT[nm]=mt.map.clone();t.source=new THREE.Source(img);t.needsUpdate=true;}mt.map=t;if(mt.emissiveMap)mt.emissiveMap=t;mt.needsUpdate=true;try{PERF.dirty=true;}catch(e){}});return;}}
+    {const nm=TXN[new THREE.Color(col).getHex()];
+     if(TXM&&nm&&c.material.map){const mt=c.material;txPre(col);
+       const apply=img=>{if(img){let t=TXT[nm];if(!t){t=TXT[nm]=mt.map.clone();t.source=new THREE.Source(img);t.needsUpdate=true;}mt.map=t;if(mt.emissiveMap)mt.emissiveMap=t;mt.needsUpdate=true;}c.visible=true;try{PERF.dirty=true;}catch(e){}};
+       if(TXT[nm])apply(1);else{c.visible=false;TXC[nm].then(apply);}return;}}
     const mt=c.material;const tc=new THREE.Color(col);const TF={0xff2a1a:[0xff2a1a,.78,1],0x3a8cff:[0x18b4ff,1.75,1.12],0xf5c400:[0xffcf10,1.85,1.15],0x2fa548:[0x36c98c,1.25,1.05],0xe331c5:[0xff4fb4,.98,1.0],0xefe6cf:[0xfffdf6,0,2.3]}[tc.getHex()]||[tc.getHex(),1.3,1];tc.setHex(TF[0]);const U={value:tc},US={value:TF[1]},UG={value:TF[2]};mt.onBeforeCompile=sh=>{sh.uniforms.uTint=U;sh.uniforms.uSat=US;sh.uniforms.uGain=UG;
       sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nattribute float aH;varying float vH;').replace('#include <begin_vertex>','#include <begin_vertex>\nvH=aH;');
       sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nuniform vec3 uTint;uniform float uSat;uniform float uGain;varying float vH;').replace('#include <map_fragment>',`#include <map_fragment>
         {vec3 c=diffuseColor.rgb;float rg=c.r/(c.g+.02),rb=c.r/(c.b+.02);float k=smoothstep(TR0,TR1,rg)*smoothstep(1.3,1.9,rb)*smoothstep(HY0,HY1,vH);
          float l=dot(c,vec3(.299,.587,.114));vec3 t=uTint*clamp(l*3.*uGain,0.,1.7);t=max(mix(vec3(dot(t,vec3(.299,.587,.114))),t,uSat),0.);diffuseColor.rgb=mix(c,t,smoothstep(0.,.45,k));}`.replace('TR0',TROOF[0]).replace('TR1',TROOF[1]).replace('HY0',TROOF[2]).replace('HY1',TROOF[3]));};
     mt.customProgramCacheKey=()=>'tintRoof';mt.needsUpdate=true;});}
-const TROOF=['1.12','1.45','.34','.4'];const TXM=!/[?&]tx=0/.test(location.search),TXC={},TXT={};const FLOORH=.075;
+const TROOF=['1.12','1.45','.34','.4'];const TXM=!/[?&]tx=0/.test(location.search),TXC={},TXT={};
+// per-colour roof textures: fetched while the island loads, so a new building never shows the base (red) roof first
+const TXN={0xff2a1a:'red',0x3a8cff:'blue',0x2fa548:'green',0xf5c400:'yellow'};function txPre(col){const nm=TXN[new THREE.Color(col).getHex()];if(TXM&&nm&&!TXC[nm])TXC[nm]=new Promise(res=>new THREE.ImageLoader().load(`assets/test/tex/${nm}.jpg`,res,undefined,()=>res(null)));return nm;}const FLOORH=.075;
 // castle A (single texture): blue roofs -> player colour, bluish stone -> warm light stone
 // wind: one shared clock (W.windT) drives castle flags, forest trees and field grass
 function windUniform(){if(!W.windT)W.windT={value:0};W.windOn=true;return W.windT;}
@@ -3849,7 +3852,8 @@ function sync3D(){
   // nothing on the island changed (timer ticks, chat, other players' cards, repeated network states): skip the full redraw + shadow pass
   {let T0;try{T0=targets();}catch(e){T0={};}const sig=JSON.stringify([S.board.hexes,S.board.ports,S.eo,S.vb,S.board.robber,lastSum,S.players.map(p=>p.color),T0.kind,T0.v,T0.e,T0.h,ui.hints,PH.on,typeof TUT!=='undefined'&&TUT.on]);
     if(sig===W.sig3&&W.pieces)return;W.sig3=sig;}
-  invalidate(true);buildStatic();
+  invalidate(true);buildStatic();try{S.players.forEach((_,i)=>txPre(pc3(i)));}catch(e){}
+  if(!W.bldPre&&USEBLD&&THREE.GLTFLoader){W.bldPre=1;setTimeout(()=>{for(const f of TSM?[`assets/test/t${TSM}.glb`,'assets/test/c1.glb']:['assets/bld/cottage.glb','assets/bld/castle.glb']){const R=BGLB[f]=BGLB[f]||{g:null,cbs:[]};if(!R.g&&!R.cbs.length){R.cbs.push(()=>{});new THREE.GLTFLoader().load(f,g=>{R.g=g;R.cbs.splice(0).forEach(fn=>fn(g));},undefined,e=>console.warn('bld',e));}}},2500);}
   W.tokens.forEach((sp,i)=>{if(!sp)return;const n=S.board.hexes[i].num;sp.material.map=tokenTex(n,n===lastSum);sp.material.opacity=i===S.board.robber?.4:1;sp.material.needsUpdate=true;});
   const now=performance.now();const first=W.prev===null;W.pieces=W.pieces||new Map();const want=new Map();
   S.eo.forEach((o,e)=>{if(o>=0)want.set('e'+e+':'+o+S.players[o].color,()=>{const E=G.edges[e],A=vc(E.a),B=vc(E.b);const dx=B.x-A.x,dz=B.z-A.z,L=Math.hypot(dx,dz);
