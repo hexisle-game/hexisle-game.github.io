@@ -52,10 +52,10 @@ select.btn{appearance:auto}
 .side{display:flex;flex-direction:column;min-width:0}
 .panel{background:linear-gradient(180deg,var(--surface-2),var(--surface) 60px);border:1px solid var(--line);border-top-color:var(--trim);border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.25)}
 .panel h2{text-transform:uppercase}
-.turnbar{display:flex;align-items:center;gap:12px}
-.turnbar .who{flex:1;min-width:0}
-.turnbar .who .n{font-family:var(--display);font-weight:800;line-height:1.1}
-.turnbar .who .t{color:var(--muted);font-size:12px}
+
+
+
+
 .dice{display:flex;gap:6px}
 .die{width:38px;height:38px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);padding:5px}
 .die i{width:7px;height:7px;border-radius:50%;background:var(--token-ink);place-self:center;visibility:hidden}
@@ -84,9 +84,9 @@ select.btn{appearance:auto}
 .fan .cw:hover{z-index:99!important}
 .fan .newtag{position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--gold-ink);font-size:10.5px;font-weight:800;padding:1px 6px;border-radius:5px;white-space:nowrap}
 .emptyhand{display:grid;place-items:center;text-align:center;padding:10px}
-.tally{display:flex;flex-wrap:wrap}
-.tally span{font-size:12.5px;font-variant-numeric:tabular-nums}
-.tally span.z{opacity:.45}
+
+
+
 .bld{position:relative;display:flex;flex-direction:column;align-items:center;color:#f3dfb8}
 .bld img{width:100%;max-width:150px;height:auto;aspect-ratio:260/220;object-fit:contain;filter:drop-shadow(0 6px 6px rgba(0,0,0,.45));pointer-events:none}
 .bld .meta2{color:rgba(243,223,184,.8)}
@@ -121,7 +121,7 @@ select.btn{appearance:auto}
 .pl .dot{border-radius:3px;grid-column:1;grid-row:1/3}
 .pl .nm{grid-column:2;grid-row:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pl .vp{grid-column:3;grid-row:1/3;font-variant-numeric:tabular-nums}
-.pl .meta{grid-column:2;grid-row:2;display:flex;flex-wrap:wrap}
+
 .badge{font-size:10.5px;padding:0 5px}
 
 
@@ -218,7 +218,7 @@ header.top{max-width:none}
 .bld .meta2{font-size:10.5px}
 .mini{min-height:20px;margin-top:2px}
 .mini img{width:14px;margin-left:-4px}
-.turnbar .who .n{font-size:18px}
+
 .pl{grid-template-columns:10px minmax(0,1fr) auto}
 .pl .dot{width:10px;height:10px}
 :root{--sea:#120b06;--sea-2:#1a110a;--surface:#22160d;--surface-2:#2d1d11;--line:#4d3522;--trim:#9c7a44;--gold:#d8b26a;--gold-ink:#26170a;--danger:#e0705e;--ctl:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><g transform='' fill='none' stroke-linecap='round'><path d='M1.5 29V9.5C1.5 5 5 1.5 9.5 1.5H29' stroke='%23c9a560' stroke-width='1.6'/><path d='M5 24V11C5 7.5 7.5 5 11 5h13' stroke='%237a5a30' stroke-width='1'/><path d='M8.5 15c0-4 2.5-6.5 6.5-6.5' stroke='%23d9b36a' stroke-width='1.2'/></g><g transform=''><circle cx='9' cy='9' r='2.2' fill='%23e6c47a'/><circle cx='9' cy='9' r='.9' fill='%233a2414'/></g></svg>");--ctr:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><g transform='translate(30 0) scale(-1 1)' fill='none' stroke-linecap='round'><path d='M1.5 29V9.5C1.5 5 5 1.5 9.5 1.5H29' stroke='%23c9a560' stroke-width='1.6'/><path d='M5 24V11C5 7.5 7.5 5 11 5h13' stroke='%237a5a30' stroke-width='1'/><path d='M8.5 15c0-4 2.5-6.5 6.5-6.5' stroke='%23d9b36a' stroke-width='1.2'/></g><g transform='translate(30 0) scale(-1 1)'><circle cx='9' cy='9' r='2.2' fill='%23e6c47a'/><circle cx='9' cy='9' r='.9' fill='%233a2414'/></g></svg>");--cbl:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><g transform='translate(0 30) scale(1 -1)' fill='none' stroke-linecap='round'><path d='M1.5 29V9.5C1.5 5 5 1.5 9.5 1.5H29' stroke='%23c9a560' stroke-width='1.6'/><path d='M5 24V11C5 7.5 7.5 5 11 5h13' stroke='%237a5a30' stroke-width='1'/><path d='M8.5 15c0-4 2.5-6.5 6.5-6.5' stroke='%23d9b36a' stroke-width='1.2'/></g><g transform='translate(0 30) scale(1 -1)'><circle cx='9' cy='9' r='2.2' fill='%23e6c47a'/><circle cx='9' cy='9' r='.9' fill='%233a2414'/></g></svg>");--cbr:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><g transform='translate(30 30) scale(-1 -1)' fill='none' stroke-linecap='round'><path d='M1.5 29V9.5C1.5 5 5 1.5 9.5 1.5H29' stroke='%23c9a560' stroke-width='1.6'/><path d='M5 24V11C5 7.5 7.5 5 11 5h13' stroke='%237a5a30' stroke-width='1'/><path d='M8.5 15c0-4 2.5-6.5 6.5-6.5' stroke='%23d9b36a' stroke-width='1.2'/></g><g transform='translate(30 30) scale(-1 -1)'><circle cx='9' cy='9' r='2.2' fill='%23e6c47a'/><circle cx='9' cy='9' r='.9' fill='%233a2414'/></g></svg>");--leather:none}
@@ -254,15 +254,15 @@ header.top .tools .btn{padding:9px 16px;font-size:13.5px}
 .dicebox{left:var(--hud);top:var(--hud)}
 .stagebtns{right:var(--hud);bottom:var(--hud);gap:10px}
 .stagebtns .tbtn{min-width:96px}
-.turnplaque{position:absolute;top:var(--hud);left:50%;transform:translateX(-50%);z-index:2;display:flex;align-items:center;gap:12px;background:linear-gradient(180deg,rgba(44,28,16,.94),rgba(24,14,8,.94));border:1px solid #9c7a44;border-radius:4px;box-shadow:inset 0 0 0 2px #150c06,0 6px 18px rgba(0,0,0,.55);white-space:nowrap}
-.tp-pip{width:12px;height:12px;transform:rotate(45deg);flex:none}
-.tp-txt{display:flex;flex-direction:column;gap:2px}
-.tp-name{line-height:1.15}
-.tp-sub{font-size:12px;color:var(--muted)}
+
+
+
+
+
 .toast{top:var(--hud);right:var(--hud);width:min(420px,calc(50% - 170px));padding:12px 16px}
 @media (max-width:640px){.stagebtns{left:10px;right:10px;bottom:10px}
 .stagebtns .tbtn{font-size:13px;padding:10px 4px;white-space:nowrap}
-.turnplaque{top:auto}}
+}
 .tray{padding:20px 0 20px;gap:0;grid-template-columns:minmax(0,1fr) auto auto;align-items:stretch}
 .tray>div{padding:0 26px;min-width:0}
 .tray>div+div{border-left:1px solid}
@@ -270,8 +270,8 @@ header.top .tools .btn{padding:9px 16px;font-size:13.5px}
 .tray>div+div{border-left:0;border-top:1px solid;padding-top:18px}}
 .tray-h{margin-bottom:10px;gap:10px}
 .crow{padding-top:16px}
-.tally{margin-top:12px;gap:8px}
-.tally span{padding:3px 10px}
+
+
 .tray-dev{min-width:170px;max-width:300px}
 .builds{gap:10px;grid-template-columns:repeat(4,90px)}
 @media (max-width:640px){.builds{grid-template-columns:repeat(4,minmax(0,1fr))}
@@ -280,11 +280,11 @@ header.top .tools .btn{padding:9px 16px;font-size:13.5px}
 .side{gap:16px}
 .side .panel{padding:18px 20px}
 .panel h2{margin:0 0 12px}
-.gameinfo{font-size:12.5px;margin:-4px 0 12px}
+
 .players{gap:8px}
 .pl{gap:4px 12px}
 .pl .nm{font-size:14.5px}
-.pl .meta{gap:8px}
+
 details.ref summary{padding:2px 0}
 
 @media (min-width:1101px) and (max-height:900px){header.top{min-height:44px;margin-bottom:12px}
@@ -294,7 +294,7 @@ header.top .sub{display:none}
 .coach{padding:8px 18px 8px 42px}
 .tray{padding:12px 0}
 .tray-h{margin-bottom:4px;font-size:14px}
-.tally{display:none}
+
 .crow{padding-top:10px}
 .builds{grid-template-columns:repeat(4,78px);gap:8px}
 .bld .pimg{height:44px}
@@ -302,8 +302,8 @@ header.top .sub{display:none}
 .dicebox{min-height:52px;padding:7px 12px}
 .dicebox .sum{font-size:26px}
 .dicebox .die{width:32px;height:32px}
-.turnplaque{padding:7px 20px 7px 14px}
-.tp-name{font-size:16px}
+
+
 .stagebtns .tbtn{padding:9px 16px;font-size:14px;min-width:80px}}
 .sheet.sheet-rules{height:min(640px,calc(100dvh - 48px));display:flex;flex-direction:column;padding:26px 30px 22px}
 .sheet.sheet-rules .row{margin-top:auto;padding-top:14px;border-top:1px solid rgba(156,122,68,.35)}
@@ -314,7 +314,7 @@ html,body{background:#0d0b09;color:var(--ink)}
 /* never let anything widen the page: a wider page makes mobile browsers zoom, and that zoom sticks across rotations */
 @media (orientation:portrait) and (max-width:900px){html,body{max-width:100vw;overflow:hidden;overflow:clip}}
 body{background:#0d0b09;font-family:var(--body);font-size:14px;letter-spacing:-.005em}
-.panel,.coach,.sheet,.dicebox,.toast,#tip,#pop,.turnplaque{background:var(--hud-bg)!important;border:1px solid var(--hud-line);border-radius:var(--r);box-shadow:0 12px 32px rgba(0,0,0,.32)}
+.panel,.coach,.sheet,.dicebox,.toast,#tip,#pop{background:var(--hud-bg)!important;border:1px solid var(--hud-line);border-radius:var(--r);box-shadow:0 12px 32px rgba(0,0,0,.32)}
 #tip,#pop,.toast{background:var(--hud-bg2)!important}
 .coach::before{display:none}
 .panel h2{font-family:var(--body);font-weight:500;font-size:12.5px;margin-bottom:10px}
@@ -331,9 +331,9 @@ header.top h1{font-family:var(--display);font-weight:900;font-size:22px;color:#e
 header.top .sub{color:var(--muted);font-size:12px}
 .coach{font-size:13.5px;line-height:1.6;color:#e3dacb;padding:12px 16px!important}
 .coach b{color:#f0c977;font-weight:700}
-.turnplaque{padding:9px 20px 9px 16px!important}
-.tp-name{font-family:var(--display);font-weight:700;font-size:18px;color:#fff}
-.tp-pip{box-shadow:0 0 0 2px rgba(0,0,0,.5)}
+
+
+
 .dicebox .sum{font-family:var(--display);font-weight:900;color:#f3d08a}
 .die{border-radius:7px;background:linear-gradient(150deg,#fbf4e3,#ddd0b2)}
 .die.blank{background:rgba(255,245,230,.06);box-shadow:inset 0 0 0 1px var(--hud-line2)}
@@ -342,9 +342,9 @@ header.top .sub{color:var(--muted);font-size:12px}
 .pl{border-radius:9px;border:1px solid transparent;padding:9px 10px;transition:background .2s,border-color .2s}
 .pl .nm{font-weight:500}
 .pl .vp{font-family:var(--display);font-weight:900;color:#f3d08a;font-size:20px}
-.pl .meta{color:var(--muted);font-size:11.5px}
+
 .badge{border-radius:4px;background:rgba(217,164,65,.2);color:#f3d08a;font-weight:500}
-.gameinfo{color:var(--muted)}
+
 
 
 details.ref summary{color:var(--muted)}
@@ -359,7 +359,7 @@ details.ref summary{color:var(--muted)}
 .tray>div+div{border-image:linear-gradient(180deg,transparent,rgba(255,236,205,.16),transparent) 1}
 .tray-h{font-family:var(--body);font-weight:500;font-size:13px;color:#e8dfd0;letter-spacing:-.02em;text-shadow:none}
 .tray-h span{color:var(--muted)}
-.tally span{background:rgba(255,245,230,.06);border:1px solid var(--hud-line);border-radius:6px;color:#e8dfd0;font-weight:500}
+
 .bld{border-radius:10px;box-shadow:none;transition:background .15s,border-color .15s,transform .15s}
 .bld:hover:not(:disabled){background:rgba(255,245,230,.09);border-color:var(--hud-line2);transform:translateY(-2px)}
 .bld.active{background:rgba(217,164,65,.12)}
@@ -369,7 +369,7 @@ details.ref summary{color:var(--muted)}
 .crow .cw.new{animation:cardIn .5s cubic-bezier(.2,.8,.2,1) both}
 @keyframes cardIn{from{transform:translateY(34px) rotate(4deg);opacity:0}}
 @keyframes plaqueIn{from{opacity:0;transform:translate(-50%,-10px)}}
-@media (prefers-reduced-motion:reduce){.crow .cw.new,.turnplaque.swap{animation:none}}
+@media (prefers-reduced-motion:reduce){.crow .cw.new{animation:none}}
 #stage{background:#0e2a3a}
 #stage::after{background:radial-gradient(ellipse at 50% 46%,transparent 58%,rgba(0,0,0,.38))}
 html.has-deco2 #stage::after{background:radial-gradient(ellipse 76% 76% at 50% 46%,transparent 72%,rgba(0,0,0,.34))}
@@ -380,7 +380,7 @@ html.has-deco2 #stage::after{background:radial-gradient(ellipse 76% 76% at 50% 4
 header.top{position:fixed;top:18px;left:24px;right:24px;z-index:6;margin:0;min-height:0;pointer-events:none;align-items:flex-start}
 header.top>*{pointer-events:auto}
 header.top .sub{display:block;margin-top:2px}
-.turnplaque{z-index:6}
+
 .dicebox{position:fixed;left:24px;top:84px;z-index:5}
 .coach{position:fixed;left:24px;top:158px;width:340px;z-index:5}
 .toast{position:fixed;left:50%;right:auto;transform:translateX(-50%);width:min(480px,38vw);z-index:6}
@@ -391,7 +391,7 @@ header.top .sub{display:block;margin-top:2px}
 .tray{position:fixed;left:0;right:0;bottom:0;z-index:4;padding:44px 400px 20px 24px!important;grid-template-columns:minmax(0,1fr) auto auto}
 .stagebtns{position:fixed;z-index:6}
 .stagebtns .tbtn{font-size:14px}}
-@media (min-width:1101px) and (min-height:640px) and (max-width:1560px){.turnplaque{top:76px}
+@media (min-width:1101px) and (min-height:640px) and (max-width:1560px){
 .toast{top:146px}}
 @media (min-width:1101px) and (min-height:640px) and (max-height:900px){.coach{top:146px}
 .dicebox{top:76px}
@@ -404,12 +404,12 @@ header.top .sub{display:block;margin-top:2px}
 .dicebox .sum{font-size:22px}
 .toast{top:58px;left:10px;right:10px;width:auto;padding:8px 11px;font-size:12px}
 .toast .ex{font-size:11.5px}
-.turnplaque{bottom:62px;padding:6px 14px 6px 12px!important}
-.tp-name{font-size:15px}}
+
+}
 @media (max-width:1100px),(max-height:639px){.tray{background:linear-gradient(180deg,rgba(24,20,16,.96),rgba(14,12,10,.98))!important;border:1px solid var(--hud-line)!important;border-radius:var(--r)}}
 :root{--hud-bg:rgba(7,7,8,.86);--hud-bg2:rgba(5,5,6,.93);--hud-line:rgba(214,196,160,.16);--hud-line2:rgba(214,196,160,.3)}
-.panel,.coach,.sheet,.dicebox,#tip,#pop,.toast,.turnplaque,.btn,.tbtn,.bld,.pl,.tally span,.badge,.emptyhand,.resp .r,.pick button,.step .cell,.flow span,select.btn,.tray,.cnt .btn,.die.blank{border-radius:0!important}
-.panel,.coach,.sheet,.dicebox,#tip,#pop,.toast,.turnplaque{background:linear-gradient(180deg,rgba(18,17,16,.9),rgba(6,6,7,.9))!important;border:1px solid rgba(214,196,160,.2)!important;box-shadow:inset 0 1px 0 rgba(255,240,210,.06),0 10px 28px rgba(0,0,0,.5)!important}
+.panel,.coach,.sheet,.dicebox,#tip,#pop,.toast,.btn,.tbtn,.bld,.pl,.badge,.emptyhand,.resp .r,.pick button,.step .cell,.flow span,select.btn,.tray,.cnt .btn,.die.blank{border-radius:0!important}
+.panel,.coach,.sheet,.dicebox,#tip,#pop,.toast{background:linear-gradient(180deg,rgba(18,17,16,.9),rgba(6,6,7,.9))!important;border:1px solid rgba(214,196,160,.2)!important;box-shadow:inset 0 1px 0 rgba(255,240,210,.06),0 10px 28px rgba(0,0,0,.5)!important}
 .panel h2{color:#cbb98f;letter-spacing:.02em;border-bottom:1px solid rgba(214,196,160,.14);padding-bottom:8px}
 header.top .tools .btn,header.top select.btn{padding:6px 11px!important;font-size:12px!important;font-weight:500;background:rgba(10,10,11,.78)!important;border:1px solid rgba(214,196,160,.22)!important;box-shadow:none!important;color:#d8d0c2}
 header.top .tools .btn:hover{border-color:rgba(214,196,160,.5)!important;background:rgba(30,28,26,.85)!important}
@@ -431,12 +431,12 @@ header.top select.btn{appearance:none;-webkit-appearance:none;padding-right:30px
 .bld.active{border-color:#e3c27a!important;box-shadow:inset 0 0 0 1px #e3c27a,0 0 14px rgba(227,194,122,.35)!important}
 .pl.cur{border-color:rgba(227,194,122,.6)!important;background:linear-gradient(90deg,rgba(227,194,122,.14),rgba(227,194,122,.02))!important}
 @keyframes plaqueIn3{from{opacity:0;transform:translateY(-8px)}}
-.turnplaque.swap{animation:plaqueIn3 .45s cubic-bezier(.2,.8,.2,1)}
-@media (min-width:1101px) and (min-height:640px){.turnplaque{position:fixed!important;top:84px!important;right:24px;left:auto!important;transform:none!important;width:284px;box-sizing:border-box;padding:12px 16px!important}
+
+@media (min-width:1101px) and (min-height:640px){
 .side{top:160px!important;bottom:auto!important}
 
 .toast{top:18px!important}}
-@media (min-width:1101px) and (min-height:640px) and (max-height:900px){.turnplaque{top:76px!important}
+@media (min-width:1101px) and (min-height:640px) and (max-height:900px){
 .side{top:148px!important}
 }
 .mini img.lack{opacity:.28;filter:grayscale(1)}
@@ -446,7 +446,7 @@ header.top select.btn{appearance:none;-webkit-appearance:none;padding-right:30px
 #stage.robmode::after{background:radial-gradient(ellipse at 50% 46%,rgba(0,0,0,.05) 35%,rgba(40,4,0,.62))!important;animation:robVig 1.6s ease-in-out infinite}
 @keyframes robVig{50%{opacity:.75}}
 @media (prefers-reduced-motion:reduce){#stage.robmode::after{animation:none}}
-.side>.turnplaque{position:static!important;transform:none!important;width:auto!important;margin:0}
+
 
 #rotate{position:fixed;inset:0;z-index:999;background:#0b0a09;color:#eee3cc;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:24px}
 #rotate b{font-size:20px}
@@ -461,7 +461,7 @@ html.phone body{width:var(--vw)!important;height:var(--vh)!important;transform:s
 html.phone .side{overflow:visible;gap:8px;z-index:7}
 html.phone .side>.panel:has(details.ref){display:none}
 html.phone .players{gap:2px}
-html.phone .pl .meta{display:none}
+
 html.phone .pl .vp{grid-row:1}
 html.phone .tray{padding-top:26px!important}
 html.phone .tray>div{padding:0 14px!important}
@@ -474,7 +474,7 @@ html.phone .tray-h{white-space:nowrap}
 html.phone .stagebtns .tbtn:not(.primary)::before,html.phone .stagebtns .tbtn:not(.primary)::after{display:none}
 
 
-html.phone .gameinfo{display:none}
+
 html.phone .panel h2{margin-bottom:6px;padding-bottom:5px}
 #maplbls{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden;transition:opacity .25s}
 .maplbl{position:absolute;left:0;top:0;display:flex;align-items:center;gap:6px;padding:3px 10px 3px 8px;background:rgba(14,12,10,.88);border:1px solid rgba(255,236,205,.3);border-radius:999px;color:#fffaf0;font:700 12px/1.2 var(--body);white-space:nowrap;will-change:transform}
@@ -511,14 +511,14 @@ html.phone .dicebox .who{display:none}
 html.phone .coach{font-size:13px;line-height:1.45;padding:9px 12px!important}
 html.phone #leftcol>.toast .ex{display:none}
 html.phone #leftcol>.toast{font-size:12.5px;padding:8px 12px}
-html.phone .turnplaque{top:50px!important;right:14px!important}
+
 html.phone .side{right:14px!important}
-html.phone .side>.panel:has(details.ref),html.phone .gameinfo{display:none!important}
+html.phone .side>.panel:has(details.ref){display:none!important}
 html.phone .side .panel h2{display:none}
 html.phone .pl .vp{font-size:17px}
 html.phone .tray{padding:22px 260px 10px 14px!important}
 html.phone .tray-dev{display:none}
-html.phone .tally{display:none}
+
 html.phone .tray-h{font-size:13px}
 html.phone .builds{grid-template-columns:repeat(4,72px)!important}
 html.phone .bld .meta2{display:none}
@@ -535,15 +535,15 @@ html.phone .sheet .btn{font-size:16px;padding:12px 18px}
 html.phone .cnt .btn{font-size:15px}
 html.phone .cnt small{font-size:13px}
 html.phone .mclose{width:44px;height:44px;font-size:28px}
-.panel,.coach,.sheet,.dicebox,#tip,#pop,.toast,.turnplaque,.bld{box-shadow:none!important}
-.panel,.coach,.dicebox,.toast,.turnplaque{background:linear-gradient(180deg,rgba(18,17,16,.8),rgba(6,6,7,.8))!important}
-html.phone .turnplaque{width:150px!important;padding:7px 10px!important}
-html.phone .tp-name{font-size:13.5px}
-html.phone .tp-sub{font-size:11px}
+.panel,.coach,.sheet,.dicebox,#tip,#pop,.toast,.bld{box-shadow:none!important}
+.panel,.coach,.dicebox,.toast{background:linear-gradient(180deg,rgba(18,17,16,.8),rgba(6,6,7,.8))!important}
+
+
+
 html.phone .pl{padding:4px 8px!important;gap:2px 6px}
 html.phone .pl .nm{font-size:12.5px}
 html.phone .tray{padding-right:250px!important}
-.panel,.dicebox,.turnplaque,#tip,#pop{background:linear-gradient(180deg,rgba(44,44,46,.8),rgba(32,32,34,.8))!important;border-color:rgba(255,255,255,.12)!important}
+.panel,.dicebox,#tip,#pop{background:linear-gradient(180deg,rgba(44,44,46,.8),rgba(32,32,34,.8))!important;border-color:rgba(255,255,255,.12)!important}
 header.top .tools .btn,header.top select.btn{background-color:rgba(44,44,46,.85)!important}
 @media (min-width:1101px) and (min-height:640px){#leftcol{width:190px}
 #leftcol>.coach,#leftcol>.toast{background:none!important;border:0!important;box-shadow:none!important;padding:0 2px!important;text-shadow:0 1px 2px rgba(0,0,0,.95),0 0 10px rgba(0,0,0,.7)}
@@ -559,7 +559,7 @@ html body header.top .tools>.btn:hover:not(:disabled){color:#f3d08a!important}
 html body header.top .tools>.btn.btn.active{color:#e9c47a!important;background:none!important;border-top:0!important;border-right:0!important;border-bottom:0!important}
 header.top select.btn option{color:#111}
 .roundline{display:none}
-html.phone .turnplaque{display:none!important}
+
 html.phone .side{top:50px!important}
 html.phone .roundline{display:block;margin-top:6px;padding-top:7px;border-top:1px solid rgba(255,255,255,.14);font-size:12px;color:#b8b1a6;text-align:center}
 html.phone html body header.top .tools>.btn{padding:4px 10px!important;font-size:13px!important}
@@ -576,7 +576,7 @@ html.phone .side .panel{background:none!important;border:0!important;box-shadow:
 html.phone .side .pl{text-shadow:0 1px 3px rgba(0,0,0,.95),0 0 8px rgba(0,0,0,.6)}
 html.phone .side .pl.cur{background:rgba(0,0,0,.28)!important}
 html.phone .roundline{text-shadow:0 1px 3px rgba(0,0,0,.95);border-top-color:rgba(255,255,255,.3)}
-@media (min-width:1101px) and (min-height:640px){html:not(.phone) .turnplaque{display:none!important}
+@media (min-width:1101px) and (min-height:640px){
 html:not(.phone) .side{top:84px!important}
 html:not(.phone) .roundline{display:block;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.14);font-size:12.5px;color:#b8b1a6;text-align:center}
 html:not(.phone) .side .panel{padding:12px 14px!important}
@@ -776,7 +776,7 @@ html.phone .setpanel .mi{font-size:17px!important}
 .tinfo .cost{margin-top:6px;flex-wrap:wrap}
 .tinfo .pdev{background:rgba(255,255,255,.14)}
 .side .panel{background:none!important;border:0!important;box-shadow:none!important}
-.side .pl,.side .panel h2,.side .gameinfo,.side .roundline{text-shadow:0 1px 3px rgba(0,0,0,.95),0 0 8px rgba(0,0,0,.6)}
+.side .pl,.side .panel h2,.side .roundline{text-shadow:0 1px 3px rgba(0,0,0,.95),0 0 8px rgba(0,0,0,.6)}
 html:not(.phone) .side .pl.cur{background:rgba(0,0,0,.3)!important}
 html:not(.phone) header.top h1.logo{font-size:39px}
 html.phone header.top h1.logo{font-size:26px}
@@ -1068,7 +1068,7 @@ html body .sheet-mp .row .btn,html body .sheet-mp #mJoin{width:100%;min-height:5
 html body .sheet-mp{width:min(560px,100%)!important}
 html body .pl .bdgs{grid-column:2;display:flex;flex-wrap:wrap;gap:4px;margin:-5px 0 1px}
 html body .pl .vp{grid-row:1/4}
-html body .pl .meta{grid-row:3}
+
 html body .pl .bdgs .badge{font-size:10.5px;padding:1px 6px}
 .bld .lft{display:inline;font-weight:500;color:#cdbf9f;margin-left:2px;font-size:.9em}
 html.phone .bld .lft{display:inline;font-weight:500;color:#cdbf9f;margin-left:2px;font-size:.9em}
@@ -1503,7 +1503,7 @@ html.phone #turnBan{font-size:28px;padding:13px 0;top:28%}
 @media (prefers-reduced-motion:reduce){#turnBan.go{animation-duration:.01s}}
 
 /* muted player colours in the UI (3D pieces keep the bright colour) */
-.sw,.pl .dot,.lrow .dot,.tp-pip,.scores .dot,.prow .pbtn{filter:saturate(.8) brightness(.84)}
+.sw,.pl .dot,.lrow .dot,.scores .dot,.prow .pbtn{filter:saturate(.8) brightness(.84)}
 
 .dlg-over .oscores{display:flex;flex-direction:column;gap:8px;margin:16px auto 4px;max-width:440px}
 .dlg-over .oscores>div{display:flex;align-items:center;gap:10px;padding:8px 14px;background:rgba(0,0,0,.25);border-radius:3px;font-size:17px;color:#efe2c4}
@@ -1536,7 +1536,7 @@ html.phone .dlg-over .row{margin-top:10px!important}html.phone .dlg-over .row .b
 html.phone .av{box-shadow:0 0 0 5px var(--c),0 0 0 7px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.55)}
 html body .pl .av.avp{width:34px!important;height:34px!important;border-radius:50%!important;grid-row:1/4;align-self:center;margin:4px 4px 4px 4px}
 html body .pl{grid-template-columns:44px minmax(0,1fr) auto!important}
-html body .pl .meta{flex-wrap:nowrap;gap:7px;white-space:nowrap;font-size:11px}
+
 html.phone body .pl{grid-template-columns:32px minmax(0,1fr) auto!important}
 html.phone body .pl .av.avp{width:22px!important;height:22px!important;margin:4px}
 .pl.cur .av.avp{transform:scale(1.08)}
@@ -1661,7 +1661,7 @@ html.phone.sico-on .setpanel .mi{gap:6px!important}
 html:not(.phone).sico-on .setpanel .mi{gap:10px!important}
 /* player list: name, then resources 2px below; bonus badges go under the resources */
 html:not(.phone) body .pl{row-gap:2px!important;align-content:center}
-html:not(.phone) body .pl .meta{grid-row:2!important}
+
 html:not(.phone) body .pl .bdgs{grid-row:3!important;margin:4px 0 1px!important}
 html:not(.phone) body .pl .bdgs:empty{display:none}
 
@@ -1689,7 +1689,7 @@ html.phone .credits .crlist li{font-size:12px;padding:5px 0}
 
 /* ===== table dressing around the board ===== */
 #deco{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-#deco .dk{position:absolute;background:center/contain no-repeat;display:block}
+
 #deco .cur{top:0;height:90vh;aspect-ratio:800/1169;background-image:url(assets/deco/curtain.webp);background-position:left top}
 #deco .cur.l{left:-3vh}
 #deco .cur.r{right:-3vh;transform:scaleX(-1)}
@@ -1753,14 +1753,14 @@ html body .bld .mini{display:none!important}
 html body .bld .pimg{height:96px!important}html body .bld .pimg img{max-height:96px!important}
 html.phone body .bld .pimg{height:var(--bpH,60px)!important}html.phone body .bld .pimg img{max-height:var(--bpH,60px)!important}
 /* ===== screen dressing v2 (?deco=1): left / right columns + wood panel, PC and mobile sets ===== */
-#deco.v2 .dk{display:none}#deco.v2 .dvig{z-index:0}
+#deco.v2 .dvig{z-index:0}
 #deco.v2 .d2{position:absolute;top:0;height:calc(100% - var(--woodH,196px));background:left top/auto 100% no-repeat;display:block;z-index:1}
 #deco.v2 .d2.l{left:0;aspect-ratio:569/1440;background-image:url(assets/deco2/side_left.webp)}
 #deco.v2 .d2.r{right:0;aspect-ratio:569/1440;background-image:url(assets/deco2/side_right.webp);background-position:right top}
-#deco.v2 .d2.w{top:auto;bottom:0;left:0;right:0;height:calc(var(--woodH,196px) + .9vw);aspect-ratio:auto;background:url(assets/deco2/wood2.webp) center top/100% auto no-repeat;z-index:2;box-shadow:0 -8px 22px rgba(0,0,0,.55)}
 
 
-html.phone #deco.v2 .d2.w{height:calc(var(--woodH) + .9vw)}
+
+
 
 /* tray: no headings under the tabs; guide tab */
 html body .tray-act>.tray-h{visibility:hidden!important}
@@ -1776,8 +1776,8 @@ html.has-deco2 body header.top .tools .ib{padding:6px 9px!important}
 html.has-deco2 body header.top .tools .ib::before,html.has-deco2 body header.top .tools .ib+.ib::before,html.has-deco2 body header.top .tools>*::before{display:none!important}
 html.has-deco2 body header.top .tools{gap:6px}
 html.has-deco2 body header.top .tools .gico{width:26px;height:26px}
-html.has-deco2 body .side .panel>h2,html.has-deco2 body .side #gameinfo{display:none!important}
-html.has-deco2 body #players .pl .meta{display:none!important}
+html.has-deco2 body .side .panel>h2{display:none!important}
+
 html.has-deco2 body #players .pl{min-height:0!important;padding-top:6px!important;padding-bottom:6px!important}
 html.phone.has-deco2 body .side{width:170px!important}
 html.phone.has-deco2 body header.top .tools .gico{width:24px;height:24px}
@@ -1798,7 +1798,7 @@ html.phone body .bld .pimg{height:60px!important;width:50px!important}
 html.phone body .bld .pimg img{width:50px!important;max-width:50px!important;height:60px!important}
 html.phone body .bld b{font-size:8px!important}
 html body .bld .meta2{display:none!important}
-html body #hand .tally{display:none!important}
+
 
 
 /* mobile: narrower action buttons, bigger build icons centred in the wood */
@@ -1831,7 +1831,7 @@ html.phone body #handHead .htab{padding:4px 13px 5px!important}
 .sheet-info .itip{margin:6px 4px 0;font-size:12px;line-height:1.5;color:#d9cdb4;word-break:keep-all;text-align:center}
 html body #handHead .htabs{gap:4px!important}html body #handHead .htab.hguide{margin-left:0!important}
 /* ===== bottom bar as one unit (deco v2): wood, tabs, cards, builds and buttons sized by % of the screen ===== */
-html.has-deco2 #deco.v2 .d2.w{display:none!important}
+
 html.has-deco2 #deco.v2 .d2{height:calc(100% - var(--barH) + var(--barOff,0px) + 4px)!important}
 html.has-deco2{--barH:max(150px,18.5vh)}
 html.phone.has-deco2{--barH:calc(var(--vh) * .3)}
@@ -1963,19 +1963,19 @@ html.has-deco2 body .tray::after{content:'';position:absolute;left:0;right:0;top
 #turnBan::before,#turnBan::after{content:'';position:absolute;left:12%;right:12%;height:14px;background:url(assets/ui2/orn.webp) center/auto 14px no-repeat,linear-gradient(90deg,transparent,rgba(217,172,104,.8) 25%,rgba(217,172,104,.8) 75%,transparent) center/100% 1px no-repeat}
 #turnBan::before{top:-7px}#turnBan::after{bottom:-7px}
 /* title ambience: sun glow + rays, gold dust, logo shine */
-.title .tsun{position:absolute;left:calc(3vw - 22vmax);top:calc(37% - 22vmax);width:44vmax;height:44vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,205,130,.75) 0,rgba(255,160,80,.35) 20%,rgba(255,120,60,.12) 46%,transparent 70%);animation:tsunB 7s ease-in-out infinite alternate}
+
 @keyframes tsunB{from{opacity:.75;transform:scale(.96)}to{opacity:1;transform:scale(1.05)}}
 .title video{pointer-events:none;mix-blend-mode:screen;background:transparent;object-fit:cover}
-.title .tbeams{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;opacity:.42}
+
 .title .tmotes{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .title .ttwk{position:absolute;inset:0;width:100%;height:100%;opacity:.38;-webkit-mask-image:linear-gradient(180deg,#000 0,#000 26%,rgba(0,0,0,.35) 40%,transparent 50%);mask-image:linear-gradient(180deg,#000 0,#000 26%,rgba(0,0,0,.35) 40%,transparent 50%)}
 .title .tshine{position:absolute;pointer-events:none;mix-blend-mode:screen;visibility:hidden;-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
   background:linear-gradient(105deg,transparent 42%,rgba(255,244,214,.75) 50%,transparent 58%) no-repeat;background-size:300% 100%;background-position:130% 0}
 .title.shine-on .tshine{visibility:visible;animation:tshine 8s ease-in-out 1.5s infinite}
 @keyframes tshine{0%{background-position:130% 0}18%,100%{background-position:-30% 0}}
-.title.intro .tsun{animation:tfxIn 3s ease 1.5s both}.title.intro .tbeams{animation:tfxIn 3.5s ease 1.2s both}.title.intro .ttwk{animation:tfxIn 3s ease 2.6s both}.title.intro .tmotes{animation:tfxIn 3s ease 2.2s both}
+.title.intro .ttwk{animation:tfxIn 3s ease 2.6s both}.title.intro .tmotes{animation:tfxIn 3s ease 2.2s both}
 @keyframes tfxIn{from{opacity:0}}
-@media (prefers-reduced-motion:reduce){.title .tsun,.title .tshine{animation:none}.title video{display:none}}
+@media (prefers-reduced-motion:reduce){.title .tshine{animation:none}.title video{display:none}}
 
 html body .setmenu .setpanel .mi,html body .setmenu .setpanel .mi span{color:#e9c47a!important}
 html body .setpanel .seg button:not(.on){color:#c9b48a!important}
@@ -2153,7 +2153,7 @@ html.phone body .emptyhand{font-size:11.5px!important;color:rgba(166,155,139,.72
 <main class="game">
   <section class="board-wrap">
     <div id="coach" class="coach"></div>
-    <div id="stage"><div id="maplbls"></div><div id="toast" class="toast" hidden></div><div id="mpNote" class="mpnote" hidden></div><div class="dicebox" id="dicebox"></div><div class="turnplaque" id="turnbar"></div><div class="stagebtns" id="stagebtns"></div></div>
+    <div id="stage"><div id="maplbls"></div><div id="toast" class="toast" hidden></div><div id="mpNote" class="mpnote" hidden></div><div class="dicebox" id="dicebox"></div><div class="stagebtns" id="stagebtns"></div></div>
     <div class="tray" id="tray">
       <div class="tray-hand"><div class="tray-h" id="handHead">내 자원카드 <span id="handCount"></span></div><div id="hand"></div></div>
       <div class="tray-dev"><div class="tray-h" id="devHead">내 발전카드 <span id="devCount"></span> <button class="qi" data-pop="all" aria-label="발전 카드 종류 보기" data-tip="발전 카드 종류 보기">?</button></div><div id="devs"></div></div>
@@ -2170,14 +2170,14 @@ html.phone body .emptyhand{font-size:11.5px!important;color:rgba(166,155,139,.72
   </section>
 
   <aside class="side">
-    <div class="panel"><h2>플레이어</h2><div class="gameinfo" id="gameinfo"></div><div id="players" class="players"></div><div class="roundline" id="roundline"></div></div>
+    <div class="panel"><div id="players" class="players"></div><div class="roundline" id="roundline"></div></div>
   </aside>
 </main>
 
 <div id="tip" hidden></div><div id="pop" hidden></div>
 <div id="leftcol"></div>
 <div id="rotate" hidden><div class="rot-ic"></div><b>가로로 돌려 주세요</b><span>HexIsle은 휴대폰에서<br>가로 화면으로 플레이해요.</span></div>
-<div id="splash"><img id="spLogo" alt="HEXISLE"><p class="spnote">이 게임은 수익을 창출하지 않으며,<br>개인 목적으로만 제작되었습니다.</p><p class="sptap">화면을 탭 하여 시작</p><div class="spload"><i></i></div></div><div id="veil" aria-hidden="true"></div><div id="title" class="title" hidden><div class="tbg"></div><div class="tsun"></div><div class="tdim"></div><canvas class="tbeams" id="tBeams" width="640" height="360"></canvas><video class="ttwk" muted playsinline loop autoplay preload="auto" disablepictureinpicture aria-hidden="true" src="assets/fx/twinkle.mp4"></video><canvas class="tmotes" id="tMotes"></canvas><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 헥스아일 - 개척의 시대"><div class="tshine" id="tShine"></div><button class="ttro" id="tTrophy" aria-label="기록·랭킹" hidden><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="url(#ggt)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><defs><linearGradient id="ggt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbe6b4"/><stop offset=".55" stop-color="#d9ac68"/><stop offset="1" stop-color="#a87a42"/></linearGradient></defs><path d="M7.5 4.5h9v4.2a4.5 4.5 0 0 1-9 0z"/><path d="M7.5 6H4.8c0 2.6 1.3 4 3.2 4.3M16.5 6h2.7c0 2.6-1.3 4-3.2 4.3"/><path d="M12 13.2v3.3M8.8 19.5h6.4M9.8 16.5h4.4l.6 3h-5.6z"/></svg></button><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
+<div id="splash"><img id="spLogo" alt="HEXISLE"><p class="spnote">이 게임은 수익을 창출하지 않으며,<br>개인 목적으로만 제작되었습니다.</p><p class="sptap">화면을 탭 하여 시작</p><div class="spload"><i></i></div></div><div id="veil" aria-hidden="true"></div><div id="title" class="title" hidden><div class="tbg"></div><div class="tdim"></div><video class="ttwk" muted playsinline loop autoplay preload="auto" disablepictureinpicture aria-hidden="true" src="assets/fx/twinkle.mp4"></video><canvas class="tmotes" id="tMotes"></canvas><div class="tnoise"></div><img class="tlogo" id="tLogo" alt="HEXISLE 헥스아일 - 개척의 시대"><div class="tshine" id="tShine"></div><button class="ttro" id="tTrophy" aria-label="기록·랭킹" hidden><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="url(#ggt)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><defs><linearGradient id="ggt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbe6b4"/><stop offset=".55" stop-color="#d9ac68"/><stop offset="1" stop-color="#a87a42"/></linearGradient></defs><path d="M7.5 4.5h9v4.2a4.5 4.5 0 0 1-9 0z"/><path d="M7.5 6H4.8c0 2.6 1.3 4 3.2 4.3M16.5 6h2.7c0 2.6-1.3 4-3.2 4.3"/><path d="M12 13.2v3.3M8.8 19.5h6.4M9.8 16.5h4.4l.6 3h-5.6z"/></svg></button><div class="tbot"><p class="ttap" id="tTap">화면을 탭 하여 게임 시작</p><div class="tmenu" id="tMenu" hidden><button class="tm tm-or" id="tSingle">싱글 플레이</button><button class="tm tm-gr" id="tMulti">멀티 플레이</button><button class="tm tm-gy" id="tTut">튜토리얼</button></div></div></div>
 <div id="tut" hidden><div class="tblock" id="tBlock"></div><div class="tring" id="tRing" hidden></div><div class="tx" id="tX" hidden>✕</div><div class="tbub" id="tBub"></div><div class="tgest" id="tGest" hidden><i class="f1"></i><i class="f2"></i></div></div>
 <div id="dialog" class="overlay dlgov" hidden><div class="sheet sheet-dialog" id="dsheet"></div></div>
 <div id="modal" class="overlay" hidden><div class="sheet" id="sheet"></div><i class="mcrest" id="mcrest" aria-hidden="true"></i></div>
@@ -4098,7 +4098,6 @@ function renderHand(me,groups){const box=$('#hand');const prev0=ui.prevRes?{...u
   const hh=$('#handHead');{if(!ui.handTab)ui.handTab='res';hh.innerHTML=`<div class="htabs"><button class="htab${ui.handTab==='res'?' on':''}" data-htab="res">자원카드 <i>${list.length}</i></button><button class="htab${ui.handTab==='dev'?' on':''}" data-htab="dev">발전카드 <i>${me.dev.length}</i></button><button class="htab hguide" data-pop="guide" aria-label="안내">안내</button></div>`;}
   if(ui.handTab==='dev'){box.innerHTML=me.dev.length?row(me.dev.map(d=>`<div style="position:relative"><img class="card" src="${CARDIMG[d.t]}" alt="${DEVN[d.t]}" data-pop="${d.t}">${d.fresh&&d.t!=='vp'?'<span class="newtag">다음 차례</span>':''}</div>`),cw,W0,'devrow2'):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">발전 카드가 없어요.</div>`;return;}
   let h=list.length?row(list.map(r=>`<img class="card" data-res="${r}" data-pop="res:${r}" src="${CARDIMG[r]}" alt="${RN[r]}" data-tip="${RN[r]}: 눌러서 설명 보기">`),cw,W0,'',flags):`<div class="emptyhand" style="min-height:${cw*1.525+14}px">자원 카드가 없어요.</div>`;
-  h+=`<div class="tally">${RES.map(r=>`<span class="${me.res[r]?'':'z'}">${RN[r]} ${me.res[r]}</span>`).join('')}</div>`;
   const gone=box.dataset.hold?[]:handLeaving(box,me,prev0);
   box.innerHTML=h;
   handLeft(gone);
@@ -4125,10 +4124,8 @@ function render(){{const r=document.getElementById('result');if(r&&(!S||S.phase!
   $('#coach').innerHTML=coachText()+(S.mp&&S.phase!=='over'&&actor()!==null&&!S.players[actor()].ai?` <span class="cdwrap">· <i data-cd="dl"></i></span>`:'');
   const cp=S.players[S.cur];
   const rolledNow=S.rollId!==ui.shownRoll;ui.shownRoll=S.rollId;
-  $('#turnbar').innerHTML=`<span class="tp-pip" style="background:${cp.color}"></span><span class="tp-txt"><span class="tp-name">${S.phase==='over'?'게임 종료':S.cur===ME?'나 (내 차례)':cp.name+'의 차례'}</span><span class="tp-sub">${S.phase==='setup'?`초기 배치 ${S.si+1}/${2*S.n}`:`${S.turn}번째 바퀴`}</span></span>`;
-  if(ui.lastCur!==S.cur+':'+S.phase){const prevTurn=ui.lastCur;ui.lastCur=S.cur+':'+S.phase;if(prevTurn&&S.phase==='main')turnBanner(S.cur);const tb=$('#turnbar');tb.classList.remove('swap');void tb.offsetWidth;tb.classList.add('swap');}
+  if(ui.lastCur!==S.cur+':'+S.phase){const prevTurn=ui.lastCur;ui.lastCur=S.cur+':'+S.phase;if(prevTurn&&S.phase==='main')turnBanner(S.cur);}
   {const rl=$('#roundline');if(rl)rl.textContent=S.phase==='setup'?`초기 배치 ${S.si+1}/${2*S.n}`:S.phase==='over'?'게임 종료':`${S.turn}번째 바퀴`;}
-  $('#gameinfo').textContent=`${S.n}인 게임, 난이도 ${({easy:'쉬움',normal:'보통',hard:'어려움'})[S.diff||'normal']}`;
   if(rolledNow&&S.dice){ui.diceRevealAt=performance.now()+1350;ui.flyRoll=S.rollId;renderDiceBox();slotSpin();if(typeof throwDice==='function')throwDice(S.dice);clearTimeout(ui.diceT);ui.diceT=setTimeout(renderDiceBox,1450);clearTimeout(ui.dfxT);ui.dfxT=setTimeout(diceFX,1380);}
   else if(!(S.dice&&performance.now()<(ui.diceRevealAt||0)))renderDiceBox();
   const myS=S.phase==='main'&&S.cur===ME&&!S.pend;
@@ -4148,7 +4145,7 @@ function render(){{const r=document.getElementById('result');if(r&&(!S||S.phase!
   $('#players').innerHTML=S.players.map((p,i)=>`<div class="pl${i===S.cur&&S.phase!=='over'?' cur':''}">${avHTML(p,'dot avp')}
     <span class="nm">${p.name}${p.ai?(p.left?' · AI(나감)':' · AI'):''}${S.mp&&!p.ai&&window.NET&&NET.offline&&NET.offline(p.uid)?' <span class="badge off">연결 끊김</span>':''}</span>${S.lr.o===i||S.la.o===i?`<span class="bdgs">${S.lr.o===i?'<span class="badge bimg" data-tip="최장 교역로 +2점: 끊기지 않은 도로가 5칸 이상이면서 가장 긴 사람"><img src="assets/badge/lr.webp" alt="최장 교역로"></span>':''}${S.la.o===i?'<span class="badge bimg" data-tip="최강 기사단 +2점: 기사 카드를 3장 이상, 가장 많이 쓴 사람"><img src="assets/badge/la.webp" alt="최강 기사단"></span>':''}</span>`:''}
     <span class="vp" data-tip="${i===ME?'내 점수(승점 카드 포함). 10점이 되면 승리!':'공개된 점수예요. 숨겨진 승점 카드는 빠져 있어요.'}">${vp(i,i===ME)}</span>
-    <span class="meta"><span data-tip="손에 든 자원 카드 수. 8장 이상이면 7이 나올 때 절반을 버려요.">자원 ${sumRes(p.res)}</span><span data-tip="가진 발전 카드 수. 종류는 본인만 알아요.">발전 ${p.dev.length}</span><span data-tip="지금까지 사용한 기사 카드 수. 3장 이상이며 가장 많으면 최강 기사단 2점.">기사 ${p.knights}</span><span data-tip="가장 길게 이어진 도로 길이. 5 이상이며 가장 길면 최장 교역로 2점.">도로 ${S.rl[i]||0}</span></span></div></nav>`).join('');
+    </div></nav>`).join('');
   checkToast();try{alignBtns();}catch(e){}
   motionFX();
   {const sig=myOffer()?JSON.stringify(S.offer.to):'';if(ui.modal==='trade'&&ui.tradeRedraw&&sig!==ui.offerSig){ui.offerSig=sig;try{ui.tradeRedraw();}catch(e){}}}
@@ -4425,22 +4422,12 @@ function titleFx(){const lg=$('#tLogo'),sh=$('#tShine');const place=()=>{if(!lg.
   const loop=ts=>{const t=$('#title');if(t.hidden){titleFx.run=0;return;}requestAnimationFrame(loop);if(ts-last<33||!SP.complete)return;if(t.classList.contains('intro')&&performance.now()-(ui.introT0||0)<2600)return;last=ts;
     if(cv.clientWidth!==W||cv.clientHeight!==H){fit();P.length=0;G.length=0;}
     if(!P.length){const n=Math.round(Math.min(60,W*H/20000));for(let i=0;i<n;i++)P.push(mk({},1));for(let i=0;i<7;i++){const g=mkG({});g.t=R()*g.d;G.push(g);}}
-    cx.clearRect(0,0,W,H);const s=ts/1000;beams(s);if(window.FXOFF&&FXOFF.includes('dust'))return;cx.globalCompositeOperation='lighter';
+    cx.clearRect(0,0,W,H);const s=ts/1000;cx.globalCompositeOperation='lighter';
     for(const p of P){p.x+=p.vx+Math.sin(s*.5+p.ph)*.08;p.y+=p.vy;if(p.y<-10||p.x>W+10)mk(p);const tw=.55+.45*Math.sin(s*p.sp+p.ph);cx.globalAlpha=p.a*tw;const z=p.r*8;cx.drawImage(SP,0,0,64,64,p.x-z/2,p.y-z/2,z,z);}
     for(const g of G){g.t++;if(g.t>g.d)mkG(g);const k=Math.sin(Math.PI*g.t/g.d);cx.globalAlpha=k*k*.75;const z=g.s*(.6+.4*k);cx.drawImage(SP,g.k*64,0,64,64,g.x-z/2,g.y-z/2,z,z);}
     cx.globalAlpha=1;cx.globalCompositeOperation='source-over';};
   requestAnimationFrame(loop);}
-// ---- light beams from the sunset side: ~18 independent beams, drawn small and upscaled for softness ----
-function beams(s){if(window.FXOFF&&FXOFF.includes('beams'))return;const cv=$('#tBeams');if(!cv)return;const c=cv.getContext('2d'),W=cv.width,H=cv.height;
-  if(!beams.B){const R=Math.random;beams.B=Array.from({length:18},(_,i)=>({a:-26+56*(i+R()*.8)/18,w:1.2+R()*2.8,f1:.07+R()*.12,f2:.17+R()*.25,p1:R()*6.3,p2:R()*6.3,k:.5+R()*.5,col:R()<.35?[255,214,160]:R()<.5?[255,236,205]:[236,226,255]}));}
-  const ox=-W*.10,oy=H*.30,L=Math.hypot(W*1.15,H*1.1);c.clearRect(0,0,W,H);c.globalCompositeOperation='lighter';
-  const g0=c.createRadialGradient(ox,oy,0,ox,oy,W*.55);g0.addColorStop(0,'rgba(255,214,160,.32)');g0.addColorStop(1,'rgba(255,200,140,0)');c.fillStyle=g0;c.fillRect(0,0,W,H);
-  for(const b of beams.B){const v=.5+.32*Math.sin(s*b.f1*6.283+b.p1)+.18*Math.sin(s*b.f2*6.283+b.p2);const a=Math.max(0,v)*b.k*.68;if(a<.004)continue;
-    const ang=(b.a+.9*Math.sin(s*.05+b.p2))*Math.PI/180,hw=(b.w*(.75+.35*Math.sin(s*b.f2*3+b.p1)))*Math.PI/360;
-    const gr=c.createRadialGradient(ox,oy,0,ox,oy,L);const[r,g,bb]=b.col;gr.addColorStop(0,`rgba(${r},${g},${bb},${a})`);gr.addColorStop(.45,`rgba(${r},${g},${bb},${a*.55})`);gr.addColorStop(1,`rgba(${r},${g},${bb},0)`);
-    c.fillStyle=gr;c.beginPath();c.moveTo(ox,oy);c.lineTo(ox+Math.cos(ang-hw)*L,oy+Math.sin(ang-hw)*L);c.lineTo(ox+Math.cos(ang+hw)*L,oy+Math.sin(ang+hw)*L);c.closePath();c.fill();}
-  c.globalCompositeOperation='destination-in';const fd=c.createLinearGradient(0,0,W,0);fd.addColorStop(0,'rgba(0,0,0,1)');fd.addColorStop(.45,'rgba(0,0,0,.7)');fd.addColorStop(1,'rgba(0,0,0,.08)');c.fillStyle=fd;c.fillRect(0,0,W,H);
-  c.globalCompositeOperation='source-over';}
+
 
 // settings menu icons in the header icon style (gold gradient stroke over a dark offset outline); preview: ?icons=2
 const SICO={
@@ -4455,9 +4442,6 @@ const SICO={
 function sicoSVG(k){const p=SICO[k];return `<svg class="sico" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g stroke="#3a2412" stroke-width="3.2" transform="translate(.7 .9)" opacity=".85">${p}</g><g stroke="url(#ggs)" stroke-width="2.2">${p}</g></svg>`;}
 function addSetIcons(){['newBtn','homeBtn','fbBtn','rulesBtn','sndBtn','leaveBtn','tipBtn','hintBtn','gfxBtn'].forEach(id=>{const b=document.getElementById(id);if(b&&!b.querySelector('.sico'))b.insertAdjacentHTML('afterbegin',sicoSVG(id));});
   const sp=document.querySelector('#setMenu .mrow');if(sp&&!sp.querySelector('.sico'))sp.insertAdjacentHTML('afterbegin',sicoSVG('aiSpeed'));document.documentElement.classList.add('sico-on');}
-(function(){const q=new URLSearchParams(location.search).get('fx')||'-sun,-beams';const off=q==='none'?['beams','dust','twinkle','noise','sun','shine']:q.split(',').filter(x=>x[0]==='-').map(x=>x.slice(1));
-  const sel={beams:'.title .tbeams',dust:'.title .tmotes',twinkle:'.title .ttwk',noise:'.title .tnoise',sun:'.title .tsun',shine:'.title .tshine'};
-  const st=document.createElement('style');st.textContent=off.map(k=>sel[k]).filter(Boolean).join(',')+'{display:none!important}';document.head.appendChild(st);window.FXOFF=off;})();
 function noiseTile(){if(noiseTile.d)return;noiseTile.d=1;const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),im=x.createImageData(128,128);for(let i=0;i<im.data.length;i+=4){const v=Math.random()*255|0;im.data[i]=im.data[i+1]=im.data[i+2]=v;im.data[i+3]=255;}x.putImageData(im,0,0);document.documentElement.style.setProperty('--noise',`url(${c.toDataURL()})`);}
 function showCredits(){openDialog(`<h3>Credits &amp; Licenses</h3><div class="credits">
   <p class="cmuted" style="margin-top:0!important">3D 모델 (Sketchfab)</p><ul class="crlist"><li><b>정착지</b> — <a href="https://sketchfab.com/3d-models/cozy--x--cottage-three-2b7aa00cb4384e67af49ba31ce56ee58" target="_blank" rel="noopener">Cozy_{-X-}_Cottage-ThreE</a><br>by <a href="https://sketchfab.com/XX-XX" target="_blank" rel="noopener">-X-ScornGames</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>도시</b> — <a href="https://sketchfab.com/3d-models/fantasycastle3dmodel-2b47b3c474534580bac56ea6ce72263e" target="_blank" rel="noopener">fantasy castle 3d model</a><br>by <a href="https://sketchfab.com/jusaav.2022" target="_blank" rel="noopener">JuanSaavedraSegura</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>풍차</b> — <a href="https://sketchfab.com/3d-models/stylized-windmill-work-in-progress-13f186b788e54d4ab7f35611e79d2e71" target="_blank" rel="noopener">Stylized Windmill (Work in progress)</a><br>by <a href="https://sketchfab.com/dangry" target="_blank" rel="noopener">Daniel Gryningstjerna</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>산(암석)</b> — <a href="https://sketchfab.com/3d-models/lush-crater-4e1490b0597d4dc1a42b6c9a1e577625" target="_blank" rel="noopener">Lush Crater</a><br>by <a href="https://sketchfab.com/PukarS" target="_blank" rel="noopener">Pukar Shiwakoti</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>낮은 흙산(벽돌)</b> — <a href="https://sketchfab.com/3d-models/desert-rocks-fea49e7d365d4f46a0f2da1d22b68f80" target="_blank" rel="noopener">Desert rocks</a><br>by <a href="https://sketchfab.com/WSVideoCarta" target="_blank" rel="noopener">WeSVa</a> · <a href="https://sketchfab.com/licenses" target="_blank" rel="noopener">Sketchfab Standard</a> · 크기·색 조정</li><li><b>나무</b> — <a href="https://sketchfab.com/3d-models/low-poly-forest-tree-pack-5ff5a51e74324845a4e4905f182dfb2b" target="_blank" rel="noopener">Low Poly Forest Tree Pack</a><br>by <a href="https://sketchfab.com/99.Miles" target="_blank" rel="noopener">99.Miles</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>나무</b> — <a href="https://sketchfab.com/3d-models/lowpoly-tree-b562b2e9f029440c804b4b6d36ebe174" target="_blank" rel="noopener">Lowpoly Tree</a><br>by <a href="https://sketchfab.com/dionne" target="_blank" rel="noopener">dionne</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>나무</b> — <a href="https://sketchfab.com/3d-models/tree-72c92ba005df4ff3a61063510abae539" target="_blank" rel="noopener">Tree</a><br>by <a href="https://sketchfab.com/SketchyB0t_3D_Fabrication" target="_blank" rel="noopener">SketchyBot</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>나무</b> — <a href="https://sketchfab.com/3d-models/low-poly-trees-flowers-and-grass-442904f26b87407d98871b50b49c4169" target="_blank" rel="noopener">Low poly trees, flowers and grass</a><br>by <a href="https://sketchfab.com/marciomeireles" target="_blank" rel="noopener">Márcio Meireles</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>나무</b> — <a href="https://sketchfab.com/3d-models/hill-top-tree-25f7a45343724eab93520a966f8c7843" target="_blank" rel="noopener">Hill Top Tree</a><br>by <a href="https://sketchfab.com/Kadota" target="_blank" rel="noopener">Kadota</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>나무</b> — <a href="https://sketchfab.com/3d-models/tree-lowpoly-f4bfb06999c342c5920368ff8c71088c" target="_blank" rel="noopener">Tree_LowPoly</a><br>by <a href="https://sketchfab.com/ArturoA.Meza" target="_blank" rel="noopener">ArturoA.Meza</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>야자수</b> — <a href="https://sketchfab.com/3d-models/palm-trees-55690379305145488e20afb05fc687e6" target="_blank" rel="noopener">Palm Trees</a><br>by <a href="https://sketchfab.com/erroratten" target="_blank" rel="noopener">Erroratten</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>부두</b> — <a href="https://sketchfab.com/3d-models/simple-wooden-pier-or-dock-5bf117cb734a46559d10971c3098165c" target="_blank" rel="noopener">Simple Wooden Pier or Dock</a><br>by <a href="https://sketchfab.com/jungle_jim" target="_blank" rel="noopener">Jungle Jim</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>항구 좌판</b> — <a href="https://sketchfab.com/3d-models/medieval-market-stall-asset-24-7b01f8c6175648c6b3d83b6d4058f971" target="_blank" rel="noopener">Medieval Market Stall Asset 2/4</a><br>by <a href="https://sketchfab.com/UgurYksk" target="_blank" rel="noopener">Uğur Yakışık</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>등대</b> — <a href="https://sketchfab.com/3d-models/lighthouse-01-f62ff1dd93fe4044a4213670367a160f" target="_blank" rel="noopener">Lighthouse 01</a><br>by <a href="https://sketchfab.com/azizi16" target="_blank" rel="noopener">Ahmad Azizi</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>범선</b> — <a href="https://sketchfab.com/3d-models/old-pirates-ship-ca1fd59494a64abf813c6833d6a36aa9" target="_blank" rel="noopener">Old pirates ship</a><br>by <a href="https://sketchfab.com/White_sniper" target="_blank" rel="noopener">White_sniper</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>범선</b> — <a href="https://sketchfab.com/3d-models/anno-1401-explorer-ship-d9176932e4c64077b867a16efeedb0b7" target="_blank" rel="noopener">ANNO 1401 - Explorer Ship</a><br>by <a href="https://sketchfab.com/mixmamo.studio" target="_blank" rel="noopener">Mixmamo.studio</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>갈매기</b> — <a href="https://sketchfab.com/3d-models/seagull-dc42ffc81c86480e9e7f7752fa134174" target="_blank" rel="noopener">Seagull</a><br>by <a href="https://sketchfab.com/Dayvable" target="_blank" rel="noopener">Dayvable</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>해안 오두막</b> — <a href="https://sketchfab.com/3d-models/sea-shack-7ef8de84a24e47a3be7a54ccccd0904a" target="_blank" rel="noopener">Sea shack</a><br>by <a href="https://sketchfab.com/Kimppo" target="_blank" rel="noopener">Kimppo</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>보트</b> — <a href="https://sketchfab.com/3d-models/boat-5cdc4fc134e84a8d97fb2d3ffaf5c5fb" target="_blank" rel="noopener">Boat</a><br>by <a href="https://sketchfab.com/bumstrum" target="_blank" rel="noopener">DJMaesen</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>돛단배</b> — <a href="https://sketchfab.com/3d-models/lowpoly-boat-01d38186dfdb44fe980cc8e72f475225" target="_blank" rel="noopener">Lowpoly Boat</a><br>by <a href="https://sketchfab.com/Macaroniii" target="_blank" rel="noopener">Macaroni</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>트랙터</b> — <a href="https://sketchfab.com/3d-models/low-poly-tractor-2238874c9473486fb6826c9be4f5a5ed" target="_blank" rel="noopener">low-poly tractor</a><br>by <a href="https://sketchfab.com/Saorix" target="_blank" rel="noopener">Saorix</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 크기·색 조정</li><li><b>도적</b> — <a href="https://sketchfab.com/3d-models/cartoon-style-grim-reaper-56ab37a1ae00418a8f3857face21fe45" target="_blank" rel="noopener">Cartoon Style Grim Reaper</a><br>by <a href="https://sketchfab.com/utudesign" target="_blank" rel="noopener">Utu Design</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · 색상 변경 및 경량화</li></ul>
@@ -4472,7 +4456,7 @@ function placeWood(){const d=document.getElementById('deco');if(!d||!d.classList
   {const L=d.querySelector('.d2.l'),R=d.querySelector('.d2.r');if(L&&R){const r=document.documentElement.style;const wl=L.getBoundingClientRect().width/k,wr=R.getBoundingClientRect().width/k;r.setProperty('--sideL',Math.round(Math.max(14,wl*.42))+'px');r.setProperty('--sideR',Math.round(Math.max(14,wr*.42))+'px');r.setProperty('--dL',Math.round(wl*.24+12)+'px');r.setProperty('--dR',Math.round(wr*.58+8)+'px');r.setProperty('--dT',Math.round(L.getBoundingClientRect().height/k*.09)+'px');{const hd=document.querySelector('header.top .tools');if(hd){const hb=(hd.getBoundingClientRect().bottom-document.documentElement.getBoundingClientRect().top-PH.oy)/k;r.setProperty('--hdB',Math.round(hb+6)+'px');}}}}}
 setInterval(()=>{try{placeWood();}catch(e){}},300);
 function addDeco(){if(/[?&]deco=0/.test(location.search)||(/[?&]test=1/.test(location.search)&&!/[?&]deco=1/.test(location.search))||document.getElementById('deco'))return;const st=document.getElementById('stage');if(!st)return;const d=document.createElement('div');d.id='deco';
-  d.className='v2';d.innerHTML='<i class="d2 l"></i><i class="d2 r"></i><i class="d2 w"></i><i class="dk plank"></i><i class="dk cur l"></i><i class="dk cur r"></i><i class="dk ml"></i><i class="dk mr"></i><i class="dk bl"></i><i class="dk br"></i><i class="dvig"></i>';
+  d.className='v2';d.innerHTML='<i class="d2 l"></i><i class="d2 r"></i><i class="dvig"></i>';
   const cv=st.querySelector('canvas');if(cv&&cv.nextSibling)st.insertBefore(d,cv.nextSibling);else st.appendChild(d);}
 function titleIntro(t){ui.introT0=performance.now();t.classList.remove('shine-on');t.classList.add('intro');setTimeout(()=>{t.classList.remove('intro');shineOn();},4800);}
 function shineOn(){const t=$('#title'),lg=$('#tLogo');if(t.classList.contains('intro')||ui.splash)return;if(lg.complete&&lg.naturalWidth)t.classList.add('shine-on');else lg.addEventListener('load',()=>{if(!t.classList.contains('intro'))t.classList.add('shine-on');},{once:true});}
@@ -4809,7 +4793,6 @@ addEventListener('resize',()=>{applyPhone();setTimeout(applyPhone,350);setTimeou
 function alignHeads(){const hh=$('#handHead'),ah=document.querySelector('.tray-act>.tray-h');if(!hh||!ah)return;ah.style.marginBottom='';if(!PH.on)return;const k=PH.k||1;const d=(ah.getBoundingClientRect().top-hh.getBoundingClientRect().top)/k;ah.style.setProperty('margin-bottom',Math.max(-16,6+d)+'px','important');}
 function alignBtns(){try{alignHeads();}catch(e){}if(document.documentElement.classList.contains('has-deco2')){const sb0=$('#stagebtns');if(sb0)sb0.style.removeProperty('bottom');return;}const sb=$('#stagebtns'),bd=document.querySelector('.builds');if(!sb||!bd)return;if(!HUDQ.matches||PH.on){sb.style.bottom='';return;}const r=bd.getBoundingClientRect();if(!r.height)return;const c=r.top+r.height/2;sb.style.setProperty('bottom',Math.max(12,innerHeight-c-sb.offsetHeight/2)+'px','important');}
 function fitChrome(){const h=document.querySelector('header.top');if(h)document.documentElement.style.setProperty('--chrome',(h.offsetHeight+16+40)+'px');
-  {const tb=$('#turnbar'),sd=document.querySelector('.side'),st0=$('#stage');if(tb&&sd&&st0){if(HUDQ.matches){if(tb.parentNode!==st0)st0.appendChild(tb);}else if(tb.parentNode!==sd)sd.insertBefore(tb,sd.firstChild);}}
   const sb=$('#stagebtns'),tr=$('#tray'),st=$('#stage');if(sb&&tr&&st){if(HUDQ.matches){if(sb.parentNode!==tr)tr.appendChild(sb);}else if(sb.parentNode!==st)st.appendChild(sb);}
   {const lc=$('#leftcol');for(const id of ['dicebox','coach','toast']){const e=$('#'+id);if(!e)continue;if(!e._home)e._home={p:e.parentNode,n:e.nextSibling};if(HUDQ.matches){if(e.parentNode!==lc)lc.appendChild(e);}else if(e.parentNode!==e._home.p){const n=e._home.n;if(n&&n.parentNode===e._home.p)e._home.p.insertBefore(e,n);else e._home.p.appendChild(e);}}}
   if(tr)document.documentElement.style.setProperty('--trayH',(HUDQ.matches?tr.offsetHeight:0)+'px');
